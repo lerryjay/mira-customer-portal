@@ -1,5 +1,5 @@
 <?php
-  class TicketModel extends DBModel
+  class TicketModel extends Model
   {
     public function addTicket($companyId,$productId,$packageId,$customerId,$title,$type,$message,$files,$status = 'pending')
     {

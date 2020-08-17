@@ -16,8 +16,6 @@
 12. IP - Validate IP address
 */
 
-
-
 class Validate{
 
 	public static function string($string, $with_html = true, $trim= false, $min=2, $max=1000){

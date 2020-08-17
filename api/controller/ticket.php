@@ -46,8 +46,8 @@
         $response['data'] = $hasTickets['data'];
         $response['message'] = "Ticket records found";
       }
-      $this->setOutputHeader('Content-type:application/json');
-      $this->setOutput($response);
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
     }
 
     /**
@@ -73,8 +73,8 @@
         $response['message'] = "Ticket created successfully";
         $response['data'] = ['ticketid'=>TICKET_PREFIX.$add['data']['insertId']];
       }
-      $this->setOutputHeader('Content-type:application/json');
-      $this->setOutput($response);
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
     }
 
     /**
@@ -106,8 +106,8 @@
           }else $response['message'] = "Unexpected error saving ticket reply!";
         }else $response['message'] = "You do not have the authority to perform this action!";
       }else $response ['message'] = !$ticket ?  "Invalid ticket!" : "This ticket has been closed no further replys can be submitted";
-      $this->setOutputHeader('Content-type:application/json');
-      $this->setOutput($response);
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
     }
 
     /**
@@ -135,8 +135,8 @@
         $response['status']  = true;
         $response['message'] = 'Ticket reply success';
       }else $response['message'] = "Unexpected error saving ticket reply!";
-      $this->setOutputHeader('Content-type:application/json');
-      $this->setOutput($response);
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
     }
 
     
@@ -163,8 +163,8 @@
         $response['message'] = ['Ticket status updated successfully'];
       }else $response['message'] = "An unexpected error occured. Please try again later";
 
-      $this->setOutputHeader('Content-type:application/json');
-      $this->setOutput($response);
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
 
     }
 
@@ -184,8 +184,8 @@
         else $response['message'] = "You do not have the authority to perform this action!";
       }else $response ['message'] = !$ticket ?  "Invalid ticket!" : "This ticket has been closed no further replys can be submitted";
       $response['status']   = false;
-      $this->setOutputHeader('Content-type:application/json');
-      $this->setOutput($response);
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
     }
   }
 ?>

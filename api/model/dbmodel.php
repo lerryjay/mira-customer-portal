@@ -1,14 +1,20 @@
 <?php
-  class DBModel{
+
+  class DBModel extends Dbconn{
+
+    function __construct()
+    {
+      parent::connect();
+    }
     public function query($sql,$bindString = '',$bindValues = [])
     {
       $prepare = $this->conn->prepare($sql);
-      $prepare->bindParam($bindString,...$bindValues);
+      !(count($bindValues) > 0) ?: $prepare->bindParam($bindString,...$bindValues);
       $prepare->execute();
       $select_record = $prepare->get_result();
       $rowNums      =  $select_record->num_rows;
       if($rowNums < 1) return false;
-      $this->num_rows = $rowNums ;
+      $this->num_rows = $rowNums;
       $this->rows =  $select_record->fetch_all(MYSQLI_ASSOC);
       $this->row =  $select_record->fetch_assoc();
       // $this->affected_rows =  $select_record->fetch_assoc();

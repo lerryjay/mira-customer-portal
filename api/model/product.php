@@ -2,7 +2,7 @@
   /**
    * Products model
    */
-  class Products extends DBModel
+  class Products extends Model
   {
     public function addProduct($productName,$desription,$companyId)
     {
@@ -63,7 +63,7 @@
      * @param BindValues $values
      * @return bool false if query fails or @return object if query passes
      **/
-    public function getProductPackages($condition = '',$string = '',$values = [])
+    public function gePackages($condition = '',$string = '',$values = [])
     {
       $sql = 'SELECT * FROM productpackage '+$condition;
       $query = $this->query($sql,$string,$values); 
@@ -97,7 +97,7 @@
      **/
     public function getPackagesByProductId($productId,$status = 1)
     {
-      return $this->getProductPackages('WHERE product_id = ? AND status = ? ','ii', [$productId,$status]);
+      return $this->getPackages('WHERE product_id = ? AND status = ? ','ii', [$productId,$status]);
     }
 
     /**

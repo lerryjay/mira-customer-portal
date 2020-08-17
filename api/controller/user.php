@@ -3,40 +3,88 @@
 
     public function register()
     {
-      extract($_POST);
-      $valid = $this->validateRegistration($name,$email,$telephone,$password,$companyId);
-      if(!$valid['status']) $response;
+      
+      $data = $this->validateRegistration();
+      if($data) $response;
       else{
+        extract($data);
         $password = $this->encrypt->password($password);
         $response = $this->userModel->register($name,$email,$telephone,$password,$companyId);
       }
       
-      $this->setOutputHeader('Content-type:application/json');
-      $this->setOutput($response);
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
     }
 
-    private function validateRegistration($name,$email,$telephone,$password,$companyId)
+    private function validateRegistration()
     {
+      extract($_POST);
+      $name       = isset($name) ? $name : '';
+      $email      = isset($email) ? $email : '';
+      $password   = isset($password) ? $password : '';
+      $telephone  = isset($telephone) ? $telephone : '';
+
       $emailValid      = Validate::email($email);
-      if($emailValid) return ['status'=>false, 'message'=>'Invalid email', 'data'=>['field'=>'email']];
+      if($emailValid){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>$emailValid, 'data'=>['field'=>'email']]));
+      }
       $passwordValid   = Validate::password($password);
-      if($emailValid) return ['status'=>false, 'message'=>'Invalid password', 'data'=>['field'=>'password']];
+      if($passwordValid){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>$passwordValid, 'data'=>['field'=>'password']]));
+      }
+
       $telephoneValid  = Validate::telephone($telephone);
-      if($emailValid) return ['status'=>false, 'message'=>'Invalid telphone number supplied', 'data'=>['field'=>'telphone']];
+      if($telephoneValid){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>$telephoneValid, 'data'=>['field'=>'telphone']]));
+        return ;
+      }
+      
       $nameValid       = Validate::string($name,false,false,4);
-      if($emailValid) return ['status'=>false, 'message'=>'Invalid name supplied', 'data'=>['field'=>'name']];
+      if($nameValid){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>$nameValid, 'data'=>['field'=>'name']]));
+      } 
 
       // check email exists
       $emailExists    = $this->userModel->getUserByLoginId($email);
-      if($emailExists) return ['status'=>false, 'message'=>'Email is associated with another account!', 'data'=>['field'=>'email']];
+      if($emailExists){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Email is associated with another account!', 'data'=>['field'=>'email']]));
+      }
 
       // check telephone exists
       $telephoneExists = $this->userModel->getUserByTelephone($telephone);
 
-      if($emailExists) return ['status'=>false, 'message'=>'Telephone is associated with another account!', 'data'=>['field'=>'telephone']];
+      if($telephoneExists){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Telephone is associated with another account!', 'data'=>['field'=>'telephone']]));
+      }
       
       // no errors
-      return ['status'=>true];
+      return ['telephone'>$telephone,'email'=>$email,'name'=>$name,'password'=>$password,'companyId'=>$companyId];
+    }
+
+    public function validateLogin()
+    {
+      extract($_POST);
+      $loginId  = isset($loginid) ? $loginid : '';
+      $password = isset($password) ? $password : '';
+
+      $response = [
+        'status'=>false,
+        'message'=>'Invalid username or password'
+      ];
+
+      $loginValid     = Validate::string($loginId);
+      $passwordValid  = Validate::password($password);
+
+      if(!$loginValid && !$passwordValid) return ['loginId'=>$loginId, 'password'=>$password ];
+      
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
     }
 
     public function login()
@@ -45,10 +93,10 @@
         'status'=>false,
         'message'=>'Invalid username or password'
       ];
-      extract($_POST);
-      $userExists = $this->userModel->getUserByLoginId($loginid);
-      if($userExists){
-        $user  = $tuserExists;
+      $loginData = $this->validateLogin();
+      extract($loginData);
+      $user = $this->userModel->getUserByLoginId($loginId);
+      if($user){
         if (password_verify($password,$user['password'])) {
           $response = [
             'status'=>true,
@@ -62,8 +110,8 @@
           ];
         }
       }
-      $this->setOutputHeader('Content-type:application/json');
-      $this->setOutput($response);
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
     }
 
     public function updatepassword()
@@ -89,8 +137,8 @@
       }else{
         $response['message'] = 'Account not found!';
       }
-      $this->setOutputHeader('Content-type:application/json');
-      $this->setOutput($response);
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
     }
 
     public function verifytoken()
@@ -114,8 +162,8 @@
       }else{
         $response['message'] = 'Account not found!';
       }
-      $this->setOutputHeader('Content-type:application/json');
-      $this->setOutput($response);
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
     }
 
     public function resetpassword()
@@ -145,8 +193,8 @@
       }else{
         $response['message'] = 'Account not found!';
       }
-      $this->setOutputHeader('Content-type:application/json');
-      $this->setOutput($response);
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
     }
 
     public function updateprofile()
@@ -170,8 +218,8 @@
       }else{
         $response['message'] = 'Account not found!';
       }
-      $this->setOutputHeader('Content-type:application/json');
-      $this->setOutput($response);
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
     }
     /**
      * validate that a user exists within the database
@@ -189,8 +237,8 @@
         $response['status']  = false;
         $response['message'] = "User not recognised";
       }
-      $_this->setOutputHeader('Content-type:application/json');
-      $_this->setOutput($response);
+      $_this->setOutputHeader(['Content-type:application/json']);
+      $_this->setOutput(json_encode($response));
     }
   }
 ?>

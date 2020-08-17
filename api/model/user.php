@@ -1,5 +1,5 @@
 <?php
-  class UserModel extends DBModel{
+  class UserModel extends Model{
     public function getUser($condition = '',$string = '',$values = [])
     {
       $sql = 'SELECT * FROM user '+$condition;

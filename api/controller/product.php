@@ -39,8 +39,8 @@
       $response['message']  = 'Products packages retrived successfulty';
       $response['data']     = $packages;
 
-      $this->setOutputHeader('Content-type:application/json');
-      $this->setOutput($response);
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
     }
 
     public function validateduserproductpermission()
@@ -53,8 +53,8 @@
         else $response['message'] = "You do not have the right priviledges to complete this request!";
       } $response['message']  =  "Invalid product!";
       $response['status']   = false;
-      $this->setOutputHeader('Content-type:application/json');
-      $this->setOutput($response);
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
     }
   }
   

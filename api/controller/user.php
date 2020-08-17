@@ -1,5 +1,5 @@
 <?php
-  class Admin extends Controller{
+  class User extends Controller{
 
     public function register()
     {
@@ -8,7 +8,7 @@
       if(!$valid['status']) $response;
       else{
         $password = $this->encrypt->password($password);
-        $response = $this->adminModel->register($name,$email,$telephone,$password,$companyId);
+        $response = $this->userModel->register($name,$email,$telephone,$password,$companyId);
       }
       
       $this->setOutputHeader('Content-type:application/json');
@@ -27,11 +27,11 @@
       if($emailValid) return ['status'=>false, 'message'=>'Invalid name supplied', 'data'=>['field'=>'name']];
 
       // check email exists
-      $emailExists    = $this->adminModel->getAdminByLoginId($email);
+      $emailExists    = $this->userModel->getUserByLoginId($email);
       if($emailExists) return ['status'=>false, 'message'=>'Email is associated with another account!', 'data'=>['field'=>'email']];
 
       // check telephone exists
-      $telephoneExists = $this->adminModel->getAdminByTelephone($telephone);
+      $telephoneExists = $this->userModel->getUserByTelephone($telephone);
 
       if($emailExists) return ['status'=>false, 'message'=>'Telephone is associated with another account!', 'data'=>['field'=>'telephone']];
       
@@ -46,18 +46,18 @@
         'message'=>'Invalid username or password'
       ];
       extract($_POST);
-      $adminExists = $this->adminModel->getAdminByLoginId($loginid);
-      if($adminExists){
-        $admin  = $this->adminModel->row;
-        if (password_verify($password,$admin['password'])) {
+      $userExists = $this->userModel->getUserByLoginId($loginid);
+      if($userExists){
+        $user  = $tuserExists;
+        if (password_verify($password,$user['password'])) {
           $response = [
             'status'=>true,
             'message'=>'Login Successful!',
             'data'=>[
-              'email'=>$admin['email'],
-              'telephone'=>$admin['telephone'],
-              'fullname'=>$admin['name'],
-              'companyid'=>$admin['company_id'],
+              'email'=>$user['email'],
+              'telephone'=>$user['telephone'],
+              'fullname'=>$user['name'],
+              'companyid'=>$user['company_id'],
             ]
           ];
         }
@@ -70,15 +70,15 @@
     {
       $response = [
         'status'=>false,
-        'message'=>'Invalid adminid'
+        'message'=>'Invalid userid'
       ];
 
       extract($_POST);
-      $adminExists = $this->adminModel->getAdminById($adminid);
-      if($adminExists){
-        $admin  = $this->adminModel->row;
-        if (password_verify($oldpassword,$admin['password'])) {
-          $updated = $this->adminModel->updatePassword($adminId,$newpassword);
+      $userExists = $this->userModel->getUserById($userid);
+      if($userExists){
+        $user  = $this->userModel->row;
+        if (password_verify($oldpassword,$user['password'])) {
+          $updated = $this->userModel->updatePassword($userId,$newpassword);
           if($updated['status']){
             $response['status'] = true;
             $response['message'] = 'Password update successful';
@@ -97,14 +97,14 @@
     {
       $response = [
         'status'=>false,
-        'message'=>'Invalid adminid'
+        'message'=>'Invalid userid'
       ];
 
       extract($_POST);
-      $adminExists = $this->adminModel->getAdminById($adminid);
-      if($adminExists){
-        $admin  = $this->adminModel->row;
-        if($admin['token'] != $token || date("Y-m-d") > date("Y-m-d", strtotime($admin['tokenexpdate']))  || date("H-i-s") > date("Y-m-d", strtotime($admin['tokenexptime']))) $response['message'] = 'Invalid token!';
+      $userExists = $this->userModel->getUserById($userid);
+      if($userExists){
+        $user  = $userExists;
+        if($user['token'] != $token || date("Y-m-d") > date("Y-m-d", strtotime($user['tokenexpdate']))  || date("H-i-s") > date("Y-m-d", strtotime($user['tokenexptime']))) $response['message'] = 'Invalid token!';
         else{
           $response = [
             'status'=>true,
@@ -122,16 +122,16 @@
     {
       $response = [
         'status'=>false,
-        'message'=>'Invalid adminid'
+        'message'=>'Invalid userid'
       ];
 
       extract($_POST);
-      $adminExists = $this->adminModel->getAdminById($adminid);
-      if($adminExists){
-        $admin  = $this->adminModel->row;
-        if($admin['token'] != $token || date("Y-m-d") > date("Y-m-d", strtotime($admin['tokenexpdate']))  || date("H-i-s") > date("Y-m-d", strtotime($admin['tokenexptime']))) $response['message'] = 'Invalid token!';
+      $userExists = $this->userModel->getUserById($userid);
+      if($userExists){
+        $user  = $userExists;
+        if($user['token'] != $token || date("Y-m-d") > date("Y-m-d", strtotime($user['tokenexpdate']))  || date("H-i-s") > date("Y-m-d", strtotime($user['tokenexptime']))) $response['message'] = 'Invalid token!';
         else{
-          $updated = $this->adminModel->updatePassword($adminId,$password);
+          $updated = $this->userModel->updatePassword($userId,$password);
           if($updated){
             $response = [
               'status'=>true,
@@ -153,12 +153,12 @@
     {
       $response = [
         'status'=>false,
-        'message'=>'Invalid adminid'
+        'message'=>'Invalid userid'
       ];
       extract($_POST);
-      $adminExists = $this->adminModel->getAdminById($adminid);
-      if($adminExists){
-        $updated = $this->adminModel->updateProfile($adminId,$username,$telephone,$fullnmae);
+      $userExists = $this->userModel->getUserById($userid);
+      if($userExists){
+        $updated = $this->userModel->updateProfile($userId,$username,$telephone,$fullnmae);
         if($updated){
           $response = [
             'status'=>true,
@@ -172,6 +172,25 @@
       }
       $this->setOutputHeader('Content-type:application/json');
       $this->setOutput($response);
+    }
+    /**
+     * validate that a user exists within the database
+     *
+     * @param UsierId $userid Primary Id of the user
+     * @return DatabaseUserObject
+     **/
+    public static function validateUser($userId)
+    {
+
+      $_this   = new Self();
+      $userExists = $_this->userModel->getUserById($userId);
+      if($userExists)return  $userExists;
+      else{
+        $response['status']  = false;
+        $response['message'] = "User not recognised";
+      }
+      $_this->setOutputHeader('Content-type:application/json');
+      $_this->setOutput($response);
     }
   }
 ?>

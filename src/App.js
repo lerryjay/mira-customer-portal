@@ -10,6 +10,12 @@ import { Provider } from './common/context';
 import Login from "./pages/login/login";
 import SignUp from "./pages/signup/signup";
 import ForgotPassword from "./pages/forgot_password/forgot_password";
+<<<<<<< Updated upstream
+=======
+import Dashboard from './pages/dashboard/Dashboard.jsx';
+import ChangePassword from './pages/change_password/ChangePassword';
+import CreateTicket from './pages/create_ticket/create_ticket'
+>>>>>>> Stashed changes
 
 import Nav from './common/components/Nav';
 
@@ -25,6 +31,10 @@ class App extends Component {
     console.log('Yuppie i logged ', email, password);
   }
 
+  changePassword = async (currentpwd, newpwd, confirmnewpwd) => {
+    console.log('Changed Successfully ', currentpwd,newpwd, confirmnewpwd);
+  }
+
   logoutUser = () => this.setState({ loggedIn: false });
 
   getContext = () => {
@@ -34,6 +44,7 @@ class App extends Component {
   render() {
     return (
       <Provider value={this.getContext()}>
+<<<<<<< Updated upstream
         <Router>
           <div className="bg-img">
             <Nav />
@@ -45,6 +56,31 @@ class App extends Component {
               </Switch>
           </div>
         </Router>
+=======
+        <div className="home">
+          <Fragment>
+            <Router>
+              <Nav />
+              <div className="App" id="wrapper">
+                {this.state.loggedIn && <Sidebar />}
+                <div className="content">
+                  <Switch>
+                    {!this.state.loggedIn && <Route path="/" component={Login} />}
+                    {!this.state.loggedIn && <Route path="/login" component={Login} />}
+                    {!this.state.loggedIn && <Route path="/signup" component={SignUp} />}
+                    {!this.state.loggedIn && <Redirect from="/dashboard" to="/login" />}
+                    {this.state.loggedIn && <Route exact path="/dashboard" component={Dashboard} />}
+                    {this.state.loggedIn && <Route path="/forgot_password" component={ForgotPassword} />}
+                    {this.state.loggedIn && <Route path="/changePassword" component={ChangePassword} />}
+                    {this.state.loggedIn && <Route path="/create_ticket" component={CreateTicket} />}
+                    <Route component={NotFound} />
+                  </Switch>
+                </div>
+              </div>
+            </Router>
+          </Fragment>
+        </div>
+>>>>>>> Stashed changes
       </Provider>
     )
   };

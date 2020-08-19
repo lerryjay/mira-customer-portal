@@ -12,6 +12,7 @@ import SignUp from "./pages/signup/signup";
 import ForgotPassword from "./pages/forgot_password/forgot_password";
 import Dashboard from './pages/dashboard/Dashboard';
 import ChangePassword from './pages/change_password/ChangePassword';
+import CreateTicket from './pages/create_ticket/create_ticket'
 
 import Nav from './common/components/Nav';
 import Sidebar from './common/components/Sidebar';
@@ -32,10 +33,14 @@ class App extends Component {
     return { status:true,message: 'Login successful'};
   }
 
+  changePassword = async (currentpwd, newpwd, confirmnewpwd) => {
+    console.log('Changed Successfully ', currentpwd,newpwd, confirmnewpwd);
+  }
+
   logoutUser = () => this.setState({ loggedIn: false });
 
   getContext = () => {
-    return { ...this.state, login: this.loginUser, logout: this.logoutUser }
+    return { ...this.state, login: this.loginUser, logout: this.logoutUser, changepassword: this.changePassword }
   };
 
 
@@ -59,6 +64,7 @@ class App extends Component {
                     {this.state.loggedIn && <Route exact path="/dashboard" component={Dashboard} />}
                     {this.state.loggedIn && <Route path="/forgot_password" component={ForgotPassword} />}
                     {this.state.loggedIn && <Route path="/changePassword" component={ChangePassword} />}
+                    {this.state.loggedIn && <Route path="/create_ticket" component={CreateTicket} />}
                     <Route component={NotFound} />
                   </Switch>
                 </div>

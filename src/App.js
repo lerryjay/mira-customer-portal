@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React, { Component, Fragment } from 'react';
+import { Redirect, BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { HTTPURL } from './common/global_constant';
 
-import './App.css';
+// import './App.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 import { Provider } from './common/context';
@@ -10,26 +10,26 @@ import { Provider } from './common/context';
 import Login from "./pages/login/login";
 import SignUp from "./pages/signup/signup";
 import ForgotPassword from "./pages/forgot_password/forgot_password";
-import Dashboard from './pages/dashboard/Dashboard.jsx';
+import Dashboard from './pages/dashboard/Dashboard';
 import ChangePassword from './pages/change_password/ChangePassword';
-import CreateTicket from './pages/create_ticket/create_ticket'
 
 import Nav from './common/components/Nav';
+import Sidebar from './common/components/Sidebar';
+import NotFound from './common/components/NotFound';
+
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: false
+      loggedIn: true
     }
   }
   loginUser = async (email, password) => {
-    await fetch(HTTPURL+'user/login');
+    // await fetch(HTTPURL + 'user/login');
+    this.setState({ loggedIn : true});
     console.log('Yuppie i logged ', email, password);
-  }
-
-  changePassword = async (currentpwd, newpwd, confirmnewpwd) => {
-    console.log('Changed Successfully ', currentpwd,newpwd, confirmnewpwd);
+    return { status:true,message: 'Login successful'};
   }
 
   logoutUser = () => this.setState({ loggedIn: false });
@@ -38,8 +38,11 @@ class App extends Component {
     return { ...this.state, login: this.loginUser, logout: this.logoutUser }
   };
 
+
   render() {
+
     return (
+
       <Provider value={this.getContext()}>
         <div className="home">
           <Fragment>
@@ -56,7 +59,6 @@ class App extends Component {
                     {this.state.loggedIn && <Route exact path="/dashboard" component={Dashboard} />}
                     {this.state.loggedIn && <Route path="/forgot_password" component={ForgotPassword} />}
                     {this.state.loggedIn && <Route path="/changePassword" component={ChangePassword} />}
-                    {this.state.loggedIn && <Route path="/create_ticket" component={CreateTicket} />}
                     <Route component={NotFound} />
                   </Switch>
                 </div>
@@ -67,6 +69,8 @@ class App extends Component {
       </Provider>
     )
   };
+
+  
 }
 
 export default App;

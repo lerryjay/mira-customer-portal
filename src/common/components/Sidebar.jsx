@@ -32,13 +32,13 @@ const Sidebar = (props) => {
                                 className="fas fa-chevron-left fa-fw float-right"></i>
                         </li>
                     </NavLink>
-                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='a' onClick={toggle2}>
+                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/viewClient' onClick={toggle2}>
                         <li className="nav-item active">
                             <i className="fa fa-user-friends"></i>&nbsp;View&nbsp;Client&nbsp;<i
                                 className="fas fa-chevron-left fa-fw float-right"></i>
                         </li>
                     </NavLink>
-                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='a' onClick={toggle2}>
+                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/listClient' onClick={toggle2}>
                         <li className="nav-item">
                             <i className="fa fa-list-ol"></i>&nbsp;List&nbsp;Client&nbsp;<i
                                 className="fas fa-chevron-left fa-fw float-right"></i>
@@ -73,7 +73,7 @@ const Sidebar = (props) => {
                             <i className="fas fa-key fa-fw"></i>&nbsp;Change&nbsp;Password
                         </li>
                     </NavLink>
-                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} className="ext-center" to='a'>
+                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} className="text-center" to='/login'>
                         <li className="nav-item last" style={{ margin: "0 35%" }} >
                             <i className="fas fa-power-off text-danger">&nbsp;<b
                                 style={{ color: "white" }}>&nbsp;Logout</b></i>

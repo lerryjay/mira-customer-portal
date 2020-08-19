@@ -16,6 +16,8 @@ import CreateClient from './pages/create_client/CreateClient';
 import CreateUser from './pages/create_user/CreateUser';
 import Profile from './pages/profile/Profile';
 import TicketList from './pages/ticket_list/TicketList';
+import ViewClient from './pages/view_client/ViewClient';
+import ListClient from './pages/list_client/ListClient'
 
 import Nav from './common/components/Nav';
 import Sidebar from './common/components/Sidebar';
@@ -66,6 +68,8 @@ class App extends Component {
                     {this.state.loggedIn && <Route path="/creatUser" component={CreateUser} />}
                     {this.state.loggedIn && <Route path="/profile" component={Profile} />}
                     {this.state.loggedIn && <Route path="/ticketList" component={TicketList} />}
+                    {this.state.loggedIn && <Route path="/viewClient" component={ViewClient} />}
+                    {this.state.loggedIn && <Route path="/listClient" component={ListClient} />}
                     {this.state.loggedIn && <Route path="/changePassword" component={ChangePassword} />}
                     <Route component={NotFound} />
                   </Switch>

@@ -19,7 +19,8 @@ export default function TicketList() {
                                             className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-white home-chart">
                                             <caption>Hello World!</caption>
                                             <thead>
-                                                <th>S/N</th>
+                                            <tr>
+                                            <th>S/N</th>
                                                 <th>Date&nbsp;&&nbsp;Time</th>
                                                 <th>Client&nbsp;Name</th>
                                                 <th>Email&nbsp;Address</th>
@@ -27,6 +28,8 @@ export default function TicketList() {
                                                 <th><i className="fas fa-comments"></i>&nbsp;&nbsp;Message</th>
                                                 <th>Status</th>
                                                 <th>View&nbsp;Ticket</th>
+                                            </tr>
+                                                
                                             </thead>
                                             <tbody>
                                                 <tr>
@@ -93,7 +96,7 @@ export default function TicketList() {
                                                             className="fas fa-comments">Pending</i></button>
                                                     </td>
                                                     <td className="align-middle"><i className="fas fa-eye" data-toggle="modal"
-                                                        data-target="#viewTicket"></i></td>
+                                                       data-target="#viewTicket"></i></td>
                                                 </tr>
 
                                             </tbody>
@@ -121,6 +124,77 @@ export default function TicketList() {
                     </form>
                 </div>
             </div>
+       
+            <div className="overlay"></div>
+
+<div className="modal fade" id="viewTicket" tabIndex="-1" role="dialog" aria-labelledby="viewTicketTitle"
+    aria-hidden="true">
+    <div className="modal-dialog modal-dialog-centered" role="document">
+        <div className="modal-content">
+            <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div className="modal-body">
+                <form action="">
+                    <div className="card">
+                        <div className="card-header h6">
+                            Create Ticket
+                        </div>
+                        <div className="card-body">
+
+                            <div className="row">
+
+                                <div className="col-md-12 mb-3">
+                                    <div className="form-group">
+                                        <label htmlFor="" className="">Email</label>
+                                        <input type="text" className="form-control form-control-sm" name="" id=""
+                                            value="Johndoe@mail.com" placeholder="" disabled/>
+                                    </div>
+                                </div>
+                                <div className="col-md-6 mb-3">
+                                    <div className="form-group">
+                                        <label htmlFor="" className="">Subject</label>
+                                        <input type="text" className="form-control form-control-sm" name="" id=""
+                                            value="John" placeholder="" disabled/>
+                                    </div>
+                                </div>
+                                <div className="col-md-6 mb-3">
+                                    <div className="form-group">
+                                        <label htmlFor="type" className="">Ticket&nbsp;Type</label>
+                                        <select name="type" id="type" className="form-select form-select-sm" disabled>
+                                            <option value="" defaultValue disabled>--Select&nbsp;Ticket&nbsp;Type--
+                                            </option>
+                                            <option value="complaint">complaint</option>
+                                            <option value="request">Request</option>
+                                            <option value="enquiry">Enquiry</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="col-md-12 mb-3">
+                                    <div className="form-group">
+                                        <label htmlFor="message">Message</label>
+                                        <textarea id="message" name="message" rows="10" cols="50"
+                                            className="form-control text-left" disabled>
+
+                                    </textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
         </div>
     )
 }

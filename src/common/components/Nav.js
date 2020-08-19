@@ -24,6 +24,8 @@ const Nav = () => {
         });
     }
 
+
+    
     return (
 
         <nav className="navbar navbar-expand-lg navbar-dark bg-navbar px-2 fixed-top up" id="Navigation">
@@ -42,10 +44,10 @@ const Nav = () => {
                 </ul>
             </div>
 
-            {/* <span className="">
+            <span className="">
                 <i id='btn-toggle' className="fas fa-moon"></i>
                 <i id='btn-toggle' className="fas fa-sun sr-only"></i>
-            </span> */}
+            </span>
         </nav>)
 }
 export default Nav;

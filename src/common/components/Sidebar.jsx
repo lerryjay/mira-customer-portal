@@ -60,7 +60,7 @@ const Sidebar = (props) => {
                                 className="fas fa-chevron-left fa-fw float-right"></i>
                         </li>
                     </NavLink>
-                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='a'>
+                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/changePassword'>
                         <li className="nav-item">
                             <i className="fas fa-key fa-fw"></i>&nbsp;Change&nbsp;Password
                         </li>

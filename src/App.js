@@ -11,6 +11,7 @@ import Login from "./pages/login/login";
 import SignUp from "./pages/signup/signup";
 import ForgotPassword from "./pages/forgot_password/forgot_password";
 import Dashboard from './pages/dashboard/Dashboard';
+import ChangePassword from './pages/change_password/ChangePassword';
 
 import Nav from './common/components/Nav';
 import Sidebar from './common/components/Sidebar';
@@ -21,7 +22,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: false
+      loggedIn: true
     }
   }
   loginUser = async (email, password) => {
@@ -57,6 +58,7 @@ class App extends Component {
                     {!this.state.loggedIn && <Redirect from="/dashboard" to="/login" />}
                     {this.state.loggedIn && <Route exact path="/dashboard" component={Dashboard} />}
                     {this.state.loggedIn && <Route path="/forgot_password" component={ForgotPassword} />}
+                    {this.state.loggedIn && <Route path="/changePassword" component={ChangePassword} />}
                     <Route component={NotFound} />
                   </Switch>
                 </div>

@@ -26,26 +26,27 @@ class Login extends Component {
         e.preventDefault()
 
         const { email, password} = this.state
-        await this.setState({loading : true});
+       
         //Waste 3 seconds
-        setTimeout(() =>this.setState({loading : false}), 3000);
+       
         if(!Validators.validateEmail(email).status){
             const err = Validators.validateEmail(email).message
             this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
-        }else if(!Validators.validatePassword(password,1).status){
-            const err = Validators.validatePassword(password,1).message;
-            this.setState({errormessage: err});
+        }else if(!Validators.validatePassword(password,1,false,false,false,false).status){
+            const err = Validators.validatePassword(password,1,false,false,false,false).message;
+           await this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
         }else{
+            await this.setState({loading : true});
+            setTimeout(() =>this.setState({loading : false}), 3000);
            const res =  await this.state.login(email,password);
-            
-           this.props.history.push('/dashboard');
-        //    if(!res['status'])this.setState({errormessage: res['message']});
-        //     else{
-        //         //find a way to redirect here 
-        //         this.props.history.push('/dashboard');
-        //     }
+           if(!res['status'])this.setState({errormessage: res['message']});
+            else{
+                document.querySelector('.content').style.width = "";
+                 document.querySelector('.content').style.marginLeft = "";
+                this.props.history.push('/dashboard');
+            }
         }
         console.log('submitting')
     }
@@ -54,6 +55,7 @@ class Login extends Component {
         document.querySelector('.content').style.width = "100vw";
         document.querySelector('.content').style.marginLeft = "0";
      }
+
 
     render() {
         return(
@@ -68,8 +70,8 @@ class Login extends Component {
                         <div className="card-body py-lg-5 text-muted text-center">
                             <form onSubmit={this.handleSubmit}>
 
-                                { this.state.errormessage.length > 0 ? 
-                                    <div class="alert alert-warning" role="alert">{this.state.errormessage}</div>
+                                { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
+                                    <div className="alert alert-warning" role="alert">{this.state.errormessage}</div>
                                     : 
                                     <span></span>
                                 }

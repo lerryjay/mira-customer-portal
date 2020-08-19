@@ -25,28 +25,16 @@ class App extends Component {
     }
   }
   loginUser = async (email, password) => {
-    await fetch(HTTPURL + 'user/login');
+    // await fetch(HTTPURL + 'user/login');
+    this.setState({ loggedIn : true});
     console.log('Yuppie i logged ', email, password);
+    return { status:true,message: 'Login successful'};
   }
 
   logoutUser = () => this.setState({ loggedIn: false });
 
-  signupUser = async (username, email, password) => {
-    console.log('Registered Successfully ', username, email, password);
-  }
-
-  forgotPassword = async (email) => {
-    console.log('Reset password link sent!', email);
-  }
-
   getContext = () => {
-    return { 
-      ...this.state, 
-      login: this.loginUser, 
-      logout: this.logoutUser, 
-      signup: this.signupUser,
-      forgotpassword: this.forgotPassword
-    }
+    return { ...this.state, login: this.loginUser, logout: this.logoutUser }
   };
 
 

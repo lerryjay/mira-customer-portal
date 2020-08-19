@@ -8,7 +8,10 @@ body, .bg-img {
   border: 0;
   transition: box-shadow 0.15s ease;
 }
-
+.welcome{
+  color: #fff;
+  text-align: center;
+}
 div.card, div.bottom_link {
   width: inherit;
 }

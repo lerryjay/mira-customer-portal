@@ -1,30 +1,52 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
+import Validators  from "../../common/Validators";
 import {withContext} from '../../common/context';
 
 class Login extends Component {
 
     constructor(props){
         super(props);
-        this.state = { ...this.props, email : '', password : '' };
+        this.state = { 
+            ...this.props, 
+            email : '', 
+            password : '' , 
+            loading: false, 
+            errormessage: ''
+        };
     }
     
     handleInputChange = e => {
         const { name, value } = e.target
-        this.setState({ [name]: value })
+        this.setState({ [name]: value,errormessage : '' });
     }
 
     handleSubmit = async e => {
         e.preventDefault()
-        const { email, password } = this.state
-        if (email === '' && password === '') {
-            return false
+
+        const { email, password} = this.state
+        await this.setState({loading : true});
+        //Waste 3 seconds
+        setTimeout(() =>this.setState({loading : false}), 3000);
+        if(!Validators.validateEmail(email).status){
+            const err = Validators.validateEmail(email).message
+            this.setState({errormessage: err});
+            setTimeout(()=> this.setState({errormessage: ''}),5000);
+        }else if(!Validators.validatePassword(password,1).status){
+            const err = Validators.validatePassword(password,1).message;
+            this.setState({errormessage: err});
+            setTimeout(()=> this.setState({errormessage: ''}),5000);
+        }else{
+           const res =  await this.state.login(email,password);
+            
+           this.props.history.push('/dashboard');
+        //    if(!res['status'])this.setState({errormessage: res['message']});
+        //     else{
+        //         //find a way to redirect here 
+        //         this.props.history.push('/dashboard');
+        //     }
         }
-        // else{
-        //     const res = await this.state.login(email,password);
-        //     if(res['status'])
-        // }
         console.log('submitting')
     }
 
@@ -40,6 +62,13 @@ class Login extends Component {
                         </div>
                         <div className="card-body py-lg-5 text-muted text-center">
                             <form onSubmit={this.handleSubmit}>
+
+                                { this.state.errormessage.length > 0 ? 
+                                    <div class="alert alert-warning" role="alert">{this.state.errormessage}</div>
+                                    : 
+                                    <span></span>
+                                }
+
                                 <div className="input-group mb-3">
                                     <span className="input-group-text bg-white alt" id="email">
                                         <i className="fas fa-envelope fa-fw"></i>
@@ -51,6 +80,7 @@ class Login extends Component {
                                     value={this.state.email}
                                     onChange={this.handleInputChange}/>
                                 </div>
+                                
 
                                 <div className="input-group mb-3">
                                     <span className="input-group-text bg-white alt" id="password">
@@ -62,11 +92,19 @@ class Login extends Component {
                                         value={this.state.password}
                                         onChange={this.handleInputChange}/>
                                 </div>
-
+                                {this.state.loading ? 
                                 <button type="submit" className="btn btn-sm bg-btn">
-                                    <i className="fas fa-sign-in-alt fa-fw mr-1"></i>
-                                    SIGN IN
+                                    <div className="spinner-border text-secondary" role="status" id="loader">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
                                 </button>
+                                : <button type="submit" className="btn btn-sm bg-btn">
+                                        <i className="fas fa-sign-in-alt fa-fw mr-1"></i>
+                                        SIGN IN
+                                    </button>
+                                }
+                                
+                                
                             </form>
                         </div>
                     </div>

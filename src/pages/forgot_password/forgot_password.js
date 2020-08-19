@@ -1,7 +1,50 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
+
+import Validators  from "../../common/Validators";
+import {withContext} from '../../common/context';
+
 class ForgotPassword extends Component {
+    constructor(props){
+        super(props);
+        this.state = { 
+            ...this.props, 
+            email : '', 
+            loading: false, 
+            errormessage: ''
+        };
+    }
+
+    handleInputChange = e => {
+        const { name, value } = e.target
+        this.setState({ [name]: value,errormessage : '' });
+    }
+
+    handleSubmit = async e => {
+        e.preventDefault()
+
+        const { email} = this.state
+        await this.setState({loading : true});
+        //Waste 3 seconds
+        setTimeout(() =>this.setState({loading : false}), 3000);
+        if(!Validators.validateEmail(email).status){
+            const err = Validators.validateEmail(email).message
+            this.setState({errormessage: err});
+            setTimeout(()=> this.setState({errormessage: ''}),5000);
+        }else{
+           const res =  await this.state.forgotpassword(email);
+            
+           this.props.history.push('/login');
+        //    if(!res['status'])this.setState({errormessage: res['message']});
+        //     else{
+        //         //find a way to redirect here 
+        //         this.props.history.push('/dashboard');
+        //     }
+        }
+        console.log('Reset password link sent!')
+    }
+
     render() {
         return(
             <div>
@@ -13,7 +56,13 @@ class ForgotPassword extends Component {
                             <img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt=""/>
                         </div>
                         <div className="card-body py-lg-5 text-muted text-center">
-                            <form action="" method="post" id="forgotpwd" name="forgotpwd" >
+                            <form onSubmit={this.handleSubmit} >
+                                
+                                { this.state.errormessage.length > 0 ? 
+                                    <div class="alert alert-warning" role="alert">{this.state.errormessage}</div>
+                                    : 
+                                    <span></span>
+                                }
 
                                 <div className="input-group mb-3">
                                     <span className="input-group-text bg-white alt" id="email">
@@ -21,13 +70,22 @@ class ForgotPassword extends Component {
                                     </span>
                                     {/* <label for="email">Email</label> */}
                                     <input type="text" className="form-control alt" id="email" name="email" placeholder="Email" aria-label="Email"
-                                        aria-describedby="email" autocomplete="email"/>
+                                        aria-describedby="email" autocomplete="email" required
+                                        value={this.state.email}
+                                        onChange={this.handleInputChange}/>
                                 </div>
 
+                                {this.state.loading ? 
                                 <button type="submit" className="btn btn-sm bg-btn">
+                                    <div className="spinner-border text-secondary" role="status" id="loader">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
+                                </button>
+                                : <button type="submit" className="btn btn-sm bg-btn">
                                     <i className="fas fa-paper-plane fa-fw"></i>
                                     SEND
                                 </button>
+                                }
                             </form>
                         </div>
                     </div>
@@ -46,4 +104,4 @@ class ForgotPassword extends Component {
     }
 }
 
-export default ForgotPassword
+export default withContext(ForgotPassword);

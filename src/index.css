@@ -234,7 +234,7 @@ div ul a li {
   background-color: #2c2c34;
   min-height: 100vh;
   width: 200px;
-  margin-top: 64px;
+  margin-top: 45px;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -249,7 +249,7 @@ div ul a li {
 .content {
   width: calc(100vw - 200px);
   margin-left: 200px;
-  margin-top: 58px;
+  margin-top: 40px;
 }
 
  

@@ -1,10 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 
 const Nav = () => {
 
-    document.addEventListener("DOMContentLoaded", () => {
+    const toggle = () => {
         //Link click remove sidebar
         document.querySelectorAll(".nav-item").forEach(item => {
             item.addEventListener("click", () => {
@@ -23,34 +22,30 @@ const Nav = () => {
             document.querySelector('#sidebar').classList.remove('active');
             document.querySelector('.overlay').classList.remove('active');
         });
-    })
+    }
 
     return (
 
         <nav className="navbar navbar-expand-lg navbar-dark bg-navbar px-2 fixed-top up" id="Navigation">
-            <img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt="" width="40" />
+            
+            <h6 className="h6 text-uppercase"><img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt="" width="40" />Ticket App</h6>
             <button className="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#ticketNav"
-                aria-controls="ticketNav" aria-expanded="false" aria-label="Toggle navigation" id="sidebarCollapse">
+                aria-controls="ticketNav" aria-expanded="false" aria-label="Toggle navigation" id="sidebarCollapse" onClick={toggle}>
                 <span className="navbar-toggler-icon"></span>
             </button>
 
             <div className="collapse navbar-collapse" id="ticketNav">
                 <ul className="navbar-nav mr-auto">
-                    <li className="nav-item active">
-                        <Link className="nav-link" to="#">Home <span className="sr-only">(current)</span></Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="#">Link</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link disabled" to="#" tabIndex="-1" aria-disabled="true">Disabled</Link>
-                    </li>
-                    <li className="mt-2">
-                        <i id='btn-toggle' className="fas fa-moon"></i>
-                        <i id='btn-toggle' className="fas fa-sun sr-only"></i>
+                    <li className="mb-1">
+                    
                     </li>
                 </ul>
             </div>
+
+            {/* <span className="">
+                <i id='btn-toggle' className="fas fa-moon"></i>
+                <i id='btn-toggle' className="fas fa-sun sr-only"></i>
+            </span> */}
         </nav>)
 }
 export default Nav;

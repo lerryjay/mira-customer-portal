@@ -29,14 +29,9 @@ class Login extends Component {
     }
 
     componentDidMount(){
-        document.getElementById('sidebar').style.display = "none";
         document.querySelector('.content').style.width = "100vw";
         document.querySelector('.content').style.marginLeft = "0";
      }
-  
-    //  componentWillUnmount(){
-    //     document.getElementById('sidebar').style.display = "flex";
-    //  }
 
     render() {
         return(
@@ -54,10 +49,10 @@ class Login extends Component {
                                     <span className="input-group-text bg-white alt" id="email">
                                         <i className="fas fa-envelope fa-fw"></i>
                                     </span>
-                                    <label for="email" className="sr-only">Email</label>
+                                    <label htmlFor="email" className="sr-only">Email</label>
                                     <input type="text" className="form-control alt alt2" 
                                     id="email" name="email" placeholder="Email" aria-label="Email"
-                                    aria-describedby="email" autocomplete="email" required
+                                    aria-describedby="email" autoComplete="email" required
                                     value={this.state.email}
                                     onChange={this.handleInputChange}/>
                                 </div>
@@ -66,7 +61,7 @@ class Login extends Component {
                                     <span className="input-group-text bg-white alt" id="password">
                                         <i className="fas fa-lock-open fa-fw"></i>
                                     </span>
-                                    <label for="password" className="sr-only">Password</label>
+                                    <label htmlFor="password" className="sr-only">Password</label>
                                     <input type="password" className="form-control alt alt2" id="password" name="password" placeholder="Password..."
                                         aria-label="Password" aria-describedby="password" required
                                         value={this.state.password}

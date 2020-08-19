@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Redirect, BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { HTTPURL } from './common/global_constant';
 
 // import './App.css';
@@ -37,7 +37,7 @@ class App extends Component {
 
 
   render() {
-    
+
     return (
 
       <Provider value={this.getContext()}>
@@ -45,15 +45,16 @@ class App extends Component {
           <Fragment>
             <Router>
               <Nav />
-              <div className="" id="wrapper">
-                <Sidebar />
+              <div className="App" id="wrapper">
+                {this.state.loggedIn && <Sidebar />}
                 <div className="content">
                   <Switch>
-                    <Route path="/login" component={Login} />
-                    <Route path="/signup" component={SignUp} />
-                    <Route exact path="/dashboard" component={Dashboard} />
-                    <Route exact path="/" component={Dashboard} />
-                    <Route path="/forgot_password" component={ForgotPassword} />
+                    {!this.state.loggedIn && <Route path="/" component={Login} />}
+                    {!this.state.loggedIn && <Route path="/login" component={Login} />}
+                    {!this.state.loggedIn && <Route path="/signup" component={SignUp} />}
+                    {!this.state.loggedIn && <Redirect from="/dashboard" to="/login" />}
+                    {this.state.loggedIn && <Route exact path="/dashboard" component={Dashboard} />}
+                    {this.state.loggedIn && <Route path="/forgot_password" component={ForgotPassword} />}
                     <Route component={NotFound} />
                   </Switch>
                 </div>

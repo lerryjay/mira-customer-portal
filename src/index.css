@@ -69,10 +69,13 @@ div.card, div.bottom_link {
   width: inherit;
 }
 
-.bg-light, div.card {
+.bg-light {
   background-color: #f8f9fa !important;
 }
 
+div.card {
+  background-color: #f8f9fa ;
+}
 .bg-secondary {
   background-color: #e9eaeb !important;
 }
@@ -392,4 +395,7 @@ a:hover {
 #profilePix div.card-header {
   background-color: #04021b;
   border-color: #181924;
+}
+.table-hover tbody tr:hover {
+  color: #c1cdd8 !important;
 }

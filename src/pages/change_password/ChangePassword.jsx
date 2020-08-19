@@ -60,7 +60,7 @@ class ChangePassword extends Component {
     render() {
         return (
             <div className="container">
-                <div className="row col-lg-5 col-md-8 col-sm-10 col-xs-12 mx-auto cent">
+                <div className="row col-lg-6 col-md-8 col-sm-10 col-xs-12 mx-auto cent">
 
                     <div className="card bg-light shadow border-0 py-3">
                         <div className="card-header bg-transparent text-center text-dark">

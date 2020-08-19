@@ -13,7 +13,7 @@ export default class ChangePassword extends Component {
     render() {
         return (
             <div className="container">
-                <div className="row col-lg-5 col-md-8 col-sm-10 col-xs-12 mx-auto cent">
+                <div className="row col-lg-6 col-md-8 col-sm-10 col-xs-12 mx-auto cent">
 
                     <div className="card bg-light shadow border-0 py-3">
                         <div className="card-header bg-transparent text-center">
@@ -29,7 +29,7 @@ export default class ChangePassword extends Component {
                                     <label className='sr-only' htmlFor="currentpwd">Current&nbsp;Password</label>
                                     <input type="password" className="form-control form-control-sm alt" id="currentpwd"
                                         name="currentpwd" placeholder="Current Password" aria-label="Current password"
-                                        aria-describedby="Current password" autocomplete="off" />
+                                        aria-describedby="Current password" autoComplete="off" />
                                 </div>
                                 <div className="input-group mb-3">
                                     <span className="input-group-text bg-white alt" id="email">
@@ -38,7 +38,7 @@ export default class ChangePassword extends Component {
                                     <label className='sr-only' htmlFor="newpwd">New&nbsp;Password</label>
                                     <input type="password" className="form-control form-control-sm alt" id="newpwd" name="newpwd"
                                         placeholder="New Password" aria-label="Confirm New password"
-                                        aria-describedby="Confirm New password" autocomplete="off" />
+                                        aria-describedby="Confirm New password" autoComplete="off" />
                                 </div>
                                 <div className="input-group mb-3">
                                     <span className="input-group-text bg-white alt" id="email">
@@ -48,7 +48,7 @@ export default class ChangePassword extends Component {
                                     <input type="password" className="form-control form-control-sm alt" id="confirmnewpwd"
                                         name="confirmnewpwd" placeholder="Confirm New password"
                                         aria-label="Confirm New password" aria-describedby="Confirm New password"
-                                        autocomplete="off" />
+                                        autoComplete="off" />
                                 </div>
 
                                 <button type="submit" className="btn btn-sm bg-btn">

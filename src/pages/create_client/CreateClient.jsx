@@ -12,62 +12,62 @@ export default class CreateClient extends Component {
     render() {
         return (
 
-            <div class="container mx-auto row">
+            <div className="container-fluid row">
 
-                <div class="col-md-10 mb-3 mt-4" id="profile">
+                <div className="col-lg-10 mb-3 mt-4 mx-auto" id="profile">
                     <form action="">
-                        <div class="card">
-                            <div class="card-header text-white">
+                        <div className="card">
+                            <div className="card-header text-white">
                                 Add Client
                 </div>
-                            <div class="card-body">
+                            <div className="card-body">
 
-                                <div class="row">
+                                <div className="row">
 
-                                    <div class="col-md-6 mb-3">
-                                        <div class="form-group">
-                                            <label htmlFor="" class="sr-only">Email</label>
-                                            <input type="text" class="form-control form-control-sm" name=""
-                                                id="" value="Johndoe@mail.com" placeholder="" />
+                                    <div className="col-md-6 mb-3">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Email</label>
+                                            <input type="text" className="form-control form-control-sm" name=""
+                                                id="" value="" placeholder="Johndoe@mail.com" />
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6 mb-3">
-                                        <div class="form-group">
-                                            <label htmlFor="" class="sr-only">Phone-number</label>
-                                            <input type="text" class="form-control form-control-sm" name=""
-                                                id="" value="00000000000000" placeholder="" />
+                                    <div className="col-md-6 mb-3">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Phone-number</label>
+                                            <input type="text" className="form-control form-control-sm" name=""
+                                                id="" value="" placeholder="0900000000000000" />
                                         </div>
                                     </div>
 
 
-                                    <div class="col-md-6 mb-3">
-                                        <div class="form-group">
-                                            <label htmlFor="" class="sr-only">Company&nbsp;Name</label>
-                                            <input type="text" class="form-control form-control-sm" name=""
-                                                id="" value="John" placeholder="" />
+                                    <div className="col-md-6 mb-3">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Company&nbsp;Name</label>
+                                            <input type="text" className="form-control form-control-sm" name=""
+                                                id="" value="" placeholder="Company Name" />
                                         </div>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <div class="form-group">
-                                            <label htmlFor="" class="sr-only">Peronal&nbsp;Name</label>
-                                            <input type="text" class="form-control form-control-sm" name=""
-                                                id="" value="Doe" placeholder="" />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <div class="form-group">
-                                            <label htmlFor="" class="sr-only">Company&nbsp;Address</label>
-                                            <input type="text" class="form-control form-control-sm" name=""
-                                                id="" value="No 6 Hello World close" placeholder="" />
+                                    <div className="col-md-6 mb-3">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Peronal&nbsp;Name</label>
+                                            <input type="text" className="form-control form-control-sm" name=""
+                                                id="" value="" placeholder="Personal Name" />
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6 mb-3">
-                                        <div class="form-group">
-                                            <label htmlFor="" class="sr-only">Image</label>
-                                            <input type="file" class="form-file form-file-sm" name=""
+                                    <div className="col-md-6 mb-3">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Company&nbsp;Address</label>
+                                            <input type="text" className="form-control form-control-sm" name=""
+                                                id="" value="" placeholder="Company Address" />
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-6 mb-3">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Image</label>
+                                            <input type="file" className="form-file form-file-sm" name=""
                                                 id="" placeholder="" />
                                         </div>
                                     </div>
@@ -77,15 +77,15 @@ export default class CreateClient extends Component {
 
                             </div>
 
-                            <div class="card-footer">
-                                <div class="float-right">
+                            <div className="card-footer">
+                                <div className="float-right">
 
-                                    <button class="btn btn-sm btn-primary">
-                                        <i class="fas fa-folder-open"></i>
+                                    <button className="btn btn-sm btn-primary">
+                                        <i className="fas fa-folder-open"></i>
                             Save
                         </button>&nbsp;
-                                    <button class="btn btn-sm btn-danger" type="reset">
-                                        <i class="fas fa-history"></i>
+                                    <button className="btn btn-sm btn-danger" type="reset">
+                                        <i className="fas fa-history"></i>
                             Reset
                         </button>
                                 </div>

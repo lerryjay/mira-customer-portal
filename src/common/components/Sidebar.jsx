@@ -10,6 +10,21 @@ const Sidebar = (props) => {
         document.querySelector('.overlay').classList.remove('active');
     }
 
+    const dropdown = () => {
+        let dropdown = document.getElementsByClassName("dropdown-btn");
+        let p;
+        for (p = 0; p < dropdown.length; p++) {
+            dropdown[p].addEventListener("click", function () {
+                this.classList.toggle("active");
+                let dropdownContent = this.nextElementSibling;
+                if (dropdownContent.style.display === "block") {
+                    dropdownContent.style.display = "none";
+                } else {
+                    dropdownContent.style.display = "block";
+                }
+            });
+        }
+    }
 
     return (
         <div>
@@ -53,6 +68,12 @@ const Sidebar = (props) => {
                     <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/ticketList' onClick={toggle2}>
                         <li className="nav-item">
                             <i className="fa fa-list-ul"></i>&nbsp;Ticket&nbsp;List&nbsp;<i
+                                className="fas fa-chevron-left fa-fw float-right"></i>
+                        </li>
+                    </NavLink>
+                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/ticketChat' onClick={toggle2}>
+                        <li className="nav-item">
+                            <i className="fa fa-list-ul"></i>&nbsp;Ticket&nbsp;Chat&nbsp;<i
                                 className="fas fa-chevron-left fa-fw float-right"></i>
                         </li>
                     </NavLink>

@@ -143,6 +143,38 @@ label {
   margin-bottom : 0 !important;
 }
 
+.other_files{
+  width: 200px;
+  background-color: blue;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.imagePreview {
+  width: 200px;
+  height: 200px;
+}
+.images{
+  display: flex;
+}
+.other_files:hover .fa-trash, .imgPreview:hover .fa-trash{
+  visibility:visible !important;
+}
+.imagePreview .fa-trash{
+  position: absolute;
+  left: 198.5px;
+  cursor: pointer;
+  visibility: hidden;
+}
+.other_files .fa-trash{
+  position: relative;
+  top: -80px;
+  left: 115px;
+  cursor: pointer;
+  visibility: hidden;
+}
+
 /* =========================home ===================== */
 
 div.home {

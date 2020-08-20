@@ -10,8 +10,13 @@ import { Provider } from './common/context';
 import Login from "./pages/login/login";
 import SignUp from "./pages/signup/signup";
 import ForgotPassword from "./pages/forgot_password/forgot_password";
+<<<<<<< HEAD
 import Dashboard from './pages/dashboard/Dashboard.jsx';
+=======
+import Dashboard from './pages/dashboard/dashboard';
+>>>>>>> auth
 import ChangePassword from './pages/change_password/ChangePassword';
+import CreateTicket from './pages/create_ticket/create_ticket'
 import CreateClient from './pages/create_client/CreateClient';
 import CreateUser from './pages/create_user/CreateUser';
 import Profile from './pages/profile/Profile';
@@ -39,10 +44,14 @@ class App extends Component {
     return { status: true, message: 'Login successful' };
   }
 
+  changePassword = async (currentpwd, newpwd, confirmnewpwd) => {
+    console.log('Changed Successfully ', currentpwd,newpwd, confirmnewpwd);
+  }
+
   logoutUser = () => this.setState({ loggedIn: false });
 
   getContext = () => {
-    return { ...this.state, login: this.loginUser, logout: this.logoutUser }
+    return { ...this.state, login: this.loginUser, logout: this.logoutUser, changepassword: this.changePassword }
   };
 
 
@@ -73,6 +82,7 @@ class App extends Component {
                     {this.state.loggedIn && <Route path="/listClient" component={ListClient} />}
                     {this.state.loggedIn && <Route path="/ticketChat" component={Chat} />}
                     {this.state.loggedIn && <Route path="/changePassword" component={ChangePassword} />}
+                    {this.state.loggedIn && <Route path="/create_ticket" component={CreateTicket} />}
                     <Route component={NotFound} />
                   </Switch>
                 </div>

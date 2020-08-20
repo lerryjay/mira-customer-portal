@@ -10,7 +10,7 @@ import { Provider } from './common/context';
 import Login from "./pages/login/login";
 import SignUp from "./pages/signup/signup";
 import ForgotPassword from "./pages/forgot_password/forgot_password";
-import Dashboard from './pages/dashboard/Dashboard';
+import Dashboard from './pages/dashboard/dashboard';
 import ChangePassword from './pages/change_password/ChangePassword';
 import CreateTicket from './pages/create_ticket/create_ticket'
 import CreateClient from './pages/create_client/CreateClient';

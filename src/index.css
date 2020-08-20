@@ -140,6 +140,28 @@ label.show {
   display: block;
 }
 
+.other_files{
+  width: 200px;
+  background-color: lightcyan;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.imagePreview {
+  width: 200px;
+}
+.other_files:hover .fa-trash, .imgPreview:hover .fa-trash{
+  visibility:visible;
+}
+.fa-trash{
+  position: absolute;
+  top: 10px;
+  left: 190px;
+  cursor: pointer;
+  visibility: hidden;
+}
+
 /* =========================home ===================== */
 
 div.home {
@@ -234,7 +256,7 @@ div ul a li {
   background-color: #2c2c34;
   min-height: 100vh;
   width: 200px;
-  margin-top: 45px;
+  margin-top: 65px;
   position: fixed;
   top: 0;
   bottom: 0;

@@ -25,24 +25,6 @@ class create_ticket extends Component {
     handleSubmit = async e => {
         e.preventDefault()
 
-        const {email} = this.state
-       
-        //Waste 3 seconds
-     
-        if(!Validators.validateEmail(email).status){
-            const err = Validators.validateEmail(email).message
-            this.setState({errormessage: err});
-            setTimeout(()=> this.setState({errormessage: ''}),5000);
-        }else{
-            await this.setState({loading : true});
-            setTimeout(() =>this.setState({loading : false}), 3000);
-            
-        //    const res =  await this.state.changepassword(currentpwd,newpwd, confirmnewpwd);
-        //    if(!res['status'])this.setState({errormessage: res['message']});
-        //     else{
-        //         this.props.history.push('/dashboard');
-        //     }
-        }
         console.log('changed successfully!')
     }
 
@@ -54,11 +36,6 @@ class create_ticket extends Component {
                 <div className="col-md-12" id="profile">
                     <form onSubmit={this.handleSubmit}>
 
-                    { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                                    <div className="alert alert-warning" role="alert">{this.state.errormessage}</div>
-                                    : 
-                                    <span></span>
-                                }
 
                         <div className="card">
                             <div className="card-header">
@@ -66,23 +43,31 @@ class create_ticket extends Component {
                                 
                             </div>
                             <div className="card-body">
-
+                            <div className="row">
+                                <div className="col-md-12">
+                                    { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
+                                        <div className="alert alert-warning" role="alert">{this.state.errormessage}</div>
+                                        : 
+                                        <span></span>
+                                        }
+                                </div>
+                            </div>
                                 <div className="row">
                                     
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
-                                            {/* <label for="" className="">Email</label> */}
-                                            <input type="text" className="form-control form-control-sm" name="email"
-                                                id="email" value="Johndoe@mail.com" placeholder=""
+                                            {/* <label for="" className="">Title</label> */}
+                                            <input type="text" className="form-control form-control-sm" name="title"
+                                                id="title" placeholder="Title" 
                                                 value={this.state.email} required
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
-                                            {/* <label for="" className="">Subject</label> */}
-                                            <input type="text" className="form-control form-control-sm" name="subject"
-                                                id="subject" value="John" placeholder="" 
+                                            {/* <label for="" className="">UserID</label> */}
+                                            <input type="text" className="form-control form-control-sm" name="userid"
+                                                id="userid" placeholder="User ID" 
                                                 value={this.state.subject} required
                                                 onChange={this.handleInputChange}/>
                                         </div>
@@ -103,7 +88,7 @@ class create_ticket extends Component {
                                         <div className="form-group">
                                             {/* <label for="message">Message</label> */}
                                             <textarea id="message" name="message" rows="10" cols="50" className="form-control text-left" 
-                                            value={this.state.message} required
+                                            value={this.state.message} required placeholder="Message"
                                             onChange={this.handleInputChange}>
                                                 
                                             </textarea>

@@ -44,25 +44,6 @@ class CreateClient extends Component {
         this.setState({imagePreviewUrl: ''})
     }
 
-<<<<<<< HEAD
-            <div className="container-fluid row">
-
-                <div className="col-lg-10 mb-3 mt-4 mx-auto" id="profile">
-                    <form action="">
-                        <div className="card">
-                            <div className="card-header text-white">
-                                Add Client
-                </div>
-                            <div className="card-body">
-
-                                <div className="row">
-
-                                    <div className="col-md-6 mb-3">
-                                        <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Email</label>
-                                            <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value="" placeholder="Johndoe@mail.com" />
-=======
     removeOtherImage(e) {
         console.log(e, "Image removed")
         this.setState({ file: '',imageError : false})
@@ -151,22 +132,16 @@ class CreateClient extends Component {
                                                 id="email" placeholder="Johndoe@mail.com" 
                                                 value={this.state.email}
                                                 onChange={this.handleInputChange}/>
->>>>>>> auth
                                         </div>
                                     </div>
 
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Phone-number</label>
-<<<<<<< HEAD
-                                            <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value="" placeholder="0900000000000000" />
-=======
                                             <input type="text" className="form-control form-control-sm" name="number"
                                                 id="number" placeholder="00000000000000"
                                                 value={this.state.number}
                                                 onChange={this.handleInputChange} />
->>>>>>> auth
                                         </div>
                                     </div>
 
@@ -174,43 +149,21 @@ class CreateClient extends Component {
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Company&nbsp;Name</label>
-<<<<<<< HEAD
-                                            <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value="" placeholder="Company Name" />
-=======
                                             <input type="text" className="form-control form-control-sm" name="company"
                                                 id="company" placeholder="John" />
->>>>>>> auth
                                         </div>
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Peronal&nbsp;Name</label>
-<<<<<<< HEAD
-                                            <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value="" placeholder="Personal Name" />
-=======
                                             <input type="text" className="form-control form-control-sm" name="name"
                                                 id="name" placeholder="Doe" />
->>>>>>> auth
                                         </div>
                                     </div>
 
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Company&nbsp;Address</label>
-<<<<<<< HEAD
-                                            <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value="" placeholder="Company Address" />
-                                        </div>
-                                    </div>
-
-                                    <div className="col-md-6 mb-3">
-                                        <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Image</label>
-                                            <input type="file" className="form-file form-file-sm" name=""
-                                                id="" placeholder="" />
-=======
                                             <input type="text" className="form-control form-control-sm" name="companyadr"
                                                 id="companyadr" placeholder="No 6 Hello World close" />
                                         </div>
@@ -221,7 +174,6 @@ class CreateClient extends Component {
                                         <div className="other_files mb-2">
                                             <i className="fa fa-trash" onClick={(e) => this.removeOtherImage(e)}></i>
                                             {this.state.file.name}
->>>>>>> auth
                                         </div>
                                         :
                                         <div className="imgPreview mb-2">

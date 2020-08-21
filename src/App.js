@@ -10,11 +10,7 @@ import { Provider } from './common/context';
 import Login from "./pages/login/login";
 import SignUp from "./pages/signup/signup";
 import ForgotPassword from "./pages/forgot_password/forgot_password";
-<<<<<<< HEAD
-import Dashboard from './pages/dashboard/Dashboard.jsx';
-=======
 import Dashboard from './pages/dashboard/dashboard';
->>>>>>> auth
 import ChangePassword from './pages/change_password/ChangePassword';
 import CreateTicket from './pages/create_ticket/create_ticket'
 import CreateClient from './pages/create_client/CreateClient';

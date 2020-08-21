@@ -1,4 +1,10 @@
 import React, { Component } from 'react'
+// import { FilePond, registerPlugin } from 'react-filepond';
+// import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+// import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
+// registerPlugin(FilePondPluginImagePreview);
+import { FilePond } from 'react-filepond';
+import 'filepond/dist/filepond.min.css';
 
 export default class Chat extends Component {
     constructor(props) {
@@ -66,7 +72,7 @@ export default class Chat extends Component {
                     <div className="card-header text-white">
                         Ticket Chat
                     </div>
-    
+                    <FilePond allowMultiple={true} onChange={(e) => console.log(e)} />
     
                     <div className="card-body" style={{ overflowY: 'scroll', minHeight: '400px', maxHeight: '450px' }}>
                         <div id="chat">

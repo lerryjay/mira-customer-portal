@@ -1,5 +1,7 @@
 <?php
-
+  /**
+   * undocumented class
+  */
   class DBModel extends Dbconn{
 
     function __construct()
@@ -9,15 +11,14 @@
     public function query($sql,$bindString = '',$bindValues = [])
     {
       $prepare = $this->conn->prepare($sql);
-      !(count($bindValues) > 0) ?: $prepare->bindParam($bindString,...$bindValues);
+      !(count($bindValues) > 0) ?: $prepare->bind_param($bindString,...$bindValues);
       $prepare->execute();
       $select_record = $prepare->get_result();
-      $rowNums      =  $select_record->num_rows;
-      if($rowNums < 1) return false;
+      $this->rows =  $select_record->fetch_all(MYSQLI_ASSOC) ?? [];
+      $this->row  =  count($this->rows) > 0 ? $this->rows[0] : [];
+      $rowNums    =  count($this->rows);
       $this->num_rows = $rowNums;
-      $this->rows =  $select_record->fetch_all(MYSQLI_ASSOC);
-      $this->row =  $select_record->fetch_assoc();
-      // $this->affected_rows =  $select_record->fetch_assoc();
+      if($rowNums < 1) return false;
       return true;
     }
 
@@ -42,5 +43,36 @@
         return array('message' => 'Data insert successful', 'data'=>['insertId'=>$this->conn->insert_id],'status' => true);
       }
     }
+
+    public function update($tablename,$data,$condition){
+      $fields = array_keys($data);
+      $string = '';
+      $values = array();
+      $conditions = '';
+      for ($i=0; $i < sizeof($fields); $i++) { 
+        $conditions .= $fields[$i];
+        if(is_numeric($data[$fields[$i]])) {$string .= 'i'; }else{ $string .= 's';}
+        if ($i == (sizeof($fields)-1)) { $conditions .= '= ? ';  }else{ $conditions .= '= ?,'; }
+        array_push($values,$data[$fields[$i]]);
+      }
+      $clause = array_keys($condition);
+      $where = '';
+      for ($i=0; $i < count($clause); $i++) { 
+        $where  .= $clause[$i];
+        if(is_numeric($condition[$clause[$i]])) {$string .= 'i'; }else{ $string .= 's';}
+        array_push($values,$condition[$clause[$i]]);
+        if ($i == (sizeof($clause)-1)) { $where .= '= ? '; }else{ $where .= '= ? AND '; }
+      }
+      $sql = " UPDATE $tablename SET $conditions WHERE $where";
+      $prep_update = $this->conn->prepare($sql);
+      $prep_update->bind_param($string, ...$values);
+      $prep_update->execute();
+      if (!$prep_update) {
+        return  false;
+      }else{
+        return true;
+      }
+    }
+  
   }
 ?>

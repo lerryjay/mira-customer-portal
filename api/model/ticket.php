@@ -1,24 +1,71 @@
 <?php
+/** 
+*
+*Base Ticket Model Class
+*
+**/
   class TicketModel extends Model
+  
   {
-    public function addTicket($companyId,$productId,$packageId,$customerId,$title,$type,$message,$files,$status = 'pending')
-    {
-      return $this->insert('tickets',['productid'=>$productId,'packageid'=>$packageid,'customerid'=>$customerId,'title'=>$title,'type'=>$type,'message'=>$message,'files'=>$files,'company_id'=>$companyId,'ticketstatus'=>$status,'createdat'=>date("Y-m-d H:i:s")]);
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param String $companyId preegistered company Id tciket belongs to.
+     * @param String $productId preregistered product Id tciket refers to.
+     * @param String $customerId Userid of the sender .
+     * @param String $title Title of the ticket.
+     * @param String $title Ticket type.
+     * @param String $message Description of the title.
+     * @param String $files Registered company Id ticket belongs to.
+     * @return Array [ status : boolean,message:string, data ?: Array['insertId':integer ] ]
+     **/
+    public function addTicket($companyId,$productId,$customerId,$title,$type,$message,$files,$status = 'pending'){
+  
+      $id = uniqid();
+      $insert =  $this->insert('tickets',['id'=>$id,'product_id'=>$productId,'customer_id'=>$customerId,'title'=>$title,'createdat'=>date("Y-m-d H:i:s"),'message'=>$message,'company_id'=>$companyId,'type'=>$type,'files'=>$files,'ticketstatus'=>$status,]);
+      if($insert) return $id;
+      else false;
     }
     
+    /**
+     * Adds a ticket function long description
+     *
+     * @param Integer $ticketId Id of tiket to add chat
+     * @param Integer $senderId Userid of the sender .
+     * @param String $message reply message.
+     * @param String $files attached files.
+     * @return Array [ status : boolean,message:string, data ?: Array['insertId':integer ] ]
+     **/
     public function addChat($ticketId,$message,$files,$senderId,$senderRole)
     {
       return $this->insert('ticketchat',['ticket_id'=>$ticketId,'senderid'=>$senderId,'role'=>$senderRole,'message'=>$message,'files'=>$files,'createdat'=>date("Y-m-d H:i:s")]);
     }
 
+    /**
+     * Updates the status of  a ticket.
+     *
+     * @param Integer $ticketId Id of tiket to add chat
+     * @param String $status current status of the ticket.
+     * @return Array [ status : boolean,message:string, data ?: Array['insertId':integer ] ]
+     **/
     public function updateTicketStatus($ticketId,$status)
     {
       return $this->update('tickets',['ticketstatus'=>$status],['id'=>$ticketId]);
     }
 
+      /**
+     * Retrieve tickets .
+     *
+     * @param String $condition  - Query ticket condition
+     * @param String $string String represenntation of values passed e.g name:String,id:integer = 'si'.
+     * @param Array $values values to be passed to the query
+     * @return Array [ status : boolean,message:string, data ?: Array['insertId':integer ] ]
+     **/
     public function getTickets($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT * FROM tickets '+$condition;
+      $sql = 'SELECT * FROM tickets '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->rows;
       else return false;
@@ -34,7 +81,7 @@
      **/
     public function getTicket($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT * FROM tickets '+$condition;
+      $sql = 'SELECT * FROM tickets '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->row;
       else return false;
@@ -50,7 +97,7 @@
     {
       return $this->getTicket('WHERE id = ? AND status = ? ','si',[$ticketId,$status]);
     }
-    public function searchTicket($filter)
+    public function searchTicket($filter = [])
     {
       $conditions .= isset($filter['ticketId']) ? "AND ticket_id = ".$filter['ticketId'] : "";
       $conditions .= isset($filter['type']) ? "AND type = ".$filter['type'] : "";
@@ -82,7 +129,7 @@
      **/
     public function getChats($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT * FROM ticketchats '+$condition;
+      $sql = 'SELECT * FROM ticketchats '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->rows;
       else return false;
@@ -98,7 +145,7 @@
      **/
     public function getChat($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT * FROM ticketchat '+$condition;
+      $sql = 'SELECT * FROM ticketchat '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->row;
       else return false;
@@ -113,7 +160,7 @@
      **/
     public function getChatsByTicketId($ticketId,$status = 1)
     {
-      return $this->getChats('WHERE id = ? AND status =  ?','si',[$ticketId,$status]);
+      return $this->getChats('WHERE ticket_id = ? AND status =  ?','si',[$ticketId,$status]);
     }
 
     

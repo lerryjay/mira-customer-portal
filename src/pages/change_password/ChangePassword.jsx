@@ -48,11 +48,6 @@ class ChangePassword extends Component {
             await this.setState({loading : true});
             setTimeout(() =>this.setState({loading : false}), 3000);
             this.state.changepassword(currentpwd,newpwd, confirmnewpwd);
-        //    const res =  await this.state.changepassword(currentpwd,newpwd, confirmnewpwd);
-        //    if(!res['status'])this.setState({errormessage: res['message']});
-        //     else{
-        //         this.props.history.push('/dashboard');
-        //     }
         }
         console.log('changed successfully!')
     }
@@ -70,7 +65,11 @@ class ChangePassword extends Component {
                             <form onSubmit={this.handleSubmit}>
 
                             { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                                    <div className="alert alert-warning" role="alert">{this.state.errormessage}</div>
+                                    <div className="alert alert-warning" role="alert">{this.state.errormessage}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
                                     : 
                                     <span></span>
                                 }

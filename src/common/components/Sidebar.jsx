@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
+import image from '../../assets/images/dammy.jpg'
 
 const Sidebar = (props) => {
 
@@ -30,45 +31,65 @@ const Sidebar = (props) => {
         <div>
             <div className="sidemenu" id="sidebar">
                 <ul className="list-unstyled components">
-                    <p className="py-2 text-white">
-                        <img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt="icon"
-                            width='35' />&nbsp;&nbsp;Hello World
-                        </p>
-                    <hr className="bg-white" />
-                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to="dashboard" onClick={toggle2}>
-                        <li className="nav-item active">
-                            <i className="fa fa-tachometer-alt"></i>&nbsp;Dashboard<i
-                                className="fas fa-chevron-left fa-fw float-right"></i>
+                    <div className="py-2 text-white text-center">
+                        {/* <img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt="icon"
+                            width='35' />&nbsp;&nbsp;Hello World */}
+                            <img src={image} className="image_sidebar my-3"  alt=""/>
+                            <p className="image_name mb-0">Rhoda Stone</p>
+                        </div>
+                        <p className="mt-2 mb-2">MENU</p>
+                    <hr className="bg-white mb-0 mt-0" />
+                    <NavLink className={`dropdown-btn nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to="dashboard" onClick={toggle2}>
+                    <li className="nav-item ">
+                            <i className="fa fa-tachometer-alt mr-1"></i>&nbsp;Dashboard
                         </li>
                     </NavLink>
+
+                    <div className="dropdown-btn nav-item" onClick={toggle2, dropdown}>
+                        <li className="nav-item">
+                            <i className="fa fa-user mr-1"></i>&nbsp;Client Corner&nbsp;<i
+                                className="fas fa-chevron-left fa-fw float-right"></i>
+                        </li>
+                    </div>
+                    <div className="dropdown-container">
                     <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/createClient' onClick={toggle2}>
-                        <li className="nav-item active">
-                            <i className="fa fa-user-friends"></i>&nbsp;Add&nbsp;Client&nbsp;<i
-                                className="fas fa-chevron-left fa-fw float-right"></i>
+                        <li className="nav-item">
+                            <i className="fa fa-user-friends mr-1"></i>&nbsp;Add&nbsp;Client
                         </li>
-                    </NavLink>
+                    </NavLink> 
                     <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/viewClient' onClick={toggle2}>
-                        <li className="nav-item active">
-                            <i className="fa fa-user-friends"></i>&nbsp;View&nbsp;Client&nbsp;<i
-                                className="fas fa-chevron-left fa-fw float-right"></i>
+                        <li className="nav-item">
+                            <i className="fa fa-user-friends mr-1"></i>&nbsp;View&nbsp;Client
                         </li>
                     </NavLink>
                     <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/listClient' onClick={toggle2}>
                         <li className="nav-item">
-                            <i className="fa fa-list-ol"></i>&nbsp;List&nbsp;Client&nbsp;<i
-                                className="fas fa-chevron-left fa-fw float-right"></i>
+                            <i className="fa fa-list-ol mr-1"></i>&nbsp;List&nbsp;Client
                         </li>
                     </NavLink>
-                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/creatUser' onClick={toggle2}>
+                    </div>
+
+                    <NavLink className={`dropdown-btn nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/creatUser' onClick={toggle2}>
                         <li className="nav-item">
-                            <i className="fa fa-user-plus"></i>&nbsp;Create&nbsp;User&nbsp;<i
-                                className="fas fa-chevron-left fa-fw float-right"></i>
+                            <i className="fa fa-user-plus mr-1"></i>&nbsp;Create&nbsp;User
                         </li>
                     </NavLink>
+
+                    <div className="dropdown-btn nav-item" onClick={toggle2, dropdown}>
+                        <li className="nav-item ">
+                            <i className="fa fa-ticket-alt mr-1"></i>&nbsp;Ticket&nbsp;<i
+                                className="fas fa-chevron-left fa-fw float-right"></i>
+                        </li>
+                    </div>
+                    <div className="dropdown-container">
                     <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/ticketList' onClick={toggle2}>
                         <li className="nav-item">
-                            <i className="fa fa-list-ul"></i>&nbsp;Ticket&nbsp;List&nbsp;<i
-                                className="fas fa-chevron-left fa-fw float-right"></i>
+                            <i className="fa fa-list-ul mr-1"></i>&nbsp;Ticket&nbsp;List
+                        </li>
+                    </NavLink>
+                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/ticketChat' onClick={toggle2}>
+                        <li className="nav-item">
+                            <i className="fa fa-list-ul mr-1"></i>&nbsp;Ticket&nbsp;Chat
                         </li>
                     </NavLink>
                     <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/ticketChat' onClick={toggle2}>
@@ -79,26 +100,28 @@ const Sidebar = (props) => {
                     </NavLink>
                     <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='a' onClick={toggle2}>
                         <li className="nav-item">
-                            <i className="fas fa-ticket-alt fa-fw"></i>&nbsp;View&nbsp;Ticket&nbsp;<i
-                                className="fas fa-chevron-left fa-fw float-right"></i>
+                            <i className="fas fa-ticket-alt fa-fw mr-1"></i>&nbsp;View&nbsp;Ticket
                         </li>
                     </NavLink>
-                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to="profile" onClick={toggle2}>
+                    </div>
+
+                    <p className="mt-4 mb-2" >ACCOUNT</p>
+                    <hr className="bg-white mt-0 mb-0" />
+                    <NavLink className={`dropdown-btn nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to="profile" onClick={toggle2}>
                         <li className="nav-item">
-                            <i className="fas fa-user fa-fw"></i>&nbsp;Profile&nbsp;<i
-                                className="fas fa-chevron-left fa-fw float-right"></i>
+                            <i className="fas fa-user fa-fw mr-1"></i>&nbsp;Profile
                         </li>
                     </NavLink>
-                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/changePassword' onClick={toggle2}>
+                    <NavLink className={`dropdown-btn nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/changePassword' onClick={toggle2}>
                         <li className="nav-item">
-                            <i className="fas fa-key fa-fw"></i>&nbsp;Change&nbsp;Password
+                            <i className="fas fa-key fa-fw mr-1"></i>&nbsp;Change&nbsp;Password
                         </li>
                     </NavLink>
-                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} className="text-center" to='/login'>
-                        <li className="nav-item last" style={{ margin: "0 35%" }} >
-                            <i className="fas fa-power-off text-danger">&nbsp;<b
+                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} className="text-center" to='/login' onClick={toggle2}>
+                        <p className=" last_" >
+                            <i className="fas fa-power-off text-danger mr-1">&nbsp;<b
                                 style={{ color: "white" }}>&nbsp;Logout</b></i>
-                        </li>
+                        </p>
                     </NavLink>
                 </ul>
             </div>

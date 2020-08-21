@@ -101,7 +101,11 @@ class create_ticket extends Component {
                             <div className="row">
                                 <div className="col-md-12">
                                     { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                                        <div className="alert alert-warning" role="alert">{this.state.errormessage}</div>
+                                        <div className="alert alert-warning" role="alert">{this.state.errormessage}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
                                         : 
                                         <span></span>
                                         }

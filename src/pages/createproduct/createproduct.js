@@ -3,16 +3,13 @@ import React, { Component } from 'react'
 import Validators  from "../../common/Validators";
 import {withContext} from '../../common/context';
 
-class CreateClient extends Component {
+class CreateProduct extends Component {
     constructor(props){
         super(props);
         this.state = { 
             ...this.props, 
-            email : '', 
-            number : '' , 
-            name: '',
-            company: '',
-            companyadr: '',
+            productname : '', 
+            productdetails: '',
             errormessage: '',
             file: '',
             imagePreviewUrl: '',
@@ -93,7 +90,7 @@ class CreateClient extends Component {
         let {imagePreviewUrl} = this.state;
             let imagePreview = null;
             if (imagePreviewUrl) {
-            imagePreview = (<img src={imagePreviewUrl} className="imagePreview" alt="preview"/>);
+            imagePreview = (<img src={imagePreviewUrl} className="imagePreview"/>);
             } 
         return (
 
@@ -105,7 +102,7 @@ class CreateClient extends Component {
                     
                             <div className="card">
                                 <div className="card-header text-white">
-                                    Add Client
+                                    Add New Product
                     </div>
                     
                                 <div className="card-body">
@@ -129,51 +126,27 @@ class CreateClient extends Component {
                             </div>
                                 <div className="row">
                                
-                                    <div className="col-md-6 mb-3">
+                                    <div className="col-md-12 mb-1">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Email</label>
+                                            <label htmlFor="" className="sr-only">Product Name</label>
                                             <input type="text" className="form-control form-control-sm" name="email"
-                                                id="email" placeholder="Johndoe@mail.com" 
-                                                value={this.state.email}
+                                                id="productname" placeholder="Product Name" 
+                                                value={this.state.productname}
                                                 onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
 
-                                    <div className="col-md-6 mb-3">
+                                    <div className="col-md-12">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Phone-number</label>
-                                            <input type="text" className="form-control form-control-sm" name="number"
-                                                id="number" placeholder="00000000000000"
-                                                value={this.state.number}
+                                            <label htmlFor="" className="sr-only">Product Description</label>
+                                            <textarea type="text" className="form-control form-control-sm" name="number"
+                                                id="productdetails" placeholder="Product Details"
+                                                value={this.state.productdetails}
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
 
-
-                                    <div className="col-md-6 mb-3">
-                                        <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Company&nbsp;Name</label>
-                                            <input type="text" className="form-control form-control-sm" name="company"
-                                                id="company" placeholder="John" />
-                                        </div>
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Peronal&nbsp;Name</label>
-                                            <input type="text" className="form-control form-control-sm" name="name"
-                                                id="name" placeholder="Doe" />
-                                        </div>
-                                    </div>
-
-                                    <div className="col-md-6 mb-3">
-                                        <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Company&nbsp;Address</label>
-                                            <input type="text" className="form-control form-control-sm" name="companyadr"
-                                                id="companyadr" placeholder="No 6 Hello World close" />
-                                        </div>
-                                    </div>
-
-                                    <div className="col-md-6 mb-3"> 
+                                    <div className="col-md-12 mb-1"> 
                                     {this.state.imageError !== false ? 
                                         <div className="other_files mb-2">
                                             <i className="fa fa-trash" onClick={(e) => this.removeOtherImage(e)}></i>
@@ -186,7 +159,7 @@ class CreateClient extends Component {
                                             </div>
                                        }
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Image</label>
+                                            <label htmlFor="" >Upload an Image</label> <br/>
                                             <input type="file" className="form-file form-file-sm" name="image"
                                                 id="image" placeholder="" 
                                                 onChange={(e)=>this.handleImageChange(e)} />
@@ -219,4 +192,4 @@ class CreateClient extends Component {
         )
     }
 }
-export default withContext(CreateClient);
+export default withContext(CreateProduct);

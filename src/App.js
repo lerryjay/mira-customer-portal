@@ -12,7 +12,10 @@ import SignUp from "./pages/signup/signup";
 import ForgotPassword from "./pages/forgot_password/forgot_password";
 import Dashboard from './pages/dashboard/dashboard';
 import ChangePassword from './pages/change_password/ChangePassword';
-import CreateTicket from './pages/create_ticket/create_ticket'
+import CreateTicket from './pages/create_ticket/create_ticket';
+import CreateProduct from './pages/createproduct/createproduct';
+import ProductDetails from './pages/product_details/product_details';
+import ViewProduct from './pages/viewproduct/viewproduct';
 import CreateClient from './pages/create_client/CreateClient';
 import CreateUser from './pages/create_user/CreateUser';
 import Profile from './pages/profile/Profile';
@@ -34,24 +37,51 @@ class App extends Component {
       users: []
     }
   }
-  loginUser = async (email, password) => {
+  loginUser = (email, password) => {
     // await fetch(HTTPURL + 'user/login');
+    let data = {
+      email: this.state.email,
+      password: this.state.password
+    }
+
+    fetch(HTTPURL + 'user/login', {
+        method: 'POST',
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(json => {
+      console.log(json);
+      return json;
+    })
+
     this.setState({ loggedIn: true });
     console.log('Yuppie i logged ', email, password);
     return { status: true, message: 'Login successful' };
   }
 
-  signupUser = async (username, email, password) => {
-    const requestOptions = {
+  signupUser = (data) => {
+    let form = new FormData(data);
+    // form.append('username', username);
+    // form.append('email', email);
+    // form.append('password', password);
+    // let data = {
+    //   username,
+    //   email,
+    //   password
+    // }
+
+    return fetch(HTTPURL + 'user/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: username, email:email, password:password })
-    };
-    await fetch(HTTPURL + 'user/signup', requestOptions)
-        .then(response => response.json())
-        .then(data => console.log(data.json));
+        body: form,
+        headers: new Headers()
+    })
+    .then(response => response.json())
+    .then(json => {
+      console.log(json);
+      return json;
+    });
     
-    console.log('Registered Successfully ', username, email, password);
+    // console.log('Registered Successfully ', username, email, password);
   }
 
   changePassword = async (currentpwd, newpwd, confirmnewpwd) => {
@@ -75,9 +105,13 @@ class App extends Component {
             <Router>
               <Nav />
               <div className="App" id="wrapper">
-                {this.state.loggedIn && <Sidebar />}
+                {this.state.loggedIn &&<Sidebar />}
                 <div className="content">
                   <Switch>
+                    {<Route path="/createproduct" component={CreateProduct} />}
+                    {<Route path="/viewproduct" component={ViewProduct} />}
+                    {<Route path="/productdetails" component={ProductDetails} />}
+                    {<Route path="/createticket" component={CreateTicket} />}
                     {<Route path="/signup" component={SignUp} />}
                     {<Route path="/login" component={Login} />}
                     {<Route path="/forgotpassword" component={ForgotPassword} />}

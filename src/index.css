@@ -168,20 +168,56 @@ label {
   display: flex;
 }
 .other_files:hover .fa-trash, .imgPreview:hover .fa-trash{
-  visibility:visible !important;
+  visibility:visible;
 }
-.imagePreview .fa-trash{
+.imgPreview .fa-trash{
   position: absolute;
-  left: 198.5px;
+  left: 195px;
+  top:10px;
   cursor: pointer;
   visibility: hidden;
 }
 .other_files .fa-trash{
-  position: relative;
-  top: -80px;
-  left: 115px;
+  position: absolute;
+  left: 195px;
+  top:10px;
   cursor: pointer;
   visibility: hidden;
+}
+.image_product{
+  width: 100%;
+  height: 200px;
+}
+.products{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.new_product{
+  float: right;
+}
+.product_details{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.description p{
+  font-size: 14px;
+  line-height: 1.5rem;
+}
+.packages .card-header{
+  font-size: 14px;
+  font-weight: 600;
+}
+.packages li{
+  list-style-type: none;
+  line-height: 1.5rem;
+}
+.packages .pkg{
+  border-radius: 0 70px;
+}
+.packages .btn{
+  border-radius: 20px;
 }
 
 /* =========================home ===================== */

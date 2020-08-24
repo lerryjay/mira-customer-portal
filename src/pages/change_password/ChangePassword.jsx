@@ -32,16 +32,20 @@ class ChangePassword extends Component {
         const {currentpwd, newpwd, confirmnewpwd} = this.state
        
         //Waste 3 seconds
-        if(!Validators.validatePassword(currentpwd,1,false,false,false,false).status){
-            const err = Validators.validatePassword(currentpwd,1,false,false,false,false).message;
+        if(!Validators.validatePassword(currentpwd,1).status){
+            const err = Validators.validatePassword(currentpwd,1).message;
            await this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
-        } else if(!Validators.validatePassword(newpwd,1,false,false,false,false).status){
-            const err = Validators.validatePassword(newpwd,1,false,false,false,false).message;
+        } else if(!Validators.validatePassword(newpwd,1).status){
+            const err = Validators.validatePassword(newpwd,1).message;
            await this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
-        } else if(!Validators.validatePassword(confirmnewpwd,1,false,false,false,false).status){
-            const err = Validators.validatePassword(confirmnewpwd,1,false,false,false,false).message;
+        } else if(!Validators.validatePassword(confirmnewpwd,1).status){
+            const err = Validators.validatePassword(confirmnewpwd,1).message;
+           await this.setState({errormessage: err});
+            setTimeout(()=> this.setState({errormessage: ''}),5000);
+        }else if(newpwd !== confirmnewpwd) {
+            const err = "Password does not match!"
            await this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
         }else{
@@ -66,7 +70,7 @@ class ChangePassword extends Component {
 
                             { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
                                     <div className="alert alert-warning" role="alert">{this.state.errormessage}
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <button type="button" className="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                     </div>
@@ -81,7 +85,7 @@ class ChangePassword extends Component {
                                     <label className='sr-only' htmlFor="currentpwd">Current&nbsp;Password</label>
                                     <input type="password" className="form-control form-control-sm alt" id="currentpwd"
                                         name="currentpwd" placeholder="Current Password" aria-label="Current password"
-                                        aria-describedby="Current password" autocomplete="off" 
+                                        aria-describedby="Current password" autoComplete="off" 
                                         value={this.state.currentpwd} required
                                         onChange={this.handleInputChange}/>
                                 </div>
@@ -92,7 +96,7 @@ class ChangePassword extends Component {
                                     <label className='sr-only' htmlFor="newpwd">New&nbsp;Password</label>
                                     <input type="password" className="form-control form-control-sm alt" id="newpwd" name="newpwd"
                                         placeholder="New Password" aria-label="Confirm New password"
-                                        aria-describedby="Confirm New password" autocomplete="off" required
+                                        aria-describedby="Confirm New password" autoComplete="off" required
                                         value={this.state.newpwd}
                                         onChange={this.handleInputChange} />
                                 </div>
@@ -104,7 +108,7 @@ class ChangePassword extends Component {
                                     <input type="password" className="form-control form-control-sm alt" id="confirmnewpwd"
                                         name="confirmnewpwd" placeholder="Confirm New password"
                                         aria-label="Confirm New password" aria-describedby="Confirm New password"
-                                        autocomplete="off" required
+                                        autoComplete="off" required
                                         value={this.state.confirmnewpwd}
                                         onChange={this.handleInputChange} />
                                 </div>

@@ -10,9 +10,10 @@ class SignUp extends Component {
         //state variables
         this.state = { 
             ...this.props, 
-            username: '', 
+            name: '', 
             email : '', 
             password : '' ,
+            telephone: '',
             loading: false, 
             errormessage: ''
         };
@@ -25,32 +26,40 @@ class SignUp extends Component {
       //handles form submission
     handleSubmit = async e => {
         e.preventDefault()
-        const { username, email, password } = this.state
+        const { name, email, password, telephone } = this.state
         await this.setState({loading : true});
-        //Waste 3 seconds
         setTimeout(() =>this.setState({loading : false}), 3000);
+        //Waste 3 seconds
+        setTimeout(() =>this.setState({loading : false}), 5000);
         if(!Validators.validateEmail(email).status){
+            console.log('Failed email validation');
             const err = Validators.validateEmail(email).message
             this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
         }else if(!Validators.validatePassword(password,1).status){
+            console.log('Failed password validation');
             const err = Validators.validatePassword(password,1).message;
             this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
         }else{
-           const res = await this.state.signup(username, email, password);
-            
-           if(!res['status'])this.setState({errormessage: res['message']});
-            else{
-                //find a way to redirect here 
-                this.props.history.push('/login');
-            }
+            await this.setState({loading : true});
+            setTimeout(() =>this.setState({loading : false}), 3000);
+           const res = await this.state.signup(document.getElementById("signupform"));
+           console.log(res);
+           console.log(name, email, password, telephone);
+        
+        //    if (!res['status']) this.setState({errormessage: res['message']});
+        //     else{
+        //         //find a way to redirect here 
+        //         this.props.history.push('/login');
+        //     }
         }
         console.log(
             `
-            username: ${this.state.username}
+            name: ${this.state.name}
             email:${this.state.email}
-            password:${this.state.password}`,
+            password:${this.state.password}
+            telephone: ${this.state.telephone}`
         )
     }
 
@@ -65,7 +74,7 @@ class SignUp extends Component {
                             <img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt=""/>
                         </div>
                         <div className="card-body py-lg-5 text-muted text-center">
-                            <form onSubmit={this.handleSubmit}>
+                            <form onSubmit={this.handleSubmit} id='signupform'>
 
                             { this.state.errormessage.length > 0 ? 
                                     <div className="alert alert-warning" role="alert">{this.state.errormessage}</div>
@@ -74,12 +83,12 @@ class SignUp extends Component {
                                 }
 
                                 <div className="input-group mb-3">
-                                    <span className="input-group-text bg-white alt" id="username">
+                                    <span className="input-group-text bg-white alt" id="name">
                                         <i className="fas fa-user fa-fw"></i>
                                     </span>
-                                    {/* <label for="username">Name</label> */}
-                                    <input type="text" className="form-control alt" id="username" name="username" placeholder="Name" aria-label="Name"
-                                        aria-describedby="username" autocomplete="name" required
+                                    {/* <label for="name">Name</label> */}
+                                    <input type="text" className="form-control alt" id="name" name="name" placeholder="Name" aria-label="Name"
+                                        aria-describedby="name" autoComplete="name" required
                                         value={this.state.usename}
                                         onChange={this.handleInputChange}/>
                                 </div>
@@ -90,8 +99,19 @@ class SignUp extends Component {
                                     </span>
                                     {/* <label for="email">Email</label> */}
                                     <input type="text" className="form-control alt" id="email" name="email" placeholder="Email" aria-label="Email"
-                                        aria-describedby="email" autocomplete="email" required
+                                        aria-describedby="email" autoComplete="email" required
                                         value={this.state.email}
+                                        onChange={this.handleInputChange}/>
+                                </div>
+
+                                <div className="input-group mb-3">
+                                    <span className="input-group-text bg-white alt" id="telephone">
+                                        <i className="fas fa-phone fa-fw"></i>
+                                    </span>
+                                    {/* <label for="email">Telephone</label> */}
+                                    <input type="tel" className="form-control alt" id="telephone" name="telephone" placeholder="Telephone" aria-label="telephone"
+                                        aria-describedby="telephone" autoComplete="tel" required
+                                        value={this.state.telephone}
                                         onChange={this.handleInputChange}/>
                                 </div>
 

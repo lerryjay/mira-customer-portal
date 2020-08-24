@@ -46,27 +46,12 @@ class create_ticket extends Component {
     handleImageChange(e) {
         e.preventDefault();
 
-        let reader = new FileReader();
         let files = [];
         // console.log(typeof e.target.files, "rubbish")
         // let files = [];
         for (let i = 0;i < e.target.files.length; i++){
             files.push(e.target.files[i])
-        //     if(file.name.match(/\.(jpg|jpeg|png|gif)$/)){
-        //         let image = reader.readAsDataURL(file);
-        //         console.log(file.name,"file name",image)
-        //     }else{
-        //         // docs.push(file);
-        //         document.querySelector("#preview").insertAdjacentHTML('beforeend',`<div class="other_files mb-2">
-        //         <i class="fa fa-trash" onClick="${(e) => this.removeOtherImage(e)}"></i>
-        //         ${file.name}
-        //         </div>`);
-        //     }
         }
-
-        // let previews = '';
-        // let images = [];
-        // let docs = [];
 
         this.setState({ files :  files });
     }
@@ -95,7 +80,6 @@ class create_ticket extends Component {
                         <div className="card">
                             <div className="card-header">
                                 Create Ticket
-                                <i class="fa fa-tachometer-alt"></i>
                             </div>
                             <div className="card-body">
                             <div className="row">

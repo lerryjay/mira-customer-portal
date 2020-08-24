@@ -33,8 +33,8 @@ class Login extends Component {
             const err = Validators.validateEmail(email).message
             this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
-        }else if(!Validators.validatePassword(password,1,false,false,false,false).status){
-            const err = Validators.validatePassword(password,1,false,false,false,false).message;
+        }else if(!Validators.validatePassword(password,1).status){
+            const err = Validators.validatePassword(password,1).message;
            await this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
         }else{

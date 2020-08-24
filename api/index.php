@@ -33,7 +33,7 @@
 
   /**
    * loads a controller
-   *
+   *ri
    * @param SCRIPTNAME $name Name of the model to be loaded e.g ./model/user = user
    * @return void
    **/

@@ -120,15 +120,14 @@ nav.bg-navbar {
   position: fixed;
   top: 0;
   left: -200px;
-  min-height: calc(100vh - 56px);
+  /* min-height: calc(100vh - 56px); */
+  height: 100vh !important;
   z-index: 2000;
   background-color: #2c2c34;
-  /* background-image: url(https://images.pexels.com/photos/1097456/pexels-photo-1097456.jpeg); */
   background-repeat: no-repeat;
   background-size: cover;
   background-origin: border-box;
   color: #fff;
-  overflow-y: hidden;
   overflow-x: hidden;
   transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);

@@ -93,7 +93,7 @@ class CreateClient extends Component {
         let {imagePreviewUrl} = this.state;
             let imagePreview = null;
             if (imagePreviewUrl) {
-            imagePreview = (<img src={imagePreviewUrl} className="imagePreview"/>);
+            imagePreview = (<img src={imagePreviewUrl} className="imagePreview" alt="preview"/>);
             } 
         return (
 

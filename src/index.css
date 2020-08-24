@@ -292,11 +292,10 @@ img.image_sidebar {
   position: fixed;
   top: 0;
   /* left: -200px; */
-  /* min-height: 100vh ; */
+  min-height: 100vh ;
   z-index: 2000;
   overflow-y: auto;
   background-color: #1e1e25;
-  /* background-image: url(https://images.pexels.com/photos/1097456/pexels-photo-1097456.jpeg); */
   background-repeat: no-repeat;
   background-size: cover;
   background-origin: border-box;

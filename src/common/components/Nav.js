@@ -53,10 +53,10 @@ const Nav = () => {
                 </ul>
             </div>
 
-            <span className="">
+            {/* <span className="">
                 <i id='btn-toggle' className="fas fa-moon"></i>
                 <i id='btn-toggle' className="fas fa-sun sr-only"></i>
-            </span>
+            </span> */}
         </nav>)
 }
 export default Nav;

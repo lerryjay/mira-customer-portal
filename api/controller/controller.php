@@ -63,14 +63,14 @@
       $headers = apache_request_headers();
 			$response = array();
 		    // Verifying Authorization Header
-	    if (!isset($headers['API-KEY']) && $api ) {
+	    if (!isset($headers['api-key']) && $api ) {
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false,'message'=>'You do not not have the permission to access this resource!']));
       }else{
         loadModel('company');
         $this->companyModel = new CompanyModel();
-        // echo $headers['API-KEY'];
-        $companyExists = $this->companyModel->getCompanyByApiKey($headers['API-KEY']);
+        // echo $headers['api-key'];
+        $companyExists = $this->companyModel->getCompanyByApiKey($headers['api-key']);
         // var_dump($companyExists);
         if($companyExists){ 
           $this->companyId = $companyExists['id'];

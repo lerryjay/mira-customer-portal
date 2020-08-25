@@ -1,6 +1,6 @@
 <?php
   session_start();
-  header('Allow-Access-Control-Headers: Content-Type,API-KEY');
+  header('Access-Control-Allow-Headers: *');
   header('Content-Type: application/json');
   header('Access-Control-Allow-Origin: *');
   $path = explode('/', trim($_SERVER['PHP_SELF'],'/'));

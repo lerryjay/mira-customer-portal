@@ -1,10 +1,4 @@
 import React, { Component } from 'react'
-// import { FilePond, registerPlugin } from 'react-filepond';
-// import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-// import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
-// registerPlugin(FilePondPluginImagePreview);
-import { FilePond } from 'react-filepond';
-import 'filepond/dist/filepond.min.css';
 
 export default class Chat extends Component {
     constructor(props) {
@@ -19,46 +13,13 @@ export default class Chat extends Component {
 
     fileChange = function () {
         let input = document.getElementById('file-upload');
-        // let output = document.getElementById('file-name');
-        // let preview1 = document.getElementById('preview');
-        // let preview = document.createElement("embed");
-        // preview.className = "col-md-3";
-        // preview.id = "hello";
-        // let blank = document.querySelector("#world");
-        // let output1 = '';
         let inputfiles = [];
         for (let index = 0; index < input.files.length; index++) {
             inputfiles.push(input.files[index]);
             console.log(input.files[index].name)
         }
 
-        // input.onchange = function (e) {
             this.setState({ inputfiles  });
-            // for (let i = 0; i < input.files.length; ++i) {
-                // filelist.push(input.files.item(i).name);
-                // output1 += `<li> ${input.files.item(i).name}</li>`;
-
-                // if (this.files[i]) {
-                    
-                //     const selectedfile = e.target.files[i];
-
-                //     reader.readAsDataURL(this.files[i]);
-                //     reader.addEventListener('load', function (e) {
-                //         preview.setAttribute('src', e.target.result);
-                //     });
-                // }
-                // console.log(preview);
-
-                // output.innerHTML = output1;
-                // blank.innerHTML = preview;
-
-            // }
-            // for (let c = 0, f; (f = files[i]); i++) {
-            //     let Reader = new FileReader();
-
-            //     Reader.readAsDataURL(f)
-            // }
-
     }
 
     render() {
@@ -72,7 +33,6 @@ export default class Chat extends Component {
                     <div className="card-header text-white">
                         Ticket Chat
                     </div>
-                    <FilePond allowMultiple={true} onChange={(e) => console.log(e)} />
     
                     <div className="card-body" style={{ overflowY: 'scroll', minHeight: '400px', maxHeight: '450px' }}>
                         <div id="chat">
@@ -224,9 +184,3 @@ export default class Chat extends Component {
         )
     }
 }
-
-
-
-
-
-// #fileUpload

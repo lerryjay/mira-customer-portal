@@ -9,54 +9,202 @@ class viewproduct extends Component {
     render() {
         return (
             <div className="container mx-auto row">
-               <div className="container">
-                   <div className="row mt-1">
-                        <div class="col-md-3 offset-md-9">
-                            <button type="button" class="btn btn-primary new_product">Add New Product 
-                            <i class="fa fa-plus-circle ml-2" aria-hidden="true"></i>
+
+                <div className="container">
+                    <div className="row mt-1" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                        <div className="col-md-3 offset-md-9">
+                            <button type="button" className="btn btn-sm btn-primary new_product">
+                            <i className="fas fa-folder-plus" aria-hidden="true">
+                            <small>&nbsp;New&nbsp;Product</small>
+                            </i>
                             </button>
                         </div>
-                   </div>
+                    </div>
                     <div className="row mt-4">
                         <div className="col-md-3">
-                            <div class="card text-center products">
-                                <img src={image} className="image_product"  alt=""/>
-                                <div class="card-body">
-                                    <h5 class="card-title">Accsiss eBs</h5>
+                            <div className="card text-center products">
+                                <img src={image} className="image_product" alt="" />
+                                <div className="card-body">
+                                    <h5 className="card-title">Accsiss eBs</h5>
                                     {/* <p>DESIGNED FOR ACCOUNTING, SALES AND INVOICING.</p> */}
-                                    <a href="#" class="btn btn-primary">View Details</a>
+                                    <a href="#" className="btn btn-primary">View Details</a>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-3">
-                            <div class="card text-center products">
-                                <img src={sysbanker} className="image_product"  alt=""/>
-                                <div class="card-body">
-                                    <h5 class="card-title">SYSBANKER EE</h5>
-                                    <a href="#" class="btn btn-primary">View Details</a>
+                            <div className="card text-center products">
+                                <img src={sysbanker} className="image_product" alt="" />
+                                <div className="card-body">
+                                    <h5 className="card-title">SYSBANKER EE</h5>
+                                    <a href="#" className="btn btn-primary">View Details</a>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-3">
-                            <div class="card text-center products">
-                                <img src={accsissp} className="image_product"  alt=""/>
-                                <div class="card-body">
-                                    <h5 class="card-title">Accsiss PPs</h5>
-                                    <a href="#" class="btn btn-primary">View Details</a>
+                            <div className="card text-center products">
+                                <img src={accsissp} className="image_product" alt="" />
+                                <div className="card-body">
+                                    <h5 className="card-title">Accsiss PPs</h5>
+                                    <a href="#" className="btn btn-primary">View Details</a>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-3">
-                            <div class="card text-center products">
-                                <img src={mira} className="image_product"  alt=""/>
-                                <div class="card-body">
-                                    <h5 class="card-title">Mira HPro</h5>
-                                    <a href="#" class="btn btn-primary">View Details</a>
+                            <div className="card text-center products">
+                                <img src={mira} className="image_product" alt="" />
+                                <div className="card-body">
+                                    <h5 className="card-title">Mira HPro</h5>
+                                    <a href="#" className="btn btn-primary">View Details</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-               </div>
+
+
+
+
+
+                    <div className="row my-2">
+
+                        <div className="col-lg-3 col-md-6 col-sm-12">
+
+                            <div className="card-container">
+                                <div className="card">
+                                    <div className="front">
+                                        <div className="card-header text-center font-weight-bold">
+                                            <img src={image} className="image_product" alt="" />
+                                            Accsiss eBs
+                                            </div>
+                                        <div className="card-body">
+                                            hello world
+                                            </div>
+                                        <div className="card-footer">
+                                            hello world world
+                                            </div>
+                                    </div>
+
+                                    <div className="back">
+                                        <div className="card-header text-center font-weight-bold">
+                                            <img src={mira} className="image_product" alt="" />
+                                            Accsiss eBs
+                                        </div>
+                                        <div className="card-body">
+                                            Accsiss eBs is an accounting software, designed to run in multiple locations across different states, nations and continents, with complex network and diverse platforms. This version combines the functionalities of the small business version and more.
+                                            </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div className="col-lg-3 col-md-6 col-sm-12">
+
+                            <div className="card-container">
+                                <div className="card">
+                                    <div className="front">
+                                        <div className="card-header">
+                                            <img src={sysbanker} className="image_product" alt="" />hello wor
+                                            </div>
+                                        <div className="card-body">
+                                            hello world
+                                            </div>
+                                        <div className="card-footer">
+                                            hello world world
+                                            </div>
+                                    </div>
+
+                                    <div className="back">
+                                        <div className="card-header">
+                                            <img src={mira} className="image_product" alt="" />
+                                            hello
+                                        </div>
+                                        <div className="card-body">
+                                            hello world
+                                            </div>
+                                        <div className="card-footer">
+                                            hello
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div className="col-lg-3 col-md-6 col-sm-12">
+
+                            <div className="card-container">
+                                <div className="card">
+                                    <div className="front">
+                                        <div className="card-header">
+                                            <img src={mira} className="image_product" alt="" />hello world
+                                            </div>
+                                        <div className="card-body">
+                                            hello world
+                                            </div>
+                                        <div className="card-footer">
+                                            hello world world
+                                            </div>
+                                    </div>
+
+                                    <div className="back">
+                                        <div className="card-header">
+                                            <img src={sysbanker} className="image_product" alt="" />
+                                            hello
+                                        </div>
+                                        <div className="card-body">
+                                            hello world
+                                            </div>
+                                        <div className="card-footer">
+                                            hello
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div className="col-lg-3 col-md-6 col-sm-12">
+
+                            <div className="card-container">
+                                <div className="card">
+                                    <div className="front">
+                                        <div className="card-header">
+                                            <img src={image} className="image_product" alt="" />
+                                            hello world
+                                        </div>
+                                        <div className="card-body">
+                                            hello world
+                                        </div>
+                                        <div className="card-footer">
+                                            hello world world
+                                        </div>
+                                    </div>
+
+                                    <div className="back">
+                                        <div className="card-header">
+                                            <img src={sysbanker} className="image_product" alt="" />
+                                            hello
+                                        </div>
+                                        <div className="card-body">
+                                            hello world
+                                        </div>
+                                        <div className="card-footer">
+                                            hello
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
         );
     }

@@ -4,6 +4,7 @@ import { HTTPURL } from './common/global_constant';
 
 // import './App.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import './assets/css/rotating-card.css';
 
 import { Provider } from './common/context';
 

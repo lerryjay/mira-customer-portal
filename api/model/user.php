@@ -76,5 +76,30 @@
       if($update) return true;
       else return false;
     }
+
+    /**
+    * retrieves a company users
+    *
+    * @param String $companyId Id of the company
+    * @param Int  $status 1 = still existing, 0 = deleted
+    * @return boolean false if not found @return Array of users with matching roles
+    **/
+    public function getCompanyUsers($companyId,$status = 1)
+    {
+      return $this->getUsers('WHERE company_id = ? AND status = ?','si', [$companyId,$status]);
+    }
+
+    /**
+     * retrieves a company users based on the role
+     *
+     * @param String $companyId Id of the company
+     * @param String $role admin, user
+     * @param Int  $status 1 = still existing, 0 = deleted
+     * @return boolean false if not found @return Array of users with matching roles
+     **/
+    public function getCompanyUsersByRole($companyId, $role,$status = 1)
+    {
+      return $this->getUsers('WHERE company_id = ? AND role = ? AND status = ?','ssi', [$companyId,$role, $status]);
+    }
   }
 ?>

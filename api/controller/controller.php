@@ -23,7 +23,7 @@
         $this->userId = $_SESSION['userid'];
       }else{
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false,'message'=>'You do not not have the permission to access this resource!']));
+        $this->setOutput(json_encode(['status'=>false,'message'=>'You do not have the permission to access this resource!']));
       }
     }
 
@@ -65,11 +65,10 @@
 		    // Verifying Authorization Header
 	    if (!isset($headers['api-key']) && $api ) {
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false,'message'=>'You do not not have the permission to access this resource!']));
+        $this->setOutput(json_encode(['status'=>false,'message'=>'You do  not have the permission to access this resource!']));
       }else{
         loadModel('company');
         $this->companyModel = new CompanyModel();
-        // echo $headers['api-key'];
         $companyExists = $this->companyModel->getCompanyByApiKey($headers['api-key']);
         // var_dump($companyExists);
         if($companyExists){ 
@@ -78,7 +77,7 @@
         }
         else if($api){
           $this->setOutputHeader(['Content-type:application/json']);
-          $this->setOutput(json_encode(['status'=>false,'message'=>'You do not not have the permission to access this resource!']));
+          $this->setOutput(json_encode(['status'=>false,'message'=>'You do  not have the permission to access this resource!']));
         }else{
           return false;
         }

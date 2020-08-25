@@ -101,6 +101,31 @@ class Company extends Controller
 
     return ['name'=>$name,'packageId'=>$packageId,'email'=>$email,'telephone'=>$telephone,'address'=>$address,'password'=>$password];
   }
+
+
+  /**
+   * undocumented function summary
+   *
+   * Undocumented function long description
+   *
+   * @param Type $var Description
+   * @return type
+   * @throws conditon
+   **/
+  public function clients()
+  {
+    loadController('user');
+    User::validateUser($this->userId,true);
+    $this->userModel = new UserModel();
+    $users = $this->userModel->getCompanyUsersByRole($this->companyId,'user');
+    $response = [
+      'status'=>true,
+      'message'=>'Company clients retrieved successfully!',
+      'data'=>$users ?: []
+    ];
+    $this->setOutputHeader(['Content-type:application/json']);
+    $this->setOutput(json_encode($response));
+  }
 }
 
 ?>

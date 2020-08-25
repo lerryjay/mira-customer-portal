@@ -77,17 +77,15 @@
         "message"=>"Error creating ticket!"
       ];
 
-      extract($_POST);
       $data = $this->validateNewTicket();
       extract($data);
-      loadController('user');
-      $user = User::validateUser($userId);
+      
       if($_FILES){
         $files = File::upload("files",'ticket');
         if($files) $files = json_encode($files);
         else $files   = "[]";
       }else $files   = "[]";
-      $customerId = $user['role'] == 'user' ? $userId : $customerId;
+      
       $add = $this->ticketModel->addTicket($user['company_id'],$productId,$customerId,$title,$type,$message,$files,'pending');
       if($add){
         $response['status'] = true;
@@ -107,18 +105,12 @@
     public function validateNewTicket()
     {
       extract($_POST);
-      $userId      = isset($userid) ? $userid : '';
-      $customerId  = isset($customerid) ? $customerid : '';
+      $userId      = isset($userid) ? $userid : $this->userId;
       $title       = isset($title) ? $title : '';
       $message     = isset($message) ? $message : '';
       $type        = isset($type) ? $type : '';
-      $productId    = isset($productid) ? $productid : 'all';
-      $titleError  = Validate::string($title,false,false,4);
-      if($titleError){
-        $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid ticket title', 'data'=>['field'=>'title']]));
-      } 
-      
+      $customerId  = $customerid ?? '';
+      $productId   = $productid ?? '';
       $typeError   = Validate::select($type,['request','complaint','enquiry']);
       if($typeError){
         $this->setOutputHeader(['Content-type:application/json']);
@@ -130,10 +122,23 @@
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Please enter a breif description of the issue', 'data'=>['field'=>'message']]));
       } 
-      
+
+      loadController('user');
+      $user = User::validateUser($userId);
+      $customerId = $user['role'] == 'user' ? $userId : $customerId;
+      if($user['role'] == 'admin')
+      {
+        $this->userModel = new UserModel();
+        $customer = $this->userModel->getUser($customerId);
+        if(!$customer){
+          $this->setOutputHeader(['Content-type:application/json']);
+          $this->setOutput(json_encode(['status'=>false, 'message'=>'Please enter a customerid', 'data'=>['field'=>'customerid']]));
+        }
+      }
+
       loadModel('ticket');
       $this->ticketModel = new TicketModel();
-      return ['title'=>$title,'message'=>$message,'type'=>$type,'customerId'=>$customerId,'userId'=>$userId,'productId'=>$productId];
+      return ['title'=>$title,'message'=>$message,'type'=>$type,'customerId'=>$customerId,'userId'=>$this->userId,'productId'=>$productId,'user'=>$user];
     }
 
     /**

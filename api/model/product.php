@@ -4,14 +4,17 @@
    */
   class ProductModel extends Model
   {
-    public function addProduct($productName,$desription,$companyId)
+    public function addProduct($productName,$description,$companyId)
     {
-      return $this->insert('products',['name'=>$productName,'desription'=>$desription,'company_id'=>$companyId,'createdat'=>date("Y-m-d H:i:s")]);
+      $id = uniqid();
+      $insert =  $this->insert('products',['id'=>$id,'name'=>$productName,'description'=>$description,'company_id'=>$companyId,'createdat'=>date("Y-m-d H:i:s")]);
+      if($insert['status']) return $id;
+      return false;
     }
 
-    public function addProductPackage($productId,$packageName,$description)
+    public function addProductModule($productId,$moduleName,$description)
     {
-      return $this->insert('productpackage',['name'=>$packageName,'desription'=>$desription,'product_id'=>$productId,'createdat'=>date("Y-m-d H:i:s")]);
+      return $this->insert('productmodules',['name'=>$moduleName,'description'=>$description,'product_id'=>$productId,'createdat'=>date("Y-m-d H:i:s")]);
     }
 
 
@@ -56,16 +59,16 @@
     }
 
     /**
-     * Retrieves all packages
+     * Retrieves all modules
      *
-     * @param QueryConditionString $condtion - Condition  for retrieving packages
+     * @param QueryConditionString $condtion - Condition  for retrieving modules
      * @param BindStrings $string  bind string for all parameters passed e.g 'ssii' for string,string,int,int
      * @param BindValues $values
      * @return bool false if query fails or @return object if query passes
      **/
-    public function gePackages($condition = '',$string = '',$values = [])
+    public function getModules($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT * FROM productpackage '.$condition;
+      $sql = 'SELECT * FROM productmodules '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->rows;
       else return false;
@@ -73,52 +76,52 @@
 
 
     /**
-     * Retrieves a single package
+     * Retrieves a single module
      *
-     * @param QueryConditionString $condtion - Condition  for retrieving packages
+     * @param QueryConditionString $condtion - Condition  for retrieving modules
      * @param BindStrings $string  bind string for all parameters passed e.g 'ssii' for string,string,int,int
      * @param BindValues $values
      * @return bool false if query fails or @return object if query passes
      **/
-    public function getPackage($condition = '',$string = '',$values = [])
+    public function getModule($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT * FROM productpackage '.$condition;
+      $sql = 'SELECT * FROM productmodules '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->rows;
       else return false;
     }
 
     /**
-     * Retrieves product packages
+     * Retrieves product modules
      *
      * @param Int $productId 
      * @param Int $status  1 = not deleted, 0 = deleted
      * @return bool false if query fails or @return object if query passes
      **/
-    public function getPackagesByProductId($productId,$status = 1)
+    public function getModulesByProductId($productId,$status = 1)
     {
-      return $this->getPackages('WHERE product_id = ? AND status = ? ','ii', [$productId,$status]);
+      return $this->getModules('WHERE product_id = ? AND status = ? ','ii', [$productId,$status]);
     }
 
     /**
-     * Retrieves all the data about a package
+     * Retrieves all the data about a module
      *
-     * @param Int $packageId Id of package to be retrieved
+     * @param Int $moduleId Id of module to be retrieved
      * @return bool false if query fails or @return object if query passes
      **/
-    public function getPackageInfo($packageId,$status = 1)
+    public function getModuleInfo($moduleId,$status = 1)
     {
-      return $this->getProductPackages('WHERE id = ? AND status = ? ','ii', [$packageId,$status]); 
+      return $this->getProductModules('WHERE id = ? AND status = ? ','ii', [$moduleId,$status]); 
     }
 
-    public function updateProduct($productId,$productName,$desription)
+    public function updateProduct($productId,$productName,$description)
     {
       return $this->update('products', ['name'=>$productName,'description'=>$description ], ['id'=>$productId]);
     }
 
-    public function updateProductPackage($packageId,$productId, $packageName,$description)
+    public function updateProductModule($moduleId,$productId, $moduleName,$description)
     {
-      return $this->update('productpackage', ['name'=>$packageName,'description'=>$description,'product_id'=>$productId ], ['id'=>$packageId]);
+      return $this->update('productmodules', ['name'=>$moduleName,'description'=>$description,'product_id'=>$productId ], ['id'=>$moduleId]);
     }
 
     public function deleteProduct($productId)
@@ -126,9 +129,9 @@
       return $this->update('products', ['status'=> 0 ], ['id'=>$productId]);
     }
 
-    public function deleteProductPackage($packageId)
+    public function deleteProductModule($moduleId)
     {
-      return $this->update('productpackage', ['status'=> 0 ], ['id'=>$packageId]);
+      return $this->update('productmodules', ['status'=> 0 ], ['id'=>$moduleId]);
     }
   }
 ?>

@@ -159,9 +159,10 @@
               'fullname'=>$user['name'],
               'companyid'=>$user['company_id'],
               'activation'=>$user['activation'],
+              'role'=>$user['role'],
             ]
           ];
-        }
+        }else session_destroy();
       }
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));

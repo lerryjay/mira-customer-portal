@@ -20,13 +20,13 @@
       ];
       loadController('user');
       loadModel('product');
-      extract($_GET);
-      $userId = isset($userid) ? $userid : '';
-      $user   = User::validateUser($userId); 
+      // extract($_GET);
+      // $userId = isset($userid) ? $userid : '';
+      // $user   = User::validateUser($userId); 
 
       $this->productModel = new ProductModel();
 
-      $products = $this->productModel->getCompanyProducts($user['company_id']);
+      $products = $this->productModel->getCompanyProducts($this->companyId);
       if($products){
         $response = [
           'status'=>true,
@@ -52,7 +52,7 @@
      * @return type
      * @throws conditon
      **/
-    public function product()
+    public function getproduct()
     {
       $response = [
         'status'=>false,
@@ -86,8 +86,8 @@
       extract($data);
       loadModel('product');
       $this->productModel = new ProductModel();
-      $add = $this->productModel->addProduct($name,$desription,$user['company_id']);
-      if($add['status']){
+      $add = $this->productModel->addProduct($name,$description,$user['company_id']);
+      if($add){
         $response = [
           'status'=>true,
           'message'=>'Product saved successfully!',
@@ -98,12 +98,12 @@
     }
 
     /**
-     * Retrieves product packagesproduct
+     * Retrieves product modules product
      *
      * @param HTTPPOSTPARAMS $_POST - productid,$userid
      * @return JSONRESPONSE 
      **/
-    public function packages()
+    public function modules()
     {
       $response = [
         'status'=>false,
@@ -113,39 +113,39 @@
       $data = $this->validateduserproductpermission();
       extract($data);
 
-      $packages = $this->productModel->getPackagesByProductId($product['id']);
+      $modules = $this->productModel->getModulesByProductId($product['id']);
       
       $response['status']   = true;
-      $response['message']  = 'Products packages retrived successfulty';
-      $response['data']     = $packages;
+      $response['message']  = 'Products modules retrived successfulty';
+      $response['data']     = $modules;
 
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     }
 
     /**
-     * Add product package
+     * Add product module
      *
      * @param HTTPPOSTPARAMS $productId
      * @param HTTPPOSTPARAMS $name
      * @param HTTPPOSTPARAMS $description
      * @return HTTPRESPONSE [ status:boolean, message;String response from the request]
      **/
-    public function addpackage()
+    public function addmodule()
     {
       $response = [
         'status'=>false,
-        'message'=>'Error saving package'
+        'message'=>'Error saving module'
       ];
 
-      $data = $this->validateAddPackage();
+      $data = $this->validateAddModule();
       extract($data);
 
-      $add  = $this->productModel->addProductPackage($product['id'],$packageName,$description);
+      $add  = $this->productModel->addProductModule($product['id'],$moduleName,$description);
       if($add['status']){
         $response = [
           'status'=>true,
-          'message'=>'Package saved successfully'
+          'message'=>'Module saved successfully'
         ];
       }
 
@@ -180,7 +180,6 @@
       extract($_POST);
       $userId = isset($userid) ? $userid : '';
       $user   = User::validateUser($userId,true);
-
       $name      = $name ?? '';
       $nameError =   Validate::string($name,false,false,4); 
       if($nameError){
@@ -188,9 +187,9 @@
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid product name', 'data'=>['field'=>'name']]));
       } 
 
-      $desription       = $desription ?? '';
-      $desriptionError  = Validate::string($desription,false,false,4); 
-      if($desriptionError){
+      $description       = $description ?? '';
+      $descriptionError  = Validate::string($description,false,false,4); 
+      if($descriptionError){
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid product description', 'data'=>['field'=>'description']]));
       } 
@@ -198,12 +197,12 @@
     }
 
     /**
-     * Vslidation for a new package
+     * Vslidation for a new module
      *
      * @param HTTPPOST userid,name-productname,description
      * @return PRODUCTOBJECT if valid else @return HTTPEXITRESPONSE 
      **/
-    public function validateAddPackage()
+    public function validateAddModule()
     {
       loadModel('product');
       loadController('user');
@@ -226,14 +225,14 @@
       $nameError =   Validate::string($name,false,false,4); 
       if($nameError){
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid package name', 'data'=>['field'=>'name']]));
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid module name', 'data'=>['field'=>'name']]));
       } 
 
-      $desription       = $desription ?? '';
-      $desriptionError  = Validate::string($desription,false,false,4); 
-      if($desriptionError){
+      $description       = $description ?? '';
+      $descriptionError  = Validate::string($description,false,false,4); 
+      if($descriptionError){
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid package description', 'data'=>['field'=>'description']]));
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid module description', 'data'=>['field'=>'description']]));
       } 
       return ['name'=>$name,'description'=>$description,'user'=>$user, 'product'=>$product];
     }

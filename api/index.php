@@ -61,7 +61,7 @@
     if(isset($route[2])){
       $func = $route[2];
       $class->$func();
-    }  else $class->index();
+    }else $class->index();
   // } catch (Throwable $th) {
   //   header('Content-Type:Application/json',true,404);
   //   echo json_encode(["message"=>"Not found", "status"=>false]);

@@ -1,4 +1,4 @@
-<?
+<?php
   /**
    * File Handler class
    */

@@ -38,43 +38,36 @@ class App extends Component {
       users: []
     }
   }
-  loginUser = (email, password) => {
-    // await fetch(HTTPURL + 'user/login');
-    let data = {
-      email: this.state.email,
-      password: this.state.password
-    }
+  loginUser = (data) => {
+    let form = new FormData(data);
 
-    fetch(HTTPURL + 'user/login', {
+    const headers = new Headers();
+    headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+     fetch(HTTPURL + 'user/login', {
         method: 'POST',
-        body: JSON.stringify(data)
+        body: form,
+        headers: headers
     })
     .then(response => response.json())
     .then(json => {
       console.log(json);
       return json;
-    })
-
-    this.setState({ loggedIn: true });
-    console.log('Yuppie i logged ', email, password);
+    });
+;
+    this.setState({ loggedIn: true })
+    console.log('Yuppie i logged ', data);
     return { status: true, message: 'Login successful' };
   }
 
   signupUser = (data) => {
+    const headers = new Headers();
+    headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
     let form = new FormData(data);
-    // form.append('username', username);
-    // form.append('email', email);
-    // form.append('password', password);
-    // let data = {
-    //   username,
-    //   email,
-    //   password
-    // }
-
     return fetch(HTTPURL + 'user/register', {
         method: 'POST',
         body: form,
-        headers: new Headers()
+        headers: headers
+
     })
     .then(response => response.json())
     .then(json => {
@@ -109,10 +102,6 @@ class App extends Component {
                 {this.state.loggedIn &&<Sidebar />}
                 <div className="content">
                   <Switch>
-                    {<Route path="/createproduct" component={CreateProduct} />}
-                    {<Route path="/viewproduct" component={ViewProduct} />}
-                    {<Route path="/productdetails" component={ProductDetails} />}
-                    {<Route path="/createticket" component={CreateTicket} />}
                     {<Route path="/signup" component={SignUp} />}
                     {<Route path="/login" component={Login} />}
                     {<Route path="/forgotpassword" component={ForgotPassword} />}
@@ -122,12 +111,14 @@ class App extends Component {
                     {this.state.loggedIn && <Route path="/createclient" component={CreateClient} />}
                     {this.state.loggedIn && <Route path="/creatuser" component={CreateUser} />}
                     {this.state.loggedIn && <Route path="/profile" component={Profile} />}
-                    {this.state.loggedIn && <Route path="/ticketList" component={TicketList} />}
-                    {this.state.loggedIn && <Route path="/viewClient" component={ViewClient} />}
-                    {this.state.loggedIn && <Route path="/listClient" component={ListClient} />}
-                    {this.state.loggedIn && <Route path="/ticketChat" component={Chat} />}
-                    {this.state.loggedIn && <Route path="/changePassword" component={ChangePassword} />}
-                    {this.state.loggedIn && <Route path="/create_ticket" component={CreateTicket} />}
+                    {this.state.loggedIn && <Route path="/ticketlist" component={TicketList} />}
+                    {this.state.loggedIn && <Route path="/viewclient" component={ViewClient} />}
+                    {this.state.loggedIn && <Route path="/listclient" component={ListClient} />}
+                    {this.state.loggedIn && <Route path="/changepassword" component={ChangePassword} />}
+                    {this.state.loggedIn && <Route path="/createproduct" component={CreateProduct} />}
+                    {this.state.loggedIn && <Route path="/viewproduct" component={ViewProduct} />}
+                    {this.state.loggedIn && <Route path="/productdetails" component={ProductDetails} />}
+                    {this.state.loggedIn && <Route path="/createticket" component={CreateTicket} />}
                     <Route component={NotFound} />
                   </Switch>
                 </div>

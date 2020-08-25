@@ -40,7 +40,7 @@ class Login extends Component {
         }else{
             await this.setState({loading : true});
             setTimeout(() =>this.setState({loading : false}), 3000);
-           const res =  await this.state.login(email,password);
+           const res = await this.state.login(document.getElementById("loginform"));
            if(!res['status'])this.setState({errormessage: res['message']});
             else{
                 document.querySelector('.content').style.width = "";
@@ -68,7 +68,7 @@ class Login extends Component {
                             <img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt=""/>
                         </div>
                         <div className="card-body py-lg-5 text-muted text-center">
-                            <form onSubmit={this.handleSubmit}>
+                            <form onSubmit={this.handleSubmit} id="loginform">
 
                                 { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
                                     <div className="alert alert-warning" role="alert">{this.state.errormessage}</div>

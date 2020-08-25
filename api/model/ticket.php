@@ -68,7 +68,7 @@
      **/
     public function getTickets($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT * FROM tickets '.$condition;
+      $sql = 'SELECT *, (SELECT name FROM users WHERE id = customer_id) AS clientname,  (SELECT email FROM users WHERE id = customer_id) AS email FROM tickets '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->rows;
       else return false;
@@ -84,7 +84,7 @@
      **/
     public function getTicket($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT * FROM tickets '.$condition;
+      $sql = 'SELECT *, (SELECT name FROM users WHERE id = customer_id) AS clientname,  (SELECT email FROM users WHERE id = customer_id) AS email FROM tickets '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->row;
       else return false;
@@ -118,7 +118,6 @@
       $pageno      = (string) isset($filter['pageno']) ? $filter['pageno'] : 1;
       $conditions .= ' LIMIT '.(string) $limit;
       $conditions .= ' OFFSET '.(string) (($pageno - 1 ) * $limit);
-
       $conditions  = ltrim($conditions,'AND');
       return $this->getTickets('WHERE '.$conditions,'',[]);
     }

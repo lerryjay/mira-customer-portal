@@ -25,7 +25,7 @@
       loadController('user');
       $this->ticketModel = new TicketModel();
 
-      $userId     = isset($userid) ? $userid : '';
+      $userId     = isset($userid) ? $userid : $this->userId;
       $on         = isset($on) ? $on : '';
       $type       = isset($type) ? $type : '';
       $limit      = isset($limit) ? $limit : 25;

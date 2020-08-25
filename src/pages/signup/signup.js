@@ -36,23 +36,20 @@ class SignUp extends Component {
             const err = Validators.validateEmail(email).message
             this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
-        }else if(!Validators.validatePassword(password,1).status){
+        }else if(!Validators.validatePassword(password,6).status){
             console.log('Failed password validation');
-            const err = Validators.validatePassword(password,1).message;
+            const err = Validators.validatePassword(password,6).message;
             this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
         }else{
             await this.setState({loading : true});
             setTimeout(() =>this.setState({loading : false}), 3000);
-           const res = await this.state.signup(document.getElementById("signupform"));
-           console.log(res);
-           console.log(name, email, password, telephone);
-        
-        //    if (!res['status']) this.setState({errormessage: res['message']});
-        //     else{
-        //         //find a way to redirect here 
-        //         this.props.history.push('/login');
-        //     }
+            const res = await this.state.signup(document.getElementById("signupform"));
+           if(!res['status'])this.setState({errormessage: res['message']});
+            else{
+                //find a way to redirect here 
+                this.props.history.push('/login');
+            }
         }
         console.log(
             `

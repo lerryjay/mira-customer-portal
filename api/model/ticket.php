@@ -24,7 +24,7 @@
     public function addTicket($companyId,$productId,$customerId,$title,$type,$message,$files,$status = 'pending'){
   
       $id = uniqid();
-      $insert =  $this->insert('tickets',['id'=>$id,'product_id'=>$productId,'customer_id'=>$customerId,'title'=>$title,'createdat'=>date("Y-m-d H:i:s"),'message'=>$message,'company_id'=>$companyId,'type'=>$type,'files'=>$files,'ticketstatus'=>$status,]);
+      $insert =  $this->insert('tickets',['id'=>$id,'product_id'=>$productId,'customer_id'=>$customerId,'title'=>$title,'createdat'=>date("Y-m-d H:i:s"),'message'=>$message,'company_id'=>$companyId,'type'=>$type,'files'=>$files,'ticketstatus'=>$status]);
       if($insert) return $id;
       else false;
     }
@@ -40,7 +40,10 @@
      **/
     public function addChat($ticketId,$message,$files,$senderId,$senderRole)
     {
-      return $this->insert('ticketchat',['ticket_id'=>$ticketId,'senderid'=>$senderId,'role'=>$senderRole,'message'=>$message,'files'=>$files,'createdat'=>date("Y-m-d H:i:s")]);
+      $id = uniqid();
+      $insert =  $this->insert('ticketchat',['id'=>$id,'ticket_id'=>$ticketId,'sender_id'=>$senderId,'role'=>$senderRole,'message'=>$message,'files'=>$files,'createdat'=>date("Y-m-d H:i:s")]);
+      if($insert['status']) return $id;
+      else return false;
     }
 
     /**
@@ -99,24 +102,25 @@
     }
     public function searchTicket($filter = [])
     {
-      $conditions .= isset($filter['ticketId']) ? "AND ticket_id = ".$filter['ticketId'] : "";
-      $conditions .= isset($filter['type']) ? "AND type = ".$filter['type'] : "";
-      $conditions .= isset($filter['customerId']) ? "AND customer_id = ".$filter['customerId'] : "";
-      $conditions .= isset($filter['companyId']) ? "AND customer_id = ".$filter['companyId'] : "";
-      $conditions .= isset($filter['on']) ? "AND dateadded = ".$filter['on'] : "";
-      $conditions .= isset($filter['startDate']) ? "AND dateadded >= ".$filter['startDate'] : "";
-      $conditions .= isset($filter['endDate']) ? "AND dateadded <= ".$filter['endDate'] : "";
+      $conditions  = '';
+      $conditions .= isset($filter['ticketId']) && $filter['ticketId'] != NULL ? "AND ticket_id = '".$filter['ticketId']."'" : "";
+      $conditions .= isset($filter['type']) && $filter['type'] != NULL  ? "AND type = '".$filter['type']."'" : "";
+      $conditions .= isset($filter['customerId']) && $filter['customerId'] != NULL  ? "AND customer_id = '".$filter['customerId']."'" : "";
+      $conditions .= isset($filter['companyId']) && $filter['companyId'] != NULL  ? "AND company_id = '".$filter['companyId']."'" : "";
+      $conditions .= isset($filter['on'])  && $filter['on'] != NULL ? "AND dateadded = '".$filter['on']."'" : "";
+      $conditions .= isset($filter['startDate'])  && $filter['startDate'] != NULL ? "AND dateadded >= '".$filter['startDate']."'" : "";
+      $conditions .= isset($filter['endDate']) && $filter['endDate'] != NULL  ? "AND dateadded <= '".$filter['endDate']."'" : "";
 
-      $conditions .= isset($filter['order_by']) ? " ORDER BY ".$filter['order_by'] : "ORDER BY id";
+      $conditions .= isset($filter['order_by']) ? " ORDER BY ".$filter['order_by'] : " ORDER BY createdat";
       $conditions .= isset($filter['order']) ? " ".$filter['order'] : " DESC";
 
       $limit       = (int) isset($filter['limit']) ? $filter['limit'] : 20;
       $pageno      = (string) isset($filter['pageno']) ? $filter['pageno'] : 1;
-      $conditions .= 'LIMIT '.(string) $limit;
-      $conditions .= 'OFFSET '.(string) (($pageno - 1 ) * $limit);
+      $conditions .= ' LIMIT '.(string) $limit;
+      $conditions .= ' OFFSET '.(string) (($pageno - 1 ) * $limit);
 
-      ltrim($conditions,'AND');
-      return $this->getTickets($conditions,'',[]);
+      $conditions  = ltrim($conditions,'AND');
+      return $this->getTickets('WHERE '.$conditions,'',[]);
     }
 
     /**
@@ -129,7 +133,7 @@
      **/
     public function getChats($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT * FROM ticketchats '.$condition;
+      $sql = 'SELECT * FROM ticketchat '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->rows;
       else return false;

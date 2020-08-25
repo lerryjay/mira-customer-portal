@@ -19,11 +19,21 @@
         "data"=>[],
         "message"=>"No ticket records!"
       ];
+
       extract($_GET);
+      loadModel('ticket');
       loadController('user');
-      $userId = isset($userid) ? $userid : '';
+      $this->ticketModel = new TicketModel();
+
+      $userId     = isset($userid) ? $userid : '';
+      $on         = isset($on) ? $on : '';
+      $type       = isset($type) ? $type : '';
+      $limit      = isset($limit) ? $limit : 25;
+      $pageno     = isset($pageno) ? $pageno : 1;
+      $enddate    = isset($enddate) ? $enddate : '';
+      $startdate  = isset($startdate) ? $startdate : '';
+      $customerId = isset($customerid) ? $customerid : null;
       $user = User::validateUser($userId);
-      $user = $this->userModel->row;
       $filters = ($user['role'] == 'user') ? 
       [
         "customerId"=>$userid,
@@ -45,7 +55,7 @@
       ];
       $hasTickets =   $this->ticketModel->searchTicket($filters);
       if($hasTickets){
-        $response['data'] = $hasTickets['data'];
+        $response['data'] = $hasTickets;
         $response['message'] = "Ticket records found";
       }
       $this->setOutputHeader(['Content-type:application/json']);
@@ -53,7 +63,8 @@
     }
 
     /**
-     * Creates a new ticket for the given customer of a specific company
+     * Creates a new ticket for
+     *  the given customer of a specific company
      *
      * @param HTTPPOSTPARAMS $_POST - companyId,customerid,title,message,type - request,complaint,enquiry -,files, 
      * @return JSONRESPONSE 
@@ -107,19 +118,19 @@
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid ticket title', 'data'=>['field'=>'title']]));
       } 
-
+      
       $typeError   = Validate::select($type,['request','complaint','enquiry']);
       if($typeError){
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Please select the nature of the ticket', 'data'=>['field'=>'type']]));
       } 
-
+      
       $messageError =  Validate::string($message,false,false,1);
       if($messageError){
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Please enter a breif description of the issue', 'data'=>['field'=>'message']]));
       } 
-
+      
       loadModel('ticket');
       $this->ticketModel = new TicketModel();
       return ['title'=>$title,'message'=>$message,'type'=>$type,'customerId'=>$customerId,'userId'=>$userId,'productId'=>$productId];
@@ -141,21 +152,20 @@
       $data   = $this->validateTicketReply();
       extract($data);   
       loadModel('file');
-      $ticket = $this->ticketModel->getTicketById($ticketid);
-      if($ticket || $ticket['ticketstatus'] == 'closed'){
-        if($userid == $ticket['customer'] || $user['role'] == 'admin'){
-          if($_FILES['file']){
-            $files = File::upload("files",'ticket');
-            if($files) $files = json_encode($files);
-            else $files   = "[]";
-          }else $files   = "[]";
-          $saved = $this->ticketModel->addTicketChat($ticketid,$message,$files,$userid,$user['role']);
-          if($saved){
-            $response['status']  = true;
-            $response['message'] = 'Ticket reply success';
-          }else $response['message'] = "Unexpected error saving ticket reply!";
-        }else $response['message'] = "You do not have the authority to perform this action!";
-      }else $response ['message'] = !$ticket ?  "Invalid ticket!" : "This ticket has been closed no further replys can be submitted";
+      if($userId == $ticket['customer_id'] || $user['role'] == 'admin'){
+        if(isset($_FILES['file'])){
+          $files = File::upload("files",'ticket');
+          if($files) $files = json_encode($files);
+          else $files   = "[]";
+        }else $files   = "[]";
+        $saved = $this->ticketModel->addChat($ticketid,$message,$files,$userId,$user['role']);
+        if($saved){
+          $response['status']  = true;
+          $response['message'] = 'Ticket reply success';
+          $response['data'] = ['replyid'=>$saved];
+        }else $response['message'] = "Unexpected error saving ticket reply!";
+      }else $response['message'] = "You do not have the authority to perform this action!";
+      
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     }
@@ -171,18 +181,31 @@
     {
       extract($_POST);
       $userId      = isset($userid) ? $userid : '';
-
+      $ticketId      = isset($ticketid) ? $ticketid : '';
       $message     = isset($message) ? $message : '';
       $files       = isset($files) ? $files : '';
-
+      loadController('user');
       $user = User::validateUser($userId); 
 
       $messageError =  Validate::string($message,false,false,1);
       if($messageError){
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid ticket title', 'data'=>['field'=>'title']]));
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid ticket message', 'data'=>['field'=>'message']]));
       } 
-      return ['message'=>$message,'files'=>$files,'user'=>$user,'userId'=>$userId];
+      loadModel('ticket');
+      $this->ticketModel = new TicketModel();
+      $ticket = $this->ticketModel->getTicketById($ticketId);
+      if(!$ticket || $ticket['ticketstatus'] == 'closed'){
+        $message = !$ticket ?  "Invalid ticket!" : "This ticket has been closed no further replys can be submitted";
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>$message]));
+      }
+      if($user['company_id'] !== $ticket['company_id']){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>"You do not have the permission to perform this action!"]));
+      }
+
+      return ['message'=>$message,'files'=>$files,'user'=>$user,'userId'=>$userId,'ticket'=>$ticket,'ticketid'=>$ticketId];
     }
 
     /**
@@ -201,9 +224,7 @@
       $data = $this->validateUserTicketPermission();
       extract($data);
 
-      loadModel('ticket');
-      $this->ticketModel = new TicketModel();
-
+      
       $data = $this->ticketModel->getChatsByTicketId($ticketId);
       if($data){
         $response['status'] = true;
@@ -213,9 +234,9 @@
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     }
-
     
-
+    
+    
     /**
      * Update the status of a ticket
      *
@@ -237,12 +258,12 @@
         $response['status'] = true;
         $response['message'] = ['Ticket status updated successfully'];
       }else $response['message'] = "An unexpected error occured. Please try again later";
-
+      
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
-
+      
     }
-
+    
     /**
      * Access control for the ticket data
      *
@@ -251,19 +272,27 @@
      **/
     public function validateUserTicketPermission()
     {
+      extract($_GET);
       extract($_POST);
-      loadModel('user');
+      loadModel('ticket');
+      loadController('user');
+      
       $userId   = isset($userid) ? $userid : '';
-      $tciketId = isset($ticketid) ? $ticketid : '';
-      $user     = User::validateUser($userId); 
+      $ticketId = isset($ticketid) ? $ticketid : '';
+      $user     = User::validateUser($userId);
+
+      $this->ticketModel = new TicketModel();
       $ticket   = $this->ticketModel->getTicketById($ticketId);
-      if($ticket || $ticket['ticketstatus'] != 'closed'){
-        if($user['id'] == $ticket['customer']) return ['user'=> $user,'ticket'=>$ticket,'ticketId'=>$ticketId,'userId'=>$userId];
-        else $response['message'] = "You do not have the authority to perform this action!";
-      }else $response ['message'] = !$ticket ?  "Invalid ticket!" : "This ticket has been closed no further replys can be submitted";
-      $response['status']   = false;
-      $this->setOutputHeader(['Content-type:application/json']);
-      $this->setOutput(json_encode($response));
+      
+      
+      if(!$ticket){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>"Invalid ticket!"]));
+      }elseif($user['company_id'] !== $ticket['company_id']){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>"You do not have the permission to perform this action!"]));
+      }elseif($user['role'] == 'admin' || $user['id'] == $ticket['customer_id']) return ['user'=> $user,'ticket'=>$ticket,'ticketId'=>$ticketId,'userId'=>$userId];
+
     }
   }
 ?>

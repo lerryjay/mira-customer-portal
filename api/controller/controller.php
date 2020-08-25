@@ -13,9 +13,12 @@
      **/
     public function __construct()
     {
-      if(!isset($_SESSION)){
+      // var_dump($_SESSION);
+      // unset($_SESSION);
+      // session_destroy();
+      if(!isset($_SESSION) || count($_SESSION) < 1){
         $this->validateApiKey(true);
-      }else if($_SESSION){
+      }else if(count($_SESSION) > 0 ){
         $this->companyId = $_SESSION['companyid'];
         $this->userId = $_SESSION['userid'];
       }else{

@@ -36,8 +36,13 @@
 
     public function register($name,$email,$telephone,$password,$companyId)
     {
+      // var_dump($name,$email,$telephone,$password,$companyId);
       $id = uniqid();
-      $insert =  $this->insert('users',['id'=>$id,'name'=>$name,'email'=>$email,'telephone'=>$telephone,'password'=>$password,'company_id'=>$companyId,'createdat'=>date("Y-m-d H:i:s")]);
+      //
+      //
+      
+      $insert =  $this->insert('users',['id'=>$id,'name'=>$name,'company_id'=>$companyId,'email'=>$email,'telephone'=>$telephone,'password'=>$password,'createdat'=>date("Y-m-d H:i:s")]);
+      // var_dump($insert);
       if($insert['status']) return $id;
       else return false;
     }

@@ -1,5 +1,5 @@
 <?php
-  $db_server = '192.168.1.4';
+  $db_server = 'localhost';
   $db_user = 'root';
   $db_password = '';
   $db = 'ticketapp';

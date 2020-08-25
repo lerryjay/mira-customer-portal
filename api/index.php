@@ -52,11 +52,16 @@
   $route = getroute();
 
   require_once BASE_PATH.'/api/controller/'.$route[1].'.php';
-  $class = ucfirst($route[1]);
-  $class = new $class();
-  if(isset($route[2])){
-   $func = $route[2];
-    $class->$func();
-  }
-  else $class->index();
+  // try {
+    $class = ucfirst($route[1]);
+    $class = new $class();
+    if(isset($route[2])){
+      $func = $route[2];
+      $class->$func();
+    }  else $class->index();
+  // } catch (Throwable $th) {
+  //   header('Content-Type:Application/json',true,404);
+  //   echo json_encode(["message"=>"Not found", "status"=>false]);
+  // }
+  
 ?>

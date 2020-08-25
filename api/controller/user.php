@@ -8,6 +8,7 @@
     function __construct(){
       loadModel('user');
       $this->userModel = new UserModel();
+      parent::__construct();
     }
 
     /**
@@ -21,9 +22,10 @@
       $data = $this->validateRegistration();
       extract($data);
       $password = $this->encryptPassword($password);
-      $response = $this->userModel->register($name,$email,$telephone,$password,$companyId);
+
+      $response = $this->userModel->register($name,$email,$telephone,$password,$this->companyId);
       if($response){
-        $_SESSION['companyid'] = $companyId;
+        $_SESSION['companyid'] = $this->companyId;
         $_SESSION['userid'] = $response;
         $response = [
           'status'=>true,
@@ -156,6 +158,7 @@
               'telephone'=>$user['telephone'],
               'fullname'=>$user['name'],
               'companyid'=>$user['company_id'],
+              'activation'=>$user['activation'],
             ]
           ];
         }

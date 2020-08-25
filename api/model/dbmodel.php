@@ -11,15 +11,17 @@
     public function query($sql,$bindString = '',$bindValues = [])
     {
       $prepare = $this->conn->prepare($sql);
-      !(count($bindValues) > 0) ?: $prepare->bind_param($bindString,...$bindValues);
-      $prepare->execute();
-      $select_record = $prepare->get_result();
-      $this->rows =  $select_record->fetch_all(MYSQLI_ASSOC) ?? [];
-      $this->row  =  count($this->rows) > 0 ? $this->rows[0] : [];
-      $rowNums    =  count($this->rows);
-      $this->num_rows = $rowNums;
-      if($rowNums < 1) return false;
-      return true;
+      if($prepare){
+        !(count($bindValues) > 0) ?: $prepare->bind_param($bindString,...$bindValues);
+        $prepare->execute();
+        $select_record = $prepare->get_result();
+        $this->rows =  $select_record->fetch_all(MYSQLI_ASSOC) ?? [];
+        $this->row  =  count($this->rows) > 0 ? $this->rows[0] : [];
+        $rowNums    =  count($this->rows);
+        $this->num_rows = $rowNums;
+        if($rowNums < 1) return false;
+        return true;
+      }else false;
     }
 
     public function insert($table,$data){
@@ -34,9 +36,9 @@
       }
       $sql = " INSERT INTO $table (".implode(',',$fields).")  VALUES ( $plc_holder )";
       $prep_insert = $this->conn->prepare($sql);
-      // echo $string;
       $prep_insert->bind_param($string, ...$values);
       $prep_insert->execute();			
+      echo mysqli_error($this->conn);
       if (!$prep_insert) {
         return array('message' => mysqli_error($this->conn), 'status' => false);
       }else{

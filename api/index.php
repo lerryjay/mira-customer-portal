@@ -1,5 +1,8 @@
 <?php
   session_start();
+  header('Allow-Access-Control-Headers: Content-Type,API-KEY');
+  header('Content-Type: application/json');
+  header('Access-Control-Allow-Origin: *');
   $path = explode('/', trim($_SERVER['PHP_SELF'],'/'));
   define('BASE_PATH', $_SERVER['DOCUMENT_ROOT'].'/'.$path[0]);
   require_once './config.php';

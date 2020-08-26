@@ -8,7 +8,7 @@ export default function Dashboard() {
 
                 <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
                     <div className="p-2 card card1">
-                        <i className="fas fa-user-edit fa-fw fa-2x"></i>
+                        <i className="fas fa-user-edit fa-fw fa-2x mb-2"></i>
                         <p className="border-top text-right py-2">9.823
             <br />
                             <small>
@@ -20,7 +20,7 @@ export default function Dashboard() {
 
                 <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
                     <div className="p-2 card cardd">
-                        <i className="fas fa-check fa-fw fa-2x"></i>
+                        <i className="fas fa-check fa-fw fa-2x mb-2"></i>
                         <p className="border-top text-right py-2">9.823
             <br />
                             <small>
@@ -32,7 +32,7 @@ export default function Dashboard() {
 
                 <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
                     <div className="p-2 card carddd">
-                        <i className="fas fa-comments fa-fw fa-2x"></i>
+                        <i className="fas fa-comments fa-fw fa-2x mb-2"></i>
                         <p className="border-top text-right py-2">9.823
             <br />
                             <small>
@@ -43,7 +43,7 @@ export default function Dashboard() {
                 </div>
                 <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
                     <div className="p-2 card cardddd">
-                        <i className="fas fa-user-times fa-fw fa-2x"></i>
+                        <i className="fas fa-user-times fa-fw fa-2x mb-2"></i>
                         <p className="border-top text-right py-2">9.823
             <br />
                             <small>
@@ -68,10 +68,10 @@ export default function Dashboard() {
             </div>
 
             <div id='table' className="card pt-2 my-3 mx-4 shadow px-2">
-                <h6 className="h6 text-left">Ticket&nbsp;Table</h6>
+                <h6 className="h6 text-left mt-2 mb-3">Ticket&nbsp;Table</h6>
                 <div className="table-responsive">
                     <table id='text'
-                        className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-white">
+                        className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark">
                         <caption>Hello World!</caption>
                         <thead>
                             <tr>

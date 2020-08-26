@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import image from '../../assets/images/dammy.jpg'
 
-const Sidebar = (props) => {
+const ClientSidebar = (props) => {
 
     const toggle2 = () => {
         //Link click remove sidebar
@@ -44,25 +44,6 @@ const Sidebar = (props) => {
                             <i className="fa fa-tachometer-alt mr-1"></i>&nbsp;Dashboard
                         </li>
                     </NavLink>
-
-                    <div className="dropdown-btn nav-item" onClick={toggle2, dropdown}>
-                        <li className="nav-item">
-                            <i className="fa fa-user mr-1"></i>&nbsp;Client Corner&nbsp;<i
-                                className="fas fa-chevron-left fa-fw float-right"></i>
-                        </li>
-                    </div>
-                    <div className="dropdown-container">
-                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/createClient' onClick={toggle2}>
-                        <li className="nav-item">
-                            <i className="fa fa-user-friends mr-1"></i>&nbsp;Add&nbsp;Client
-                        </li>
-                    </NavLink> 
-                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/listClient' onClick={toggle2}>
-                        <li className="nav-item">
-                            <i className="fa fa-list-ol mr-1"></i>&nbsp;List&nbsp;Client
-                        </li>
-                    </NavLink>
-                    </div>
 
                     {/* <NavLink className={`dropdown-btn nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/creatUser' onClick={toggle2}>
                         <li className="nav-item">
@@ -143,4 +124,4 @@ const Sidebar = (props) => {
     )
 }
 
-export default withRouter(Sidebar);
+export default withRouter(ClientSidebar);

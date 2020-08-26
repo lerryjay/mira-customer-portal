@@ -1,18 +1,24 @@
-import React from 'react'
+import React, { Component } from 'react';
+import {withContext} from '../../common/context';
 
-export default function Profile() {
-    const edit = () => {
-        // Make Form Editable
-        let edit = document.querySelector('#edit');
-        let input = document.getElementsByTagName('input');
-
-
-        for (let d = input.length - 1; d >= 0; d--) {
-            edit.addEventListener("click", function (e) {
-                input[d].removeAttribute("disabled");
-            });
-        };
+class Profile extends Component{
+    constructor(props){
+        super(props);
     }
+
+//  edit(){
+//         // Make Form Editable
+//         let edit = document.querySelector('#edit');
+//         let input = document.getElementsByTagName('input');
+
+
+//         for (let d = input.length - 1; d >= 0; d--) {
+//             edit.addEventListener("click", function (e) {
+//                 input[d].removeAttribute("disabled");
+//             });
+//         };
+//     }
+   render() {
     return (
         <div className="container mx-auto">
             <div className="row mt-4">
@@ -22,25 +28,19 @@ export default function Profile() {
                         <div className="card">
                             <div className="card-header text-white">
                                 Profile Information
-                <span className="float-right" id='edit' style={{cursor: 'pointer'}} onClick={edit}><i className="fas fa-pen-square fa-2x"></i>
+                <span className="float-right" id='edit' style={{cursor: 'pointer'}}><i className="fas fa-pen-square fa-2x"></i>
                                 </span>
                             </div>
                             <div className="card-body">
+                                {this.props.profile.map(profile => 
 
                                 <div className="row">
 
-                                    <div className="col-md-6 mb-3">
+                                    <div className="col-md-12 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Name</label>
                                             <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value="" placeholder="First Name" disabled autoComplete="name" />
-                                        </div>
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Name</label>
-                                            <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value="" placeholder="Last Name" disabled autoComplete="name" />
+                                                id="" value={profile.fullname} placeholder="Name" disabled autoComplete="name" />
                                         </div>
                                     </div>
 
@@ -48,14 +48,14 @@ export default function Profile() {
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Email</label>
                                             <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value="" placeholder="johndoe@mail.com" disabled autoComplete="email" />
+                                                id="" value={profile.email} placeholder="johndoe@mail.com" disabled autoComplete="email" />
                                         </div>
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Phone-number</label>
                                             <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value="" placeholder="090 ......." disabled autoComplete="tel" />
+                                                id="" value={profile.telephone} placeholder="090 ......." disabled autoComplete="tel" />
                                         </div>
                                     </div>
 
@@ -84,13 +84,13 @@ export default function Profile() {
 
                                 </div>
 
-
+                                )}
                             </div>
 
                             <div className="card-footer">
                                 <div className="float-right">
 
-                                    <button className="btn btn-sm btn-primary">
+                                    <button type="submit" className="btn btn-sm btn-primary">
                                         <i className="fas fa-folder-open"></i>
                         Save
                     </button>
@@ -121,4 +121,8 @@ export default function Profile() {
             </div>
         </div>
     )
+   }
+
 }
+
+export default withContext(Profile);

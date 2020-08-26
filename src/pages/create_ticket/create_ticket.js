@@ -29,6 +29,9 @@ class create_ticket extends Component {
     handleSubmit = async e => {
         e.preventDefault()
 
+        await this.setState({loading : true});
+        setTimeout(() =>this.setState({loading : false}), 3000);
+        const res = await this.state.createticket(document.getElementById("createticket"));
         console.log('changed successfully!')
     }
     removeImage(e) {
@@ -74,12 +77,12 @@ class create_ticket extends Component {
             <div className="row">
 
                 <div className="col-md-12" id="profile">
-                    <form onSubmit={this.handleSubmit}>
+                    <form onSubmit={this.handleSubmit} id="createticket">
 
 
                         <div className="card">
-                            <div className="card-header">
-                                Create Ticket
+                            <div className="card-header bg-medium font-weight-bold text-dark">
+                                CREATE TICKET
                             </div>
                             <div className="card-body">
                             <div className="row">
@@ -97,6 +100,14 @@ class create_ticket extends Component {
                             </div>
                                 <div className="row">
                                     
+                                <div className="col-md-6 mb-3">
+                                        <div className="form-group">
+                                            <input type="text" className="form-control form-control-sm" name="userid"
+                                                id="userid" placeholder="User ID" 
+                                                value={this.state.userid} required
+                                                onChange={this.handleInputChange}/>
+                                        </div>
+                                    </div>
 
                                 <div className="col-md-6 mb-3">
                                     <div className="form-group">
@@ -107,30 +118,12 @@ class create_ticket extends Component {
                                     </div>
                                 </div>
                                 
-                                    <div className="col-md-6 mb-3">
-                                        <div className="form-group">
-                                            <input type="text" className="form-control form-control-sm" name="userid"
-                                                id="userid" placeholder="User ID" 
-                                                value={this.state.userid} required
-                                                onChange={this.handleInputChange}/>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <div className="form-group">
-                                            <select name="customerid" id="customerid" className=" form-control form-select form-select-sm">
-                                                <option value="" selected disabled>--Select&nbsp;CustomerID&nbsp;--</option>
-                                                <option value="complaint">complaint</option>
-                                                <option value="request">Request</option>
-                                                <option value="enquiry">Enquiry</option>
-                                            </select>
-                                        </div>
-                                    </div>
                                     
                                     <div className="col-md-6 mb-3">
                                             <div className="form-group">
                                                 <select name="type" id="type" className=" form-control form-select form-select-sm">
                                                     <option value="" selected disabled>--Select&nbsp;Ticket&nbsp;Type--</option>
-                                                    <option value="complaint">complaint</option>
+                                                    <option value="complaint">Complaint</option>
                                                     <option value="request">Request</option>
                                                     <option value="enquiry">Enquiry</option>
                                                 </select>
@@ -140,22 +133,60 @@ class create_ticket extends Component {
                                             <div className="form-group">
                                                 <select name="product" id="product" className=" form-control form-select form-select-sm">
                                                     <option value="" selected disabled>--Select&nbsp;Product &nbsp;--</option>
-                                                    <option value="complaint">complaint</option>
-                                                    <option value="request">Request</option>
-                                                    <option value="enquiry">Enquiry</option>
+                                                    <option value="complaint">Accsiss eBs</option>
+                                                    <option value="request">SYSBANKER EE</option>
+                                                    <option value="request">Mira HPro</option>
+                                                    <option value="enquiry">Accsiss PPs</option>
                                                 </select>
                                             </div>
                                         </div>
 
-                                        <div className="col-md-6 mb-3">
-                                            <div className="form-group">
+                                        <div className="col-md-12 mb-3">
+                                            {/* <div className="form-group">
                                                 <select name="package" id="package" className=" form-control form-select form-select-sm">
                                                     <option value="" selected disabled>--Select&nbsp;Package&nbsp;--</option>
                                                     <option value="complaint">complaint</option>
                                                     <option value="request">Request</option>
                                                     <option value="enquiry">Enquiry</option>
                                                 </select>
-                                            </div>
+                                            </div> */}
+                                              <div className="card">
+                                    <div class="card-header bg-medium font-weight-bold text-dark">
+                                        Select Packages
+                                    </div>
+                        <div className="card-body">
+                            <p className="list-group-item">Design <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                </label>
+                            </p>
+                            <p className="list-group-item">Development <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                </label>
+                            </p>
+                            <p className="list-group-item">Hosting <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                </label>
+                            </p>
+                            <p className="list-group-item">Analytics <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                </label>
+                            </p>
+                            <p className="list-group-item">Email Setup <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                </label>
+                            </p>
+                            <p className="list-group-item">Search Engine Optimization <label class="switch float-right"> <input type="checkbox" /><span class="slider round"></span>
+                                </label>
+                            </p>
+                            <p className="list-group-item">Backups <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                </label>
+                            </p>
+                            <p className="list-group-item">Live Chat <label class="switch float-right"> <input type="checkbox" /><span class="slider round"></span>
+                                </label>
+                            </p>
+                            <p className="list-group-item">Content Management <label class="switch float-right"> <input type="checkbox" /><span class="slider round"></span>
+                                </label>
+                            </p>
+                            <p className="list-group-item">Maintenance Agreement<label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                </label>
+                            </p>
+                        </div>
+                    </div>
                                         </div>
 
                                         
@@ -186,7 +217,7 @@ class create_ticket extends Component {
                             <div className="card-footer">
                                 <div className="float-right">
 
-                                    <button className="btn btn-sm btn-primary mr-2">
+                                    <button type="submit" className="btn btn-sm btn-primary mr-2">
                                         <i className="fas fa-folder-open"></i>
                                         Save
                                     </button>

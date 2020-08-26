@@ -39,7 +39,11 @@ const Nav = () => {
 
         <nav className="navbar navbar-expand-lg navbar-dark bg-navbar px-2 fixed-top up" id="Navigation">
 
-            <h6 className="h6 text-uppercase"><img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt="AppLogo" width="40" />Ticket App</h6>
+            <div>
+                <img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt="AppLogo" width="40" />
+                <span className="logoname text-uppercase h6">Ticket App</span>
+            </div>
+
             <button className="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#ticketNav"
                 aria-controls="ticketNav" aria-expanded="false" aria-label="Toggle navigation" id="sidebarCollapse" onClick={toggle1}>
                 <span className="navbar-toggler-icon"></span>

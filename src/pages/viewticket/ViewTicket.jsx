@@ -5,7 +5,64 @@ export default class ViewTicket extends Component {
         super(props)
 
         this.state = {
-              inputfiles : []   
+              inputfiles : [],
+              chats: [
+                  {
+                      "role": "Admin",
+                      "date": "8:40 AM, Today",
+                      "message": "hello, thanks for reaching out!",
+                  },
+                  {
+                      "name": "John Doe",
+                      "date": "8:53 AM, Today",
+                      "message": "consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae",
+                  },
+                  {
+                      "name": "John Doe",
+                      "date": "8:54 AM, Today",
+                      "message": "consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae",
+                  },
+                  {
+                      "role": "Admin",
+                      "date": "8:56 AM, Today",
+                      "message": "Lorem ipssum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?",
+                  },
+                  {
+                      "name": "John Doe",
+                      "date": "9:00 AM, Today",
+                      "message": "consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae",
+                  },
+                  {
+                      "role": "Admin",
+                      "date": "9:01 AM, Today",
+                      "message": "consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae",
+                  },
+                  {
+                      "name": "John Doe",
+                      "date": "9:02 AM, Today",
+                      "message": "consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae",
+                  },
+                  {
+                      "role": "Admin",
+                      "date": "9:02 AM, Today",
+                      "message": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?",
+                  },
+                  {
+                      "name": "John Doe",
+                      "date": "9:04 AM, Today",
+                      "message": "consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae!",
+                  },
+                  {
+                      "role": "Admin",
+                      "date": "9:06 AM, Today",
+                      "message": "consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae",
+                  },
+                  {
+                      "name": "John Doe",
+                      "date": "9:10 AM, Today",
+                      "message": "Thanks for resolving it!",
+                  }
+              ]   
         }
 
         this.fileChange = this.fileChange.bind(this);
@@ -31,125 +88,58 @@ export default class ViewTicket extends Component {
             <div className="container mx-auto mt-md-5 shadow" id="profile">
                 <div className="card home-chart mt-md-4">
                     <div className="card-header bg-medium font-weight-bold text-dark">
-                        Ticket Chat
+                    <span className="font-weight-bolder mr-4">TICKET ID: #023</span>
+                    <span className="font-weight-bolder mr-4">TYPE: Complaint</span>
+                    <span className="font-weight-bolder">TICKET TITLE: Order Issues</span>
+                        <div className="form-group  mt-2">
+                            <textarea id="message" name="message" rows="5" cols="50" className="form-control text-left" 
+                            value="I was unable to view past orders" required placeholder="Message" disabled
+                                />
+                        </div>
                     </div>
     
                     <div className="card-body" style={{ overflowY: 'scroll', minHeight: '400px', maxHeight: '450px' }}>
                         <div id="chat">
-                            <div className="row mb-2" id="client">
-                                <div className="col-md-7 col-sm-12 p-2" style={{background:'#a8afb5'}}>
-                                    hello
-                                    <br />
-                                    <small>John Doe</small>
-                                </div>
-                                <div className="col-md-5 col-sm-12 p-2">
-    
-                                </div>
-                            </div>
-                            <div className="row my-2" id="admin">
-                                <div className="col-md-5 col-sm-12 p-2">
-    
-                                </div>
-                                <div className="col-md-7 col-sm-12 p-2 bg-secondary text-right text-white">
-                                    world
-                                    <br />
-                                    <small>Admin<span>29-04-06</span></small>
-                                </div>
-                            </div>
-                            <div className="row my-2" id="admin">
-                                <div className="col-md-5 col-sm-12 p-2">
-    
-                                </div>
-                                <div className="col-md-7 col-sm-12 p-2 bg-secondary text-right text-white">
-                                    Okay
-                                    <br />
-                                    <small>Admin<span>&nbsp;29-04-06,&nbsp;18:46</span></small>
-                                </div>
-                            </div>
-    
-                            <div className="row mb-2">
-                                <div className="col-md-6 col-sm-12 p-2" style={{background:'#a8afb5'}}>
-                                    hello
-                                    <br />
-                                    <small>John Doe</small>
-                                </div>
-                                <div className="col-md-6 col-sm-12 p-2">
-    
-                                </div>
-                            </div>
-                            <div className="row my-2">
-                                <div className="col-md-6 col-sm-12 p-2">
-    
-                                </div>
-                                <div className="col-md-6 col-sm-12 p-2 bg-secondary text-right text-white">
-                                    world
-                                    <br />
-                                    <small>Admin<span>29-04-06</span></small>
-                                </div>
-                            </div>
-    
-                            <div className="row mb-2">
-                                <div className="col-md-6 col-sm-12 p-2" style={{background:'#a8afb5'}}>
-                                    hello
-                                    <br />
-                                    <small>John Doe</small>
-                                </div>
-                                <div className="col-md-6 col-sm-12 p-2">
-    
-                                </div>
-                            </div>
-                            <div className="row my-2">
-                                <div className="col-md-6 col-sm-12 p-2">
-    
-                                </div>
-                                <div className="col-md-6 col-sm-12 p-2 bg-secondary text-right text-white">
-                                    world
-                                    <br />
-                                    <small>Admin<span>29-04-06</span></small>
-                                </div>
-                            </div>
-    
-                            <div className="row mb-2">
-                                <div className="col-md-6 col-sm-12 p-2" style={{background:'#a8afb5'}}>
-                                    hello
-                                    <br />
-                                    <small>John Doe</small>
-                                </div>
-                                <div className="col-md-6 col-sm-12 p-2">
-    
-                                </div>
-                            </div>
-                            <div className="row my-2">
-                                <div className="col-md-6 col-sm-12 p-2">
-    
-                                </div>
-                                <div className="col-md-6 col-sm-12 p-2 bg-secondary text-right text-white">
-                                    world
-                                    <br />
-                                    <small>Admin<span>29-04-06</span></small>
-                                </div>
-                            </div>
-    
-                            <div className="row mb-2">
-                                <div className="col-md-6 col-sm-12 p-2" style={{background:'#a8afb5'}}>
-                                    hello
-                                    <br />
-                                    <small>John Doe</small>
-                                </div>
-                                <div className="col-md-6 col-sm-12 p-2">
-    
-                                </div>
-                            </div>
-                            <div className="row my-2">
-                                <div className="col-md-6 col-sm-12 p-2">
-    
-                                </div>
-                                <div className="col-md-6 col-sm-12 p-2 bg-secondary text-right text-white">
-                                    world
-                                    <br />
-                                    <small>Admin<span>29-04-06</span></small>
-                                </div>
-                            </div>
+                        {this.state.chats.map( chat => {
+                                                     return(
+                                                        <div>
+                                                        {
+                                                            chat.role == "Admin" ? <div className="row mb-2" id="client">
+                                                                <div className="col-md-7 col-sm-12 ">
+                                                                    <div className="chatbox" style={{background:'#a8afb5'}}>
+                                                                    {chat.message}
+                                                                    <br />
+                                                                    <small>{chat.role}</small>
+                                                                    </div>
+                                                                <span class="msg_time">{chat.date}</span>
+                                                                </div>
+                                                                <div className="col-md-5 col-sm-12 p-2">
+                                    
+                                                                </div>
+                                                            </div>
+                                                                :   <div className="row my-2" id="admin">
+                                                                <div className="col-md-5 col-sm-12 p-2">
+                                                                </div>
+                                                                <div className="col-md-7 col-sm-12 p-2 text-right text-white">
+                                                                    <div className="chatbox bg-secondary">
+                                                                    
+                                                                    {chat.message}
+                                                                    <br />
+                                                                    <small>{chat.name}</small>
+                                                                    </div>
+                                                                <span class="msg_time">{chat.date}</span>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                            
+                           
+                                                        </div>
+
+                                )
+                            })  
+                        }  
+
+                         
                         </div>
                     </div>
     

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import {withContext} from '../../common/context';
 
-class ViewClient extends Component{
+class ClientProfile extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -63,7 +63,7 @@ render() {
                     <form action="">
                         <div className="card">
                             <div className="card-header bg-medium font-weight-bold text-dark">
-                                CLIENT INFORMATION
+                                PROFILE
                 <span className="float-right" id='edit' style={{ cursor: 'pointer' }} onClick={this.edit}><i className="fas fa-pen-square fa-2x"></i>
                                 </span>
                             </div>
@@ -183,15 +183,14 @@ render() {
                                     {/* <div id='table' className="card pt-2 mt-3 justify-content-center shadow px-2">
                                         <div className="table-responsive">
                                             <table
-                                                className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
-                                               
+                                                className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-white home-chart">
+                                                
                                                 <thead>
                                                 <tr>
-                                                <th className="py-2">S/N</th>
-                                                    <th className="py-2">Product&nbsp;Name</th>
-                                                    <th className="py-2">Description</th>
-                                                    <th className="py-2">Price</th>
-                                                    <th className="py-2">Show</th>
+                                                <th>S/N</th>
+                                                    <th>Product&nbsp;Name</th>
+                                                    <th>Description</th>
+                                                    <th>Price</th>
                                                 </tr>
                                                     
                                                 </thead>
@@ -200,7 +199,7 @@ render() {
                                                 {this.state.products.map( product => {
                                                      return(
 
-                                                            <tr>
+                                                        <tr>
                                                             <td>
                                                                 {product.productid}
                                                             </td>
@@ -213,9 +212,6 @@ render() {
                                                             <td>
                                                                 {product.price}
                                                             </td>
-                                                            <td>
-                                                            <button id="show">Show</button>
-                                                            </td>
                                                         </tr>
                                                      )
                                                     })  
@@ -226,8 +222,8 @@ render() {
                                        </tbody>
                                             </table>
                                         </div>
-                                    </div>
- */}
+                                    </div> */}
+
 
                                     </div>
                                 </div>
@@ -239,4 +235,4 @@ render() {
     )
 }
 }
-export default withContext(ViewClient);
+export default withContext(ClientProfile);

@@ -17,9 +17,11 @@ import CreateTicket from './pages/create_ticket/create_ticket';
 import CreateProduct from './pages/createproduct/createproduct';
 import ProductDetails from './pages/product_details/product_details';
 import ViewProduct from './pages/viewproduct/viewproduct';
+import ClientViewProduct from './pages/clientviewproduct/clientviewproduct';
 import CreateClient from './pages/create_client/CreateClient';
 import CreateUser from './pages/create_user/CreateUser';
 import Profile from './pages/profile/Profile';
+import ClientProfile from './pages/clientprofile/ClientProfile';
 import TicketList from './pages/ticket_list/TicketList';
 import ViewTicket from './pages/viewticket/ViewTicket';
 import ViewClient from './pages/view_client/ViewClient';
@@ -218,7 +220,8 @@ class App extends Component {
                     {this.state.loggedIn && <Route exact path="/dashboard" component={Dashboard} />}
                     {this.state.loggedIn && <Route path="/createclient" component={CreateClient} />}
                     {this.state.loggedIn && <Route path="/creatuser" component={CreateUser} />}
-                    {this.state.loggedIn && <Route path="/profile" component={Profile} />}
+                    {this.state.admin && this.state.loggedIn && <Route path="/profile" component={Profile} />}
+                    {!this.state.admin && this.state.loggedIn &&  <Route path="/clientprofile" component={ClientProfile} />}
                     {this.state.loggedIn && <Route path="/ticketlist" component={TicketList} />}
                     {this.state.loggedIn && <Route path="/viewclient" component={ViewClient} />}
                     {this.state.loggedIn && <Route path="/listclient" component={ListClient} />}
@@ -227,6 +230,7 @@ class App extends Component {
                     {this.state.loggedIn && <Route path="/viewticket" component={ViewTicket} />}
                     {this.state.loggedIn && <Route path="/productcart" component={ProductCart} />}
                     {this.state.loggedIn && <Route path="/viewproduct" component={ViewProduct} />}
+                    {!this.state.admin && this.state.loggedIn && <Route path="/view_product" component={ClientViewProduct} />}
                     {this.state.loggedIn && <Route path="/productdetails" component={ProductDetails} />}
                     {this.state.loggedIn && <Route path="/createticket" component={CreateTicket} />}
                     <Route component={NotFound} />

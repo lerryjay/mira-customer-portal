@@ -6,33 +6,34 @@ class Profile extends Component{
         super(props);
     }
 
-//  edit(){
-//         // Make Form Editable
-//         let edit = document.querySelector('#edit');
-//         let input = document.getElementsByTagName('input');
+     edit() {
+        // Make Form Editable
+        let edit = document.querySelector('#edit');
+        let input = document.getElementsByTagName('input');
 
 
-//         for (let d = input.length - 1; d >= 0; d--) {
-//             edit.addEventListener("click", function (e) {
-//                 input[d].removeAttribute("disabled");
-//             });
-//         };
-//     }
+        for (let d = input.length - 1; d >= 0; d--) {
+            edit.addEventListener("click", function (e) {
+                input[d].removeAttribute("disabled");
+            });
+        };
+    }
+
    render() {
     return (
         <div className="container mx-auto">
+        {this.props.profile.map(profile => 
             <div className="row mt-4">
 
-                <div className="col-md-9 mb-3" id="profile">
+                <div className="col-md-8 mb-3" id="profile">
                     <form action="">
                         <div className="card">
                             <div className="card-header text-white">
                                 Profile Information
-                <span className="float-right" id='edit' style={{cursor: 'pointer'}}><i className="fas fa-pen-square fa-2x"></i>
+                <span className="float-right"  id='edit' style={{ cursor: 'pointer' }} onClick={this.edit()}><i className="fas fa-pen-square fa-2x"></i>
                                 </span>
                             </div>
                             <div className="card-body">
-                                {this.props.profile.map(profile => 
 
                                 <div className="row">
 
@@ -84,41 +85,39 @@ class Profile extends Component{
 
                                 </div>
 
-                                )}
                             </div>
 
                             <div className="card-footer">
                                 <div className="float-right">
 
-                                    <button type="submit" className="btn btn-sm btn-primary">
-                                        <i className="fas fa-folder-open"></i>
+                                    <button className="btn btn-sm btn-primary px-3">
+                                        <i className="fas fa-folder-open pr-2"></i>
                         Save
                     </button>
-                                    &nbsp;<button className="btn btn-sm btn-danger" type="reset">
-                                        <i className="fas fa-history"></i>
-                        Reset
-                    </button>
+                                
                                 </div>
                             </div>
                         </div>
                     </form>
                 </div>
 
-                <div className="col-md-3 text-center" id='profilePix'>
+                <div className="col-md-4 text-center" id='profilePix'>
                     <div className="card">
-                        <div className="card-header py-5">
+                        <div className="card-header">
                         </div>
                         <div className="card-body">
                             <img src="https://miratechnologiesng.com/img/icons/miraicon.png"
-                                alt="profile picture" className="img-fluid" style= {{ marginTop: '-80px' }} />
-                            <p className="text-dark">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                            Repudiandae veniam ullam excepturi natus perspiciatis distinctio amet error
-                            nostrum
-                voluptas at accusamus,.</p>
+                                alt="profile picture" className="img-fluid" style={{ marginTop: '-80px' }} />
+                                <h6 className="mt-3">{profile.name} </h6>
+                                <p className="mt-2"><i class="fa fa-map-marker" aria-hidden="true"></i> Lagos <br/>
+                                <i class="fa fa-envelope" aria-hidden="true"></i> {profile.email} </p>
                         </div>
                     </div>
                 </div>
+
+       
             </div>
+                 )}
         </div>
     )
    }

@@ -21,7 +21,6 @@ body{
   font-size: 13px !important;
 }
 
-
 @media (prefers-color-scheme: dark) {
   /* defaults to dark theme */
   div.home {

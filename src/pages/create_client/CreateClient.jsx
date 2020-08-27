@@ -14,6 +14,8 @@ class CreateClient extends Component {
             // company: '',
             // companyadr: '',
             errormessage: '',
+            loading: false, 
+            successmessage: '',
             // file: '',
             // imagePreviewUrl: '',
             imageError: false,
@@ -32,13 +34,24 @@ class CreateClient extends Component {
 
         if(!Validators.validateEmail(email).status){
             const err = Validators.validateEmail(email).message
-            this.setState({errormessage: err});
-            setTimeout(()=> this.setState({errormessage: ''}),5000);
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({errormessage: err});
+                setTimeout(()=> this.setState({errormessage: ''}),5000);
+            }, 3000);
         }else{
-            await this.setState({loading : true});
-            setTimeout(() =>this.setState({loading : false}), 3000);
-           const res = await this.state.createclient(document.getElementById("createclient"));
-            console.log('submitting')
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({successmessage: 'Added Successfully!'})
+                setTimeout(() =>{
+                    this.setState({successmessage: false});
+                    const res = this.state.createclient(document.getElementById("createclient"));
+                     console.log('submitting')
+                     this.setState({name: '', email: '', telephone: ''})
+                }, 5000);
+            }, 3000);
         }
     }
 
@@ -101,6 +114,37 @@ class CreateClient extends Component {
         return (
 
             <div className="container mx-auto row">
+            {/* Error Message */}
+            { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
+                <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                    {this.state.errormessage}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                :   <span></span>
+            }
+            {/* Success Message */}
+            { this.state.successmessage ? 
+                <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                    <span className="mt-3">{this.state.successmessage}</span>
+                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                :   <span></span>
+            }
+
+            {/* Image Error */}
+            {this.state.imageError !== false ?
+                <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                    <span className="mt-3">{ this.state.imageError }</span>
+                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                : <span></span> 
+            }
 
                 <div className="col-md-8 offset-2 mb-3 mt-4" id="profile">
 
@@ -113,23 +157,6 @@ class CreateClient extends Component {
                     
                                 <div className="card-body">
 
-                            <div className="row">
-                                <div className="col-md-12">
-                                    { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                                        <div className="alert alert-warning" role="alert">{this.state.errormessage}
-                                        <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        </div>
-                                        : 
-                                        <span></span>
-                                        }
-
-                                    {this.state.imageError !== false ?
-                                        <div className="alert alert-warning"> { this.state.imageError } </div>
-                                        : <span></span> }
-                                </div>
-                            </div>
                                 <div className="row">
                                         
                                    <div className="col-md-12 mb-3">
@@ -137,7 +164,7 @@ class CreateClient extends Component {
                                             <label htmlFor="" className="sr-only">Peronal&nbsp;Name</label>
                                             <input type="text" className="form-control form-control-sm" name="name"
                                                 id="name" placeholder="Enter Fullname"
-                                                value={this.state.name}
+                                                value={this.state.name} required
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
@@ -147,7 +174,7 @@ class CreateClient extends Component {
                                             <label htmlFor="" className="sr-only">Email</label>
                                             <input type="text" className="form-control form-control-sm" name="email"
                                                 id="email" placeholder="Enter Email" 
-                                                value={this.state.email}
+                                                value={this.state.email} required
                                                 onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
@@ -156,7 +183,7 @@ class CreateClient extends Component {
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Telephone</label>
                                             <input type="text" className="form-control form-control-sm" name="telephone"
-                                                id="telephone" placeholder="Phone no."
+                                                id="telephone" placeholder="Phone no." required
                                                 value={this.state.telephone}
                                                 onChange={this.handleInputChange} />
                                         </div>
@@ -206,15 +233,19 @@ class CreateClient extends Component {
 
                             <div className="card-footer">
                                 <div className="text-center">
+                                {this.state.loading ? 
+                                <button type="submit" className="btn btn-sm bg-btn">
+                                    <div className="spinner-border text-secondary" role="status" id="loader">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
+                                </button>
+                                : <button type="submit" className="btn btn-sm btn-primary px-3">
+                                    <i className="fas fa-folder-open mr-2"></i>
+                                        Save
+                                    </button>
+                                }
 
-                                    <button type="submit" className="btn btn-sm btn-primary px-3">
-                                        <i className="fas fa-folder-open mr-2"></i>
-                            Save
-                        </button>&nbsp;
-                                    <button className="btn btn-sm btn-danger px-3" type="reset">
-                                        <i className="fas fa-history mr-2"></i>
-                            Reset
-                        </button>
+                                    
                                 </div>
                             </div>
                         </div>

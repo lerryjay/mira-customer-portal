@@ -32,23 +32,40 @@ class Login extends Component {
        
         if(!Validators.validateEmail(loginid).status){
             const err = Validators.validateEmail(loginid).message
-            this.setState({errormessage: err});
-            setTimeout(()=> this.setState({errormessage: ''}),5000);
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({errormessage: err});
+                setTimeout(()=> this.setState({errormessage: ''}),5000);
+            }, 3000);
         }else if(!Validators.validatePassword(password,1).status){
             const err = Validators.validatePassword(password,1).message;
-           await this.setState({errormessage: err});
-            setTimeout(()=> this.setState({errormessage: ''}),5000);
+           await this.setState({loading : true});
+           setTimeout(() => {
+               this.setState({loading : false});
+               this.setState({errormessage: err});
+               setTimeout(()=> this.setState({errormessage: ''}),5000);
+           }, 3000);
         }else{
-            this.setState({successmessage: 'Login Successful'})
-            await this.setState({loading : true});
-            setTimeout(() =>this.setState({loading : false}), 3000);
-           const res = await this.state.login(document.getElementById("loginform"));
-           if(!res['status'])this.setState({errormessage: res['message']});
-            else{
-                document.querySelector('.content').style.width = "";
-                 document.querySelector('.content').style.marginLeft = "";
-                this.props.history.push('/dashboard');
-            }
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({successmessage: 'Login Successful'})
+                setTimeout(() =>{
+                    this.setState({successmessage: false});
+                    const res =  this.state.login(document.getElementById("loginform"));
+                    this.props.history.push('/dashboard');
+                }, 2000);
+            }, 3000);
+
+           
+        //    const res = await this.state.login(document.getElementById("loginform"));
+        //    if(!res['status'])this.setState({errormessage: res['message']});
+        //     else{
+        //         document.querySelector('.content').style.width = "";
+        //          document.querySelector('.content').style.marginLeft = "";
+        //         this.props.history.push('/dashboard');
+        //     }
         }
         console.log('submitting')
     }
@@ -63,27 +80,33 @@ class Login extends Component {
         return(
             <div>
                 <div className="container">
+                    {/* Error Message */}
+                    { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
+                        <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                            {this.state.errormessage}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        :   <span></span>
+                    }
+                    {/* Success Message */}
+                    { this.state.successmessage ? 
+                        <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                            <span className="mt-3">{this.state.successmessage}</span>
+                            <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        :   <span></span>
+                    }
                 <div className="row col-lg-5 col-md-8 col-sm-10 col-xs-12 mx-auto cent">
-
                     <div className="card bg-light shadow border-0 py-3">
                         <div className="card-header bg-transparent text-center">
                             <img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt=""/>
                         </div>
                         <div className="card-body py-lg-5 text-muted text-center">
                             <form onSubmit={this.handleSubmit} id="loginform">
-
-                                { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                                    <div className="alert alert-warning" role="alert">{this.state.errormessage}</div>
-                                    : 
-                                    <span></span>
-                                }
-
-                                { this.state.successmessage != null && this.state.successmessage.length > 0 ? 
-                                    <div className="alert alert-success" role="alert">{this.state.successmessage}</div>
-                                    : 
-                                    <span></span>
-                                }
-
                                 <div className="input-group mb-3">
                                     <span className="input-group-text bg-white alt" id="loginid">
                                         <i className="fas fa-envelope fa-fw"></i>

@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import {withContext} from '../../common/context';
+import { HTTPURL } from '../../common/global_constant';
 
 class Profile extends Component{
     constructor(props){
         super(props);
+        this.state = {
+            ...this.props, 
+            name: ''
+        }
     }
 
-     edit() {
+     editp() {
         // Make Form Editable
-        let edit = document.querySelector('#edit');
+        const edit = document.querySelector('#edit');
         let input = document.getElementsByTagName('input');
 
 
@@ -18,6 +23,33 @@ class Profile extends Component{
             });
         };
     }
+    
+    handleInputChange = e => {
+        const { name, value } = e.target
+        this.setState({ [name]: value });
+    }
+
+    handleSubmit = async e => {
+        e.preventDefault()
+
+        const headers = new Headers();
+        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+        let form = new FormData(document.getElementById("profileform"));
+
+
+        fetch(HTTPURL + 'user/updateprofile', {
+            method: 'POST',
+            body: form,
+            headers: headers
+        })
+        .then(response => response.json())
+        .then(json => {
+        console.log(json);
+        return json;
+        });
+
+        console.log('Profile Updated!')
+    }
 
    render() {
     return (
@@ -26,11 +58,12 @@ class Profile extends Component{
             <div className="row mt-4">
 
                 <div className="col-md-8 mb-3" id="profile">
-                    <form action="">
+
+                    <form id="profileform" onSubmit={this.handleSubmit}>
                         <div className="card">
-                            <div className="card-header text-white">
+                            <div className="card-header bg-medium font-weight-bold text-dark">
                                 Profile Information
-                <span className="float-right"  id='edit' style={{ cursor: 'pointer' }} onClick={this.edit()}><i className="fas fa-pen-square fa-2x"></i>
+                <span className="float-right"  id='edit' style={{ cursor: 'pointer' }} onClick={this.editp}><i className="fas fa-pen-square fa-2x"></i>
                                 </span>
                             </div>
                             <div className="card-body">
@@ -40,31 +73,31 @@ class Profile extends Component{
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Name</label>
-                                            <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value={profile.fullname} placeholder="Name" disabled autoComplete="name" />
+                                            <input type="text" className="form-control form-control-sm" name="name"
+                                                id="name" value={profile.fullname} placeholder="Name" disabled autoComplete="name" onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
 
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Email</label>
-                                            <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value={profile.email} placeholder="johndoe@mail.com" disabled autoComplete="email" />
+                                            <input type="text" className="form-control form-control-sm" name="email"
+                                                id="email" value={profile.email} placeholder="johndoe@mail.com" disabled autoComplete="email" onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Phone-number</label>
-                                            <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value={profile.telephone} placeholder="090 ......." disabled autoComplete="tel" />
+                                            <input type="text" className="form-control form-control-sm" name="telephone"
+                                                id="telephone" value={profile.telephone} placeholder="090 ......." disabled autoComplete="tel" onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
 
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Company&nbsp;Name</label>
-                                            <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value="" placeholder="john & Sons" disabled autoComplete="name" />
+                                            <input type="text" className="form-control form-control-sm" name="name"
+                                                id="name" value="ghs" placeholder="john & Sons"  autoComplete="name" />
                                         </div>
                                     </div>
                                     <div className="col-md-6 mb-3">
@@ -90,7 +123,7 @@ class Profile extends Component{
                             <div className="card-footer">
                                 <div className="float-right">
 
-                                    <button className="btn btn-sm btn-primary px-3">
+                                    <button type="submit" className="btn btn-sm btn-primary px-3">
                                         <i className="fas fa-folder-open pr-2"></i>
                         Save
                     </button>

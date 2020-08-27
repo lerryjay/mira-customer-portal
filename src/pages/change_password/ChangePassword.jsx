@@ -12,7 +12,8 @@ class ChangePassword extends Component {
             newpassword: '',
             confirmnewpwd: '',
             loading: false, 
-            errormessage: ''
+            errormessage: '',
+            successmessage: ''
         };
     }
     
@@ -48,10 +49,17 @@ class ChangePassword extends Component {
             const err = "Password does not match!"
            await this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
-        }else{
-            await this.setState({loading : true});
-            setTimeout(() =>this.setState({loading : false}), 3000);
+        } else {
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({successmessage: 'Password Changed Successfully!'});
+                setTimeout(() => this.setState({successmessage: false}), 5000);
+            }, 3000);
+        
             const res = await this.state.changepassword(document.getElementById("changepassword"));
+
+            this.setState({oldpassword: '', newpassword: '', confirmnewpwd: ''})
         }
         console.log('changed successfully!')
     }
@@ -59,6 +67,26 @@ class ChangePassword extends Component {
     render() {
         return (
             <div className="container">
+            {/* Error Message */}
+            { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
+                <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                    <span className="mt-3">{this.state.errormessage}</span>
+                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                :   <span></span>
+            }
+            {/* Success Message */}
+            { this.state.successmessage ? 
+                <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                    <span className="mt-3">{this.state.successmessage}</span>
+                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                :   <span></span>
+            }
                 <div className="row col-lg-6 col-md-8 col-sm-10 col-xs-12 mx-auto cent">
 
                     <div className="card bg-light shadow border-0 py-3">
@@ -67,16 +95,6 @@ class ChangePassword extends Component {
                         </div>
                         <div className="card-body py-lg-5 text-muted text-center">
                             <form onSubmit={this.handleSubmit} id="changepassword">
-
-                            { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                                    <div className="alert alert-warning" role="alert">{this.state.errormessage}
-                                    <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    </div>
-                                    : 
-                                    <span></span>
-                                }
 
                                 <div className="input-group mb-3">
                                     <span className="input-group-text bg-white alt" id="email">

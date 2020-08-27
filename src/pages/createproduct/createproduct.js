@@ -10,6 +10,8 @@ class CreateProduct extends Component {
             userid: '',
             description: '',
             errormessage: '',
+            loading: false,
+            successmessage: '',
             file: '',
             imagePreviewUrl: '',
             imageError: false,
@@ -23,7 +25,17 @@ class CreateProduct extends Component {
 
     handleSubmit = async e => {
         e.preventDefault()
-       const res = await this.state.createproduct(document.getElementById("createproduct"));
+        this.setState({loading : true});
+        setTimeout(() => {
+            this.setState({loading : false});
+            this.setState({successmessage: 'Added Successfully!'})
+            setTimeout(() =>{
+                this.setState({successmessage: false});
+                const res = this.state.createproduct(document.getElementById("createproduct"));
+                 console.log('submitting')
+                 this.setState({name: '', description: '', file: ''})
+            }, 5000);
+        }, 3000);
     
     }
 
@@ -86,6 +98,26 @@ class CreateProduct extends Component {
         return (
 
             <div className="container mx-auto row">
+                 {/* Error Message */}
+            { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
+                <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                    {this.state.errormessage}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                :   <span></span>
+            }
+            {/* Success Message */}
+            { this.state.successmessage ? 
+                <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                    <span className="mt-3">{this.state.successmessage}</span>
+                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                :   <span></span>
+            }
 
                 <div className="col-md-8 offset-2 mb-3 mt-4" id="profile">
 
@@ -174,10 +206,18 @@ class CreateProduct extends Component {
                             <div className="card-footer">
                                 <div className="float-right">
 
-                                    <button type="submit" className="btn btn-sm btn-primary px-3 py-2">
-                                        <i className="fas fa-folder-open mr-2"></i>
-                            Save
-                        </button>
+                                     {this.state.loading ? 
+                                <button type="submit" className="btn btn-sm bg-btn">
+                                    <div className="spinner-border text-secondary" role="status" id="loader">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
+                                </button>
+                                : <button type="submit" className="btn btn-sm btn-primary px-3 py-2">
+                                    <i className="fas fa-folder-open mr-2"></i>
+                                        Save
+                                    </button>
+                                }
+
                                 </div>
                             </div>
                         </div>

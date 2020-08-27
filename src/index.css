@@ -21,6 +21,7 @@ body{
   font-size: 13px !important;
 }
 
+
 @media (prefers-color-scheme: dark) {
   /* defaults to dark theme */
   div.home {
@@ -389,6 +390,9 @@ input:checked + .slider:before {
 }
 #chat small{
   font-weight: 900;
+}
+.ticket-title{
+  font-size: larger;
 }
 
 /* Scrollbar */

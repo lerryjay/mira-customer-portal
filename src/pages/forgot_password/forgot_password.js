@@ -12,7 +12,8 @@ class ForgotPassword extends Component {
             ...this.props, 
             email : '', 
             loading: false, 
-            errormessage: ''
+            errormessage: '',
+            successmessage: ''
         };
     }
 
@@ -30,25 +31,57 @@ class ForgotPassword extends Component {
         setTimeout(() =>this.setState({loading : false}), 3000);
         if(!Validators.validateEmail(email).status){
             const err = Validators.validateEmail(email).message
-            this.setState({errormessage: err});
-            setTimeout(()=> this.setState({errormessage: ''}),5000);
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({errormessage: err});
+                setTimeout(()=> this.setState({errormessage: ''}),5000);
+            }, 3000);
         }else{
-           const res = await this.state.forgotpassword(document.getElementById("forgotpassword"));
             
-           this.props.history.push('/login');
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({successmessage: 'A reset password link has been sent to your email!'})
+                setTimeout(() =>{
+                    this.setState({successmessage: false});
+                    const res = this.state.forgotpassword(document.getElementById("forgotpassword"));
+                    this.props.history.push('/login');
+                }, 5000);
+            }, 3000);
+            
         //    if(!res['status'])this.setState({errormessage: res['message']});
         //     else{
         //         //find a way to redirect here 
         //         this.props.history.push('/dashboard');
         //     }
         }
-        console.log('Reset password link sent!')
     }
 
     render() {
         return(
             <div>
                 <div className="container">
+                    {/* Error Message */}
+                    { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
+                        <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                            {this.state.errormessage}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        :   <span></span>
+                    }
+                    {/* Success Message */}
+                    { this.state.successmessage ? 
+                        <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                            <span className="mt-3">{this.state.successmessage}</span>
+                            <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        :   <span></span>
+                    }
                     <div className="row col-lg-5 col-md-8 col-sm-10 col-xs-12 mx-auto cent">
 
                     <div className="card bg-light shadow border-0 py-3">
@@ -58,12 +91,6 @@ class ForgotPassword extends Component {
                         <div className="card-body py-lg-5 text-muted text-center">
                             <form onSubmit={this.handleSubmit} id="forgotpassword">
                                 
-                                { this.state.errormessage.length > 0 ? 
-                                    <div class="alert alert-warning" role="alert">{this.state.errormessage}</div>
-                                    : 
-                                    <span></span>
-                                }
-
                                 <div className="input-group mb-3">
                                     <span className="input-group-text bg-white alt" id="email">
                                         <i className="fas fa-envelope fa-fw"></i>

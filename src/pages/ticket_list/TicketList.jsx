@@ -9,36 +9,7 @@ class TicketList extends Component{
         this.state = {
             ticket: [],
             id: 1,
-            tickets : [
-                // {
-                //     "ticketid" : 1,
-                //     "Date" : "2020-08-17" ,
-                //     "client_name" : "John Doe",
-                //     "email" : "John@gmail.com",
-                //     "type" : "Complaint",
-                //     "message" : "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducires...!",
-                //     "ticketstatus" : "Approved"
-                // }, 
-                // {
-                //     "ticketid" : 2,
-                //     "Date" : "2020-08-17" ,
-                //     "client_name" : "Stone Walker",
-                //     "email" : "Stone@gmail.com",
-                //     "type" : "Enquiry",
-                //     "message" : "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducires...!",
-                //     "ticketstatus" : "Cancelled"
-                // }, 
-                // {
-                //     "ticketid" : 3,
-                //     "Date" : "2020-08-17" ,
-                //     "client_name" : "Jane Doe",
-                //     "email" : "Jane@gmail.com",
-                //     "type" : "Suggestion",
-                //     "message" : "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducires...!",
-                //     "ticketstatus" : "Pending"
-                // }
-                
-            ]
+            tickets : []
         }
     }
     componentDidMount(){
@@ -59,19 +30,9 @@ class TicketList extends Component{
             this.setState({ ticket :  ticket });
         }
     }
-    // $(function(){
-    //     $(".dropdown-menu").on('click', 'a', function(){
-    //         $(this).parents('.dropdown').find('button').text($(this).text());
-    //     });
-    //  });
+    
      changeStatus(e,ticket) {
         
-        // document.querySelectorAll(".nav-item").forEach(item => {
-        //             item.addEventListener("click", () => {
-        //                 document.querySelector('#sidebar').classList.toggle('active');
-        //                 document.querySelector('.overlay').classList.toggle('active');
-        //             })
-
 
         const tickets = this.state.tickets.map(item=>{ 
             console.log(e.target.value);
@@ -80,11 +41,6 @@ class TicketList extends Component{
         })
 
         this.setState({tickets});
-        // let dropdown = document.getElementsByClassName("dropdown-menu");
-        // let element = []
-        // for (let i = 0; i < dropdown[0].childNodes.length; i++) {
-        //      element.push(dropdown[0].childNodes[i])
-        // }
         
      }
      render() {

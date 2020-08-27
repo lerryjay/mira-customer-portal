@@ -17,7 +17,8 @@ class create_ticket extends Component {
             loading: false, 
             files: [],
             previews: '',
-            imagePreviewUrl: ''
+            imagePreviewUrl: '',
+            successmessage: ''
         };
     }
     
@@ -29,11 +30,19 @@ class create_ticket extends Component {
     handleSubmit = async e => {
         e.preventDefault()
 
-        await this.setState({loading : true});
-        setTimeout(() =>this.setState({loading : false}), 3000);
+        this.setState({loading : true});
+        setTimeout(() => {
+            this.setState({loading : false});
+            this.setState({successmessage: 'Ticket Created Successfully'})
+            setTimeout(() => this.setState({successmessage: false}), 5000);
+        }, 3000);
+    
+
         const res = await this.state.createticket(document.getElementById("createticket"));
-        console.log('changed successfully!')
+        this.setState({title : '', package: '', type: '', message: '', product: ''});
+        
     }
+    
     removeImage(e) {
         console.log(e, "Image removed")
         this.setState({imagePreviewUrl: ''})
@@ -74,6 +83,26 @@ class create_ticket extends Component {
         )} )
         return (
             <div className="container-fluid content text-white">
+            {/* Error Message */}
+            { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
+                <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                    {this.state.errormessage}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                :   <span></span>
+            }
+            {/* Success Message */}
+            { this.state.successmessage ? 
+                <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                    <span className="mt-3">{this.state.successmessage}</span>
+                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                :   <span></span>
+            }
             <div className="row">
 
                 <div className="col-md-8 offset-2" id="profile">
@@ -121,7 +150,7 @@ class create_ticket extends Component {
                                     
                                     <div className="col-md-6 mb-3">
                                             <div className="form-group">
-                                                <select name="type" id="type" className=" form-control form-select form-select-sm">
+                                                <select onChange={this.handleInputChange} name="type" id="type" className=" form-control form-select form-select-sm">
                                                     <option value="" selected disabled>--Select&nbsp;Ticket&nbsp;Type--</option>
                                                     <option value="complaint">Complaint</option>
                                                     <option value="request">Request</option>
@@ -131,7 +160,7 @@ class create_ticket extends Component {
                                         </div>
                                         <div className="col-md-6 mb-3">
                                             <div className="form-group">
-                                                <select name="product" id="product" className=" form-control form-select form-select-sm">
+                                                <select onChange={this.handleInputChange} name="product" id="product" className=" form-control form-select form-select-sm">
                                                     <option value="" selected disabled>--Select&nbsp;Product &nbsp;--</option>
                                                     <option value="complaint">Accsiss eBs</option>
                                                     <option value="request">SYSBANKER EE</option>
@@ -140,47 +169,6 @@ class create_ticket extends Component {
                                                 </select>
                                             </div>
                                         </div>
-
-                                        <div className="col-md-12 mb-3">
-                                              {/* <div className="card">
-                                    <div class="card-header bg-medium font-weight-bold text-dark">
-                                        Select Packages
-                                    </div>
-                        <div className="card-body">
-                            <p className="list-group-item">Design <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Development <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Hosting <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Analytics <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Email Setup <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Search Engine Optimization <label class="switch float-right"> <input type="checkbox" /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Backups <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Live Chat <label class="switch float-right"> <input type="checkbox" /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Content Management <label class="switch float-right"> <input type="checkbox" /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Maintenance Agreement<label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                </label>
-                            </p>
-                        </div>
-                    </div> */}
-                                        </div>
-
                                         
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
@@ -208,15 +196,18 @@ class create_ticket extends Component {
 
                             <div className="card-footer">
                                 <div className="float-right">
-
-                                    <button type="submit" className="btn btn-sm btn-primary mr-2">
-                                        <i className="fas fa-folder-open"></i>
-                                        Save
-                                    </button>
-                                    <button className="btn btn-sm btn-danger" type="reset">
-                                        <i className="fas fa-history"></i>
-                                        Reset
-                                    </button>
+                                {this.state.loading ? 
+                                <button type="submit" className="btn btn-sm bg-btn">
+                                    <div className="spinner-border text-secondary" role="status" id="loader">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
+                                </button>
+                                : 
+                                <button type="submit" className="btn btn-sm btn-primary mr-2">
+                                    <i className="fas fa-folder-open"></i>
+                                    Save
+                                </button>
+                                }
                                 </div>
                             </div>
                         </div>

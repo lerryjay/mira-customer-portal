@@ -38,10 +38,10 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: true,
+      loggedIn: false,
       users: [],
       profile: [],
-      admin: true
+      admin: false
     }
   }
   loginUser = (data) => {
@@ -178,6 +178,26 @@ class App extends Component {
     });
   }
 
+  sendChat = (data) => {
+    const headers = new Headers();
+    headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+    let form = new FormData(data);
+    
+    // form.append("file", file.get('file'));
+    // console.log(files[0]);
+
+    return fetch(HTTPURL + 'ticket/replyticket', {
+        method: 'POST',
+        body: form,
+        headers: headers
+    })
+    .then(response => response.json())
+    .then(json => {
+      console.log(json);
+      return json;
+    });
+  }
+
 
   logoutUser = () => this.setState({ loggedIn: false });
 
@@ -192,7 +212,8 @@ class App extends Component {
        createclient: this.createClient,
        createticket: this.createTicket,
        createproduct: this.createProduct,
-       profiledetails: this.getProfileDetails
+       profiledetails: this.getProfileDetails,
+       getchat: this.sendChat
     }
   };
 

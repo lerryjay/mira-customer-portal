@@ -82,7 +82,9 @@ class viewproduct extends Component {
                                             <img src={image} className="image_product" alt="" />
                                            
                                     <h5 className="card-title">{product.name}</h5>
-                                    <a href="#" className="btn btn-primary">View Details</a>
+                                        <Link to="/productdetails"  className="btn btn-primary">
+                                        View
+                                        </Link>      
                                             </div>
                                     </div>
 
@@ -91,8 +93,11 @@ class viewproduct extends Component {
                                     <h5 className="card-title">{product.name}</h5>
                                         </div>
                                         <div className="card-body">
-                                        <p className="card-title">{product.description}</p>   
-                                    <a href="#" className="btn btn-primary">View Details</a>                                         </div>
+                                        <p className="card-title">{product.description}</p> 
+                                        <Link to="/productdetails"  className="btn btn-primary">
+                                        View
+                                        </Link>                                         
+                                    </div>
                                     </div>
 
                                 </div>

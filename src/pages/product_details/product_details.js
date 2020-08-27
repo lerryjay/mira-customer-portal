@@ -41,36 +41,73 @@ class product_details extends Component {
                     <div className="col-md-10 offset-1">
                     <div className="card">
                         <div className="card-body">
-                            <p className="list-group-item">Design <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Development <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Hosting <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Analytics <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Email Setup <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Search Engine Optimization <label class="switch float-right"> <input type="checkbox" /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Backups <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Live Chat <label class="switch float-right"> <input type="checkbox" /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Content Management <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                </label>
-                            </p>
-                            <p className="list-group-item">Maintenance Agreement<label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                </label>
-                            </p>
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <p className="list-group-item">Design <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                        </label>
+                                    </p>
+                                </div>
+                                <div className="col-md-4">
+                                <p className="list-group-item">Development <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                    </label>
+                                </p>
+                                </div>
+                                <div className="col-md-4">
+                                <p className="list-group-item">Hosting <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                    </label>
+                                </p>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <p className="list-group-item">Analytics <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                        </label>
+                                    </p>
+                                </div>
+                                <div className="col-md-4">
+                                <p className="list-group-item">Email Setup <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                    </label>
+                                </p>
+                                </div>
+                                <div className="col-md-4">
+                                <p className="list-group-item">Search Engine Optimization <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                    </label>
+                                </p>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <p className="list-group-item">Backups <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                        </label>
+                                    </p>
+                                </div>
+                                <div className="col-md-4">
+                                <p className="list-group-item">Live Chat <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                    </label>
+                                </p>
+                                </div>
+                                <div className="col-md-4">
+                                <p className="list-group-item">Content Management <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                    </label>
+                                </p>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <p className="list-group-item">Maintenance Agreement <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                        </label>
+                                    </p>
+                                </div>
+                            </div>
+                       
+                            <div className="float-right">
+
+<button className="btn btn-sm btn-primary px-3">
+    <i className="fas fa-folder-open pr-2"></i>
+Save
+</button>
+
+</div>
                         </div>
                     </div>
                     </div>
@@ -127,6 +164,7 @@ class product_details extends Component {
                                 </div>
                             </div>
              */}
+             
             </div>
         );
     }

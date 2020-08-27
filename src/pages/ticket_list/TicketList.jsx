@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { HTTPURL } from '../../common/global_constant';
 import {withContext} from '../../common/context';
+import { Link } from 'react-router-dom';
 
 class TicketList extends Component{
     constructor(props){
@@ -156,8 +157,12 @@ class TicketList extends Component{
                                                                     Pending</option>
                                                             </select>
                                                             </td>
-                                                            <td className="align-middle" style={{cursor:"pointer"}}><i className="fas fa-eye" data-toggle="modal"
-                                                            data-target="#viewTicket"></i></td>
+                                                            <td className="align-middle" style={{cursor:"pointer"}}>
+                                                                <Link to="/viewticket">
+                                                                <i className="fas fa-eye text-dark" data-toggle="modal"
+                                                            data-target="#viewTicket"></i>
+                                                                </Link>
+                                                            </td>
                                                         </tr>
                                                      )
                                                     })  

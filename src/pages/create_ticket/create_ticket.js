@@ -76,7 +76,7 @@ class create_ticket extends Component {
             <div className="container-fluid content text-white">
             <div className="row">
 
-                <div className="col-md-12" id="profile">
+                <div className="col-md-8 offset-2" id="profile">
                     <form onSubmit={this.handleSubmit} id="createticket">
 
 
@@ -142,15 +142,7 @@ class create_ticket extends Component {
                                         </div>
 
                                         <div className="col-md-12 mb-3">
-                                            {/* <div className="form-group">
-                                                <select name="package" id="package" className=" form-control form-select form-select-sm">
-                                                    <option value="" selected disabled>--Select&nbsp;Package&nbsp;--</option>
-                                                    <option value="complaint">complaint</option>
-                                                    <option value="request">Request</option>
-                                                    <option value="enquiry">Enquiry</option>
-                                                </select>
-                                            </div> */}
-                                              <div className="card">
+                                              {/* <div className="card">
                                     <div class="card-header bg-medium font-weight-bold text-dark">
                                         Select Packages
                                     </div>
@@ -186,7 +178,7 @@ class create_ticket extends Component {
                                 </label>
                             </p>
                         </div>
-                    </div>
+                    </div> */}
                                         </div>
 
                                         

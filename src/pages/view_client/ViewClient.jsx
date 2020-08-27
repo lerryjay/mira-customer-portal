@@ -138,11 +138,11 @@ export default function ViewClient() {
                                     Product is empty!
                                     </div>
                                     <button type="button" className="btn btn-sm btn-primary new_product">
-                                    <i className="fas fa-folder-plus" aria-hidden="true">
                                         <Link to="/viewproduct">
+                                    <i className="fas fa-folder-plus" style={{color: '#fff'}} aria-hidden="true">
                                             <small className="newproduct" style={{color: '#fff'}}>&nbsp;Add&nbsp;New&nbsp;Product</small>
-                                        </Link>
                                     </i>
+                                        </Link>
                                     </button>
                                     </div>
                                 </div>

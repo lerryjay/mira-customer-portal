@@ -11,27 +11,36 @@
      * @return type
      * @throws conditon
      **/
-    public static function upload($filekey,$path)
+    public static function upload($filekey,$path,$multiple = false)
     {
-      $targetdir = BASE_PATH."/public/".$path.'/';
-      $path = 'public/'.$path.'/';
+      $targetdir = BASE_PATH;
+      $path = '/public/'.$path.'/';
       $files = [];
 
       if(!empty($_FILES)){
-        $file_array = count($_FILES['files'][$filekey]);
-        for( $i=0 ; $i < $file_array ; $i++ ) {
-          $tmpFilePath = $_FILES['files']['tmp_name'][$i];
-          if ($tmpFilePath != ""){
-
-            $newFilePath     = $path.uniqid().$_FILES['files']['name'][$i];
-            $newFilePathMove =  $targetdir.$newFilePath;
-            if (move_uploaded_file($tmpFilePath, $newFilePathMove)) {
-              array_push($files, $newFilePath);
+        if($multiple){
+          $file_count = isset($_FILES[$filekey]['name'][0]) ?  count($_FILES[$filekey]['name']) : 1;
+          for( $i=0 ; $i < $file_count ; $i++ ) {
+            $tmpFilePath = $_FILES[$filekey]['tmp_name'][$i];
+            if ($tmpFilePath != ""){
+              $newFilePath     = $path.uniqid().$_FILES['files']['name'][$i];
+              $newFilePathMove =  $targetdir.$newFilePath;
+              if (move_uploaded_file($tmpFilePath, $newFilePathMove)) {
+                array_push($files, $newFilePath);
+              }
             }
           }
+          if(count($files)) return $files;
+          else return false;
+        }else{
+          $newFilePath     = $path.uniqid().$_FILES[$filekey]['name'];
+          $newFilePathMove =  $targetdir.$newFilePath;
+          $tmpFilePath = $_FILES[$filekey]['tmp_name'];
+          if (move_uploaded_file($tmpFilePath, $newFilePathMove)) {
+            return $newFilePath;
+          }
         }
-        if(count($files)) return $files;
-        else return false;
+        
       }
       return false;
     }

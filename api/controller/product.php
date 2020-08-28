@@ -155,10 +155,14 @@
 
     public function validateduserproductpermission()
     {
-      extract($_POST);
+      extract($_GET);
       loadController('user');
+      loadModel('product');
+      $userid ??= '';
       $user = User::validateUser($userid); 
+      $this->productModel = new ProductModel();
       $product = $this->productModel->getProductById($productid);
+
       if($product ){
         if($product['company_id'] == $user['company_id'])return ['user'=> $user,'product'=>$product];
         else $response['message'] = "You do not have the right priviledges to complete this request!";

@@ -13,9 +13,6 @@
      **/
     public function __construct()
     {
-      // var_dump($_SESSION);
-      // unset($_SESSION);
-      // session_destroy();
       if(!isset($_SESSION) || count($_SESSION) < 1){
         $this->validateApiKey(true);
       }else if(count($_SESSION) > 0 ){

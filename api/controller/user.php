@@ -159,6 +159,7 @@
               'fullname'=>$user['name'],
               'companyid'=>$user['company_id'],
               'activation'=>$user['activation'],
+              'imageurl'=>$user['imageurl'],
               'role'=>$user['role'],
             ]
           ];
@@ -385,7 +386,12 @@
 
       $user = $this->userModel->getUserById($userId);
       if($user){
-        $updated = $this->userModel->updateUser($userId,['username'=>$username,'name'=>$name,'telephone'=>$telephone]);
+        $data = ['username'=>$username,'name'=>$name,'telephone'=>$telephone];
+        if(isset($_FILES['files']['image'])){
+          $image = File::upload("image",'images');
+          if($image) $data['imageurl'] = $image;
+        }
+        $updated = $this->userModel->updateUser($userId,$data);
         if($updated){
           $response = [
             'status'=>true,

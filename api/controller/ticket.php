@@ -81,10 +81,10 @@
       extract($data);
       
       if($_FILES){
-        $files = File::upload("files",'ticket');
+        $files = File::upload("files",'ticket',true);
         if($files) $files = json_encode($files);
-        else $files   = "[]";
-      }else $files   = "[]";
+        else $files   = json_encode([]);
+      }else $files   = json_encode([]);
       
       $add = $this->ticketModel->addTicket($user['company_id'],$productId,$customerId,$title,$type,$message,$files,'pending');
       if($add){
@@ -142,6 +142,25 @@
     }
 
     /**
+     * retrieves the ID of a ticket
+     *
+     * @param String $ticket Id iof ticket to be retrieved
+     * @return type
+     **/
+    public function getticket()
+    {
+      $data = $this->validateUserTicketPermission();
+      extract($data);
+
+      $response['status']   = true;
+      $response['message']  = 'Ticket data retrived';
+      $response['data']     = $ticket;
+
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
+    }
+
+    /**
      * Reply to an open ticket
      *
      * @param HTTPPOSTPARAMS $_POST - userid,message, files
@@ -159,7 +178,7 @@
       loadModel('file');
       if($userId == $ticket['customer_id'] || $user['role'] == 'admin'){
         if(isset($_FILES['file'])){
-          $files = File::upload("files",'ticket');
+          $files = File::upload("files",'ticket',true);
           if($files) $files = json_encode($files);
           else $files   = "[]";
         }else $files   = "[]";

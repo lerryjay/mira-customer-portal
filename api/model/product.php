@@ -55,7 +55,7 @@
     **/
     public function getProductById($productId,$status = 1)
     {
-      return $this->getProduct('WHERE product_id = ? AND status = ?','si',[$productId,$status]);
+      return $this->getProduct('WHERE id = ? AND status = ?','si',[$productId,$status]);
     }
 
     /**

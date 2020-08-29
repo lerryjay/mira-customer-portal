@@ -2,6 +2,15 @@ import React, { Component } from 'react';
 import image from '../../assets/images/Accsiss.png'
 
 class product_details extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            ...this.props, 
+        }
+
+    }
+
     render() {
         return (
             <div className="container mx-auto">
@@ -10,7 +19,7 @@ class product_details extends Component {
                         <img src={image} className="img-fluid"  alt=""/>
                     </div>
                     <div className="col-md-6">
-                        <h4 className="text-dark">Accsiss eBs</h4>
+                        <h4 className="text-dark"> {/* this.props.getProduct.id */} Accsiss eBs</h4>
                         <div className="description">
                             <p>
                             Accsiss eBs is an accounting software, designed to run in multiple locations across different states, 

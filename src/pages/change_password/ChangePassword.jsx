@@ -35,20 +35,36 @@ class ChangePassword extends Component {
         //Waste 3 seconds
         if(!Validators.validatePassword(oldpassword,1).status){
             const err = Validators.validatePassword(oldpassword,1).message;
-           await this.setState({errormessage: err});
-            setTimeout(()=> this.setState({errormessage: ''}),5000);
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({errormessage: err});
+                setTimeout(()=> this.setState({errormessage: ''}),5000);
+            }, 3000);
         } else if(!Validators.validatePassword(newpassword,1).status){
             const err = Validators.validatePassword(newpassword,1).message;
-           await this.setState({errormessage: err});
-            setTimeout(()=> this.setState({errormessage: ''}),5000);
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({errormessage: err});
+                setTimeout(()=> this.setState({errormessage: ''}),5000);
+            }, 3000);
         } else if(!Validators.validatePassword(confirmnewpwd,1).status){
             const err = Validators.validatePassword(confirmnewpwd,1).message;
-           await this.setState({errormessage: err});
-            setTimeout(()=> this.setState({errormessage: ''}),5000);
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({errormessage: err});
+                setTimeout(()=> this.setState({errormessage: ''}),5000);
+            }, 3000);
         }else if(newpassword !== confirmnewpwd) {
             const err = "Password does not match!"
-           await this.setState({errormessage: err});
-            setTimeout(()=> this.setState({errormessage: ''}),5000);
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({errormessage: err});
+                setTimeout(()=> this.setState({errormessage: ''}),5000);
+            }, 3000);
         } else {
             this.setState({loading : true});
             setTimeout(() => {
@@ -67,16 +83,6 @@ class ChangePassword extends Component {
     render() {
         return (
             <div className="container">
-            {/* Error Message */}
-            { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
-                    <span className="mt-3">{this.state.errormessage}</span>
-                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                :   <span></span>
-            }
             {/* Success Message */}
             { this.state.successmessage ? 
                 <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
@@ -95,6 +101,16 @@ class ChangePassword extends Component {
                         </div>
                         <div className="card-body py-lg-5 text-muted text-center">
                             <form onSubmit={this.handleSubmit} id="changepassword">
+                            {/* Error Message */}
+                            { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
+                                <div className="alert alert-warning" role="alert">
+                                    <span className="mt-3">{this.state.errormessage}</span>
+                                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                </div>
+                                :   <span></span>
+                            }
 
                                 <div className="input-group mb-3">
                                     <span className="input-group-text bg-white alt" id="email">

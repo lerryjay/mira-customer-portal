@@ -41,7 +41,9 @@ class App extends Component {
       loggedIn: true,
       users: [],
       profile: [],
-      admin: false
+      admin: false,
+      getTicket: '',
+      getProduct: ''
     }
   }
   loginUser = (data) => {
@@ -198,6 +200,55 @@ class App extends Component {
     });
   }
 
+  handleRoute = (e) => {
+    // Get Ticket by ID
+   const headers = new Headers();
+   headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+
+       let ticketid = e.target.attributes.value.value
+       // let ticketid = "5f4509c0c26d1"
+       let userid = "5f3e930330e28"
+
+   fetch(HTTPURL +`ticket/getticket?userid=${userid}&ticketid=${ticketid}`, {
+       method: 'GET',
+       headers: headers
+   })
+   .then(response => response.json())
+   .then(data => {
+     console.log(data.data, "data");
+     this.state.getTicket = data.data
+     this.setState({getTicket: data.data})
+     
+    //  this.state.getTickets.push(data.data)
+    //  this.setState({getTicket: this.state.getTickets[0] })
+    //  console.log(this.state.getTicket, "data2")
+    })
+}
+
+handleProductRoute = (e) => {
+  // Get Ticket by ID
+ const headers = new Headers();
+ headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+
+     let productid = e.target.attributes.value.value
+     // let ticketid = "5f4509c0c26d1"
+     let userid = "5f44c8e94593e"
+
+ fetch(HTTPURL +`product/getproduct?productid=${productid}&userid=${userid}`, {
+     method: 'GET',
+     headers: headers
+ })
+ .then(response => response.json())
+ .then(data => {
+   console.log(data.data, "data");
+   this.state.getProduct = data.data
+   this.setState({getProduct: data.data})
+   
+  //  this.state.getTickets.push(data.data)
+  //  this.setState({getTicket: this.state.getTickets[0] })
+  //  console.log(this.state.getTicket, "data2")
+  })
+}
 
   logoutUser = () => this.setState({ loggedIn: false });
 
@@ -213,7 +264,9 @@ class App extends Component {
        createticket: this.createTicket,
        createproduct: this.createProduct,
        profiledetails: this.getProfileDetails,
-       getchat: this.sendChat
+       getchat: this.sendChat,
+       viewmore: this.handleRoute,
+       viewmoredetails: this.handleProductRoute
     }
   };
 
@@ -240,7 +293,7 @@ class App extends Component {
                     {!this.state.loggedIn && <Route path="/" component={Login} />}
                     {this.state.loggedIn && <Route exact path="/dashboard" component={Dashboard} />}
                     {this.state.loggedIn && <Route path="/createclient" component={CreateClient} />}
-                    {this.state.loggedIn && <Route path="/creatuser" component={CreateUser} />}
+                    {this.state.loggedIn && <Route path="/createuser" component={CreateUser} />}
                     {this.state.admin && this.state.loggedIn && <Route path="/profile" component={Profile} />}
                     {!this.state.admin && this.state.loggedIn &&  <Route path="/clientprofile" component={ClientProfile} />}
                     {this.state.loggedIn && <Route path="/ticketlist" component={TicketList} />}

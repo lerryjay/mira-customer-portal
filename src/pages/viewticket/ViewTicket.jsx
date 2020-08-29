@@ -22,7 +22,8 @@ class ViewTicket extends Component {
     }
 
     componentDidMount() {
-            this.getChat();       
+            this.getChat();  
+           console.log(this.state,this.props,"tt")  
 
     }
     getChat(){
@@ -105,13 +106,14 @@ class ViewTicket extends Component {
             <div className="container mx-auto mt-md-5 shadow" id="profile">
                 <div className="card home-chart mt-md-4">
                     <div className="card-header bg-medium font-weight-bold text-dark">
-                      
-                    <span className="font-weight-bolder mr-4 ticket-title">TICKET ID: #{this.state.ticketid}</span>
-
-                    <span className="font-weight-bolder mr-4 ticket-title">COMPLAINT: Order Issues</span>
+                        
+                    <span className="font-weight-bolder mr-4 ticket-title">TICKET ID: #{this.props.getTicket.id}</span>
+                                              
+                    <span className="font-weight-bolder mr-4 ticket-title">
+                     <span className="uppercase">{this.props.getTicket.type}</span>: {this.props.getTicket.title}</span>
                         <div className="form-group  mt-2">
                             <textarea id="message" name="message" rows="5" cols="50" className="form-control text-left" 
-                            value="I was unable to view past orders" required placeholder="Message" disabled
+                            value={this.props.getTicket.message} required placeholder="Message" disabled
                                 />
                         </div>
                     </div>

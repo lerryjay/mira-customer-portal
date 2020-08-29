@@ -7,12 +7,19 @@ class TicketList extends Component{
     constructor(props){
         super(props);
         this.state = {
+            ...props,
+            currentPage: 1,
+            numberPerPage: 10,
             ticket: [],
             id: 1,
-            tickets : []
+            tickets : [],
+            currentList: []
         }
     }
+
+
     componentDidMount(){
+        console.log(this.state,"props")
         const headers = new Headers();
         headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
         fetch(HTTPURL + 'ticket/?userid=5f3e930330e28', {
@@ -20,7 +27,16 @@ class TicketList extends Component{
             headers: headers
         })
         .then(response => response.json())
-        .then(data => this.setState({tickets: data.data}));
+        .then(data => {
+            // let value = data.data
+            // //Get current list
+            // const indexOfLastPage = this.state.currentPage * this.state.numberPerPage;
+            // const indexOfFirstPage = indexOfLastPage - this.state.numberPerPage
+            // const currentList = value.slice(indexOfFirstPage, indexOfLastPage)
+            // console.log(currentList,"data data")
+            this.setState({tickets: data.data})
+            // this.setState({currentList: currentList})
+        });
 
         let ticket = []
         console.log('changed successfully!', ticket)
@@ -29,7 +45,30 @@ class TicketList extends Component{
             ticket.push(this.state.tickets[i])
             this.setState({ ticket :  ticket });
         }
+
     }
+
+    handleViewMore = e => {
+         this.state.viewmore(e)
+        this.props.history.push('/viewticket');
+    }
+    // handleRoute = e => {
+    //      // Get Ticket by ID
+    //     const headers = new Headers();
+    //     headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+
+    //         let ticketid = e.target.attributes.value.value
+    //         // let ticketid = "5f4509c0c26d1"
+    //         let userid = "5f3e930330e28"
+
+    //     fetch(HTTPURL +`ticket/getticket?userid=${userid}&ticketid=${ticketid}`, {
+    //         method: 'GET',
+    //         headers: headers
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => console.log(data.data, "data"))
+    //     this.props.history.push(`/viewticket/${ticketid}`);
+    // }
     
      changeStatus(e,ticket) {
         
@@ -87,7 +126,7 @@ class TicketList extends Component{
                                                             <td>
                                                                 {ticket.createdat}
                                                             </td>
-                                                            <td>
+                                                            <td  onClick={this.handleRoute}>
                                                                 {ticket.client_name}
                                                             </td>
                                                             <td>
@@ -114,98 +153,14 @@ class TicketList extends Component{
                                                             </select>
                                                             </td>
                                                             <td className="align-middle" style={{cursor:"pointer"}}>
-                                                                <Link to="/viewticket">
-                                                                <i className="fas fa-eye text-dark" data-toggle="modal"
-                                                            data-target="#viewTicket"></i>
+                                                                <Link onClick={this.handleViewMore}>
+                                                    <span class="badge px-3 py-2 badge-primary" value={ticket.id} style={{cursor:"pointer"}}>View</span>
                                                                 </Link>
                                                             </td>
                                                         </tr>
                                                      )
                                                     })  
-                                                }  
-
-
-
-{/* 
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>2020&nbsp;-&nbsp;08&nbsp;-&nbsp;17&nbsp;/&nbsp;09:15:56
-                                        </td>
-                                                        <td>John&nbsp;Doe</td>
-                                                        <td>john@mail.com</td>
-                                                        <td>Complaint</td>
-                                                        <td>Lorem ipsum dolor sit amet consectetur, adipisicing
-                                            elit. Ducires...!</td>
-                                            <td className="align-middle">
-                                                            
-                                                        <select className="custom-select btn btn-sm btn-default">
-                                                            <option value="" selected disabled>--Select&nbsp;Status&nbsp;--</option>
-                                                            <option className="btn btn-sm btn-success" value="approved">Approved</option>
-                                                            <option className="btn btn-sm btn-danger" value="cancelled">Cancelled</option>
-                                                            <option className="btn btn-sm btn-warning" value="pending">Pending</option>
-                                                        </select>
-                                                        </td>
-                                                        <td className="align-middle"><i className="fas fa-eye" data-toggle="modal"
-                                                            data-target="#viewTicket"></i></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>2020&nbsp;-&nbsp;08&nbsp;-&nbsp;17&nbsp;/&nbsp;09:15:56
-                                        </td>
-                                                        <td>doe&nbsp;jane</td>
-                                                        <td>doe@mail.com</td>
-                                                        <td>Enquiry</td>
-                                                        <td>Lorem ipsum dolor sit amet consectetur, adipisicing
-                                            elit. Ducires...!</td>
-                                            <td className="align-middle">
-                                            <select className="custom-select btn btn-sm btn-default">
-                                                <option value="" selected disabled>--Select&nbsp;Status&nbsp;--</option>
-                                                <option className="btn btn-sm btn-success" value="approved">Approved</option>
-                                                <option className="btn btn-sm btn-danger" value="cancelled">Cancelled</option>
-                                                <option className="btn btn-sm btn-warning" value="pending">Pending</option>
-                                            </select> */}
-                                            {/* <div class="dropdown" >
-                                                <button onClick={this.changeStatus} id="active" name="active" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Active
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" name="active" id="active" href="#">Active</a>
-                                                    <a class="dropdown-item" name="inactive" id="inactive" href="#">Inactive</a>
-                                                </div>
-                                            </div> */}
-                                                        {/* </td>
-                                                        <td className="align-middle"><i className="fas fa-eye" data-toggle="modal"
-                                                            data-target="#viewTicket"></i></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>2020&nbsp;-&nbsp;08&nbsp;-&nbsp;17&nbsp;/&nbsp;09:15:56
-                                        </td>
-                                                        <td>jane&nbsp;Doe</td>
-                                                        <td>jane@mail.com</td>
-                                                        <td>Suggestion</td>
-                                                        <td>Lorem ipsum dolor sit amet consectetur, adipisicing
-                                            elit. Ducires...!</td>
-                                            <td className="align-middle">
-                                            <select className="custom-select btn btn-sm btn-default">
-                                                <option value="" selected disabled>--Select&nbsp;Status&nbsp;--</option>
-                                                <option className="btn btn-sm btn-success" value="approved">Approved</option>
-                                                <option className="btn btn-sm btn-danger" value="cancelled">Cancelled</option>
-                                                <option className="btn btn-sm btn-warning" value="pending">Pending</option>
-                                            </select> */}
-                                                            {/* <button
-                                                                className="btn btn-sm btn-success d-none"><i
-                                                                    className="fas fa-check-double">Approved</i></button>
-                                                            <button
-                                                                className="btn btn-sm btn-danger d-none"><i
-                                                                    className="fas fa-times">Cancelled</i></button>
-                                                            <button className="btn btn-sm btn-warning"><i
-                                                                className="fas fa-comments">Pending</i></button> */}
-                                                        {/* </td>
-                                                        <td className="align-middle"><i className="fas fa-eye" data-toggle="modal"
-                                                           data-target="#viewTicket"></i></td>
-                                                    </tr>
-     */}
+                                                } 
                                                 </tbody>
                                             </table>
                                         </div>
@@ -218,7 +173,22 @@ class TicketList extends Component{
                         </form>
                     </div>
                 </div>
-           
+                
+
+               <div className="row justify-content-center text-center">
+                <div class="pagination">
+                        <a href="#">&laquo;</a>
+                        <a href="#">1</a>
+                        <a class="active" href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#">4</a>
+                        <a href="#">5</a>
+                        <a href="#">6</a>
+                        <a href="#">&raquo;</a>
+                    </div> 
+               </div>
+                
+                        
                 <div className="overlay"></div>
     
     <div className="modal fade" id="viewTicket" tabIndex="-1" role="dialog" aria-labelledby="viewTicketTitle"

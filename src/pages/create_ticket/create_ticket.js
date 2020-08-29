@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { HTTPURL } from '../../common/global_constant';
 import {withContext} from '../../common/context';
 
 class create_ticket extends Component {
@@ -31,15 +31,36 @@ class create_ticket extends Component {
         e.preventDefault()
 
         this.setState({loading : true});
+
+        const headers = new Headers();
+        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+        let form = new FormData(document.getElementById("createticket"));
+
+        this.state.files.forEach(item=>{
+            form.append('files[]', item);
+        })
+
+        fetch(HTTPURL + 'ticket/add', {
+            method: 'POST',
+            body: form,
+            headers: headers
+        })
+        .then(response => response.json())
+        .then(json => {
+        console.log(json);
+        return json;
+        });
+         
+
         setTimeout(() => {
             this.setState({loading : false});
             this.setState({successmessage: 'Ticket Created Successfully'})
             setTimeout(() => this.setState({successmessage: false}), 5000);
         }, 3000);
+        // const res = await this.state.createticket(document.getElementById("createticket"));
+        this.setState({title : '', package: '', type: '', message: '', product: ''});
     
 
-        const res = await this.state.createticket(document.getElementById("createticket"));
-        this.setState({title : '', package: '', type: '', message: '', product: ''});
         
     }
     
@@ -83,16 +104,6 @@ class create_ticket extends Component {
         )} )
         return (
             <div className="container-fluid content text-white">
-            {/* Error Message */}
-            { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
-                    {this.state.errormessage}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                :   <span></span>
-            }
             {/* Success Message */}
             { this.state.successmessage ? 
                 <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
@@ -106,7 +117,7 @@ class create_ticket extends Component {
             <div className="row">
 
                 <div className="col-md-8 offset-2" id="profile">
-                    <form onSubmit={this.handleSubmit} id="createticket">
+                    <form onSubmit={this.handleSubmit} id="createticket" encType="multipart/form-data">
 
 
                         <div className="card">
@@ -116,6 +127,7 @@ class create_ticket extends Component {
                             <div className="card-body">
                             <div className="row">
                                 <div className="col-md-12">
+                                    {/* Error Message */}
                                     { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
                                         <div className="alert alert-warning" role="alert">{this.state.errormessage}
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -184,7 +196,7 @@ class create_ticket extends Component {
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Image</label>
-                                            <input type="file" className="form-file form-file-sm" name="image"
+                                            <input type="file" className="form-file form-file-sm" name="files[]"
                                                  placeholder="" multiple
                                                 onChange={(e)=>this.handleImageChange(e)} />
                                         </div>  

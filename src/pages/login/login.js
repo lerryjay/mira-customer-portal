@@ -80,16 +80,6 @@ class Login extends Component {
         return(
             <div>
                 <div className="container">
-                    {/* Error Message */}
-                    { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                        <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
-                            {this.state.errormessage}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                        :   <span></span>
-                    }
                     {/* Success Message */}
                     { this.state.successmessage ? 
                         <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
@@ -107,6 +97,16 @@ class Login extends Component {
                         </div>
                         <div className="card-body py-lg-5 text-muted text-center">
                             <form onSubmit={this.handleSubmit} id="loginform">
+                    {/* Error Message */}
+                    { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
+                        <div className="alert alert-warning" role="alert">
+                            {this.state.errormessage}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        :   <span></span>
+                    }
                                 <div className="input-group mb-3">
                                     <span className="input-group-text bg-white alt" id="loginid">
                                         <i className="fas fa-envelope fa-fw"></i>

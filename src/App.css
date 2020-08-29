@@ -15,7 +15,9 @@ body, .bg-img {
 div.card, div.bottom_link {
   width: inherit;
 }
-
+.uppercase {
+  text-transform: uppercase !important;
+}
 .bg-light, div.card {
   background-color:#f8f9fa !important;
 }

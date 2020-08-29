@@ -114,16 +114,6 @@ class CreateClient extends Component {
         return (
 
             <div className="container mx-auto row">
-            {/* Error Message */}
-            { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
-                    {this.state.errormessage}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                :   <span></span>
-            }
             {/* Success Message */}
             { this.state.successmessage ? 
                 <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
@@ -135,18 +125,28 @@ class CreateClient extends Component {
                 :   <span></span>
             }
 
-            {/* Image Error */}
-            {this.state.imageError !== false ?
-                <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
-                    <span className="mt-3">{ this.state.imageError }</span>
-                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                : <span></span> 
-            }
-
                 <div className="col-md-8 offset-2 mb-3 mt-4" id="profile">
+                    {/* Error Message */}
+                    { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
+                        <div className="alert alert-warning" role="alert">
+                            {this.state.errormessage}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        :   <span></span>
+                    }
+
+                    {/* Image Error */}
+                    {this.state.imageError !== false ?
+                        <div className="alert alert-warning" role="alert">
+                            <span className="mt-3">{ this.state.imageError }</span>
+                            <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        : <span></span> 
+                    }
 
                     <form onSubmit={this.handleSubmit} id="createclient"> 
                     

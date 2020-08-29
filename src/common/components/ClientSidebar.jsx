@@ -45,11 +45,11 @@ const ClientSidebar = (props) => {
                         </li>
                     </NavLink>
 
-                    {/* <NavLink className={`dropdown-btn nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/creatUser' onClick={toggle2}>
+                    <NavLink className={`dropdown-btn nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/createUser' onClick={toggle2}>
                         <li className="nav-item">
                             <i className="fa fa-user-plus mr-1"></i>&nbsp;Create&nbsp;User
                         </li>
-                    </NavLink> */}
+                    </NavLink>
 
                     <div className="dropdown-btn nav-item" onClick={toggle2, dropdown}>
                         <li className="nav-item ">

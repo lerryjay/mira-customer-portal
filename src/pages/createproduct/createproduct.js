@@ -98,16 +98,6 @@ class CreateProduct extends Component {
         return (
 
             <div className="container mx-auto row">
-                 {/* Error Message */}
-            { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
-                    {this.state.errormessage}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                :   <span></span>
-            }
             {/* Success Message */}
             { this.state.successmessage ? 
                 <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
@@ -120,6 +110,16 @@ class CreateProduct extends Component {
             }
 
                 <div className="col-md-8 offset-2 mb-3 mt-4" id="profile">
+                 {/* Error Message */}
+                { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
+                    <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                        {this.state.errormessage}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    :   <span></span>
+                }
 
                     <form onSubmit={this.handleSubmit} id="createproduct"> 
                     

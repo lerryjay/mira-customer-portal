@@ -11,6 +11,7 @@ class viewproduct extends Component {
     constructor(props){
         super(props);
         this.state = {
+            ...props,
             product: [],
             products: [],
             id: 1
@@ -35,6 +36,11 @@ class viewproduct extends Component {
             this.setState({ product :  product });
         }
     }
+
+    handleViewMore = e => {
+        // this.props.viewmoredetails(e)
+       this.props.history.push('/productdetails');
+   }
 
     render() {
         return (
@@ -82,9 +88,9 @@ class viewproduct extends Component {
                                             <img src={image} className="image_product" alt="" />
                                            
                                     <h5 className="card-title">{product.name}</h5>
-                                        <Link to="/productdetails"  className="btn btn-primary">
-                                        View
-                                        </Link>      
+                                    <Link onClick={this.handleViewMore} className="btn btn-primary">
+                                        <span value={product.id} >View</span>
+                                        </Link>   
                                             </div>
                                     </div>
 
@@ -94,8 +100,8 @@ class viewproduct extends Component {
                                         </div>
                                         <div className="card-body">
                                         <p className="card-title">{product.description}</p> 
-                                        <Link to="/productdetails"  className="btn btn-primary">
-                                        View
+                                        <Link onClick={this.handleViewMore} className="btn btn-primary">
+                                        <span value={product.id} >View</span>
                                         </Link>                                         
                                     </div>
                                     </div>

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 import Validators  from "../../common/Validators";
 import {withContext} from '../../common/context';
+import { HTTPURL } from '../../common/global_constant';
 
 class CreateClientById extends Component {
     constructor(props){
@@ -14,7 +15,22 @@ class CreateClientById extends Component {
             errormessage: '',
             loading: false, 
             successmessage: '',
+            clients: []
         };
+    }
+    componentWillMount() {
+        this.getClient()
+    }
+
+    getClient = () => {
+        fetch(`${HTTPURL}clients?userid=${this.state.userId}`, {
+            method: "GET",
+            headers: { "api-key": this.state.apiKey },
+        }).then(res => res.json()).then(result => {
+            if (result.status) {
+                this.setState({ clients: result.data });
+            }
+        })
     }
     
     handleInputChange = e => {
@@ -25,18 +41,33 @@ class CreateClientById extends Component {
     handleSubmit = async e => {
         e.preventDefault()
 
-        const { email} = this.state
+        const { businessname, clientid } = this.state
 
-        if(!Validators.validateEmail(email).status){
-            const err = Validators.validateEmail(email).message
-            this.setState({loading : true});
+        if(!businessname){
+           this.setState({loading : true});
             setTimeout(() => {
                 this.setState({loading : false});
-                this.setState({errormessage: err});
+                this.setState({errormessage: 'Business name is required'});
                 setTimeout(()=> this.setState({errormessage: ''}),5000);
             }, 3000);
         }else{
-            this.setState({loading : true});
+            this.setState({ loading: true });
+            let myHeaders = new Headers();
+            myHeaders.append("api-key", this.state.apiKey);
+
+            var formdata = new FormData();
+            formdata.append("businessname", this.state.businessname);
+            formdata.append("clientid", clientid);
+            formdata.append("userid", this.props.userId);
+
+            fetch(`${HTTPURL}clients/add`, {
+                method: "POST",
+                headers: myHeaders,
+                body: formdata
+            }).then(response => response.json()).
+                then(result => { console.log(result) })
+
+
             setTimeout(() => {
                 this.setState({loading : false});
                 this.setState({successmessage: 'Added Successfully!'})
@@ -88,23 +119,15 @@ class CreateClientById extends Component {
 
                                 <div className="row">
 
-                                    <div className="col-md-12 mb-3">
-                                        <div className="form-group">
-                                            <label htmlFor="" className="sr-only">User ID</label>
-                                            <input type="text" className="form-control form-control-sm" name="userid"
-                                                id="userid" placeholder="UserID" required
-                                                value={this.state.userid}
-                                                onChange={this.handleInputChange} />
-                                        </div>
-                                    </div>
                                         
                                    <div className="col-md-12 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Client&nbsp;ID</label>
-                                            <input type="text" className="form-control form-control-sm" name="clientid"
-                                                id="clientid" placeholder="Client ID"
-                                                value={this.state.clientid} required
-                                                onChange={this.handleInputChange} />
+                                            <select required onChange={this.handleInputChange} className="form-control form-control-sm" name="clientid">
+                                               <option value="">Please select Client</option>
+                                                {this.state.clients.length > 0 ? this.state.clients.map(client => <option value={client.id} >{client.name}</option>) : null}
+                                            </select>
+                                            
                                         </div>
                                     </div>
 

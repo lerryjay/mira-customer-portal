@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+
+import { HTTPURL } from '../../common/global_constant';
 import {withContext} from '../../common/context';
 
 class CreateProduct extends Component {
@@ -30,7 +32,24 @@ class CreateProduct extends Component {
             this.setState({successmessage: 'Added Successfully!'})
             setTimeout(() =>{
                 this.setState({successmessage: false});
-                const res = this.state.createproduct(document.getElementById("createproduct"));
+
+                let data = document.getElementById("createproduct");
+                
+                const headers = new Headers();
+                headers.append('API-KEY',this.state.apiKey);
+
+                let form = new FormData(data);
+                fetch(HTTPURL + 'product/add', {
+                    method: 'POST',
+                    body: form,
+                    headers: headers
+                })
+                .then(response => response.json())
+                .then(json => {
+                  console.log(json);
+                  return json;
+                });
+
                  console.log('submitting')
                  this.setState({name: '', description: '', file: ''})
             }, 5000);
@@ -47,8 +66,6 @@ class CreateProduct extends Component {
         console.log(e, "Image removed")
         this.setState({ file: '',imageError : false})
         setTimeout(()=> this.setState({imageError: ''}),5000);
-        // let myElement = document.querySelector(".other_files");
-        // myElement.style.display = "none";
     }
     handleImageChange(e) {
         e.preventDefault();

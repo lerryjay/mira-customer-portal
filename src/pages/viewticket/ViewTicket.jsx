@@ -26,12 +26,10 @@ class ViewTicket extends Component {
 
     }
     getChat(){
-        // Set the userid and ticketid
-        this.setState({userid: '5f3e930330e28', ticketid: '5f447cb8e7b31'})
         
         const headers = new Headers();
         headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
-        fetch(HTTPURL + 'ticket/replys?ticketid=5f447cb8e7b31&userid=5f3e930330e28', {
+        fetch(HTTPURL + `ticket/replys?ticketid=5f447cb8e7b31&userid=5f3e930330e28`, {
             method: 'GET',
             headers: headers
         })
@@ -60,7 +58,7 @@ class ViewTicket extends Component {
 
 
         const headers = new Headers();
-        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+        headers.append('API-KEY',this.state.apiKey);
         let form = new FormData(document.getElementById("chatform"));
 
         this.state.inputfiles.forEach(item=>{
@@ -78,7 +76,6 @@ class ViewTicket extends Component {
         return json;
         });
 
-        // const res = await this.state.getchat(document.getElementById("chatform"));
         console.log('Message sent!')
          
         this.setState({message: '', files: ''})
@@ -179,14 +176,6 @@ class ViewTicket extends Component {
                             <input type="text" className="form-control border-right-0"  id="message" name="message"
                              placeholder="Message" aria-label="chat" aria-describedby="chat" required
                              value={this.state.message}  onChange={this.handleInputChange}/>
-
-                             <input type="hidden" className="form-control border-right-0"  id="userid" name="userid"
-                             placeholder="UserID" aria-label="chat" aria-describedby="chat" required
-                             value={this.state.userid}  onChange={this.handleInputChange} />
-
-                             <input type="hidden" className="form-control border-right-0"  id="ticketid" name="ticketid"
-                             placeholder="TicketID" aria-label="chat" aria-describedby="chat" required
-                             value={this.state.ticketid}  onChange={this.handleInputChange} />
 
                             <button className="input-group-append">
                                 <span className="input-group-text bg-white" id="chat">

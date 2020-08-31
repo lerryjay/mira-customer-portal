@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
+
 import { HTTPURL } from '../../common/global_constant';
 import {withContext} from '../../common/context';
-import './createticket.css'
 
 class create_ticket extends Component {
     constructor(props){
         super(props);
+
         this.state = { 
             ...this.props, 
             title : '' , 
-            userid: '',
-            customerid: '',
             type: '',
-            product: '',
-            package: '',
             message: '',
             loading: false, 
             files: [],
@@ -33,9 +30,13 @@ class create_ticket extends Component {
 
         this.setState({loading : true});
 
+        let data = document.getElementById("createticket")
+
         const headers = new Headers();
-        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
-        let form = new FormData(document.getElementById("createticket"));
+        headers.append('API-KEY', this.state.apiKey)
+
+        let form = new FormData(data);
+        form.append("userid", "5f3e930330e28");
 
         this.state.files.forEach(item=>{
             form.append('files[]', item);
@@ -58,10 +59,7 @@ class create_ticket extends Component {
             this.setState({successmessage: 'Ticket Created Successfully'})
             setTimeout(() => this.setState({successmessage: false}), 5000);
         }, 3000);
-        // const res = await this.state.createticket(document.getElementById("createticket"));
-        this.setState({title : '', package: '', type: '', message: '', product: ''});
-    
-
+        this.setState({title : '', type: '', message: ''});
         
     }
     
@@ -74,15 +72,13 @@ class create_ticket extends Component {
         console.log(e, "Image removed")
         this.setState({ file: '',imageError : false})
         setTimeout(()=> this.setState({imageError: ''}),5000);
-        // let myElement = document.querySelector(".other_files");
-        // myElement.style.display = "none";
     }
+
     handleImageChange(e) {
         e.preventDefault();
 
         let files = [];
-        // console.log(typeof e.target.files, "rubbish")
-        // let files = [];
+        
         for (let i = 0;i < e.target.files.length; i++){
             files.push(e.target.files[i])
         }

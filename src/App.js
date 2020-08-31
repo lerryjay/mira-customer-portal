@@ -78,7 +78,7 @@ class App extends Component {
       }
       return json;
     });
-;
+ 
     this.setState({ loggedIn: true })
     console.log('Yuppie i logged ', data);
     return { status: true, message: 'Login successful' };
@@ -104,7 +104,6 @@ class App extends Component {
       return json;
     });
     
-    // console.log('Registered Successfully ', username, email, password);
   }
 
   forgotPassword = (data) => {
@@ -122,111 +121,7 @@ class App extends Component {
       return json;
     });
   }
-
-  getProfileDetails = () => {
-    console.log(this.state.profile, "Profile Info")
-  }
-
-  changePassword = (data) => {
-    const headers = new Headers();
-    headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
-    let form = new FormData(data);
-    return fetch(HTTPURL + 'user/updatepassword', {
-        method: 'POST',
-        body: form,
-        headers: headers
-    })
-    .then(response => response.json())
-    .then(json => {
-      console.log(json);
-      return json;
-    });
-  }
-
-  createClient = (data) => {
-    const headers = new Headers();
-    headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
-    let form = new FormData(data);
-    return fetch(HTTPURL + 'company/add', {
-        method: 'POST',
-        body: form,
-        headers: headers
-    })
-    .then(response => response.json())
-    .then(json => {
-      console.log(json);
-      return json;
-    });
-  }
-
-  createTicket = (data) => {
-    const headers = new Headers();
-    headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
-    let form = new FormData(data);
-    return fetch(HTTPURL + 'ticket/add', {
-        method: 'POST',
-        body: form,
-        headers: headers
-    })
-    .then(response => response.json())
-    .then(json => {
-      console.log(json);
-      return json;
-    });
-  }
-
-  createProduct = (data) => {
-    const headers = new Headers();
-    headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
-    let form = new FormData(data);
-    return fetch(HTTPURL + 'product/add', {
-        method: 'POST',
-        body: form,
-        headers: headers
-    })
-    .then(response => response.json())
-    .then(json => {
-      console.log(json);
-      return json;
-    });
-  }
-
-  addPackage = (data) => {
-    const headers = new Headers();
-    headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
-    let form = new FormData(data);
-    return fetch(HTTPURL + 'product/addmodule', {
-        method: 'POST',
-        body: form,
-        headers: headers
-    })
-    .then(response => response.json())
-    .then(json => {
-      console.log(json);
-      return json;
-    });
-  }
-
-  sendChat = (data) => {
-    const headers = new Headers();
-    headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
-    let form = new FormData(data);
-    
-    // form.append("file", file.get('file'));
-    // console.log(files[0]);
-
-    return fetch(HTTPURL + 'ticket/replyticket', {
-        method: 'POST',
-        body: form,
-        headers: headers
-    })
-    .then(response => response.json())
-    .then(json => {
-      console.log(json);
-      return json;
-    });
-  }
-
+  
   handleRoute = (e) => {
     // Get Ticket by ID
    const headers = new Headers();
@@ -246,9 +141,6 @@ class App extends Component {
      this.state.getTicket = data.data
      this.setState({getTicket: data.data})
      
-    //  this.state.getTickets.push(data.data)
-    //  this.setState({getTicket: this.state.getTickets[0] })
-    //  console.log(this.state.getTicket, "data2")
     })
 }
 
@@ -270,9 +162,6 @@ handleProductRoute = (e) => {
    this.state.getProduct = data.data
    this.setState({getProduct: data.data})
    
-  //  this.state.getTickets.push(data.data)
-  //  this.setState({getTicket: this.state.getTickets[0] })
-  //  console.log(this.state.getTicket, "data2")
   })
 }
 
@@ -285,15 +174,8 @@ handleProductRoute = (e) => {
        logout: this.logoutUser, 
        signup: this.signupUser, 
        forgotpassword: this.forgotPassword,
-       changepassword: this.changePassword,
-       createclient: this.createClient,
-       createticket: this.createTicket,
-       createproduct: this.createProduct,
-       profiledetails: this.getProfileDetails,
-       getchat: this.sendChat,
        viewmore: this.handleRoute,
        viewmoredetails: this.handleProductRoute,
-       addpackage: this.addPackage
     }
   };
 
@@ -327,16 +209,16 @@ handleProductRoute = (e) => {
                     {this.state.loggedIn && <Route path="/ticketlist" component={TicketList} />}
                     {this.state.loggedIn && <Route path="/viewclient" component={ViewClient} />}
                     {this.state.loggedIn && <Route path="/listclient" component={ListClient} />}
-                    {this.state.loggedIn && <Route path="/changepassword" component={ChangePassword} />}
-                    {this.state.loggedIn && <Route path="/createproduct" component={CreateProduct} />}
-                    {this.state.loggedIn && <Route path="/addpackage" component={AddPackage} />}
+                    {this.state.loggedIn && <Route path="/changepassword" component={() => <ChangePassword apiKey={apiKey}></ChangePassword>} />}
+                    {this.state.loggedIn && <Route path="/createproduct" component={() => <CreateProduct apiKey={apiKey}></CreateProduct>} />}
+                    {this.state.loggedIn && <Route path="/addpackage" component={() => <AddPackage apiKey={apiKey}></AddPackage>} />}
                     {this.state.loggedIn && <Route path="/addclientproduct" component={AddClientProduct} />}
-                    {this.state.loggedIn && <Route path="/viewticket" component={ViewTicket} />}
+                    {this.state.loggedIn && <Route path="/viewticket" ccomponent={() => <ViewTicket apiKey={apiKey}></ViewTicket>} />}
                     {this.state.loggedIn && <Route path="/productcart" component={ProductCart} />}
-                    {this.state.loggedIn && <Route path="/viewproduct" component={ViewProduct} />}
+                    {this.state.loggedIn && <Route path="/viewproduct" component={() => <ViewProduct apiKey={apiKey}></ViewProduct>} />}
                     {!this.state.admin && this.state.loggedIn && <Route path="/view_product" component={ClientViewProduct} />}
                     {this.state.loggedIn && <Route path="/productdetails" component={ProductDetails} />}
-                    {this.state.loggedIn && <Route path="/createticket" component={CreateTicket} />}
+                    {this.state.loggedIn && <Route path="/createticket" component={() => <CreateTicket apiKey={apiKey}></CreateTicket>} />}
                     <Route component={NotFound} />
                   </Switch>
                 </div>

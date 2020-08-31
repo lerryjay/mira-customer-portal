@@ -2,24 +2,22 @@ import React, { Component } from 'react';
 
 import Validators  from "../../common/Validators";
 import {withContext} from '../../common/context';
+import { HTTPURL } from '../../common/global_constant';
 
 class ChangePassword extends Component {
     constructor(props){
         super(props);
+
         this.state = { 
             ...this.props, 
             oldpassword : '' , 
             newpassword: '',
             confirmnewpwd: '',
+            
             loading: false, 
             errormessage: '',
             successmessage: ''
         };
-    }
-    
-    componentDidMount() {
-        console.log('context ',this.context);
-        console.log('state ',this.state);
     }
     
     handleInputChange = e => {
@@ -73,7 +71,21 @@ class ChangePassword extends Component {
                 setTimeout(() => this.setState({successmessage: false}), 5000);
             }, 3000);
         
-            const res = await this.state.changepassword(document.getElementById("changepassword"));
+            let data = document.getElementById("changepassword")
+
+            const headers = new Headers();
+            headers.append('API-KEY',this.state.apiKey);
+            let form = new FormData(data);
+            fetch(HTTPURL + 'user/updatepassword', {
+                method: 'POST',
+                body: form,
+                headers: headers
+            })
+            .then(response => response.json())
+            .then(json => {
+            console.log(json);
+            return json;
+            });
 
             this.setState({oldpassword: '', newpassword: '', confirmnewpwd: ''})
         }

@@ -18,7 +18,7 @@ class viewproduct extends Component {
 
     componentDidMount(){
         const headers = new Headers();
-        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+        headers.append('API-KEY', this.state.apiKey)
         fetch(HTTPURL + 'product', {
             method: 'GET',
             headers: headers

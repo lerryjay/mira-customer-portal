@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
+
+import { HTTPURL } from '../../common/global_constant';
 import {withContext} from '../../common/context';
+
 
 class addpackage extends Component {
     constructor(props){
@@ -28,7 +31,24 @@ class addpackage extends Component {
             this.setState({successmessage: 'Added Successfully!'})
             setTimeout(() =>{
                 this.setState({successmessage: false});
-                const res = this.state.addpackage(document.getElementById("addpackage"));
+
+                let data = document.getElementById("addpackage")
+
+                const headers = new Headers();
+                headers.append('API-KEY',this.state.apiKey)
+
+                let form = new FormData(data);
+                fetch(HTTPURL + 'product/addmodule', {
+                    method: 'POST',
+                    body: form,
+                    headers: headers
+                })
+                .then(response => response.json())
+                .then(json => {
+                console.log(json);
+                return json;
+                });
+                
                  console.log('submitting')
                  this.setState({name: '', description: ''})
             }, 5000);

@@ -65,7 +65,6 @@ class CreateClient extends Component {
                             this.setState({ successmessage: 'Added Successfully!' })
                             setTimeout(() => {
                                 this.setState({ successmessage: false });
-                                // const res = this.state.createclient(document.getElementById("createclient"));
                                 console.log('submitting')
                                 this.setState({ name: '', email: '', telephone: '' })
                             }, 5000);
@@ -139,16 +138,6 @@ class CreateClient extends Component {
 
                                 <div className="row">
 
-                                    {/* <div className="col-md-12 mb-3">
-                                        <div className="form-group">
-                                            <label htmlFor="" className="sr-only">User ID</label>
-                                            <input type="text" className="form-control form-control-sm" name="userid"
-                                                id="userid" placeholder="UserID" required
-                                                value={this.state.userid}
-                                                onChange={this.handleInputChange} />
-                                        </div>
-                                    </div>
-                                         */}
                                    <div className="col-md-12 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Peronal&nbsp;Name</label>

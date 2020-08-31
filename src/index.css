@@ -461,7 +461,7 @@ img.image_sidebar {
   position: fixed;
   top: 0;
   /* left: -200px; */
-  /* min-height: 100vh ; */
+  min-height: 100vh ;
   z-index: 2000;
   overflow-y: auto;
   background: #020222;
@@ -670,7 +670,7 @@ select {
 }
 .last_ {
   position: relative;
-  top: 25px;
+  top: 20px;
   bottom: 0;
   color: white;
   text-align: left;

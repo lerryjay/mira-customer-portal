@@ -58,7 +58,7 @@ class SignUp extends Component {
                 setTimeout(() =>{
                     this.setState({successmessage: false});
                     const res =  this.state.signup(document.getElementById("signupform"));
-                    this.props.history.push('/login')
+                    // this.props.history.push('/login')
                 }, 5000);
             }, 3000);
         

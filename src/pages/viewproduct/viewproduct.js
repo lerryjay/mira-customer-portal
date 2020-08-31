@@ -24,7 +24,10 @@ class viewproduct extends Component {
             headers: headers
         })
         .then(response => response.json())
-        .then(data => this.setState({products: data.data}));
+        .then(data => {
+            this.setState({products: data.data})
+            console.log(this.state.products)
+        });
 
         let product = []
         console.log('changed successfully!', product)
@@ -56,24 +59,26 @@ class viewproduct extends Component {
                             </button>
                         </div>
                     </div>
-                    {/* <div className="row mt-4">
+                    <div className="row my-2">
                     {this.state.products.map( product => {
                         return(
-                        <div className="col-md-3">
+                        <div className="col-md-3 col-md-6 col-sm-12">
                             <div className="card text-center products">
                                 <img src={image} className="image_product" alt="" />
                                 <div className="card-body">
                                     <h5 className="card-title">{product.name}</h5>
-                                    <a href="#" className="btn btn-primary">View Details</a>
+                                    <Link onClick={this.handleViewMore}>
+                                        <span class="badge px-3 py-2 badge-primary" value={product.id} style={{cursor:"pointer", fontSize:'medium'}}>View</span>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
                         )}
                     )}
                     </div>
-                     */}
+                    
 
-                    <div className="row my-2">
+                    {/* <div className="row my-2">
 
                     {this.state.products.map( product => {
                         return(
@@ -111,7 +116,7 @@ class viewproduct extends Component {
     
                         )}
                         )}
-                    </div>
+                    </div> */}
 
                 </div>
 

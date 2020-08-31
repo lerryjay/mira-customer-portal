@@ -28,6 +28,7 @@ import ViewTicket from './pages/viewticket/ViewTicket';
 import ViewClient from './pages/view_client/ViewClient';
 import ListClient from './pages/list_client/ListClient';
 import ProductCart from './pages/productcart/ProductCart';
+import AddClientProduct from './pages/addclientproduct/addclientproduct'
 
 import Nav from './common/components/Nav';
 import ClientSidebar from './common/components/ClientSidebar';
@@ -91,6 +92,10 @@ class App extends Component {
     .then(response => response.json())
     .then(json => {
       console.log(json);
+      if(json.status == false) {
+        console.log(json.message)
+        return json.message
+      }
       return json;
     });
     
@@ -248,7 +253,6 @@ handleProductRoute = (e) => {
  headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
 
      let productid = e.target.attributes.value.value
-     // let ticketid = "5f4509c0c26d1"
      let userid = "5f44c8e94593e"
 
  fetch(HTTPURL +`product/getproduct?productid=${productid}&userid=${userid}`, {
@@ -320,6 +324,7 @@ handleProductRoute = (e) => {
                     {this.state.loggedIn && <Route path="/changepassword" component={ChangePassword} />}
                     {this.state.loggedIn && <Route path="/createproduct" component={CreateProduct} />}
                     {this.state.loggedIn && <Route path="/addpackage" component={AddPackage} />}
+                    {this.state.loggedIn && <Route path="/addclientproduct" component={AddClientProduct} />}
                     {this.state.loggedIn && <Route path="/viewticket" component={ViewTicket} />}
                     {this.state.loggedIn && <Route path="/productcart" component={ProductCart} />}
                     {this.state.loggedIn && <Route path="/viewproduct" component={ViewProduct} />}

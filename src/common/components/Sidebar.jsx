@@ -104,6 +104,11 @@ const Sidebar = (props) => {
                             <i className="fa fa-list-ul mr-1"></i>&nbsp;View&nbsp;Products
                         </li>
                     </NavLink>
+                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/addclientproduct' onClick={toggle2}>
+                        <li className="nav-item">
+                            <i className="fas fa-ticket-alt fa-fw mr-1"></i>&nbsp;Add&nbsp;Client&nbsp;Product
+                        </li>
+                    </NavLink>
                     </div>
 
                     <NavLink className={`dropdown-btn nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to="/addpackage" onClick={toggle2}>

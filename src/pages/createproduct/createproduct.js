@@ -7,7 +7,6 @@ class CreateProduct extends Component {
         this.state = { 
             ...this.props, 
             name : '', 
-            userid: '',
             description: '',
             errormessage: '',
             loading: false,
@@ -148,15 +147,6 @@ class CreateProduct extends Component {
                                 </div>
                             </div>
                                 <div className="row">
-
-                                <div className="col-md-12 mb-1">
-                                        <div className="form-group">
-                                            <input type="text" className="form-control form-control-sm" name="userid"
-                                                id="userid" placeholder="User ID" 
-                                                value={this.state.userid} required
-                                                onChange={this.handleInputChange}/>
-                                        </div>
-                                    </div>
 
                                     <div className="col-md-12 mb-1">
                                         <div className="form-group">

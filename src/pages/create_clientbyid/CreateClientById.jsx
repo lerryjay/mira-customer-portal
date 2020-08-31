@@ -3,20 +3,17 @@ import React, { Component } from 'react'
 import Validators  from "../../common/Validators";
 import {withContext} from '../../common/context';
 
-class CreateClient extends Component {
+class CreateClientById extends Component {
     constructor(props){
         super(props);
         this.state = { 
             ...this.props, 
-            email : '', 
-            telephone : '' , 
-            name: '',
+            clientid : '', 
+            userid : '' , 
             businessname: '',
-            userid: '',
             errormessage: '',
             loading: false, 
             successmessage: '',
-            imageError: false,
         };
     }
     
@@ -45,7 +42,6 @@ class CreateClient extends Component {
                 this.setState({successmessage: 'Added Successfully!'})
                 setTimeout(() =>{
                     this.setState({successmessage: false});
-                    // const res = this.state.createclient(document.getElementById("createclient"));
                      console.log('submitting')
                      this.setState({name: '', email: '', telephone: ''})
                 }, 5000);
@@ -54,6 +50,7 @@ class CreateClient extends Component {
     }
 
     render() {
+        
         return (
 
             <div className="container mx-auto row">
@@ -80,22 +77,11 @@ class CreateClient extends Component {
                         :   <span></span>
                     }
 
-                    {/* Image Error */}
-                    {this.state.imageError !== false ?
-                        <div className="alert alert-warning" role="alert">
-                            <span className="mt-3">{ this.state.imageError }</span>
-                            <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                        : <span></span> 
-                    }
-
                     <form onSubmit={this.handleSubmit} id="createclient"> 
                     
                             <div className="card">
                                 <div className="card-header bg-medium font-weight-bold text-dark">
-                                    ADD CLIENT
+                                    ADD CLIENT BY USERID
                     </div>
                     
                                 <div className="card-body">
@@ -114,30 +100,10 @@ class CreateClient extends Component {
                                         
                                    <div className="col-md-12 mb-3">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Peronal&nbsp;Name</label>
-                                            <input type="text" className="form-control form-control-sm" name="name"
-                                                id="name" placeholder="Enter Fullname"
-                                                value={this.state.name} required
-                                                onChange={this.handleInputChange} />
-                                        </div>
-                                    </div>
-
-                                    <div className="col-md-12 mb-3">
-                                        <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Email</label>
-                                            <input type="text" className="form-control form-control-sm" name="email"
-                                                id="email" placeholder="Enter Email" 
-                                                value={this.state.email} required
-                                                onChange={this.handleInputChange}/>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-md-12 mb-3">
-                                        <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Telephone</label>
-                                            <input type="text" className="form-control form-control-sm" name="telephone"
-                                                id="telephone" placeholder="Phone no." required
-                                                value={this.state.telephone}
+                                            <label htmlFor="" className="sr-only">Client&nbsp;ID</label>
+                                            <input type="text" className="form-control form-control-sm" name="clientid"
+                                                id="clientid" placeholder="Client ID"
+                                                value={this.state.clientid} required
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
@@ -182,4 +148,4 @@ class CreateClient extends Component {
         )
     }
 }
-export default withContext(CreateClient);
+export default withContext(CreateClientById);

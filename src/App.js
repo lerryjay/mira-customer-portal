@@ -20,6 +20,7 @@ import ProductDetails from './pages/product_details/product_details';
 import ViewProduct from './pages/viewproduct/viewproduct';
 import ClientViewProduct from './pages/clientviewproduct/clientviewproduct';
 import CreateClient from './pages/create_client/CreateClient';
+import CreateClientById from './pages/create_clientbyid/CreateClientById'
 import CreateUser from './pages/create_user/CreateUser';
 import Profile from './pages/profile/Profile';
 import ClientProfile from './pages/clientprofile/ClientProfile';
@@ -315,6 +316,7 @@ handleProductRoute = (e) => {
                     {!this.state.loggedIn && <Route path="/" component={Login} />}
                     {this.state.loggedIn && <Route exact path="/dashboard" component={Dashboard} />}
                     {this.state.loggedIn && <Route path="/createclient" component={CreateClient} />}
+                    {this.state.loggedIn && <Route path="/createclientbyid" component={CreateClientById} />}
                     {this.state.loggedIn && <Route path="/createuser" component={CreateUser} />}
                     {this.state.admin && this.state.loggedIn && <Route path="/profile" component={Profile} />}
                     {!this.state.admin && this.state.loggedIn &&  <Route path="/clientprofile" component={ClientProfile} />}

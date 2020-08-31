@@ -55,6 +55,11 @@ const Sidebar = (props) => {
                             <i className="fa fa-user-friends mr-1"></i>&nbsp;Add&nbsp;Client
                         </li>
                     </NavLink> 
+                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/createClientById' onClick={toggle2}>
+                        <li className="nav-item">
+                            <i className="fa fa-user-friends mr-1"></i>&nbsp;Add&nbsp;Client&nbsp;-UserId
+                        </li>
+                    </NavLink> 
                     <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/listClient' onClick={toggle2}>
                         <li className="nav-item">
                             <i className="fa fa-list-ol mr-1"></i>&nbsp;List&nbsp;Client

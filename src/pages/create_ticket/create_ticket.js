@@ -160,17 +160,17 @@ class create_ticket extends Component {
                                 </div>
                                 
                                     
-                                    <div className="col-md-6 mb-3">
+                                    <div className="col-md-12 mb-3">
                                             <div className="form-group">
                                                 <select onChange={this.handleInputChange} name="type" id="type" className=" form-control form-select form-select-sm">
                                                     <option value="" selected disabled>--Select&nbsp;Ticket&nbsp;Type--</option>
-                                                    <option value="complaint">Complaint</option>
-                                                    <option value="request">Request</option>
-                                                    <option value="enquiry">Enquiry</option>
+                                                    <option value="Complaint">Complaint</option>
+                                                    <option value="Request">Request</option>
+                                                    <option value="Enquiry">Enquiry</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div className="col-md-6 mb-3">
+                                        {/* <div className="col-md-6 mb-3">
                                             <div className="form-group">
                                                 <select onChange={this.handleInputChange} name="product" id="product" className=" form-control form-select form-select-sm">
                                                     <option value="" selected disabled>--Select&nbsp;Product &nbsp;--</option>
@@ -180,7 +180,7 @@ class create_ticket extends Component {
                                                     <option value="enquiry">Accsiss PPs</option>
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div> */}
                                         
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
@@ -215,8 +215,8 @@ class create_ticket extends Component {
                                     </div>
                                 </button>
                                 : 
-                                <button type="submit" className="btn btn-sm btn-primary mr-2">
-                                    <i className="fas fa-folder-open"></i>
+                                <button type="submit" className="btn btn-sm btn-primary py-2 px-3">
+                                    <i className="fas fa-folder-open  mr-2"></i>
                                     Save
                                 </button>
                                 }

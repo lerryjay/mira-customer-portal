@@ -23,7 +23,6 @@ class ViewTicket extends Component {
 
     componentDidMount() {
             this.getChat();  
-           console.log(this.state,this.props,"tt")  
 
     }
     getChat(){

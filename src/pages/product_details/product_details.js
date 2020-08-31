@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import image from '../../assets/images/Accsiss.png'
+import { HTTPURL } from '../../common/global_constant';
+import {withContext} from '../../common/context';
 
 class product_details extends Component {
     constructor(props) {
@@ -7,8 +9,26 @@ class product_details extends Component {
 
         this.state = {
             ...this.props, 
+            packages: []
         }
 
+    }
+
+    componentDidMount() {
+       this.getPackages();
+    }
+
+    getPackages() {
+        let productid = this.props.getProduct.id
+
+        const headers = new Headers();
+        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+        fetch(HTTPURL + `product/modules?productid=${productid}`, {
+            method: 'GET',
+            headers: headers
+        })
+        .then(response => response.json())
+        .then(data => this.setState({packages: data.data}));
     }
 
     render() {
@@ -19,7 +39,7 @@ class product_details extends Component {
                         <img src={image} className="img-fluid"  alt=""/>
                     </div>
                     <div className="col-md-6">
-                        <h4 className="text-dark"> {/* this.props.getProduct.id */} Accsiss eBs</h4>
+                        <h4 className="text-dark">{ this.props.getProduct.id} Accsiss eBs</h4>
                         <div className="description">
                             <p>
                             Accsiss eBs is an accounting software, designed to run in multiple locations across different states, 
@@ -50,6 +70,19 @@ class product_details extends Component {
                     <div className="col-md-10 offset-1">
                     <div className="card">
                         <div className="card-body">
+
+                        <div className="row">
+                    {this.state.packages.map( module => {
+                        return(
+                                <div className="col-md-4">
+                                    <p className="list-group-item">{module.name} <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                        </label>
+                                    </p>
+                                </div>
+                        )}
+                    )}
+                            </div>
+
                             <div className="row">
                                 <div className="col-md-4">
                                     <p className="list-group-item">Design <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
@@ -178,5 +211,4 @@ Save
         );
     }
 }
-
-export default product_details;
+export default withContext(product_details);

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import {withContext} from '../../common/context';
+import avatar from '../../assets/images/avatar.png'
 
 class ViewClient extends Component{
     constructor(props){
@@ -11,19 +12,19 @@ class ViewClient extends Component{
                 {
                     "productid" : 1,
                     "name" : "Accissebs",
-                    "description" : "It is an accounting software, designed to run in multiple locations across different states, nations and continents, ",
+                    "packages" : "Design, Development, Email Setup",
                     "price" : "₦370,000"
                 }, 
                 {
                     "productid" : 2,
                     "name" : "SYSBANKER EE",
-                    "description" : "It is an accounting software, designed to run in multiple locations across different states, nations and continents, ",
+                    "packages" : "Design, Development, Email Setup",
                     "price" : "₦100,000"
                 }, 
                 {
                     "productid" : 3,
                     "name" : "Mira HPro",
-                    "description" : "It is an accounting software, designed to run in multiple locations across different states, nations and continents, ",
+                    "packages" : "Design, Development, Email Setup",
                     "price" : "₦220,000"
                 }
                 
@@ -151,8 +152,8 @@ render() {
                         <div className="card-header">
                         </div>
                         <div className="card-body">
-                            <img src="https://miratechnologiesng.com/img/icons/miraicon.png"
-                                alt="profile picture" className="img-fluid" style={{ marginTop: '-80px' }} />
+                            <img src={avatar}
+                                alt="profile picture" className=" rounded-circle" style={{ marginTop: '-80px', width:"105px", height:"105px" }} />
                                 <h6 className="mt-3">Rhoda Stone</h6>
                                 <p className="mt-2"><i class="fa fa-map-marker" aria-hidden="true"></i> Lagos <br/>
                                 <i class="fa fa-envelope" aria-hidden="true"></i> rhoda@gmail.com </p>
@@ -189,9 +190,8 @@ render() {
                                                 <tr>
                                                 <th className="py-2">S/N</th>
                                                     <th className="py-2">Product&nbsp;Name</th>
-                                                    <th className="py-2">Description</th>
+                                                    <th className="py-2">Packages</th>
                                                     <th className="py-2">Price</th>
-                                                    <th className="py-2">Show</th>
                                                 </tr>
                                                     
                                                 </thead>
@@ -208,13 +208,10 @@ render() {
                                                                 {product.name}
                                                             </td>
                                                             <td style={{maxWidth: "150px"}}>
-                                                                {product.description}
+                                                                {product.packages}
                                                             </td>
                                                             <td>
                                                                 {product.price}
-                                                            </td>
-                                                            <td>
-                                                            <button id="show">Show</button>
                                                             </td>
                                                         </tr>
                                                      )

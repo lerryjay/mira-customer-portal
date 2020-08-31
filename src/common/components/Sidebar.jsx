@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
-import image from '../../assets/images/dammy.jpg'
+import avatar from '../../assets/images/avatar.png'
 
 const Sidebar = (props) => {
 
@@ -32,9 +32,7 @@ const Sidebar = (props) => {
             <div className="sidemenu" id="sidebar">
                 <ul className="list-unstyled components">
                     <div className="py-2 text-white text-center">
-                        {/* <img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt="icon"
-                            width='35' />&nbsp;&nbsp;Hello World */}
-                            <img src={image} className="image_sidebar my-3"  alt=""/>
+                            <img src={avatar} className="image_sidebar my-3" style={{ width:"105px", height:"105px" }}  alt=""/>
                             <p className="image_name mb-0">Rhoda Stone</p>
                         </div>
                         <p className="mt-2 mb-2">MENU</p>
@@ -107,6 +105,13 @@ const Sidebar = (props) => {
                         </li>
                     </NavLink>
                     </div>
+
+                    <NavLink className={`dropdown-btn nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to="/addpackage" onClick={toggle2}>
+                    <li className="nav-item ">
+                            <i className="fa fa-folder-open mr-1"></i>&nbsp;Add Package
+                        </li>
+                    </NavLink>
+
 
                     <p className="mt-4 mb-2" >ACCOUNT</p>
                     <hr className="bg-white mt-0 mb-0" />

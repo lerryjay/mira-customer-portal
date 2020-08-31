@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { HTTPURL } from '../../common/global_constant';
+import {withContext} from '../../common/context';
 import image from '../../assets/images/Accsiss.png'
-// import sysbanker from '../../assets/images/sysbanker.png'
-// import accsissp from '../../assets/images/accsissp.png'
-// import mira from '../../assets/images/mira.png'
 
 
 class viewproduct extends Component {
@@ -38,7 +36,7 @@ class viewproduct extends Component {
     }
 
     handleViewMore = e => {
-        // this.props.viewmoredetails(e)
+        this.props.viewmoredetails(e)
        this.props.history.push('/productdetails');
    }
 
@@ -122,4 +120,5 @@ class viewproduct extends Component {
     }
 }
 
-export default viewproduct;
+
+export default withContext(viewproduct);

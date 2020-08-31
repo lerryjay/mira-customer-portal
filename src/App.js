@@ -15,6 +15,7 @@ import Dashboard from './pages/dashboard/dashboard';
 import ChangePassword from './pages/change_password/ChangePassword';
 import CreateTicket from './pages/create_ticket/create_ticket';
 import CreateProduct from './pages/createproduct/createproduct';
+import AddPackage from './pages/addpackage/addpackage';
 import ProductDetails from './pages/product_details/product_details';
 import ViewProduct from './pages/viewproduct/viewproduct';
 import ClientViewProduct from './pages/clientviewproduct/clientviewproduct';
@@ -41,7 +42,7 @@ class App extends Component {
       loggedIn: true,
       users: [],
       profile: [],
-      admin: false,
+      admin: true,
       getTicket: '',
       getProduct: ''
     }
@@ -113,7 +114,7 @@ class App extends Component {
   }
 
   getProfileDetails = () => {
-    console.log(this.state.profile, "PD")
+    console.log(this.state.profile, "Profile Info")
   }
 
   changePassword = (data) => {
@@ -169,6 +170,22 @@ class App extends Component {
     headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
     let form = new FormData(data);
     return fetch(HTTPURL + 'product/add', {
+        method: 'POST',
+        body: form,
+        headers: headers
+    })
+    .then(response => response.json())
+    .then(json => {
+      console.log(json);
+      return json;
+    });
+  }
+
+  addPackage = (data) => {
+    const headers = new Headers();
+    headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+    let form = new FormData(data);
+    return fetch(HTTPURL + 'product/addmodule', {
         method: 'POST',
         body: form,
         headers: headers
@@ -266,7 +283,8 @@ handleProductRoute = (e) => {
        profiledetails: this.getProfileDetails,
        getchat: this.sendChat,
        viewmore: this.handleRoute,
-       viewmoredetails: this.handleProductRoute
+       viewmoredetails: this.handleProductRoute,
+       addpackage: this.addPackage
     }
   };
 
@@ -301,6 +319,7 @@ handleProductRoute = (e) => {
                     {this.state.loggedIn && <Route path="/listclient" component={ListClient} />}
                     {this.state.loggedIn && <Route path="/changepassword" component={ChangePassword} />}
                     {this.state.loggedIn && <Route path="/createproduct" component={CreateProduct} />}
+                    {this.state.loggedIn && <Route path="/addpackage" component={AddPackage} />}
                     {this.state.loggedIn && <Route path="/viewticket" component={ViewTicket} />}
                     {this.state.loggedIn && <Route path="/productcart" component={ProductCart} />}
                     {this.state.loggedIn && <Route path="/viewproduct" component={ViewProduct} />}

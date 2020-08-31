@@ -301,7 +301,7 @@
       loadModel('product');
       loadController('user');
       extract($_POST);
-      $userId    = isset($userid) ? $userid : $this->userId ?? '';
+      $userId    = $userid ?? $this->userId ?? '';
       $productId = isset($productid) ? $productid : '';
       $user      = User::validateUser($userId,true);
       $this->productModel = new ProductModel();

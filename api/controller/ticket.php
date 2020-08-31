@@ -82,7 +82,7 @@
       
       if($_FILES){
         $files = File::upload("files",'ticket',true);
-        if($files) $files = json_encode($files);
+        if($files['data']) $files = json_encode($files['data']);
         else $files   = json_encode([]);
       }else $files   = json_encode([]);
       
@@ -177,9 +177,9 @@
       extract($data);   
       loadModel('file');
       if($userId == $ticket['customer_id'] || $user['role'] == 'admin'){
-        if(isset($_FILES['file'])){
+        if(isset($_FILES['files'])){
           $files = File::upload("files",'ticket',true);
-          if($files) $files = json_encode($files);
+          if($files['status']) $files = json_encode($files['data']);
           else $files   = "[]";
         }else $files   = "[]";
         $saved = $this->ticketModel->addChat($ticketid,$message,$files,$userId,$user['role']);

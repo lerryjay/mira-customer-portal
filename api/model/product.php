@@ -4,17 +4,20 @@
    */
   class ProductModel extends Model
   {
-    public function addProduct($productName,$description,$companyId)
+    public function addProduct($productName,$description,$companyId,$imageurl)
     {
       $id = uniqid();
-      $insert =  $this->insert('products',['id'=>$id,'name'=>$productName,'description'=>$description,'company_id'=>$companyId,'createdat'=>date("Y-m-d H:i:s")]);
+      $insert =  $this->insert('products',['id'=>$id,'name'=>$productName,'description'=>$description,'company_id'=>$companyId,'createdat'=>date("Y-m-d H:i:s"),'imageurl'=>$imageurl]);
       if($insert['status']) return $id;
       return false;
     }
 
     public function addProductModule($productId,$moduleName,$description)
     {
-      return $this->insert('productmodules',['name'=>$moduleName,'description'=>$description,'product_id'=>$productId,'createdat'=>date("Y-m-d H:i:s")]);
+      $id = uniqid();
+      $insert =  $this->insert('productmodules',['id'=>$id,'name'=>$moduleName,'description'=>$description,'product_id'=>$productId,'createdat'=>date("Y-m-d H:i:s")]);
+      if($insert['status']) return $id;
+      return false;
     }
 
 
@@ -87,7 +90,7 @@
     {
       $sql = 'SELECT * FROM productmodules '.$condition;
       $query = $this->query($sql,$string,$values); 
-      if($query) return $this->rows;
+      if($query) return $this->row;
       else return false;
     }
 
@@ -111,7 +114,7 @@
      **/
     public function getModuleInfo($moduleId,$status = 1)
     {
-      return $this->getProductModules('WHERE id = ? AND status = ? ','ii', [$moduleId,$status]); 
+      return $this->getModule('WHERE id = ? AND status = ? ','si', [$moduleId,$status]); 
     }
 
     public function updateProduct($productId,$productName,$description)
@@ -119,9 +122,14 @@
       return $this->update('products', ['name'=>$productName,'description'=>$description ], ['id'=>$productId]);
     }
 
-    public function updateProductModule($moduleId,$productId, $moduleName,$description)
+    public function updateProductImage($productId,$imageurl)
     {
-      return $this->update('productmodules', ['name'=>$moduleName,'description'=>$description,'product_id'=>$productId ], ['id'=>$moduleId]);
+      return $this->update('products', ['imageurl'=>$imageurl ], ['id'=>$productId]);
+    }
+
+    public function updateProductModule($moduleId, $name,$description)
+    {
+      return $this->update('productmodules', ['name'=>$name,'description'=>$description ], ['id'=>$moduleId]);
     }
 
     public function deleteProduct($productId)

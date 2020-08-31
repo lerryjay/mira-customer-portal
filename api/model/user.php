@@ -34,14 +34,14 @@
       return $this->getUser('WHERE id = ? AND status = ?', 'si', [$userId,$status]);
     }
 
-    public function register($name,$email,$telephone,$password,$companyId)
+    public function register($name,$email,$telephone,$password,$companyId,$imageurl)
     {
       // var_dump($name,$email,$telephone,$password,$companyId);
       $id = uniqid();
       //
       //
       
-      $insert =  $this->insert('users',['id'=>$id,'name'=>$name,'company_id'=>$companyId,'email'=>$email,'telephone'=>$telephone,'password'=>$password,'createdat'=>date("Y-m-d H:i:s")]);
+      $insert =  $this->insert('users',['id'=>$id,'name'=>$name,'company_id'=>$companyId,'email'=>$email,'telephone'=>$telephone,'password'=>$password,'createdat'=>date("Y-m-d H:i:s"),'imageurl'=>$imageurl]);
       // var_dump($insert);
       if($insert['status']) return $id;
       else return false;

@@ -13,10 +13,10 @@
      * @param String $email Email addres of the company
      * @return Array [ status:boolean, message:String, data:[ insertId:Integer ] ]
      **/
-    public function addCompany($name,$address,$telephone,$email,$apiKey,$packageId)
+    public function addCompany($name,$address,$telephone,$email,$apiKey,$packageId,$logourl)
     {
       $id = uniqid();
-      $insert =  $this->insert('company',['id'=>$id,'name'=>$name,'address'=>$address,'email'=>$email,'telephone'=>$telephone,'createdat'=>date("Y-m-d H:i:s"),'apikey'=>$apiKey,'apppackage_id'=>$packageId]);
+      $insert =  $this->insert('company',['id'=>$id,'name'=>$name,'address'=>$address,'email'=>$email,'telephone'=>$telephone,'createdat'=>date("Y-m-d H:i:s"),'apikey'=>$apiKey,'apppackage_id'=>$packageId,'logourl'=>$logourl]);
       if ($insert['status']) return $id;
       else return false;
     }

@@ -30,8 +30,13 @@ class Company extends Controller
   {
     $data = $this->validateNewCompany();
     extract($data);
+    $imageurl = '';
+      if(isset($_FILES['file'])){
+        $imageurl = File::upload("file",'company',false);
+        $imageurl ?: '';
+      }
     $apiKey = $this->generateApiKey();
-    $insert = $this->companyModel->addCompany($name,$address,$telephone,$email,$apiKey,$packageId);
+    $insert = $this->companyModel->addCompany($name,$address,$telephone,$email,$apiKey,$packageId,$imageurl);
     if($insert){
       loadModel('user');
       $this->userModel = new UserModel();

@@ -22,8 +22,12 @@
       $data = $this->validateRegistration();
       extract($data);
       $password = $this->encryptPassword($password);
-
-      $response = $this->userModel->register($name,$email,$telephone,$password,$this->companyId);
+      $imageurl = '';
+      if(isset($_FILES['file'])){
+        $imageurl = File::upload("file",'user',false);
+        $imageurl ?: '';
+      }
+      $response = $this->userModel->register($name,$email,$telephone,$password,$this->companyId,$imageurl);
       if($response){
         $_SESSION['companyid'] = $this->companyId;
         $_SESSION['userid'] = $response;
@@ -453,6 +457,36 @@
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Username is associated with another account!', 'data'=>['field'=>'username']]));
       }
       return ['username'=>$username,'telephone'=>$telephone,'name'=>$name,'userId'=>$userId];
+    }
+
+    /**
+     * Update user imageurl
+     *
+     * @param HTTPFILE $file iamge - png,jpg,jpeg,gif
+     * @param HTTPPOST $userid user
+     * @return JSON status:bool,message:string,data:string if sucess or null
+     **/
+    public function updateimage()
+    {
+      extract($_POST);
+      if(!isset($userid)){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode($response));
+      }
+      $userId = $userid ?? '';
+      $user = $this->userModel->getUserById($userId);
+      if($user){
+        $imageurl = '';
+        if(isset($_FILES['file'])){
+          $upload = File::uploadImage("file",'user',false);
+          if($upload['status']){
+           $update = $this->updateUser($userId,['imageurl'=>$upload['data']]);
+           $response = $update  ? ['status'=>true,'message'=>'Image updated successfully!', 'data'=>$upload['data']] : ['status'=>false,'message'=>'Image updated failed. An unexpected error occured!'];
+          }else $response = ['status'=>false,'message'=>$upload['mesage']];
+        }else $response = ['status'=>false,'message'=>'Please select an image for upload!'];
+      }else $response = ['status'=>false,'message'=>'Account not found!'];
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
     }
 
 

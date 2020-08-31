@@ -165,6 +165,7 @@
               'activation'=>$user['activation'],
               'imageurl'=>$user['imageurl'],
               'role'=>$user['role'],
+              'userid'=>$user['id'],
             ]
           ];
         }else session_destroy();

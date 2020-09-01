@@ -148,8 +148,8 @@ class AddClientProduct extends Component {
                                     <div className="col-md-12 mb-1">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Cost</label>
-                                            <input type="text" className="form-control form-control-sm" name="name"
-                                                id="name" placeholder="Total Cost" 
+                                            <input type="text" className="form-control form-control-sm" name="cost"
+                                                id="cost" placeholder="Total Cost" 
                                                 value={this.state.cost}
                                                 onChange={this.handleInputChange}/>
                                         </div>

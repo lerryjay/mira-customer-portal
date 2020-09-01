@@ -41,6 +41,16 @@ class ListClient extends Component {
         // this.props.history.push('/viewClient');
     }
 
+    deleteModal() {
+        let modal = document.getElementById("myModal")
+        modal.style.display = "block";
+    }
+
+    closeModal() {
+        let modal = document.getElementById("myModal")
+        modal.style.display = "none";
+    }
+
     render() {
         return (
             <div className="container-fluid">
@@ -73,7 +83,7 @@ class ListClient extends Component {
                                                      return(
                                                         <tr>
                                                         <td className="align-middle">
-                                                            <img src={avatar} alt="" width="30" className="rounded-circle" /></td>
+                                                            <img src={avatar} alt="" width="30" height="30" className="rounded-circle" /></td>
                                                             <td>{client.name} </td>
                                                         <td>{client.email} </td>
                                                             <td>{client.telephone} </td>
@@ -82,8 +92,8 @@ class ListClient extends Component {
                                                         <Link onClick={this.handleViewMore}>
                                                         <span class="badge px-3 py-2 mr-2 badge-primary" value={client.id} style={{cursor:"pointer"}}>View</span>
                                                         </Link>
-                                                        <Link to="/viewClient">
-                                                        <span class="badge px-3 py-2 badge-danger" style={{cursor:"pointer"}}>Delete</span>
+                                                        <Link onClick={this.deleteModal}>
+                                                        <span class="badge px-3 py-2 badge-danger" id="myBtn" style={{cursor:"pointer"}}>Delete</span>
                                                         </Link>
                                                         </td>
                                
@@ -97,7 +107,6 @@ class ListClient extends Component {
                                         </div>
                                     </div>
     
-    
                                 </div>
     
                             
@@ -106,29 +115,32 @@ class ListClient extends Component {
     
               
               
+                    {this.state.showmodal ?  
+                    <div id="myModal" class="modal">
+                        {/* Modal content  */}
+                        <div class="modal-content text-center p-5">
+                            {/* <div className="delete-icon">
+                                &times;
+                            </div> */}
+                            <i class="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
+                            <h3>Are you sure?</h3>
+                            <p> Do you really want to delete this file?</p>
+                            <div className="row">
+                                <div className="col-md-6">                            
+                                    <button onClick={this.closeModal} className="btn-block btn btn-outline-secondary">Cancel</button>
+                                </div>
+                                <div className="col-md-6">
+                                    <button className="btn btn-danger btn-block">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    :           
+                    <span></span> 
+                }
     
-                  {/* Modal  */}
-                  {this.state.showmodal ? <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            ...
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    : <span></span> 
-    }
+                 
+
                 </div>
             </div>
         )

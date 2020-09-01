@@ -17,7 +17,6 @@ class TicketList extends Component {
         }
     }
 
-
     componentDidMount(){
         console.log(this.state,"props")
         const headers = new Headers();
@@ -52,24 +51,7 @@ class TicketList extends Component {
          this.state.viewmore(e)
         this.props.history.push('/viewticket');
     }
-    // handleRoute = e => {
-    //      // Get Ticket by ID
-    //     const headers = new Headers();
-    //     headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
 
-    //         let ticketid = e.target.attributes.value.value
-    //         // let ticketid = "5f4509c0c26d1"
-    //         let userid = "5f3e930330e28"
-
-    //     fetch(HTTPURL +`ticket/getticket?userid=${userid}&ticketid=${ticketid}`, {
-    //         method: 'GET',
-    //         headers: headers
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => console.log(data.data, "data"))
-    //     this.props.history.push(`/viewticket/${ticketid}`);
-    // }
-    
      changeStatus(e,ticket) {
         
 

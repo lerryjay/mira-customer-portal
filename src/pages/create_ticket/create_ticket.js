@@ -117,7 +117,7 @@ class create_ticket extends Component {
             }
             <div className="row">
 
-                <div className="col-md-8 offset-2" id="profile">
+                <div className="col-md-8 " id="profile">
                     <form onSubmit={this.handleSubmit} id="createticket" encType="multipart/form-data">
 
 

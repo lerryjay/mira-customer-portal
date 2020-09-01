@@ -6,6 +6,7 @@ const Sidebar = (props) => {
 
     const [clientDropdownOpen, setClientDropdown] = useState('none');
     const [ticketDropdownOpen, setTicketDropdown] = useState('none');
+    const [productDropdownOpen, setProductDropdown] = useState('none');
 
     const toggle2 = () => {
         //Link click remove sidebar
@@ -14,27 +15,12 @@ const Sidebar = (props) => {
         document.querySelector('.overlay').classList.remove('active');
     }
 
-    const dropdown = () => {
-        // let dropdown = document.getElementsByClassName("dropdown-btn");
-        // let p;
-        // for (p = 0; p < dropdown.length; p++) {
-            // dropdown[p].addEventListener("click", function () {
-            // this.classList.toggle("active");
-            let dropdownContent = this.nextElementSibling;
-            (dropdownContent.style.display === "block") ? dropdownContent.style.display = "none" : dropdownContent.style.display = "block";
-
-            // });
-        // }
-    }
-
     return (
         <div>
             <div className="sidemenu" id="sidebar">
                 <ul className="list-unstyled components">
                     <div className="py-2 text-white text-center">
-                        {/* <img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt="icon"
-                            width='35' />&nbsp;&nbsp;Hello World */}
-                        <img src={avatar} className="image_sidebar my-3" alt="" />
+                        <img src={avatar} className="image_sidebar my-3" alt="" height="110px" width="110px" />
                         <p className="image_name mb-0">Rhoda Stone</p>
                     </div>
                     <p className="mt-2 mb-2">MENU</p>
@@ -47,7 +33,8 @@ const Sidebar = (props) => {
 
                     <div className="dropdown-btn nav-item" onClick={() => setClientDropdown((clientDropdownOpen === 'none') ? 'block' : 'none')}>
                         <li className="nav-item"> 
-                            <i className="fa fa-user mr-1"></i>&nbsp;Client Corner&nbsp;<i
+                            <i className="fa fa-user mr-1"></i>&nbsp;Client
+                            <i
                                 className="fas fa-chevron-left fa-fw float-right"></i>
                         </li>
                     </div>
@@ -57,24 +44,12 @@ const Sidebar = (props) => {
                                 <i className="fa fa-user-friends mr-1"></i>&nbsp;Add&nbsp;Client
                         </li>
                         </NavLink>
-                        <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/viewClient' onClick={toggle2}>
-                            <li className="nav-item">
-                                <i className="fa fa-user-friends mr-1"></i>&nbsp;View&nbsp;Client
-                        </li>
-                        </NavLink>
                         <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/listClient' onClick={toggle2}>
                             <li className="nav-item">
                                 <i className="fa fa-list-ol mr-1"></i>&nbsp;List&nbsp;Client
                         </li>
                         </NavLink>
                     </div>
-
-                    <NavLink className={`dropdown-btn nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/creatUser' onClick={toggle2}>
-                        <li className="nav-item">
-                            <i className="fa fa-user-plus mr-1"></i>&nbsp;Create&nbsp;User
-                        </li>
-                    </NavLink>
-
                     <div className="dropdown-btn nav-item" onClick={() => setTicketDropdown((ticketDropdownOpen === 'none') ? 'block' : 'none')}>
                         <li className="nav-item ">
                             <i className="fa fa-ticket-alt mr-1"></i>&nbsp;Ticket&nbsp;<i
@@ -82,28 +57,39 @@ const Sidebar = (props) => {
                         </li>
                     </div>
                     <div className="dropdown-container" style={{display: ticketDropdownOpen}}>
+                        <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/createticket' onClick={toggle2}>
+                            <li className="nav-item">
+                                <i className="fa fa-list-ul mr-1"></i>&nbsp;Create&nbsp;Ticket
+                        </li>
+                        </NavLink>
                         <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/ticketList' onClick={toggle2}>
                             <li className="nav-item">
                                 <i className="fa fa-list-ul mr-1"></i>&nbsp;Ticket&nbsp;List
                         </li>
                         </NavLink>
-                        <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/ticketChat' onClick={toggle2}>
-                            <li className="nav-item">
-                                <i className="fa fa-list-ul mr-1"></i>&nbsp;Ticket&nbsp;Chat
-                        </li>
-                        </NavLink>
-                        <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/ticketChat' onClick={toggle2}>
-                            <li className="nav-item">
-                                <i className="fa fa-list-ul"></i>&nbsp;Ticket&nbsp;Chat&nbsp;<i
-                                    className="fas fa-chevron-left fa-fw float-right"></i>
-                            </li>
-                        </NavLink>
-                        <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='a' onClick={toggle2}>
-                            <li className="nav-item">
-                                <i className="fas fa-ticket-alt fa-fw mr-1"></i>&nbsp;View&nbsp;Ticket
-                        </li>
-                        </NavLink>
+                     
                     </div>
+
+                    <div className="dropdown-btn nav-item" onClick={() => setProductDropdown((productDropdownOpen === 'none') ? 'block' : 'none')}>
+                        <li className="nav-item ">
+                            <i className="fa fa-ticket-alt mr-1"></i>&nbsp;Product&nbsp;<i
+                                className="fas fa-chevron-left fa-fw float-right"></i>
+                        </li>
+                    </div>
+                    <div className="dropdown-container" style={{display: productDropdownOpen}}>
+                        <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/createproduct' onClick={toggle2}>
+                            <li className="nav-item">
+                                <i className="fa fa-list-ul mr-1"></i>&nbsp;Add&nbsp;Product
+                        </li>
+                        </NavLink>
+                        <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to='/viewproduct' onClick={toggle2}>
+                            <li className="nav-item">
+                                <i className="fas fa-ticket-alt fa-fw mr-1"></i>&nbsp;View&nbsp;Products
+                        </li>
+                        </NavLink>
+                     
+                    </div>
+
 
                     <p className="mt-4 mb-2" >ACCOUNT</p>
                     <hr className="bg-white mt-0 mb-0" />

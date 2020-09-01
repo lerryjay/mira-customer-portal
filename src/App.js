@@ -36,6 +36,9 @@ import ClientSidebar from './common/components/ClientSidebar';
 import Sidebar from './common/components/Sidebar';
 import NotFound from './common/components/NotFound';
 
+const apiKey = "97899c-7d0420-1273f0-901d29-84e2f8";
+const userId = "5f44ce52af9ba";
+
 
 class App extends Component {
   constructor(props) {
@@ -49,6 +52,7 @@ class App extends Component {
       getProduct: ''
     }
   }
+
   loginUser = (data) => {
     let form = new FormData(data);
 
@@ -61,7 +65,7 @@ class App extends Component {
     })
     .then(response => response.json())
     .then(json => {
-      console.log(json);
+      console.log(json.data);
       // Get user data from the database
       this.state.profile.push(json.data)
       console.log(this.state.profile[0], json.data, "profile")
@@ -315,8 +319,8 @@ handleProductRoute = (e) => {
                     {<Route path="/login" component={Login} />}
                     {!this.state.loggedIn && <Route path="/" component={Login} />}
                     {this.state.loggedIn && <Route exact path="/dashboard" component={Dashboard} />}
-                    {this.state.loggedIn && <Route path="/createclient" component={CreateClient} />}
-                    {this.state.loggedIn && <Route path="/createclientbyid" component={CreateClientById} />}
+                    {this.state.loggedIn && <Route path="/createclient" component={()=><CreateClient userId={userId} apiKey={apiKey}></CreateClient>} />}
+                    {this.state.loggedIn && <Route path="/createclientbyid" component={() => <CreateClientById userId={userId} apiKey={apiKey}></CreateClientById>} />}
                     {this.state.loggedIn && <Route path="/createuser" component={CreateUser} />}
                     {this.state.admin && this.state.loggedIn && <Route path="/profile" component={Profile} />}
                     {!this.state.admin && this.state.loggedIn &&  <Route path="/clientprofile" component={ClientProfile} />}

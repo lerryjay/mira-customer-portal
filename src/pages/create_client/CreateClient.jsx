@@ -2,22 +2,25 @@ import React, { Component } from 'react'
 
 import Validators  from "../../common/Validators";
 import {withContext} from '../../common/context';
+import { HTTPURL } from '../../common/global_constant';
 
 class CreateClient extends Component {
     constructor(props){
         super(props);
+       
         this.state = { 
             ...this.props, 
             email : '', 
             telephone : '' , 
             name: '',
             businessname: '',
-            userid: '',
+           
             errormessage: '',
             loading: false, 
             successmessage: '',
             imageError: false,
         };
+        console.log(this.state);
     }
     
     handleInputChange = e => {
@@ -39,19 +42,53 @@ class CreateClient extends Component {
                 setTimeout(()=> this.setState({errormessage: ''}),5000);
             }, 3000);
         }else{
-            this.setState({loading : true});
-            setTimeout(() => {
-                this.setState({loading : false});
-                this.setState({successmessage: 'Added Successfully!'})
-                setTimeout(() =>{
-                    this.setState({successmessage: false});
-                    // const res = this.state.createclient(document.getElementById("createclient"));
-                     console.log('submitting')
-                     this.setState({name: '', email: '', telephone: ''})
-                }, 5000);
-            }, 3000);
+            this.setState({ loading: true });
+            let myHeaders = new Headers();
+            myHeaders.append("api-key", this.state.apiKey);
+
+            var formdata = new FormData();
+            formdata.append("email", this.state.email);
+            formdata.append("businessname", this.state.businessname);
+            formdata.append("telephone", this.state.telephone);
+            formdata.append("name", this.state.name);
+            formdata.append("userid", this.props.userId);
+            
+            fetch(`${HTTPURL}clients/add`, {
+                method: "POST",
+                headers: myHeaders,
+                body:formdata
+            }).then(response => response.json()).
+                then(result => {
+                    if (result.status) {
+                        setTimeout(() => {
+                            this.setState({ loading: false });
+                            this.setState({ successmessage: 'Added Successfully!' })
+                            setTimeout(() => {
+                                this.setState({ successmessage: false });
+                                // const res = this.state.createclient(document.getElementById("createclient"));
+                                console.log('submitting')
+                                this.setState({ name: '', email: '', telephone: '' })
+                            }, 5000);
+                        }, 3000);
+                    } else {
+                        this.setState({ loading: true });
+                        setTimeout(() => {
+                            this.setState({ loading: false });
+                            this.setState({ errormessage: result.message });
+                            setTimeout(() => this.setState({ errormessage: '' }), 5000);
+                        }, 3000);   
+                    }
+                  
+                })
+
+           
         }
     }
+
+    addClient() {
+        
+    }
+
 
     render() {
         return (
@@ -102,7 +139,7 @@ class CreateClient extends Component {
 
                                 <div className="row">
 
-                                    <div className="col-md-12 mb-3">
+                                    {/* <div className="col-md-12 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">User ID</label>
                                             <input type="text" className="form-control form-control-sm" name="userid"
@@ -111,7 +148,7 @@ class CreateClient extends Component {
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
-                                        
+                                         */}
                                    <div className="col-md-12 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Peronal&nbsp;Name</label>

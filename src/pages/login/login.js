@@ -53,7 +53,7 @@ class Login extends Component {
                 this.setState({successmessage: 'Login Successful'})
                 setTimeout(() =>{
                     this.setState({successmessage: false});
-                    const res =  this.state.login(document.getElementById("loginform"));
+                    const res = this.state.login(document.getElementById("loginform"));
                     this.props.history.push('/dashboard');
                 }, 2000);
             }, 3000);

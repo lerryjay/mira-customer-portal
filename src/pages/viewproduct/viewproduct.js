@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
-import { HTTPURL } from '../../common/global_constant';
-=======
 import { Link } from "react-router-dom";
 import { HTTPURL } from '../../common/global_constant';
 import {withContext} from '../../common/context';
->>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
 import image from '../../assets/images/Accsiss.png'
 
 
@@ -13,10 +9,7 @@ class viewproduct extends Component {
     constructor(props){
         super(props);
         this.state = {
-<<<<<<< HEAD
-=======
             ...props,
->>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
             product: [],
             products: [],
             id: 1
@@ -31,14 +24,10 @@ class viewproduct extends Component {
             headers: headers
         })
         .then(response => response.json())
-<<<<<<< HEAD
-        .then(data => this.setState({products: data.data}));
-=======
         .then(data => {
             this.setState({products: data.data})
             console.log(this.state.products)
         });
->>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
 
         let product = []
         console.log('changed successfully!', product)
@@ -49,14 +38,11 @@ class viewproduct extends Component {
         }
     }
 
-<<<<<<< HEAD
-=======
     handleViewMore = e => {
         this.props.viewmoredetails(e)
         this.props.history.push('/productdetails');
     }
 
->>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
     render() {
         return (
             <div className="container mx-auto row">
@@ -73,32 +59,10 @@ class viewproduct extends Component {
                             </button>
                         </div>
                     </div>
-<<<<<<< HEAD
-                    {this.state.products.map( product => {
-                        return(
-                    <div className="row mt-4">
-                        <div className="col-md-3">
-                            <div className="card text-center products">
-                                <img src={image} className="image_product" alt="" />
-                                <div className="card-body">
-                                    <h5 className="card-title">{product.name}</h5>
-                                    {/* <p>DESIGNED FOR ACCOUNTING, SALES AND INVOICING.</p> */}
-                                    <a href="#" className="btn btn-primary">View Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                        )}
-                    )}
-                    
-                    <div className="row mt-4">
-                        <div className="col-md-3">
-=======
                     <div className="row my-2">
                     {this.state.products.map( product => {
                         return(
                         <div className="col-md-3 col-lg-4 col-sm-12">
->>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
                             <div className="card text-center products">
                                 <img src={image} className="image_product" alt="" />
                                 <div className="card-body">

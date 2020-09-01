@@ -12,7 +12,13 @@ class CreateClient extends Component {
             ...this.props, 
             email : '', 
             telephone : '' , 
-            name: '',
+            firstname: '',
+            lastname: '',
+            othername:'',
+            address: '',
+            country: '',
+            state: '',
+            lga: '',
             businessname: '',
            
             errormessage: '',
@@ -138,28 +144,35 @@ class CreateClient extends Component {
                                 <div className="card-body">
 
                                 <div className="row">
-
-                                    {/* <div className="col-md-12 mb-3">
+                                   <div className="col-md-4 mb-3">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">User ID</label>
-                                            <input type="text" className="form-control form-control-sm" name="userid"
-                                                id="userid" placeholder="UserID" required
-                                                value={this.state.userid}
+                                            <label htmlFor="" className="sr-only">Last&nbsp;Name</label>
+                                            <input type="text" className="form-control form-control-sm" name="lastname"
+                                                id="lastname" placeholder="Lastname"
+                                                value={this.state.name} required
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
-                                         */}
-                                   <div className="col-md-12 mb-3">
+                                   <div className="col-md-4 mb-3">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Peronal&nbsp;Name</label>
-                                            <input type="text" className="form-control form-control-sm" name="name"
-                                                id="name" placeholder="Enter Fullname"
+                                            <label htmlFor="" className="sr-only">First&nbsp;Name</label>
+                                            <input type="text" className="form-control form-control-sm" name="firstname"
+                                                id="firstname" placeholder="Firstname"
+                                                value={this.state.firstname} required
+                                                onChange={this.handleInputChange} />
+                                        </div>
+                                    </div>
+                                   <div className="col-md-4 mb-3">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Other&nbsp;Name</label>
+                                            <input type="text" className="form-control form-control-sm" name="othername"
+                                                id="othername" placeholder="Othername"
                                                 value={this.state.name} required
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
 
-                                    <div className="col-md-12 mb-3">
+                                    <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Email</label>
                                             <input type="text" className="form-control form-control-sm" name="email"
@@ -169,7 +182,7 @@ class CreateClient extends Component {
                                         </div>
                                     </div>
 
-                                    <div className="col-md-12 mb-3">
+                                    <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Telephone</label>
                                             <input type="text" className="form-control form-control-sm" name="telephone"
@@ -181,10 +194,48 @@ class CreateClient extends Component {
 
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Business Nmae</label>
+                                            <label htmlFor="" className="sr-only">Business Name</label>
                                             <input type="text" className="form-control form-control-sm" name="businessname"
                                                 id="businesname" placeholder="Business Name" required
                                                 value={this.state.businessname}
+                                                onChange={this.handleInputChange} />
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-4 mb-3">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Country</label>
+                                            <input type="text" className="form-control form-control-sm" name="country"
+                                                id="country" placeholder="Country"
+                                                value={this.state.country} required
+                                                onChange={this.handleInputChange} />
+                                        </div>
+                                    </div>
+                                   <div className="col-md-4 mb-3">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">State</label>
+                                            <input type="text" className="form-control form-control-sm" name="state"
+                                                id="state" placeholder="State"
+                                                value={this.state.state} required
+                                                onChange={this.handleInputChange} />
+                                        </div>
+                                    </div>
+                                   <div className="col-md-4 mb-3">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Local&nbsp;Government&nbsp;Area</label>
+                                            <input type="text" className="form-control form-control-sm" name="lga"
+                                                id="lga" placeholder="Local Government Area"
+                                                value={this.state.lga} required
+                                                onChange={this.handleInputChange} />
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-12 mb-3">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Address</label>
+                                            <input type="text" className="form-control form-control-sm" name="address"
+                                                id="address" placeholder="Address" required
+                                                value={this.state.address}
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>

@@ -16,7 +16,6 @@ const Sidebar = (props) => {
         let p;
         for (p = 0; p < dropdown.length; p++) {
             dropdown[p].addEventListener("click", function () {
-                console.log('object')
                 this.classList.toggle("active");
                 let dropdownContent = this.nextElementSibling;
                 if (dropdownContent.style.display === "block") {
@@ -27,7 +26,6 @@ const Sidebar = (props) => {
             });
         }
     }
-
 
     return (
         <div>
@@ -45,7 +43,7 @@ const Sidebar = (props) => {
                         </li>
                     </NavLink>
 
-                    <div className="dropdown-btn nav-item" onClick={dropdown}>
+                    <div className="dropdown-btn nav-item" onClick={toggle2, dropdown}>
                         <li className="nav-item">
                             <i className="fa fa-user mr-1"></i>&nbsp;Client&nbsp;<i
                                 className="fas fa-chevron-left fa-fw float-right"></i>
@@ -89,7 +87,7 @@ const Sidebar = (props) => {
                     </NavLink>
                     </div>
 
-                    <div className="dropdown-btn nav-item" onClick={dropdown}>
+                    <div className="dropdown-btn nav-item" onClick={toggle2, dropdown}>
                         <li className="nav-item ">
                             <i className="fa fa-tasks mr-1"></i>&nbsp;Product&nbsp;<i
                                 className="fas fa-chevron-left fa-fw float-right"></i>

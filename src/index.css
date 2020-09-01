@@ -273,7 +273,7 @@ div.home a {
 
 nav.bg-navbar {
   color: whitesmoke;
-  background: #02022b !important;
+  background: #8894a2 !important;
   /* background-color: #0a0b18; */
 }
 
@@ -494,7 +494,7 @@ img.image_sidebar {
   min-height: 100vh ;
   z-index: 2000;
   overflow-y: auto;
-  background: #020222;
+  background: #8894a2;
   background-repeat: no-repeat;
   background-size: cover;
   background-origin: border-box;
@@ -543,7 +543,7 @@ p.image_name {
   font-size: large;
 }
 .sidemenu {
-  background-color: #2c2c34;
+  background-color: #8894a2;
   /* min-height: 100vh; */
   width: 200px;
   margin-top: 55px;
@@ -560,8 +560,8 @@ p.image_name {
 }
 
 .content {
-  width: calc(100vw - 200px);
-  margin-left: 200px;
+  width: calc(100vw - 200px) !important;
+  margin-left: 200px !important;
   margin-top: 40px;
 }
 .logoname{

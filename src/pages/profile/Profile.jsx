@@ -97,7 +97,7 @@ class Profile extends Component{
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Company&nbsp;Name</label>
                                             <input type="text" className="form-control form-control-sm" name="name"
-                                                id="name" value="ghs" placeholder="john & Sons"  autoComplete="name" />
+                                                id="name" value="" placeholder="john & Sons"  autoComplete="name" />
                                         </div>
                                     </div>
                                     <div className="col-md-6 mb-3">

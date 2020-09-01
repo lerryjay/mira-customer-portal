@@ -35,6 +35,12 @@ class ListClient extends Component {
         });
     }
 
+    handleViewMore = e => {
+        console.log(e.target.attributes.value.value)
+        // this.props.viewclient(e)
+        // this.props.history.push('/viewClient');
+    }
+
     render() {
         return (
             <div className="container-fluid">
@@ -73,8 +79,8 @@ class ListClient extends Component {
                                                             <td>{client.telephone} </td>
                                                             <td>{client.businessname}</td>
                                                         <td>
-                                                        <Link to="/viewClient">
-                                                        <span class="badge px-3 py-2 mr-2 badge-primary" style={{cursor:"pointer"}}>View</span>
+                                                        <Link onClick={this.handleViewMore}>
+                                                        <span class="badge px-3 py-2 mr-2 badge-primary" value={client.id} style={{cursor:"pointer"}}>View</span>
                                                         </Link>
                                                         <Link to="/viewClient">
                                                         <span class="badge px-3 py-2 badge-danger" style={{cursor:"pointer"}}>Delete</span>

@@ -53,7 +53,7 @@ class ListClient extends Component {
                 </div>
                                 <div className="card-body">
     
-                                    <div id='table' className="card pt-2 mt-3 justify-content-center shadow px-2">
+                                    <div id='table' className=" pt-2 mt-3 justify-content-center shadow px-2">
                                         <div className="table-responsive">
                                             <table
                                                 className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark">

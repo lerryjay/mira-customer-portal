@@ -57,11 +57,11 @@ class App extends Component {
     let form = new FormData(data);
 
     const headers = new Headers();
-    headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
-     fetch(HTTPURL + 'user/login', {
-        method: 'POST',
-        body: form,
-        headers: headers
+    headers.append('API-KEY', '97899c-7d0420-1273f0-901d29-84e2f8');
+    fetch(HTTPURL + 'user/login', {
+      method: 'POST',
+      body: form,
+      headers: headers
     })
     .then(response => response.json())
     .then(json => {
@@ -86,12 +86,12 @@ class App extends Component {
 
   signupUser = (data) => {
     const headers = new Headers();
-    headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+    headers.append('API-KEY', '97899c-7d0420-1273f0-901d29-84e2f8');
     let form = new FormData(data);
     return fetch(HTTPURL + 'user/register', {
-        method: 'POST',
-        body: form,
-        headers: headers
+      method: 'POST',
+      body: form,
+      headers: headers
 
     })
     .then(response => response.json())
@@ -348,7 +348,7 @@ handleProductRoute = (e) => {
     )
   };
 
-  
+
 }
 
 export default App;

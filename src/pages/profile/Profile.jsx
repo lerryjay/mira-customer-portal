@@ -16,6 +16,10 @@ class Profile extends Component{
         const edit = document.querySelector('#edit');
         let input = document.getElementsByTagName('input');
 
+//  edit(){
+//         // Make Form Editable
+//         let edit = document.querySelector('#edit');
+//         let input = document.getElementsByTagName('input');
 
         for (let d = input.length - 1; d >= 0; d--) {
             edit.addEventListener("click", function (e) {
@@ -67,6 +71,7 @@ class Profile extends Component{
                                 </span>
                             </div>
                             <div className="card-body">
+                                {this.props.profile.map(profile => <p>{profile.email}</p>)}
 
                                 <div className="row">
 

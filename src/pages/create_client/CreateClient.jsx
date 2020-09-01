@@ -9,13 +9,13 @@ class CreateClient extends Component {
         this.state = { 
             ...this.props, 
             email : '', 
-            number : '' , 
+            telephone : '' , 
             name: '',
-            company: '',
-            companyadr: '',
+            // company: '',
+            // companyadr: '',
             errormessage: '',
-            file: '',
-            imagePreviewUrl: '',
+            // file: '',
+            // imagePreviewUrl: '',
             imageError: false,
         };
     }
@@ -35,73 +35,76 @@ class CreateClient extends Component {
             this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
         }else{
+            await this.setState({loading : true});
+            setTimeout(() =>this.setState({loading : false}), 3000);
+           const res = await this.state.createclient(document.getElementById("createclient"));
             console.log('submitting')
         }
     }
 
-    removeImage(e) {
-        console.log(e, "Image removed")
-        this.setState({imagePreviewUrl: ''})
-    }
+    // removeImage(e) {
+    //     console.log(e, "Image removed")
+    //     this.setState({imagePreviewUrl: ''})
+    // }
 
-    removeOtherImage(e) {
-        console.log(e, "Image removed")
-        this.setState({ file: '',imageError : false})
-        setTimeout(()=> this.setState({imageError: ''}),5000);
-        // let myElement = document.querySelector(".other_files");
-        // myElement.style.display = "none";
-    }
-    handleImageChange(e) {
-        e.preventDefault();
+    // removeOtherImage(e) {
+    //     console.log(e, "Image removed")
+    //     this.setState({ file: '',imageError : false})
+    //     setTimeout(()=> this.setState({imageError: ''}),5000);
+    //     // let myElement = document.querySelector(".other_files");
+    //     // myElement.style.display = "none";
+    // }
+    // handleImageChange(e) {
+    //     e.preventDefault();
 
-        let reader = new FileReader();
-        let file = e.target.files[0];
+    //     let reader = new FileReader();
+    //     let file = e.target.files[0];
 
-        let images = []
-        for (var i = 0; i < e.target.files.length; i++) {
-            images[i] = e.target.files.item(i);
-        }
-        images = images.filter(file => file.name.match(/\.(jpg|jpeg|png|gif)$/))
+    //     let images = []
+    //     for (var i = 0; i < e.target.files.length; i++) {
+    //         images[i] = e.target.files.item(i);
+    //     }
+    //     images = images.filter(file => file.name.match(/\.(jpg|jpeg|png|gif)$/))
         
-        if (images.length === 0){
+    //     if (images.length === 0){
 
-            reader.onloadend = () => {
-                this.setState({
-                    file: file,
-                    imagePreviewUrl: '',
-                    imageError: "Upload a valid Image"
-                });
+    //         reader.onloadend = () => {
+    //             this.setState({
+    //                 file: file,
+    //                 imagePreviewUrl: '',
+    //                 imageError: "Upload a valid Image"
+    //             });
                 
                 
-            }
+    //         }
             
             
-        } else {
-            this.setState({imageError: false})
-                reader.onloadend = () => {
-                    this.setState({
-                        file: file,
-                        imagePreviewUrl: reader.result
-                    });
-                }
-            }
+    //     } else {
+    //         this.setState({imageError: false})
+    //             reader.onloadend = () => {
+    //                 this.setState({
+    //                     file: file,
+    //                     imagePreviewUrl: reader.result
+    //                 });
+    //             }
+    //         }
 
-        reader.readAsDataURL(file)
-    }
+    //     reader.readAsDataURL(file)
+    // }
 
     render() {
-        let {imagePreviewUrl} = this.state;
-            let imagePreview = null;
-            if (imagePreviewUrl) {
-            imagePreview = (<img src={imagePreviewUrl} className="imagePreview" alt="preview"/>);
-            } 
+        // let {imagePreviewUrl} = this.state;
+        //     let imagePreview = null;
+        //     if (imagePreviewUrl) {
+        //     imagePreview = (<img src={imagePreviewUrl} className="imagePreview" alt="preview"/>);
+        //     } 
         return (
 
             <div className="container mx-auto row">
 
                 <div className="col-md-10 mb-3 mt-4" id="profile">
 
-                    <form onSubmit={this.handleSubmit}> 
+                    <form onSubmit={this.handleSubmit} id="createclient"> 
                     
                             <div className="card">
                                 <div className="card-header text-white">
@@ -141,39 +144,41 @@ class CreateClient extends Component {
 
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Phone-number</label>
-                                            <input type="text" className="form-control form-control-sm" name="number"
-                                                id="number" placeholder="00000000000000"
-                                                value={this.state.number}
+                                            <label htmlFor="" className="sr-only">Telephone</label>
+                                            <input type="text" className="form-control form-control-sm" name="telephone"
+                                                id="telephone" placeholder="00000000000000"
+                                                value={this.state.telephone}
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
 
 
-                                    <div className="col-md-6 mb-3">
+                                    {/* <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Company&nbsp;Name</label>
                                             <input type="text" className="form-control form-control-sm" name="company"
                                                 id="company" placeholder="John" />
                                         </div>
-                                    </div>
-                                    <div className="col-md-6 mb-3">
+                                    </div> */}
+                                   <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Peronal&nbsp;Name</label>
                                             <input type="text" className="form-control form-control-sm" name="name"
-                                                id="name" placeholder="Doe" />
+                                                id="name" placeholder="Doe"
+                                                value={this.state.name}
+                                                onChange={this.handleInputChange} />
                                         </div>
                                     </div>
 
-                                    <div className="col-md-6 mb-3">
+                                    {/*  <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Company&nbsp;Address</label>
                                             <input type="text" className="form-control form-control-sm" name="companyadr"
                                                 id="companyadr" placeholder="No 6 Hello World close" />
                                         </div>
-                                    </div>
+                                    </div> */}
 
-                                    <div className="col-md-6 mb-3"> 
+                                    {/* <div className="col-md-6 mb-3"> 
                                     {this.state.imageError !== false ? 
                                         <div className="other_files mb-2">
                                             <i className="fa fa-trash" onClick={(e) => this.removeOtherImage(e)}></i>
@@ -191,7 +196,7 @@ class CreateClient extends Component {
                                                 id="image" placeholder="" 
                                                 onChange={(e)=>this.handleImageChange(e)} />
                                         </div>    
-                                    </div>
+                                    </div> */}
 
                                 </div>
 
@@ -201,7 +206,7 @@ class CreateClient extends Component {
                             <div className="card-footer">
                                 <div className="float-right">
 
-                                    <button className="btn btn-sm btn-primary">
+                                    <button type="submit" className="btn btn-sm btn-primary">
                                         <i className="fas fa-folder-open"></i>
                             Save
                         </button>&nbsp;

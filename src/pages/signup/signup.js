@@ -44,20 +44,24 @@ class SignUp extends Component {
         }else{
             await this.setState({loading : true});
             setTimeout(() =>this.setState({loading : false}), 3000);
-            const res = await this.state.signup(document.getElementById("signupform"));
-           if(!res['status'])this.setState({errormessage: res['message']});
-            else{
-                //find a way to redirect here 
-                this.props.history.push('/login');
-            }
+           const res = await this.state.signup(document.getElementById("signupform"));
+           console.log(res);
+           console.log(name, email, password, telephone);
+        
+           this.props.history.push('/')
+        //    if (!res['status']) this.setState({errormessage: res['message']});
+        //     else{
+        //         //find a way to redirect here 
+        //         this.props.history.push('/login');
+        //     }
         }
-        console.log(
-            `
-            name: ${this.state.name}
-            email:${this.state.email}
-            password:${this.state.password}
-            telephone: ${this.state.telephone}`
-        )
+        // console.log(
+        //     `
+        //     name: ${this.state.name}
+        //     email:${this.state.email}
+        //     password:${this.state.password}
+        //     telephone: ${this.state.telephone}`
+        // )
     }
 
     render() {

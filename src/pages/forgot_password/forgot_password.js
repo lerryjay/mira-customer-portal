@@ -33,7 +33,7 @@ class ForgotPassword extends Component {
             this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
         }else{
-           const res =  await this.state.forgotpassword(email);
+           const res = await this.state.forgotpassword(document.getElementById("forgotpassword"));
             
            this.props.history.push('/login');
         //    if(!res['status'])this.setState({errormessage: res['message']});
@@ -56,7 +56,7 @@ class ForgotPassword extends Component {
                             <img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt=""/>
                         </div>
                         <div className="card-body py-lg-5 text-muted text-center">
-                            <form onSubmit={this.handleSubmit} >
+                            <form onSubmit={this.handleSubmit} id="forgotpassword">
                                 
                                 { this.state.errormessage.length > 0 ? 
                                     <div class="alert alert-warning" role="alert">{this.state.errormessage}</div>
@@ -70,7 +70,7 @@ class ForgotPassword extends Component {
                                     </span>
                                     {/* <label for="email">Email</label> */}
                                     <input type="text" className="form-control alt" id="email" name="email" placeholder="Email" aria-label="Email"
-                                        aria-describedby="email" autocomplete="email" required
+                                        aria-describedby="email" autoComplete="email" required
                                         value={this.state.email}
                                         onChange={this.handleInputChange}/>
                                 </div>

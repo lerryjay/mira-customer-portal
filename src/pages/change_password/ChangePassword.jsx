@@ -8,8 +8,8 @@ class ChangePassword extends Component {
         super(props);
         this.state = { 
             ...this.props, 
-            currentpwd : '' , 
-            newpwd: '',
+            oldpassword : '' , 
+            newpassword: '',
             confirmnewpwd: '',
             loading: false, 
             errormessage: ''
@@ -29,29 +29,29 @@ class ChangePassword extends Component {
     handleSubmit = async e => {
         e.preventDefault()
 
-        const {currentpwd, newpwd, confirmnewpwd} = this.state
+        const {oldpassword, newpassword, confirmnewpwd} = this.state
        
         //Waste 3 seconds
-        if(!Validators.validatePassword(currentpwd,1).status){
-            const err = Validators.validatePassword(currentpwd,1).message;
+        if(!Validators.validatePassword(oldpassword,1).status){
+            const err = Validators.validatePassword(oldpassword,1).message;
            await this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
-        } else if(!Validators.validatePassword(newpwd,1).status){
-            const err = Validators.validatePassword(newpwd,1).message;
+        } else if(!Validators.validatePassword(newpassword,1).status){
+            const err = Validators.validatePassword(newpassword,1).message;
            await this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
         } else if(!Validators.validatePassword(confirmnewpwd,1).status){
             const err = Validators.validatePassword(confirmnewpwd,1).message;
            await this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
-        }else if(newpwd !== confirmnewpwd) {
+        }else if(newpassword !== confirmnewpwd) {
             const err = "Password does not match!"
            await this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
         }else{
             await this.setState({loading : true});
             setTimeout(() =>this.setState({loading : false}), 3000);
-            this.state.changepassword(currentpwd,newpwd, confirmnewpwd);
+            const res = await this.state.changepassword(document.getElementById("changepassword"));
         }
         console.log('changed successfully!')
     }
@@ -66,7 +66,7 @@ class ChangePassword extends Component {
                             <h4>Change Password</h4>
                         </div>
                         <div className="card-body py-lg-5 text-muted text-center">
-                            <form onSubmit={this.handleSubmit}>
+                            <form onSubmit={this.handleSubmit} id="changepassword">
 
                             { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
                                     <div className="alert alert-warning" role="alert">{this.state.errormessage}
@@ -82,22 +82,22 @@ class ChangePassword extends Component {
                                     <span className="input-group-text bg-white alt" id="email">
                                         <i className="fas fa-lock-open fa-fw"></i>
                                     </span>
-                                    <label className='sr-only' htmlFor="currentpwd">Current&nbsp;Password</label>
-                                    <input type="password" className="form-control form-control-sm alt" id="currentpwd"
-                                        name="currentpwd" placeholder="Current Password" aria-label="Current password"
+                                    <label className='sr-only' htmlFor="oldpassword">Current&nbsp;Password</label>
+                                    <input type="password" className="form-control form-control-sm alt" id="oldpassword"
+                                        name="oldpassword" placeholder="Current Password" aria-label="Current password"
                                         aria-describedby="Current password" autoComplete="off" 
-                                        value={this.state.currentpwd} required
+                                        value={this.state.oldpassword} required
                                         onChange={this.handleInputChange}/>
                                 </div>
                                 <div className="input-group mb-3">
                                     <span className="input-group-text bg-white alt" id="email">
                                         <i className="fas fa-lock fa-fw"></i>
                                     </span>
-                                    <label className='sr-only' htmlFor="newpwd">New&nbsp;Password</label>
-                                    <input type="password" className="form-control form-control-sm alt" id="newpwd" name="newpwd"
+                                    <label className='sr-only' htmlFor="newpassword">New&nbsp;Password</label>
+                                    <input type="password" className="form-control form-control-sm alt" id="newpassword" name="newpassword"
                                         placeholder="New Password" aria-label="Confirm New password"
                                         aria-describedby="Confirm New password" autoComplete="off" required
-                                        value={this.state.newpwd}
+                                        value={this.state.newpassword}
                                         onChange={this.handleInputChange} />
                                 </div>
                                 <div className="input-group mb-3">

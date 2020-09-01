@@ -1,18 +1,24 @@
-import React from 'react'
+import React, { Component } from 'react';
+import {withContext} from '../../common/context';
 
-export default function Profile() {
-    const edit = () => {
-        // Make Form Editable
-        let edit = document.querySelector('#edit');
-        let input = document.getElementsByTagName('input');
-
-
-        for (let d = input.length - 1; d >= 0; d--) {
-            edit.addEventListener("click", function (e) {
-                input[d].removeAttribute("disabled");
-            });
-        };
+class Profile extends Component{
+    constructor(props){
+        super(props);
     }
+
+//  edit(){
+//         // Make Form Editable
+//         let edit = document.querySelector('#edit');
+//         let input = document.getElementsByTagName('input');
+
+
+//         for (let d = input.length - 1; d >= 0; d--) {
+//             edit.addEventListener("click", function (e) {
+//                 input[d].removeAttribute("disabled");
+//             });
+//         };
+//     }
+   render() {
     return (
         <div className="container mx-auto">
             <div className="row mt-4">
@@ -22,10 +28,11 @@ export default function Profile() {
                         <div className="card">
                             <div className="card-header text-white">
                                 Profile Information
-                <span className="float-right" id='edit' style={{cursor: 'pointer'}} onClick={edit}><i className="fas fa-pen-square fa-2x"></i>
+                <span className="float-right" id='edit' style={{cursor: 'pointer'}}><i className="fas fa-pen-square fa-2x"></i>
                                 </span>
                             </div>
                             <div className="card-body">
+                                {this.props.profile.map(profile => <p>{profile.email}</p>)}
 
                                 <div className="row">
 
@@ -121,4 +128,8 @@ export default function Profile() {
             </div>
         </div>
     )
+   }
+
 }
+
+export default withContext(Profile);

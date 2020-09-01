@@ -10,7 +10,7 @@ class Login extends Component {
         super(props);
         this.state = { 
             ...this.props, 
-            email : '', 
+            loginid : '', 
             password : '' , 
             loading: false, 
             errormessage: ''
@@ -25,12 +25,12 @@ class Login extends Component {
     handleSubmit = async e => {
         e.preventDefault()
 
-        const { email, password} = this.state
+        const { loginid, password} = this.state
        
         //Waste 3 seconds
        
-        if(!Validators.validateEmail(email).status){
-            const err = Validators.validateEmail(email).message
+        if(!Validators.validateEmail(loginid).status){
+            const err = Validators.validateEmail(loginid).message
             this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
         }else if(!Validators.validatePassword(password,1).status){
@@ -77,14 +77,14 @@ class Login extends Component {
                                 }
 
                                 <div className="input-group mb-3">
-                                    <span className="input-group-text bg-white alt" id="email">
+                                    <span className="input-group-text bg-white alt" id="loginid">
                                         <i className="fas fa-envelope fa-fw"></i>
                                     </span>
-                                    <label htmlFor="email" className="sr-only">Email</label>
+                                    <label htmlFor="loginid" className="sr-only">Email</label>
                                     <input type="text" className="form-control alt alt2" 
-                                    id="email" name="email" placeholder="Email" aria-label="Email"
-                                    aria-describedby="email" autoComplete="email" required
-                                    value={this.state.email}
+                                    id="loginid" name="loginid" placeholder="Email" aria-label="Email"
+                                    aria-describedby="loginid" autoComplete="loginid" required
+                                    value={this.state.loginid}
                                     onChange={this.handleInputChange}/>
                                 </div>
                                 

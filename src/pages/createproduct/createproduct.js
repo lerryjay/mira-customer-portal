@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-
-import Validators  from "../../common/Validators";
 import {withContext} from '../../common/context';
 
 class CreateProduct extends Component {
@@ -8,8 +6,9 @@ class CreateProduct extends Component {
         super(props);
         this.state = { 
             ...this.props, 
-            productname : '', 
-            productdetails: '',
+            name : '', 
+            userid: '',
+            description: '',
             errormessage: '',
             file: '',
             imagePreviewUrl: '',
@@ -24,16 +23,8 @@ class CreateProduct extends Component {
 
     handleSubmit = async e => {
         e.preventDefault()
-
-        const { email} = this.state
-
-        if(!Validators.validateEmail(email).status){
-            const err = Validators.validateEmail(email).message
-            this.setState({errormessage: err});
-            setTimeout(()=> this.setState({errormessage: ''}),5000);
-        }else{
-            console.log('submitting')
-        }
+       const res = await this.state.createproduct(document.getElementById("createproduct"));
+    
     }
 
     removeImage(e) {
@@ -98,7 +89,7 @@ class CreateProduct extends Component {
 
                 <div className="col-md-10 mb-3 mt-4" id="profile">
 
-                    <form onSubmit={this.handleSubmit}> 
+                    <form onSubmit={this.handleSubmit} id="createproduct"> 
                     
                             <div className="card">
                                 <div className="card-header text-white">
@@ -125,23 +116,32 @@ class CreateProduct extends Component {
                                 </div>
                             </div>
                                 <div className="row">
-                               
-                                    <div className="col-md-12 mb-1">
+
+                                <div className="col-md-12 mb-1">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Product Name</label>
-                                            <input type="text" className="form-control form-control-sm" name="email"
-                                                id="productname" placeholder="Product Name" 
-                                                value={this.state.productname}
+                                            <input type="text" className="form-control form-control-sm" name="userid"
+                                                id="userid" placeholder="User ID" 
+                                                value={this.state.userid} required
                                                 onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
 
+                                    <div className="col-md-12 mb-1">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Product Name</label>
+                                            <input type="text" className="form-control form-control-sm" name="name"
+                                                id="name" placeholder="Product Name" 
+                                                value={this.state.name}
+                                                onChange={this.handleInputChange}/>
+                                        </div>
+                                    </div>
+                                    
                                     <div className="col-md-12">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Product Description</label>
-                                            <textarea type="text" className="form-control form-control-sm" name="number"
-                                                id="productdetails" placeholder="Product Details"
-                                                value={this.state.productdetails}
+                                            <textarea type="text" className="form-control form-control-sm" name="description"
+                                                id="description" placeholder="Product Description"
+                                                value={this.state.description}
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
@@ -174,7 +174,7 @@ class CreateProduct extends Component {
                             <div className="card-footer">
                                 <div className="float-right">
 
-                                    <button className="btn btn-sm btn-primary">
+                                    <button type="submit" className="btn btn-sm btn-primary">
                                         <i className="fas fa-folder-open"></i>
                             Save
                         </button>&nbsp;

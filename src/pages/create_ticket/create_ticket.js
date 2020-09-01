@@ -29,6 +29,9 @@ class create_ticket extends Component {
     handleSubmit = async e => {
         e.preventDefault()
 
+        await this.setState({loading : true});
+        setTimeout(() =>this.setState({loading : false}), 3000);
+        const res = await this.state.createticket(document.getElementById("createticket"));
         console.log('changed successfully!')
     }
     removeImage(e) {
@@ -74,7 +77,7 @@ class create_ticket extends Component {
             <div className="row">
 
                 <div className="col-md-12" id="profile">
-                    <form onSubmit={this.handleSubmit}>
+                    <form onSubmit={this.handleSubmit} id="createticket">
 
 
                         <div className="card">
@@ -97,6 +100,14 @@ class create_ticket extends Component {
                             </div>
                                 <div className="row">
                                     
+                                <div className="col-md-6 mb-3">
+                                        <div className="form-group">
+                                            <input type="text" className="form-control form-control-sm" name="userid"
+                                                id="userid" placeholder="User ID" 
+                                                value={this.state.userid} required
+                                                onChange={this.handleInputChange}/>
+                                        </div>
+                                    </div>
 
                                 <div className="col-md-6 mb-3">
                                     <div className="form-group">
@@ -107,14 +118,6 @@ class create_ticket extends Component {
                                     </div>
                                 </div>
                                 
-                                    <div className="col-md-6 mb-3">
-                                        <div className="form-group">
-                                            <input type="text" className="form-control form-control-sm" name="userid"
-                                                id="userid" placeholder="User ID" 
-                                                value={this.state.userid} required
-                                                onChange={this.handleInputChange}/>
-                                        </div>
-                                    </div>
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <select name="customerid" id="customerid" className=" form-control form-select form-select-sm">
@@ -186,7 +189,7 @@ class create_ticket extends Component {
                             <div className="card-footer">
                                 <div className="float-right">
 
-                                    <button className="btn btn-sm btn-primary mr-2">
+                                    <button type="submit" className="btn btn-sm btn-primary mr-2">
                                         <i className="fas fa-folder-open"></i>
                                         Save
                                     </button>

@@ -88,9 +88,15 @@
 }
 
 .card-container, .front, .back {
+<<<<<<< HEAD
     width: 100%;
     height: 420px;
     border-radius: 4px;
+=======
+	width: 100%;
+	height: 300px;
+	border-radius: 4px;
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
 }
 
 /* ======= Fix bug for IE ======= */

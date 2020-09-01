@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
 import { HTTPURL } from '../../common/global_constant';
+<<<<<<< HEAD
 import { withContext } from '../../common/context';
+=======
+import {withContext} from '../../common/context';
+import { Link } from 'react-router-dom';
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
 
 class TicketList extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            ...props,
+            currentPage: 1,
+            numberPerPage: 10,
             ticket: [],
             id: 1,
+<<<<<<< HEAD
             tickets: [
 
             ]
@@ -16,12 +25,38 @@ class TicketList extends Component {
     componentDidMount() {
         const headers = new Headers();
         headers.append('API-KEY', '97899c-7d0420-1273f0-901d29-84e2f8');
+=======
+            tickets : [],
+            currentList: []
+        }
+    }
+
+
+    componentDidMount(){
+        console.log(this.state,"props")
+        const headers = new Headers();
+        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
         fetch(HTTPURL + 'ticket/?userid=5f3e930330e28', {
             method: 'GET',
             headers: headers
         })
+<<<<<<< HEAD
             .then(response => response.json())
             .then(data => this.setState({ tickets: data.data }));
+=======
+        .then(response => response.json())
+        .then(data => {
+            // let value = data.data
+            // //Get current list
+            // const indexOfLastPage = this.state.currentPage * this.state.numberPerPage;
+            // const indexOfFirstPage = indexOfLastPage - this.state.numberPerPage
+            // const currentList = value.slice(indexOfFirstPage, indexOfLastPage)
+            // console.log(currentList,"data data")
+            this.setState({tickets: data.data})
+            // this.setState({currentList: currentList})
+        });
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
 
         let ticket = []
         console.log('changed successfully!', ticket)
@@ -30,7 +65,9 @@ class TicketList extends Component {
             ticket.push(this.state.tickets[i])
             this.setState({ ticket: ticket });
         }
+
     }
+<<<<<<< HEAD
     // $(function(){
     //     $(".dropdown-menu").on('click', 'a', function(){
     //         $(this).parents('.dropdown').find('button').text($(this).text());
@@ -60,6 +97,44 @@ class TicketList extends Component {
 
     }
     render() {
+=======
+
+    handleViewMore = e => {
+         this.state.viewmore(e)
+        this.props.history.push('/viewticket');
+    }
+    // handleRoute = e => {
+    //      // Get Ticket by ID
+    //     const headers = new Headers();
+    //     headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+
+    //         let ticketid = e.target.attributes.value.value
+    //         // let ticketid = "5f4509c0c26d1"
+    //         let userid = "5f3e930330e28"
+
+    //     fetch(HTTPURL +`ticket/getticket?userid=${userid}&ticketid=${ticketid}`, {
+    //         method: 'GET',
+    //         headers: headers
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => console.log(data.data, "data"))
+    //     this.props.history.push(`/viewticket/${ticketid}`);
+    // }
+    
+     changeStatus(e,ticket) {
+        
+
+        const tickets = this.state.tickets.map(item=>{ 
+            console.log(e.target.value);
+            if(item.ticketid == ticket.ticketid) item.ticketstatus  = e.target.value;
+            return item;
+        })
+
+        this.setState({tickets});
+        
+     }
+     render() {
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
 
         return (
             <div className="container">
@@ -68,15 +143,15 @@ class TicketList extends Component {
                     <div className="col-md-12 mb-3" id="profile">
                         <form action="">
                             <div className="card home-chart">
-                                <div className="card-header text-white">
-                                    Ticket List
+                                <div className="card-header bg-medium font-weight-bold text-dark">
+                                    TICKET LIST
                 </div>
                                 <div className="card-body">
 
                                     <div id='table' className="card pt-2 mt-3 justify-content-center shadow px-2">
                                         <div className="table-responsive">
                                             <table
-                                                className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-white home-chart">
+                                                className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
                                                 {/* <caption>Hello World!</caption> */}
                                                 <thead>
                                                     <tr>
@@ -91,6 +166,7 @@ class TicketList extends Component {
                                                     </tr>
 
                                                 </thead>
+<<<<<<< HEAD
                                                 <tbody>
 
                                                     {this.state.tickets.map(ticket => {
@@ -136,6 +212,55 @@ class TicketList extends Component {
                                                     })
                                                     }
 
+=======
+                                                <tbody> 
+                                                    
+                                                {this.state.tickets.map( ticket => {
+                                                     return(
+
+                                                        <tr>
+                                                            <td>
+                                                                {this.state.id++}
+                                                            </td>
+                                                            <td>
+                                                                {ticket.createdat}
+                                                            </td>
+                                                            <td  onClick={this.handleRoute}>
+                                                                {ticket.client_name}
+                                                            </td>
+                                                            <td>
+                                                                {ticket.email}
+                                                            </td>
+                                                            <td>
+                                                                {ticket.type}
+                                                            </td>
+                                                            <td style={{minWidth: "120px", textAlign: "left"}}>
+                                                                {ticket.message}
+                                                            </td>
+                                                            <td className="align-middle" style={{minWidth: "105px"}}>
+                                                            <select className="custom-select custom-select-sm" onChange={(e) =>this.changeStatus(e,ticket)}>
+                                                                <option value="" selected > {ticket.ticketstatus}</option>
+                                                                <option className="btn btn-sm text-success" value="approved">
+                                                                    &#10003;
+                                                                    Approved</option>
+                                                                <option className="btn btn-sm text-danger" value="cancelled">
+                                                                    &#1008;
+                                                                    Cancelled</option>
+                                                                <option className="btn btn-sm btn-light text-warning" value="pending">
+                                                                    &#10070;
+                                                                    Pending</option>
+                                                            </select>
+                                                            </td>
+                                                            <td className="align-middle" style={{cursor:"pointer"}}>
+                                                                <Link onClick={this.handleViewMore}>
+                                                    <span class="badge px-3 py-2 badge-primary" value={ticket.id} style={{cursor:"pointer"}}>View</span>
+                                                                </Link>
+                                                            </td>
+                                                        </tr>
+                                                     )
+                                                    })  
+                                                } 
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
                                                 </tbody>
                                             </table>
                                         </div>
@@ -148,7 +273,26 @@ class TicketList extends Component {
                         </form>
                     </div>
                 </div>
+<<<<<<< HEAD
 
+=======
+                
+
+               <div className="row justify-content-center text-center">
+                <div class="pagination">
+                        <a href="#">&laquo;</a>
+                        <a href="#">1</a>
+                        <a class="active" href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#">4</a>
+                        <a href="#">5</a>
+                        <a href="#">6</a>
+                        <a href="#">&raquo;</a>
+                    </div> 
+               </div>
+                
+                        
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
                 <div className="overlay"></div>
 
                 <div className="modal fade" id="viewTicket" tabIndex="-1" role="dialog" aria-labelledby="viewTicketTitle"

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import {withContext} from '../../common/context';
-import avatar from '../../assets/images/avatar.png'
 
-class ViewClient extends Component{
+class ClientProfile extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -12,19 +11,19 @@ class ViewClient extends Component{
                 {
                     "productid" : 1,
                     "name" : "Accissebs",
-                    "packages" : "Design, Development, Email Setup",
+                    "description" : "It is an accounting software, designed to run in multiple locations across different states, nations and continents, ",
                     "price" : "₦370,000"
                 }, 
                 {
                     "productid" : 2,
                     "name" : "SYSBANKER EE",
-                    "packages" : "Design, Development, Email Setup",
+                    "description" : "It is an accounting software, designed to run in multiple locations across different states, nations and continents, ",
                     "price" : "₦100,000"
                 }, 
                 {
                     "productid" : 3,
                     "name" : "Mira HPro",
-                    "packages" : "Design, Development, Email Setup",
+                    "description" : "It is an accounting software, designed to run in multiple locations across different states, nations and continents, ",
                     "price" : "₦220,000"
                 }
                 
@@ -64,7 +63,7 @@ render() {
                     <form action="">
                         <div className="card">
                             <div className="card-header bg-medium font-weight-bold text-dark">
-                                CLIENT INFORMATION
+                                PROFILE
                 <span className="float-right" id='edit' style={{ cursor: 'pointer' }} onClick={this.edit}><i className="fas fa-pen-square fa-2x"></i>
                                 </span>
                             </div>
@@ -152,8 +151,8 @@ render() {
                         <div className="card-header">
                         </div>
                         <div className="card-body">
-                            <img src={avatar}
-                                alt="profile picture" className=" rounded-circle" style={{ marginTop: '-80px', width:"105px", height:"105px" }} />
+                            <img src="https://miratechnologiesng.com/img/icons/miraicon.png"
+                                alt="profile picture" className="img-fluid" style={{ marginTop: '-80px' }} />
                                 <h6 className="mt-3">Rhoda Stone</h6>
                                 <p className="mt-2"><i class="fa fa-map-marker" aria-hidden="true"></i> Lagos <br/>
                                 <i class="fa fa-envelope" aria-hidden="true"></i> rhoda@gmail.com </p>
@@ -174,7 +173,7 @@ render() {
                                     Product is empty!
                                     </div>
                                     <button type="button" className="btn btn-sm btn-primary new_product mb-2">
-                                        <Link to="/addclientproduct">
+                                        <Link to="/viewproduct">
                                     <i className="fas fa-folder-plus" style={{color: '#fff'}} aria-hidden="true">
                                             <small className="newproduct" style={{color: '#fff'}}>&nbsp;Add&nbsp;New&nbsp;Product</small>
                                     </i>
@@ -184,14 +183,14 @@ render() {
                                     {/* <div id='table' className="card pt-2 mt-3 justify-content-center shadow px-2">
                                         <div className="table-responsive">
                                             <table
-                                                className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
-                                               
+                                                className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-white home-chart">
+                                                
                                                 <thead>
                                                 <tr>
-                                                <th className="py-2">S/N</th>
-                                                    <th className="py-2">Product&nbsp;Name</th>
-                                                    <th className="py-2">Packages</th>
-                                                    <th className="py-2">Price</th>
+                                                <th>S/N</th>
+                                                    <th>Product&nbsp;Name</th>
+                                                    <th>Description</th>
+                                                    <th>Price</th>
                                                 </tr>
                                                     
                                                 </thead>
@@ -200,7 +199,7 @@ render() {
                                                 {this.state.products.map( product => {
                                                      return(
 
-                                                            <tr>
+                                                        <tr>
                                                             <td>
                                                                 {product.productid}
                                                             </td>
@@ -208,7 +207,7 @@ render() {
                                                                 {product.name}
                                                             </td>
                                                             <td style={{maxWidth: "150px"}}>
-                                                                {product.packages}
+                                                                {product.description}
                                                             </td>
                                                             <td>
                                                                 {product.price}
@@ -223,8 +222,8 @@ render() {
                                        </tbody>
                                             </table>
                                         </div>
-                                    </div>
- */}
+                                    </div> */}
+
 
                                     </div>
                                 </div>
@@ -236,4 +235,4 @@ render() {
     )
 }
 }
-export default withContext(ViewClient);
+export default withContext(ClientProfile);

@@ -7,9 +7,14 @@ class CreateProduct extends Component {
         this.state = { 
             ...this.props, 
             name : '', 
+<<<<<<< HEAD
             userid: '',
+=======
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
             description: '',
             errormessage: '',
+            loading: false,
+            successmessage: '',
             file: '',
             imagePreviewUrl: '',
             imageError: false,
@@ -23,7 +28,21 @@ class CreateProduct extends Component {
 
     handleSubmit = async e => {
         e.preventDefault()
+<<<<<<< HEAD
        const res = await this.state.createproduct(document.getElementById("createproduct"));
+=======
+        this.setState({loading : true});
+        setTimeout(() => {
+            this.setState({loading : false});
+            this.setState({successmessage: 'Added Successfully!'})
+            setTimeout(() =>{
+                this.setState({successmessage: false});
+                const res = this.state.createproduct(document.getElementById("createproduct"));
+                 console.log('submitting')
+                 this.setState({name: '', description: '', file: ''})
+            }, 5000);
+        }, 3000);
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
     
     }
 
@@ -86,14 +105,34 @@ class CreateProduct extends Component {
         return (
 
             <div className="container mx-auto row">
+            {/* Success Message */}
+            { this.state.successmessage ? 
+                <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                    <span className="mt-3">{this.state.successmessage}</span>
+                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                :   <span></span>
+            }
 
-                <div className="col-md-10 mb-3 mt-4" id="profile">
+                <div className="col-md-8 offset-2 mb-3 mt-4" id="profile">
+                 {/* Error Message */}
+                { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
+                    <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                        {this.state.errormessage}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    :   <span></span>
+                }
 
                     <form onSubmit={this.handleSubmit} id="createproduct"> 
                     
                             <div className="card">
-                                <div className="card-header text-white">
-                                    Add New Product
+                                <div className="card-header bg-medium font-weight-bold text-dark">
+                                    ADD NEW PRODUCT
                     </div>
                     
                                 <div className="card-body">
@@ -117,6 +156,7 @@ class CreateProduct extends Component {
                             </div>
                                 <div className="row">
 
+<<<<<<< HEAD
                                 <div className="col-md-12 mb-1">
                                         <div className="form-group">
                                             <input type="text" className="form-control form-control-sm" name="userid"
@@ -126,6 +166,8 @@ class CreateProduct extends Component {
                                         </div>
                                     </div>
 
+=======
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
                                     <div className="col-md-12 mb-1">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Product Name</label>
@@ -174,6 +216,7 @@ class CreateProduct extends Component {
                             <div className="card-footer">
                                 <div className="float-right">
 
+<<<<<<< HEAD
                                     <button type="submit" className="btn btn-sm btn-primary">
                                         <i className="fas fa-folder-open"></i>
                             Save
@@ -182,6 +225,20 @@ class CreateProduct extends Component {
                                         <i className="fas fa-history"></i>
                             Reset
                         </button>
+=======
+                                     {this.state.loading ? 
+                                <button type="submit" className="btn btn-sm bg-btn">
+                                    <div className="spinner-border text-secondary" role="status" id="loader">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
+                                </button>
+                                : <button type="submit" className="btn btn-sm btn-primary px-3 py-2">
+                                    <i className="fas fa-folder-open mr-2"></i>
+                                        Save
+                                    </button>
+                                }
+
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
                                 </div>
                             </div>
                         </div>

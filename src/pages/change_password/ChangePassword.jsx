@@ -12,7 +12,8 @@ class ChangePassword extends Component {
             newpassword: '',
             confirmnewpwd: '',
             loading: false, 
-            errormessage: ''
+            errormessage: '',
+            successmessage: ''
         };
     }
     
@@ -34,6 +35,7 @@ class ChangePassword extends Component {
         //Waste 3 seconds
         if(!Validators.validatePassword(oldpassword,1).status){
             const err = Validators.validatePassword(oldpassword,1).message;
+<<<<<<< HEAD
            await this.setState({errormessage: err});
             setTimeout(()=> this.setState({errormessage: ''}),5000);
         } else if(!Validators.validatePassword(newpassword,1).status){
@@ -52,6 +54,49 @@ class ChangePassword extends Component {
             await this.setState({loading : true});
             setTimeout(() =>this.setState({loading : false}), 3000);
             const res = await this.state.changepassword(document.getElementById("changepassword"));
+=======
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({errormessage: err});
+                setTimeout(()=> this.setState({errormessage: ''}),5000);
+            }, 3000);
+        } else if(!Validators.validatePassword(newpassword,1).status){
+            const err = Validators.validatePassword(newpassword,1).message;
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({errormessage: err});
+                setTimeout(()=> this.setState({errormessage: ''}),5000);
+            }, 3000);
+        } else if(!Validators.validatePassword(confirmnewpwd,1).status){
+            const err = Validators.validatePassword(confirmnewpwd,1).message;
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({errormessage: err});
+                setTimeout(()=> this.setState({errormessage: ''}),5000);
+            }, 3000);
+        }else if(newpassword !== confirmnewpwd) {
+            const err = "Password does not match!"
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({errormessage: err});
+                setTimeout(()=> this.setState({errormessage: ''}),5000);
+            }, 3000);
+        } else {
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({successmessage: 'Password Changed Successfully!'});
+                setTimeout(() => this.setState({successmessage: false}), 5000);
+            }, 3000);
+        
+            const res = await this.state.changepassword(document.getElementById("changepassword"));
+
+            this.setState({oldpassword: '', newpassword: '', confirmnewpwd: ''})
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
         }
         console.log('changed successfully!')
     }
@@ -59,6 +104,16 @@ class ChangePassword extends Component {
     render() {
         return (
             <div className="container">
+            {/* Success Message */}
+            { this.state.successmessage ? 
+                <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                    <span className="mt-3">{this.state.successmessage}</span>
+                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                :   <span></span>
+            }
                 <div className="row col-lg-6 col-md-8 col-sm-10 col-xs-12 mx-auto cent">
 
                     <div className="card bg-light shadow border-0 py-3">
@@ -67,16 +122,20 @@ class ChangePassword extends Component {
                         </div>
                         <div className="card-body py-lg-5 text-muted text-center">
                             <form onSubmit={this.handleSubmit} id="changepassword">
+<<<<<<< HEAD
 
+=======
+                            {/* Error Message */}
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
                             { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                                    <div className="alert alert-warning" role="alert">{this.state.errormessage}
-                                    <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    </div>
-                                    : 
-                                    <span></span>
-                                }
+                                <div className="alert alert-warning" role="alert">
+                                    <span className="mt-3">{this.state.errormessage}</span>
+                                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                </div>
+                                :   <span></span>
+                            }
 
                                 <div className="input-group mb-3">
                                     <span className="input-group-text bg-white alt" id="email">

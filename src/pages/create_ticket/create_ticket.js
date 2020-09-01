@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-
+import { HTTPURL } from '../../common/global_constant';
 import {withContext} from '../../common/context';
+import './createticket.css'
 
 class create_ticket extends Component {
     constructor(props){
@@ -17,7 +18,8 @@ class create_ticket extends Component {
             loading: false, 
             files: [],
             previews: '',
-            imagePreviewUrl: ''
+            imagePreviewUrl: '',
+            successmessage: ''
         };
     }
     
@@ -29,11 +31,47 @@ class create_ticket extends Component {
     handleSubmit = async e => {
         e.preventDefault()
 
+<<<<<<< HEAD
         await this.setState({loading : true});
         setTimeout(() =>this.setState({loading : false}), 3000);
         const res = await this.state.createticket(document.getElementById("createticket"));
         console.log('changed successfully!')
+=======
+        this.setState({loading : true});
+
+        const headers = new Headers();
+        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+        let form = new FormData(document.getElementById("createticket"));
+
+        this.state.files.forEach(item=>{
+            form.append('files[]', item);
+        })
+
+        fetch(HTTPURL + 'ticket/add', {
+            method: 'POST',
+            body: form,
+            headers: headers
+        })
+        .then(response => response.json())
+        .then(json => {
+        console.log(json);
+        return json;
+        });
+         
+
+        setTimeout(() => {
+            this.setState({loading : false});
+            this.setState({successmessage: 'Ticket Created Successfully'})
+            setTimeout(() => this.setState({successmessage: false}), 5000);
+        }, 3000);
+        // const res = await this.state.createticket(document.getElementById("createticket"));
+        this.setState({title : '', package: '', type: '', message: '', product: ''});
+    
+
+        
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
     }
+    
     removeImage(e) {
         console.log(e, "Image removed")
         this.setState({imagePreviewUrl: ''})
@@ -74,19 +112,35 @@ class create_ticket extends Component {
         )} )
         return (
             <div className="container-fluid content text-white">
+            {/* Success Message */}
+            { this.state.successmessage ? 
+                <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                    <span className="mt-3">{this.state.successmessage}</span>
+                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                :   <span></span>
+            }
             <div className="row">
 
+<<<<<<< HEAD
                 <div className="col-md-12" id="profile">
                     <form onSubmit={this.handleSubmit} id="createticket">
+=======
+                <div className="col-md-8 offset-2" id="profile">
+                    <form onSubmit={this.handleSubmit} id="createticket" encType="multipart/form-data">
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
 
 
                         <div className="card">
-                            <div className="card-header">
-                                Create Ticket
+                            <div className="card-header bg-medium font-weight-bold text-dark">
+                                CREATE TICKET
                             </div>
                             <div className="card-body">
                             <div className="row">
                                 <div className="col-md-12">
+                                    {/* Error Message */}
                                     { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
                                         <div className="alert alert-warning" role="alert">{this.state.errormessage}
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -100,6 +154,7 @@ class create_ticket extends Component {
                             </div>
                                 <div className="row">
                                     
+<<<<<<< HEAD
                                 <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <input type="text" className="form-control form-control-sm" name="userid"
@@ -110,6 +165,21 @@ class create_ticket extends Component {
                                     </div>
 
                                 <div className="col-md-6 mb-3">
+=======
+                                    
+                                <div className="col-md-12 mb-3">
+                                            <div className="form-group">
+                                                <select onChange={this.handleInputChange} name="type" id="type" className=" form-control form-select form-select-sm">
+                                                    <option value="" selected disabled>--Select&nbsp;Ticket&nbsp;Type--</option>
+                                                    <option value="Complaint">Complaint</option>
+                                                    <option value="Request">Request</option>
+                                                    <option value="Enquiry">Enquiry</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                
+                                <div className="col-md-12 mb-3">
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
                                     <div className="form-group">
                                         <input type="text" className="form-control form-control-sm" name="title"
                                             id="title" placeholder="Title" 
@@ -118,6 +188,7 @@ class create_ticket extends Component {
                                     </div>
                                 </div>
                                 
+<<<<<<< HEAD
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <select name="customerid" id="customerid" className=" form-control form-select form-select-sm">
@@ -161,6 +232,8 @@ class create_ticket extends Component {
                                             </div>
                                         </div>
 
+=======
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
                                         
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
@@ -173,21 +246,18 @@ class create_ticket extends Component {
                                     <div className="images">
                                         { files }
                                     </div>
-                                    <div className="col-md-12 mb-3">
-                                        <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Image</label>
-                                            <input type="file" className="form-file form-file-sm" name="image"
-                                                 placeholder="" multiple
-                                                onChange={(e)=>this.handleImageChange(e)} />
-                                        </div>  
-                                    </div>
                                 </div>
 
 
                             </div>
 
                             <div className="card-footer">
+                                <label htmlFor="files" className="btn btn-sm btn-primary py-2 px-3">Attach File</label>
+                                <input style={{display:'none'}} type={"file"}  id="files" 
+                                className="form-file form-file-sm" name="files[]"  placeholder="" multiple
+                                onChange={(e)=>this.handleImageChange(e)} />
                                 <div className="float-right">
+<<<<<<< HEAD
 
                                     <button type="submit" className="btn btn-sm btn-primary mr-2">
                                         <i className="fas fa-folder-open"></i>
@@ -197,6 +267,20 @@ class create_ticket extends Component {
                                         <i className="fas fa-history"></i>
                                         Reset
                                     </button>
+=======
+                                {this.state.loading ? 
+                                <button type="submit" className="btn btn-sm bg-btn">
+                                    <div className="spinner-border text-secondary" role="status" id="loader">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
+                                </button>
+                                : 
+                                <button type="submit" className="btn btn-sm btn-primary py-2 px-3">
+                                    <i className="fas fa-folder-open  mr-2"></i>
+                                    Save
+                                </button>
+                                }
+>>>>>>> 20660585eeaf6f7ff7ace8b4752e6df21848b9d6
                                 </div>
                             </div>
                         </div>

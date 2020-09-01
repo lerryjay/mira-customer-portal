@@ -8,11 +8,13 @@ class CreateUser extends Component {
         super(props);
         this.state = { 
             ...this.props, 
-            firstname : '', 
-            lastname : '' , 
-            email: '',
-            number: '',
-            errormessage: ''
+            name: '', 
+            email : '', 
+            password : '' ,
+            telephone: '',
+            loading: false, 
+            errormessage: '',
+            successmessage: ''
         };
     }
     
@@ -23,29 +25,65 @@ class CreateUser extends Component {
 
     handleSubmit = async e => {
         e.preventDefault()
-
-        const { email} = this.state
-
+        const { name, email, password, telephone } = this.state
+        await this.setState({loading : true});
+        setTimeout(() =>this.setState({loading : false}), 3000);
+        //Waste 3 seconds
+        setTimeout(() =>this.setState({loading : false}), 5000);
         if(!Validators.validateEmail(email).status){
+            console.log('Failed email validation');
             const err = Validators.validateEmail(email).message
-            this.setState({errormessage: err});
-            setTimeout(()=> this.setState({errormessage: ''}),5000);
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({errormessage: err});
+                setTimeout(()=> this.setState({errormessage: ''}),5000);
+            }, 3000);
+        }else if(!Validators.validatePassword(password,1).status){
+            console.log('Failed password validation');
+            const err = Validators.validatePassword(password,1).message;
+            this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({errormessage: err});
+                setTimeout(()=> this.setState({errormessage: ''}),5000);
+            }, 3000);
         }else{
-            console.log('submitting')
+            await this.setState({loading : true});
+            setTimeout(() => {
+                this.setState({loading : false});
+                this.setState({successmessage: 'Registered Successfully!'})
+                setTimeout(() =>{
+                    this.setState({successmessage: false});
+                    const res =  this.state.signup(document.getElementById("signupform"));
+                    this.setState({title : '', package: '', type: '', message: '', product: ''});
+                    this.props.history.push('/createUser')
+                }, 5000);
+            }, 3000)
         }
     }
 
     render() {
         return (
             <div className="container">
+            {/* Success Message */}
+            { this.state.successmessage ? 
+                <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                    <span className="mt-3">{this.state.successmessage}</span>
+                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                :   <span></span>
+            }
 
             <div className="row mt-4 mx-auto">
 
-                <div className="col-md-12" id="profile">
+                <div className="col-md-8 offset-2" id="profile">
                     <form onSubmit={this.handleSubmit}>
                         <div className="card">
-                            <div className="card-header text-white">
-                                Create User
+                            <div className="card-header bg-medium font-weight-bold text-dark">
+                                CREATE USER
                             </div>
                             <div className="card-body">
                             <div className="row">
@@ -63,63 +101,64 @@ class CreateUser extends Component {
                             </div>
                                 <div className="row">
 
-                                    
-                                    <div className="col-md-6 mb-3">
+                                <div className="col-md-12 mb-1">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Name</label>
-                                            <input type="text" className="form-control form-control-sm" name="firstname"
-                                                id="firstname" placeholder="First Name" 
-                                                value={this.state.firstname}
-                                                onChange={this.handleInputChange}/>
+                                    {/* <label for="name">Name</label> */}
+                                    <input type="text" className="form-control alt" id="name" name="name" placeholder="Name" aria-label="Name"
+                                        aria-describedby="name" autoComplete="name" required
+                                        value={this.state.usename}
+                                        onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
                                     
-                                    <div className="col-md-6 mb-3">
+                                <div className="col-md-12 mb-1">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Name</label>
-                                            <input type="text" className="form-control form-control-sm" name="lastname"
-                                                id="lastname" placeholder="Last Name"
-                                                value={this.state.lastname}
-                                                onChange={this.handleInputChange} />
+                                    {/* <label for="email">Email</label> */}
+                                    <input type="text" className="form-control alt" id="email" name="email" placeholder="Email" aria-label="Email"
+                                        aria-describedby="email" autoComplete="email" required
+                                        value={this.state.email}
+                                        onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
-
-                                    <div className="col-md-6 mb-3">
+                                    
+                                <div className="col-md-12 mb-1">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Email</label>
-                                            <input type="email" className="form-control form-control-sm" name="email"
-                                                id="email"  placeholder="johnDoe@mail.com" 
-                                                value={this.state.email}
-                                                onChange={this.handleInputChange}/>
+                                    {/* <label for="email">Telephone</label> */}
+                                    <input type="tel" className="form-control alt" id="telephone" name="telephone" placeholder="Telephone" aria-label="telephone"
+                                        aria-describedby="telephone" autoComplete="tel" required
+                                        value={this.state.telephone}
+                                        onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
-
-                                    <div className="col-md-6 mb-3">
+                                    
+                                <div className="col-md-12 mb-1">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Phone-number</label>
-                                            <input type="text" className="form-control form-control-sm" name="number"
-                                                id="number" placeholder="090 ..........." 
-                                                value={this.state.number}
-                                                onChange={this.handleInputChange}/>
+                                    {/* <label for="password">Password</label> */}
+                                    <input type="password" className="form-control alt" id="password" name="password" placeholder="Password..."
+                                        aria-label="password" aria-describedby="password" required
+                                        value={this.state.password}
+                                        onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
-
+                                
+                                   
                                 </div>
-
-
                             </div>
-
                             <div className="card-footer">
-                                <div className="float-right">
+                                <div className="text-center">
+                                {this.state.loading ? 
+                                <button type="submit" className="btn btn-sm bg-btn">
+                                    <div className="spinner-border text-secondary" role="status" id="loader">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
+                                </button>
+                                : <button type="submit" className="btn btn-sm btn-primary px-3">
+                                    <i className="fas fa-folder-open mr-2"></i>
+                                        Save
+                                    </button>
+                                }
 
-                                    <button className="btn btn-sm btn-primary">
-                                        <i className="fas fa-folder-open"></i>
-            Save
-        </button>
-        &nbsp;<button className="btn btn-sm btn-danger" type="reset">
-                                        <i className="fas fa-history"></i>
-            Reset
-        </button>
+                                    
                                 </div>
                             </div>
                         </div>

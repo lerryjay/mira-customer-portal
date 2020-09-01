@@ -44,7 +44,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: true,
+      loggedIn: sessionStorage.getItem('loggedIn'),
       users: [],
       profile: [],
       admin: true,
@@ -66,6 +66,10 @@ class App extends Component {
     .then(response => response.json())
     .then(json => {
       console.log(json.data);
+     
+      sessionStorage.setItem('loggedIn', true);
+      sessionStorage.setItem('userId', json.data.userid);
+      sessionStorage.setItem('role', json.data.role);
       // Get user data from the database
       this.state.profile.push(json.data)
       console.log(this.state.profile[0], json.data, "profile")
@@ -79,7 +83,7 @@ class App extends Component {
       return json;
     });
 ;
-    this.setState({ loggedIn: true })
+    this.setState({ loggedIn: sessionStorage.getItem('loggedIn') })
     console.log('Yuppie i logged ', data);
     return { status: true, message: 'Login successful' };
   }
@@ -276,7 +280,7 @@ handleProductRoute = (e) => {
   })
 }
 
-  logoutUser = () => this.setState({ loggedIn: false });
+  logoutUser = () => this.setState({ loggedIn: sessionStorage.setItem('loggedIn', false) });
 
   getContext = () => {
     return {

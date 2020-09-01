@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import image from '../../assets/images/dammy.jpg'
 import avatar from '../../assets/images/avatar.png'
 import {withContext} from '../../common/context';
-import { HTTPURL } from '../../common/global_constant';
+import { HTTPURL, APIKEY } from '../../common/global_constant';
+import ViewClient from '../view_client/ViewClient';
 
 class ListClient extends Component {
     constructor(props) {
@@ -24,8 +25,8 @@ class ListClient extends Component {
 
     getClient() {
         const headers = new Headers();
-        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
-        fetch(HTTPURL + 'clients/?userid=5f44c8e94593e', {
+        headers.append('API-KEY', APIKEY );
+        fetch(HTTPURL + `clients/?userid=${sessionStorage.getItem("userId")}`, {
             method: 'GET',
             headers: headers
         })
@@ -52,6 +53,7 @@ class ListClient extends Component {
     }
 
     render() {
+        
         return (
             <div className="container-fluid">
                 <div className="row mt-4">
@@ -89,7 +91,7 @@ class ListClient extends Component {
                                                             <td>{client.telephone} </td>
                                                             <td>{client.businessname}</td>
                                                         <td>
-                                                        <Link onClick={this.handleViewMore}>
+                                                                 <Link to={() => `/viewClient/${client.user_id}`} >
                                                         <span class="badge px-3 py-2 mr-2 badge-primary" value={client.id} style={{cursor:"pointer"}}>View</span>
                                                         </Link>
                                                         <Link onClick={this.deleteModal}>

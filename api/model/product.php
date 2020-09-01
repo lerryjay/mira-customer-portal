@@ -117,9 +117,9 @@
       return $this->getModule('WHERE id = ? AND status = ? ','si', [$moduleId,$status]); 
     }
 
-    public function updateProduct($productId,$productName,$description)
+    public function updateProduct($productId,$productName,$description,$imageurl)
     {
-      return $this->update('products', ['name'=>$productName,'description'=>$description ], ['id'=>$productId]);
+      return $this->update('products', ['name'=>$productName,'description'=>$description, 'imageurl'=>$imageurl ], ['id'=>$productId]);
     }
 
     public function updateProductImage($productId,$imageurl)

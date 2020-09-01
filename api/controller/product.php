@@ -135,7 +135,7 @@
      * @param HTTPPOSTSTRING $description New description of the product
      * @return JSON [status:bool,'message:string]
      **/
-    public function updateproduct()
+    public function update()
     {
       extract($this->validateupdateproduct());
       $imageurl = $product['imageurl'];
@@ -145,7 +145,7 @@
         $imageurl = $upload['status'] ? $upload['data'] : $imageurl;
         $message  = $upload['message'];
       }
-      $update = $this->productModel->updateProduct($name,$description,$imageurl);
+      $update = $this->productModel->updateProduct($productId,$name,$description,$imageurl);
       if($update) $response = ['status'=>true,'message'=>'Product Updated sucessfully!'.$message];
       else $response = ['status'=>false,'message'=>'Product Updated failed due to an expected error!'];
       $this->setOutputHeader(['Content-type:application/json']);
@@ -219,7 +219,7 @@
      * @param HTTPGET $userId user performing the action
      * @return JSON [status:bool,message:string]
      **/
-    public function deleteproduct()
+    public function delete()
     {
       extract($this->validateduserproductpermission());
       if($user['role'] !== 'admin'){
@@ -227,8 +227,8 @@
         $this->setOutput(json_encode(['status'=>false,'message'=>'You do not have the required permission to perform access this resource!']));
       }
       $deleted = $this->productModel->deleteproduct($productId);
-      if($deleted)$response = ['status'=>true,'message'=>'Update successful!'];
-      else $response = ['status'=>false,'message'=>'Update failed. An unexpected error occured!'];
+      if($deleted)$response = ['status'=>true,'message'=>'Product deleted successfully!'];
+      else $response = ['status'=>false,'message'=>'Delete failed. An unexpected error occured!'];
 
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
@@ -338,7 +338,7 @@
      * @param HTTPPOSTSTRING $moduleid
      * @return JSONHTTPRESPONSE status:bool,message:string,data:string if sucess or null
      **/
-    public function updatemodule(Type $var = null)
+    public function updatemodule()
     {
       extract($this->validateUpdateModule());
       $update = $this->productModel->updateProductModule($moduleId,$name,$description);

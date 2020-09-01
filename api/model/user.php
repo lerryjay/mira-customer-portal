@@ -13,7 +13,7 @@
 
     public function getUsers($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT * FROM users '.$condition;
+      $sql = 'SELECT *, IFNULL((SELECT businessname FROM clients WHERE user_id = users.id ),"") AS businessname,IF((SELECT count(businessname) FROM clients WHERE user_id = users.id ) > 0,1,0) AS isclient FROM users '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->rows;
       else return false;
@@ -34,14 +34,14 @@
       return $this->getUser('WHERE id = ? AND status = ?', 'si', [$userId,$status]);
     }
 
-    public function register($name,$email,$telephone,$password,$companyId,$imageurl)
+    public function register($name,$email,$telephone,$password,$companyId,$imageurl,$role ='user')
     {
       // var_dump($name,$email,$telephone,$password,$companyId);
       $id = uniqid();
       //
       //
       
-      $insert =  $this->insert('users',['id'=>$id,'name'=>$name,'company_id'=>$companyId,'email'=>$email,'telephone'=>$telephone,'password'=>$password,'createdat'=>date("Y-m-d H:i:s"),'imageurl'=>$imageurl]);
+      $insert =  $this->insert('users',['id'=>$id,'name'=>$name,'company_id'=>$companyId,'email'=>$email,'telephone'=>$telephone,'password'=>$password,'role'=>$role,'createdat'=>date("Y-m-d H:i:s"),'imageurl'=>$imageurl]);
       // var_dump($insert);
       if($insert['status']) return $id;
       else return false;

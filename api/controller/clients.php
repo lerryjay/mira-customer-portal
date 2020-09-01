@@ -137,6 +137,32 @@ class Clients extends Controller
       return ['telephone'=>$telephone,'businessName'=>$businessName,'email'=>$email,'name'=>$name,'password'=>$password,'companyId'=>$this->companyId,'clientUserId'=>$clientUserId];
   }
 
+  /**
+   * undocumented function summary
+   * @param Type $var Description
+   * @return type
+   * @throws conditon
+   **/
+  public function getclient()
+  {
+    extract($_GET);
+
+    $userId       = $userid ?? $this->userId ?? '';
+    $clientUserId = $clientid ?? '';
+    loadController('user');
+    $user = User::validateUser($userId,true); 
+    loadModel('client');
+    $this->clientModel  = new ClientModel();
+    $client = $this->clientModel->getClientByUserId($clientUserId);
+    if(!$client){
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode(['status'=>false,'message'=>'Client does not exist' ])); 
+    }
+
+    $this->setOutputHeader(['Content-type:application/json']);
+    $this->setOutput(json_encode(['status'=>true,'message'=>'Client retrieved sucessfully!', 'data'=>$client]));
+  }
+
     /**
    * Undocumented function long description
    *
@@ -165,10 +191,11 @@ class Clients extends Controller
   {
     extract($_POST);
 
-    $userId       = $userid ?? '';
+    $userId       = $userid ?? $this->userId ?? '';
     $clientUserId = $clientid ?? '';
-
+    loadController('user');
     $user = User::validateUser($userId,true); 
+    loadModel('client');
 
     $this->clientModel  = new ClientModel();
     $client = $this->clientModel->getClientByUserId($clientUserId);
@@ -291,9 +318,12 @@ class Clients extends Controller
   public function updateproduct()
   {
     extract($this->validateUpdateProduct());
+    loadModel('client');
+    $this->clientModel = new ClientModel();
 
-    $updated = $this->clientModel->updateClientProducts($clientUserId,$productId,$modules);
-    if($update) $response = ['status'=>true,'message'=>'Client product update sucessfully!'.$message];
+    $updated = $this->clientModel->updateClientProducts($clientUserId,$productId,['modules'=>$modules]);
+    
+    if($updated) $response = ['status'=>true,'message'=>'Client product update sucessfully!'];
     else $response = ['status'=>false,'message'=>'Client product update failed due to an expected error!'];
     $this->setOutputHeader(['Content-type:application/json']);
     $this->setOutput(json_encode($response));
@@ -310,11 +340,11 @@ class Clients extends Controller
   {
     extract($_POST);
 
-    $userId       = $userid ?? '';
+    $userId       = $userid ?? $this->userId ?? '';
     $productId    = $productid ?? '';
     $clientUserId = $clientid ?? '';
 
-    $modules      = json_decode($modules,true) ?? [];
+    $modules      = explode(',',$modules) ?? [];
 
     loadModel('product');
     loadController('user');
@@ -331,7 +361,7 @@ class Clients extends Controller
     $productModules  = $this->productModel->getModulesByProductId($productId);
     
     foreach ($productModules as $module) {
-      $itemExist = array_search($modules,$module['id']);
+      $itemExist = array_search($module['id'],$modules);
       if($itemExist !== false) array_splice($modules,$itemExist);
     }
 
@@ -340,7 +370,7 @@ class Clients extends Controller
       $this->setOutput(json_encode(['status'=>false,'message'=>'Invalid modules supplied!','data'=>['modules'=>$modules] ])); 
     }else $modules = $_POST['modules'];
 
-    return ['user'=>$user,'userId'=>$userId,'clientUserId'=>$clientUserId,'modules'=>$modules ];
+    return ['user'=>$user,'userId'=>$userId,'clientUserId'=>$clientUserId,'modules'=>$modules,'product'=>$product,'productId'=>$productId ];
   }
 
   /**

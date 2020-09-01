@@ -12,6 +12,40 @@
     }
 
     /**
+     * undocumented function summary
+     *
+     * @param Type $var Description
+     * @return type
+     **/
+    public function index()
+    {
+      extract($_GET);
+      $userId = $userid ?? $this->userId ?? '';
+      loadModel('user');
+
+      $user = Self::validateUser($userId,true);
+      $data = $this->userModel->getCompanyUsersByRole($this->companyId,'user');
+      $users = [];
+      if($data){
+        foreach($data as $user) {
+          $users[] = [
+            'name'=>$user['name'],
+            'email'=>$user['email'],
+            'telephone'=>$user['telephone'],
+            'imageurl'=>$user['imageurl'],
+            'businessname'=>$user['businessname'],
+            'isclient'=>$user['isclient'] ? true : false,
+          ];
+        }
+        $response = ['status'=>true,'message'=>'Users retrieved successfully', 'data'=>$users];
+      }
+      else $response = ['status'=>true,'message'=>'No user registered','data'=>[]];
+
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
+    }
+
+    /**
      * Registers a new user
      *
      * @param HTTPPOSTPARAMS $_POST - email,name,telephone,username,password,role - role of the user

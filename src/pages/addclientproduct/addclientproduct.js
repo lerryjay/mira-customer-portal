@@ -11,10 +11,41 @@ class AddClientProduct extends Component {
             productid: '',
             modules: '',
             cost:'',
+            products: '',
+            product: [],
             errormessage: '',
             loading: false,
             successmessage: '',
         };
+    }
+
+    componentDidMount() {
+        this.getProducts();
+        
+    }
+
+    getProducts() {
+        const headers = new Headers();
+        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+        fetch(HTTPURL + 'product', {
+            method: 'GET',
+            headers: headers
+        })
+        .then(response => response.json())
+        .then(data => {
+            this.setState({products: data.data})
+              
+        let product = []
+        for (let i = 0; i < this.state.products.length; i++) {
+            console.log(this.state.products[i], "okay")
+            product.push(this.state.products[i])
+            this.setState({ product :  product });
+            console.log(this.state.product)
+        }
+
+        });
+
+      
     }
     
     handleInputChange = e => {
@@ -96,57 +127,54 @@ class AddClientProduct extends Component {
                             </div>
                                 <div className="row">
 
-                                <div className="col-md-12 mb-1">
-                                        <div className="form-group">
-                                            <input type="text" className="form-control form-control-sm" name="userid"
-                                                id="userid" placeholder="Client ID" 
-                                                value={this.state.clientid} required
-                                                onChange={this.handleInputChange}/>
-                                        </div>
-                                    </div>
-
                                     <div className="col-md-12 mb-3">
                                             <div className="form-group">
                                                 <select onChange={this.handleInputChange} name="type" id="type" className=" form-control form-select form-select-sm">
-                                                    <option value="" selected disabled>--Select&nbsp;Product&nbsp;Name--</option>
-                                                    <option value="Accissebs">Accissebs</option>
-                                                    <option value="SYSBANKER EE">SYSBANKER EE</option>
-                                                    <option value="Mira HPro">Mira HPro</option>
+                                               
+                                                    
+                                                <option value="" selected disabled>--Select&nbsp;Product&nbsp;Name--</option>
+                                             
+                                                    {this.state.product.map( product => {
+                                                        return(
+                                                        <option value={product.id}>{product.name}</option>
+                                                        
+                                                        )}
+                                                    )}
                                                 </select>
                                             </div>
+                                           
                                         </div>
-
-                                    <div className="col-md-12 mb-1">
-                                        <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Product Name</label>
-                                            <input type="text" className="form-control form-control-sm" name="name"
-                                                id="name" placeholder="Product ID" 
-                                                value={this.state.productid}
-                                                onChange={this.handleInputChange}/>
-                                        </div>
-                                    </div>
 
                                     <div className="col-md-12 mb-1">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Cost</label>
                                             <input type="text" className="form-control form-control-sm" name="name"
-                                                id="name" placeholder="Cost" 
+                                                id="name" placeholder="Total Cost" 
                                                 value={this.state.cost}
                                                 onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
-                                    
-                                    <div className="col-md-12">
-                                        <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Modules</label>
-                                            <textarea type="text" className="form-control form-control-sm" name="description"
-                                                id="description" placeholder="Modules"
-                                                value={this.state.modules}
-                                                onChange={this.handleInputChange} />
-                                        </div>
-                                    </div>
+                          
 
                                 </div>
+
+                                <div className="row">
+                                <div className="col-md-4">
+                                    <p className="list-group-item">Design <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                        </label>
+                                    </p>
+                                </div>
+                                <div className="col-md-4">
+                                <p className="list-group-item">Development <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                    </label>
+                                </p>
+                                </div>
+                                <div className="col-md-4">
+                                <p className="list-group-item">Hosting <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
+                                    </label>
+                                </p>
+                                </div>
+                            </div>
 
 
                             </div>

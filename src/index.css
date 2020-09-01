@@ -21,6 +21,36 @@ body{
   font-size: 13px !important;
 }
 
+.card.products{
+  width: 300px;
+}
+.card.products .fa {
+  visibility: hidden;
+  display: none;
+  font-size:small;
+  color: #007bff;
+  background: #ddd;
+  padding: 6px;
+  border-radius: 50%;
+}
+.card.products:hover .fa-edit {
+  visibility: visible;
+  display: block;
+  position: absolute;
+  top: 10px;
+  left: 230px;
+  cursor: pointer;
+}
+
+.card.products:hover .fa-trash {
+  visibility: visible;
+  display: block;
+  position: absolute;
+  top: 10px;
+  left: 260px;
+  cursor: pointer;
+}
+
 @media (prefers-color-scheme: dark) {
   /* defaults to dark theme */
   div.home {

@@ -40,8 +40,8 @@ class viewproduct extends Component {
 
     handleViewMore = e => {
         this.props.viewmoredetails(e)
-       this.props.history.push('/productdetails');
-   }
+        this.props.history.push('/productdetails');
+    }
 
     render() {
         return (
@@ -62,7 +62,7 @@ class viewproduct extends Component {
                     <div className="row my-2">
                     {this.state.products.map( product => {
                         return(
-                        <div className="col-md-3 col-md-6 col-sm-12">
+                        <div className="col-md-3 col-lg-4 col-sm-12">
                             <div className="card text-center products">
                                 <img src={image} className="image_product" alt="" />
                                 <div className="card-body">
@@ -71,6 +71,8 @@ class viewproduct extends Component {
                                         <span class="badge px-3 py-2 badge-primary" value={product.id} style={{cursor:"pointer", fontSize:'medium'}}>View</span>
                                     </Link>
                                 </div>
+                                    <i className="fa fa-edit mr-1"></i>
+                                    <i className="fa fa-trash text-danger"></i>
                             </div>
                         </div>
                         )}

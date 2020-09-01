@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { HTTPURL } from '../../common/global_constant';
 import {withContext} from '../../common/context';
+import './createticket.css'
 
 class create_ticket extends Component {
     constructor(props){
@@ -141,26 +142,8 @@ class create_ticket extends Component {
                             </div>
                                 <div className="row">
                                     
-                                <div className="col-md-6 mb-3">
-                                        <div className="form-group">
-                                            <input type="text" className="form-control form-control-sm" name="userid"
-                                                id="userid" placeholder="User ID" 
-                                                value={this.state.userid} required
-                                                onChange={this.handleInputChange}/>
-                                        </div>
-                                    </div>
-
-                                <div className="col-md-6 mb-3">
-                                    <div className="form-group">
-                                        <input type="text" className="form-control form-control-sm" name="title"
-                                            id="title" placeholder="Title" 
-                                            value={this.state.title} required
-                                            onChange={this.handleInputChange} />
-                                    </div>
-                                </div>
-                                
                                     
-                                    <div className="col-md-12 mb-3">
+                                <div className="col-md-12 mb-3">
                                             <div className="form-group">
                                                 <select onChange={this.handleInputChange} name="type" id="type" className=" form-control form-select form-select-sm">
                                                     <option value="" selected disabled>--Select&nbsp;Ticket&nbsp;Type--</option>
@@ -170,17 +153,16 @@ class create_ticket extends Component {
                                                 </select>
                                             </div>
                                         </div>
-                                        {/* <div className="col-md-6 mb-3">
-                                            <div className="form-group">
-                                                <select onChange={this.handleInputChange} name="product" id="product" className=" form-control form-select form-select-sm">
-                                                    <option value="" selected disabled>--Select&nbsp;Product &nbsp;--</option>
-                                                    <option value="complaint">Accsiss eBs</option>
-                                                    <option value="request">SYSBANKER EE</option>
-                                                    <option value="request">Mira HPro</option>
-                                                    <option value="enquiry">Accsiss PPs</option>
-                                                </select>
-                                            </div>
-                                        </div> */}
+                                
+                                <div className="col-md-12 mb-3">
+                                    <div className="form-group">
+                                        <input type="text" className="form-control form-control-sm" name="title"
+                                            id="title" placeholder="Title" 
+                                            value={this.state.title} required
+                                            onChange={this.handleInputChange} />
+                                    </div>
+                                </div>
+                                
                                         
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
@@ -193,20 +175,16 @@ class create_ticket extends Component {
                                     <div className="images">
                                         { files }
                                     </div>
-                                    <div className="col-md-12 mb-3">
-                                        <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Image</label>
-                                            <input type="file" className="form-file form-file-sm" name="files[]"
-                                                 placeholder="" multiple
-                                                onChange={(e)=>this.handleImageChange(e)} />
-                                        </div>  
-                                    </div>
                                 </div>
 
 
                             </div>
 
                             <div className="card-footer">
+                                <label htmlFor="files" className="btn btn-sm btn-primary py-2 px-3">Attach File</label>
+                                <input style={{display:'none'}} type={"file"}  id="files" 
+                                className="form-file form-file-sm" name="files[]"  placeholder="" multiple
+                                onChange={(e)=>this.handleImageChange(e)} />
                                 <div className="float-right">
                                 {this.state.loading ? 
                                 <button type="submit" className="btn btn-sm bg-btn">

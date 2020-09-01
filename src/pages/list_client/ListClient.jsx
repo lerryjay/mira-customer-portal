@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import image from '../../assets/images/dammy.jpg'
 import avatar from '../../assets/images/avatar.png'
 import {withContext} from '../../common/context';
+import { HTTPURL } from '../../common/global_constant';
 
 class ListClient extends Component {
     constructor(props) {
@@ -10,14 +11,29 @@ class ListClient extends Component {
 
         this.state = {
             ...this.props, 
-            showmodal: true
+            showmodal: true,
+            clients: []
+
         }
 
     }
 
-    // showDelete = () => {
-    //     this.setS
-    // }
+    componentDidMount(){
+        this.getClient();
+    }
+
+    getClient() {
+        const headers = new Headers();
+        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+        fetch(HTTPURL + 'clients/?userid=5f44c8e94593e', {
+            method: 'GET',
+            headers: headers
+        })
+        .then(response => response.json())
+        .then(data => {
+            this.setState({clients: data.data})
+        });
+    }
 
     render() {
         return (
@@ -47,14 +63,15 @@ class ListClient extends Component {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
+                                                {this.state.clients.map( client => {
+                                                     return(
+                                                        <tr>
                                                         <td className="align-middle">
-                                                            {/* <img src={image} alt="" width="30" className="rounded-circle" /> */}
-                                                            <img src={image} alt="" width="30" className="rounded-circle" /></td>
-                                                            <td>Jane Doe</td>
-                                                        <td>JohnDoe@mail.com</td>
-                                                            <td>0900000000</td>
-                                                            <td>John and Sons</td>
+                                                            <img src={avatar} alt="" width="30" className="rounded-circle" /></td>
+                                                            <td>{client.name} </td>
+                                                        <td>{client.email} </td>
+                                                            <td>{client.telephone} </td>
+                                                            <td>{client.businessname}</td>
                                                         <td>
                                                         <Link to="/viewClient">
                                                         <span class="badge px-3 py-2 mr-2 badge-primary" style={{cursor:"pointer"}}>View</span>
@@ -65,37 +82,9 @@ class ListClient extends Component {
                                                         </td>
                                
                                                     </tr>
-                                                    <tr>
-                                                        <td className="align-middle">
-                                                        <img src={avatar} alt="" width="30" height="30" className="rounded-circle" /></td>
-                                                            <td>Jane Doe</td>
-                                                        <td>JohnDoe@mail.com</td>
-                                                            <td>0900000000</td>
-                                                            <td>John and Sons</td>
-                                                        <td>
-                                                        <Link to="/viewClient">
-                                                        <span class="badge px-3 py-2 mr-2 badge-primary" style={{cursor:"pointer"}}>View</span>
-                                                        </Link>
-                                                        <Link to="/viewClient">
-                                                        <span class="badge px-3 py-2 badge-danger" style={{cursor:"pointer"}}>Delete</span>
-                                                        </Link>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="align-middle"><img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt=""
-                                                            width="30" /></td>
-                                                            <td>Jane Doe</td>
-                                                        <td>JohnDoe@mail.com</td>
-                                                            <td>0900000000</td>
-                                                            <td>John and Sons</td>
-                                                        <td>
-                                                        <Link to="/viewClient">
-                                                        <span class="badge px-3 py-2 mr-2 badge-primary" style={{cursor:"pointer"}}>View</span>
-                                                        </Link>
-                                                        <span class="badge px-3 py-2 badge-danger " data-toggle="modal" data-target="#exampleModal" style={{cursor:"pointer"}}>Delete</span>
-                                                       
-                                                        </td>
-                                                    </tr>
+
+                                                     )}
+                                                )}
     
                                                 </tbody>
                                             </table>

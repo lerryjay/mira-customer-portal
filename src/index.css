@@ -613,6 +613,11 @@ p.image_name {
   font-size: large !important;
   margin-top: 20px;
 }
+@media(max-width: 987px) {
+  .content {
+    margin-left: 0 !important;
+  }
+}
 
  
 @media (min-width: 992px) {

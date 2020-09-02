@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import { HTTPURL } from '../../common/global_constant';
+import { HTTPURL,APIKEY } from '../../common/global_constant';
 import {withContext} from '../../common/context';
 import image from '../../assets/images/Accsiss.png'
 
@@ -10,15 +10,18 @@ class viewproduct extends Component {
         super(props);
         this.state = {
             ...props,
-            product: [],
-            products: [],
-            id: 1
+            // product: [],
+            products: []
         }
     }
 
     componentDidMount(){
+        this.getProduct();
+    }
+
+    getProduct() {
         const headers = new Headers();
-        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+        headers.append('API-KEY', APIKEY);
         fetch(HTTPURL + 'product', {
             method: 'GET',
             headers: headers
@@ -28,19 +31,11 @@ class viewproduct extends Component {
             this.setState({products: data.data})
             console.log(this.state.products)
         });
-
-        let product = []
-        console.log('changed successfully!', product)
-        for (let i = 0; i < this.state.products.length; i++) {
-            console.log(this.state.products[i])
-            product.push(this.state.products[i])
-            this.setState({ product :  product });
-        }
     }
 
     handleViewMore = e => {
-        this.props.viewmoredetails(e)
-        this.props.history.push('/productdetails');
+        // this.props.viewmoredetails(e)
+        // this.props.history.push('/productdetails');
     }
 
     render() {
@@ -67,7 +62,8 @@ class viewproduct extends Component {
                                 <img src={image} className="image_product" alt="" />
                                 <div className="card-body">
                                     <h5 className="card-title">{product.name}</h5>
-                                    <Link onClick={this.handleViewMore}>
+                                    {/* <Link  to={{ pathname:"", search}} onClick={this.handleViewMore}> */}
+                                    <Link  to={() => `/productdetails/${product.id}`}>
                                         <span class="badge px-3 py-2 badge-primary" value={product.id} style={{cursor:"pointer", fontSize:'medium'}}>View</span>
                                     </Link>
                                 </div>

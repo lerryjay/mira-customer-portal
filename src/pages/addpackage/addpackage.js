@@ -12,13 +12,30 @@ class addpackage extends Component {
             name : '', 
             productid: '',
             description: '',
+            products: [],
             errormessage: '',
             loading: false,
             successmessage: '',
         };
-        console.log(this.props.getProduct)
     }
 
+    componentDidMount() {
+       this.getProduct()
+    }
+
+    getProduct() {
+        const headers = new Headers();
+        headers.append('API-KEY', this.state.apiKey);
+        fetch(HTTPURL + 'product', {
+            method: 'GET',
+            headers: headers
+        })
+        .then(response => response.json())
+        .then(data => {
+            this.setState({products: data.data})
+            console.log(this.state.products)
+        });
+    }
     
     handleInputChange = e => {
         const { name, value } = e.target
@@ -106,15 +123,12 @@ class addpackage extends Component {
                                         <select onChange={this.handleInputChange} name="productid" id="productid" className=" form-control form-select form-select-sm">
                                         <option value="" selected disabled>--Select&nbsp;Product&nbsp;--</option>
                                         
-                                        {/* <option>{this.props.getProduct.name}</option> */}
-                                            {/* {this.state.getProduct.map(product => {
+                                            {this.state.products.map(product => {
                                                 return(
                                                     <option value={product.id}>{product.name}</option>
                                                 )
                                                 })
-                                            } */}
-                                                    {/* <option value="5f4510df9b35f">Accissebs</option>
-                                                    <option value="5f44e90983ff1">SYSBANKER EE</option> */}
+                                            }
                                             </select>
                                         </div>
                                     </div>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import image from '../../assets/images/Accsiss.png'
-import { HTTPURL } from '../../common/global_constant';
+import { HTTPURL, APIKEY } from '../../common/global_constant';
 import {withContext} from '../../common/context';
 
 class product_details extends Component {
@@ -10,30 +10,54 @@ class product_details extends Component {
 
         this.state = {
             ...this.props, 
+            name: '',
+            description: '',
             packages: ''
-        }
 
+        }
+        console.log(this.props);
     }
 
     componentDidMount() {
-       this.getPackages();
-    }
-
-    getPackages() {
-        let productid = this.props.getProduct.id
-
+        const productid = this.props.location.pathname.split('/')[2];
+        
         const headers = new Headers();
-        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
-        fetch(HTTPURL + `product/modules?productid=${productid}`, {
-            method: 'GET',
-            headers: headers
+        headers.append('API-KEY', APIKEY );
+
+        fetch(`${HTTPURL}/product/getproduct?productid=${productid}&userid=${sessionStorage.getItem('userId')}`, {
+            method: "GET",
+            headers: headers,
+        }).then(res => res.json())
+        .then(result => {
+            console.log(result, "okay")
+            // if (result.status == true) {
+            //     this.setState({ name: result.data.name, description: result.data.description })       
+            // }
+         
         })
-        .then(response => response.json())
-        .then(data => {
-            this.setState({packages: data.data})
-            console.log(this.state.packages, data,"packages")
-        });
     }
+
+    // componentDidMount() {
+    //    this.getPackages();
+    // }
+
+    // getPackages() {
+    //     let productid = this.props.getProduct.id
+
+    //     const headers = new Headers();
+    //     headers.append('API-KEY', APIKEY);
+
+    //     fetch(HTTPURL + `product/modules?productid=${productid}`, {
+    //         method: 'GET',
+    //         headers: headers
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         // this.setState({packages: data.data})
+    //         console.log(data,"packages")
+    //     });
+    // }
+
 
     render() {
         return (
@@ -43,7 +67,7 @@ class product_details extends Component {
                         <img src={image} className="img-fluid"  alt=""/>
                     </div>
                     <div className="col-md-6">
-                        <h4 className="text-dark">{ this.props.getProduct.name}</h4>
+                        <h4 className="text-dark">{ this.state.name}</h4>
                         <div className="description">
                             <p>
                             { this.props.getProduct.description} 

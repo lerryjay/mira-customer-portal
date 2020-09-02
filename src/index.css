@@ -599,7 +599,9 @@ p.image_name {
   -o-transition: all 0.25s ease-out;
   transition: all 0.25s ease-out;
 }
-
+.contentlogin{
+  margin-left: 100px !important;
+}
 .content {
   width: calc(100vw - 200px) !important;
   margin-left: 200px !important;

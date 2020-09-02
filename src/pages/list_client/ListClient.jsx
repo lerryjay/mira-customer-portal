@@ -91,14 +91,14 @@ class ListClient extends Component {
                                                             <td>{client.telephone} </td>
                                                             <td>{client.businessname}</td>
                                                         <td>
-                                                                 <Link to={() => `/viewClient/${client.user_id}`} >
-                                                        <span class="badge px-3 py-2 mr-2 badge-primary" value={client.id} style={{cursor:"pointer"}}>View</span>
-                                                        </Link>
-                                                        <Link onClick={this.deleteModal}>
-                                                        <span class="badge px-3 py-2 badge-danger" id="myBtn" style={{cursor:"pointer"}}>Delete</span>
-                                                        </Link>
+                                                            <Link to={() => `/viewClient/${client.user_id}`} >
+                                                                <span class="badge px-3 py-2 mr-2 badge-primary" value={client.id} style={{cursor:"pointer"}}>View</span>
+                                                            </Link>
+                                                            <Link onClick={this.deleteModal}>
+                                                                <span class="badge px-3 py-2 badge-danger" id="myBtn" style={{cursor:"pointer"}}>Delete</span>
+                                                            </Link>
                                                         </td>
-                               
+                            
                                                     </tr>
 
                                                      )}

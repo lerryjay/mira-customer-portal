@@ -92,7 +92,7 @@ class create_ticket extends Component {
 
     render() {
         let files = this.state.files.map( file=> {
-            this.state.imagePreviewUrl = URL.createObjectURL(file)
+            this.setState({imagePreviewUrl: URL.createObjectURL(file) })
             return (
              file.name.match(/\.(jpg|jpeg|png|gif)$/)
                 ?< div className="imgPreview m-2" id="files">

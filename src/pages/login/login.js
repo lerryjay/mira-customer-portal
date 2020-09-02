@@ -17,6 +17,10 @@ class Login extends Component {
             successmessage: ''
         };
     }
+
+    // componentDidMount() {
+    //     document.querySelector('.content').classList.add("contentlogin")
+    // }
     
     handleInputChange = e => {
         const { name, value } = e.target
@@ -57,8 +61,8 @@ class Login extends Component {
                     this.props.history.push('/dashboard');
                 }, 2000);
             }, 3000);
-
-           
+            // document.querySelector('.content').style.width = "";
+            // document.querySelector('.content').style.marginLeft = "100px";
         //    const res = await this.state.login(document.getElementById("loginform"));
         //    if(!res['status'])this.setState({errormessage: res['message']});
         //     else{
@@ -70,10 +74,10 @@ class Login extends Component {
         console.log('submitting')
     }
 
-    componentDidMount(){
-        document.querySelector('.content').style.width = "100vw";
-        document.querySelector('.content').style.marginLeft = "0";
-     }
+    // componentDidMount(){
+    //     document.querySelector('.content').style.width = "100vw";
+    //     document.querySelector('.content').style.marginLeft = "0";
+    //  }
 
 
     render() {
@@ -90,7 +94,7 @@ class Login extends Component {
                         </div>
                         :   <span></span>
                     }
-                <div className="row col-lg-5 col-md-8 col-sm-10 col-xs-12 mx-auto cent">
+                <div className="col-md-6 mx-auto" style={{marginTop: "calc(50vh/1.6)"}}>
                     <div className="card bg-light shadow border-0 py-3">
                         <div className="card-header bg-transparent text-center">
                             <img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt=""/>

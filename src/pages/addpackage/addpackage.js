@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
+
 import {withContext} from '../../common/context';
+import { HTTPURL } from '../../common/global_constant';
+
 
 class addpackage extends Component {
     constructor(props){
@@ -13,7 +16,9 @@ class addpackage extends Component {
             loading: false,
             successmessage: '',
         };
+        console.log(this.props.getProduct)
     }
+
     
     handleInputChange = e => {
         const { name, value } = e.target
@@ -28,7 +33,26 @@ class addpackage extends Component {
             this.setState({successmessage: 'Added Successfully!'})
             setTimeout(() =>{
                 this.setState({successmessage: false});
-                const res = this.state.addpackage(document.getElementById("addpackage"));
+
+                let data = document.getElementById("addpackage")
+
+                const headers = new Headers();
+                headers.append('API-KEY',this.state.apiKey);
+
+                let form = new FormData(data);
+                form.append("userid", this.props.userId);
+
+                fetch(HTTPURL + 'product/addmodule', {
+                    method: 'POST',
+                    body: form,
+                    headers: headers
+                })
+                .then(response => response.json())
+                .then(json => {
+                console.log(json);
+                return json;
+                });
+                // const res = this.state.addpackage(document.getElementById("addpackage"));
                  console.log('submitting')
                  this.setState({name: '', description: ''})
             }, 5000);
@@ -79,12 +103,19 @@ class addpackage extends Component {
 
                                 <div className="col-md-12 mb-1">
                                         <div className="form-group">
-                                        <select onChange={this.handleInputChange} name="type" id="type" className=" form-control form-select form-select-sm">
-                                                    <option value="" selected disabled>--Select&nbsp;Product&nbsp;--</option>
-                                                    <option value="Accissebs">Accissebs</option>
-                                                    <option value="SYSBANKER EE">SYSBANKER EE</option>
-                                                    <option value="Mira HPro">Mira HPro</option>
-                                                </select>
+                                        <select onChange={this.handleInputChange} name="productid" id="productid" className=" form-control form-select form-select-sm">
+                                        <option value="" selected disabled>--Select&nbsp;Product&nbsp;--</option>
+                                        
+                                        {/* <option>{this.props.getProduct.name}</option> */}
+                                            {/* {this.state.getProduct.map(product => {
+                                                return(
+                                                    <option value={product.id}>{product.name}</option>
+                                                )
+                                                })
+                                            } */}
+                                                    {/* <option value="5f4510df9b35f">Accissebs</option>
+                                                    <option value="5f44e90983ff1">SYSBANKER EE</option> */}
+                                            </select>
                                         </div>
                                     </div>
 

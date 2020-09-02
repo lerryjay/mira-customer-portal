@@ -303,6 +303,7 @@ handleProductRoute = (e) => {
 
 
   render() {
+    const {loggedIn, admin} = this.state;
 
     return (
 
@@ -316,34 +317,34 @@ handleProductRoute = (e) => {
                   :  (this.state.loggedIn && <ClientSidebar />)
                 }
                 
-                <div className="content">
                   <Switch>
                     {<Route path="/forgot_password" component={ForgotPassword} />}
                     {<Route path="/signup" component={SignUp} />}
                     {<Route path="/login" component={Login} />}
-                    {!this.state.loggedIn && <Route path="/" component={Login} />}
-                    {this.state.loggedIn && <Route exact path="/dashboard" component={Dashboard} />}
-                    {this.state.loggedIn && <Route path="/createclient" component={()=><CreateClient userId={userId} apiKey={apiKey}></CreateClient>} />}
-                    {this.state.loggedIn && <Route path="/createclientbyid" component={() => <CreateClientById userId={userId} apiKey={apiKey}></CreateClientById>} />}
-                    {this.state.loggedIn && <Route path="/createuser" component={CreateUser} />}
-                    {this.state.admin && this.state.loggedIn && <Route path="/profile" component={Profile} />}
-                    {!this.state.admin && this.state.loggedIn &&  <Route path="/clientprofile" component={ClientProfile} />}
-                    {this.state.loggedIn && <Route path="/ticketlist" component={TicketList} />}
-                    {this.state.loggedIn && <Route path="/viewclient" component={ViewClient} />}
-                    {this.state.loggedIn && <Route path="/listclient" component={ListClient} />}
-                    {this.state.loggedIn && <Route path="/changepassword" component={ChangePassword} />}
-                    {this.state.loggedIn && <Route path="/createproduct" component={CreateProduct} />}
-                    {this.state.loggedIn && <Route path="/addpackage" component={AddPackage} />}
-                    {this.state.loggedIn && <Route path="/addclientproduct" component={AddClientProduct} />}
-                    {this.state.loggedIn && <Route path="/viewticket" component={ViewTicket} />}
-                    {this.state.loggedIn && <Route path="/productcart" component={ProductCart} />}
-                    {this.state.loggedIn && <Route path="/viewproduct" component={ViewProduct} />}
-                    {!this.state.admin && this.state.loggedIn && <Route path="/view_product" component={ClientViewProduct} />}
-                    {this.state.loggedIn && <Route path="/productdetails" component={ProductDetails} />}
-                    {this.state.loggedIn && <Route path="/createticket" component={CreateTicket} />}
+                    {!loggedIn && <Route path="/" component={Login} />}
+                <div className="content">
+                    {loggedIn && <Route exact path="/dashboard" component={Dashboard} />}
+                    {loggedIn && <Route path="/createclient" component={()=><CreateClient userId={userId} apiKey={apiKey}></CreateClient>} />}
+                    {loggedIn && <Route path="/createclientbyid" component={() => <CreateClientById userId={userId} apiKey={apiKey}></CreateClientById>} />}
+                    {loggedIn && <Route path="/createuser" component={CreateUser} />}
+                    {admin && loggedIn && <Route path="/profile" component={Profile} />}
+                    {!admin && loggedIn &&  <Route path="/clientprofile" component={ClientProfile} />}
+                    {loggedIn && <Route path="/ticketlist" component={TicketList} />}
+                    {loggedIn && <Route path="/viewclient" component={ViewClient} />}
+                    {loggedIn && <Route path="/listclient" component={ListClient} />}
+                    {loggedIn && <Route path="/changepassword" component={ChangePassword} />}
+                    {loggedIn && <Route path="/createproduct" component={CreateProduct} />}
+                    {loggedIn && <Route path="/addpackage" component={()=><AddPackage userId={userId} apiKey={apiKey}></AddPackage>} />}
+                    {loggedIn && <Route path="/addclientproduct" component={AddClientProduct} />}
+                    {loggedIn && <Route path="/viewticket" component={ViewTicket} />}
+                    {loggedIn && <Route path="/productcart" component={ProductCart} />}
+                    {loggedIn && <Route path="/viewproduct" component={ViewProduct} />}
+                    {!admin && loggedIn && <Route path="/view_product" component={ClientViewProduct} />}
+                    {loggedIn && <Route path="/productdetails" component={ProductDetails} />}
+                    {loggedIn && <Route path="/createticket" component={CreateTicket} />}
+                </div>
                     <Route component={NotFound} />
                   </Switch>
-                </div>
               </div>
             </Router>
           </Fragment>

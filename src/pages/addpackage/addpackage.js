@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 
-import { HTTPURL } from '../../common/global_constant';
 import {withContext} from '../../common/context';
+import { HTTPURL, APIKEY } from '../../common/global_constant';
+
 
 
 class addpackage extends Component {
@@ -12,10 +13,29 @@ class addpackage extends Component {
             name : '', 
             productid: '',
             description: '',
+            products: [],
             errormessage: '',
             loading: false,
             successmessage: '',
         };
+    }
+
+    componentDidMount() {
+       this.getProduct()
+    }
+
+    getProduct() {
+        const headers = new Headers();
+        headers.append('API-KEY', APIKEY);
+        fetch(HTTPURL + 'product', {
+            method: 'GET',
+            headers: headers
+        })
+        .then(response => response.json())
+        .then(data => {
+            this.setState({products: data.data})
+            console.log(this.state.products)
+        });
     }
     
     handleInputChange = e => {
@@ -35,9 +55,11 @@ class addpackage extends Component {
                 let data = document.getElementById("addpackage")
 
                 const headers = new Headers();
-                headers.append('API-KEY',this.state.apiKey)
+                headers.append('API-KEY',this.state.apiKey);
 
                 let form = new FormData(data);
+                form.append("userid", sessionStorage.getItem('userId'));
+
                 fetch(HTTPURL + 'product/addmodule', {
                     method: 'POST',
                     body: form,
@@ -48,7 +70,7 @@ class addpackage extends Component {
                 console.log(json);
                 return json;
                 });
-                
+                // const res = this.state.addpackage(document.getElementById("addpackage"));
                  console.log('submitting')
                  this.setState({name: '', description: ''})
             }, 5000);
@@ -99,12 +121,16 @@ class addpackage extends Component {
 
                                 <div className="col-md-12 mb-1">
                                         <div className="form-group">
-                                        <select onChange={this.handleInputChange} name="type" id="type" className=" form-control form-select form-select-sm">
-                                                    <option value="" selected disabled>--Select&nbsp;Product&nbsp;--</option>
-                                                    <option value="Accissebs">Accissebs</option>
-                                                    <option value="SYSBANKER EE">SYSBANKER EE</option>
-                                                    <option value="Mira HPro">Mira HPro</option>
-                                                </select>
+                                        <select onChange={this.handleInputChange} name="productid" id="productid" className=" form-control form-select form-select-sm">
+                                        <option value="" selected disabled>--Select&nbsp;Product&nbsp;--</option>
+                                        
+                                            {this.state.products.map(product => {
+                                                return(
+                                                    <option value={product.id}>{product.name}</option>
+                                                )
+                                                })
+                                            }
+                                            </select>
                                         </div>
                                     </div>
 

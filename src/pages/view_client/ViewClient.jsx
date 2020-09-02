@@ -2,35 +2,37 @@ import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import {withContext} from '../../common/context';
 import avatar from '../../assets/images/avatar.png'
+import { HTTPURL, APIKEY } from '../../common/global_constant';
+
 
 class ViewClient extends Component{
     constructor(props){
         super(props);
+        console.log(this.props);
         this.state = {
             product: [],
-            products : [ 
-                {
-                    "productid" : 1,
-                    "name" : "Accissebs",
-                    "packages" : "Design, Development, Email Setup",
-                    "price" : "₦370,000"
-                }, 
-                {
-                    "productid" : 2,
-                    "name" : "SYSBANKER EE",
-                    "packages" : "Design, Development, Email Setup",
-                    "price" : "₦100,000"
-                }, 
-                {
-                    "productid" : 3,
-                    "name" : "Mira HPro",
-                    "packages" : "Design, Development, Email Setup",
-                    "price" : "₦220,000"
-                }
-                
-            ]
+            products: [],
+            name: '',
+            email: '',
+            telephone: '',
+            businessname: ''
+
         };
     }
+   
+    componentWillMount() {
+        const clienId = this.props.location.pathname.split('/')[2];
+        fetch(`${HTTPURL}clients/getclient?clientid=${clienId}&userid=${sessionStorage.getItem('userId')}`, {
+            method: "GET",
+            headers: { "api-key": APIKEY },
+        }).then(res => res.json()).then(result => {
+            if (result.status == true) {
+                this.setState({ name: result.data.name, email: result.data.email, telephone: result.data.telephone, businessname: result.data.businessname })       
+            }
+         
+        })
+    }
+
     componentDidMount(){
 
         let product = []
@@ -76,7 +78,7 @@ render() {
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Name</label>
                                             <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value="" placeholder="Name" autoComplete="name" disabled />
+                                                id="" value={this.state.name} placeholder="Name" autoComplete="name" disabled />
                                         </div>
                                     </div>
 
@@ -84,14 +86,14 @@ render() {
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Email</label>
                                             <input type="email" className="form-control form-control-sm" name=""
-                                                id="" value="" placeholder="johnDoe@mail.com" autoComplete="email" disabled />
+                                                id="" value={this.state.email} placeholder="johnDoe@mail.com" autoComplete="email" disabled />
                                         </div>
                                     </div>
                                     <div className="col-md-6 mb-0">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Telephone</label>
                                             <input type="tel" className="form-control form-control-sm" name=""
-                                                id="" value="" placeholder="090 ......" autoComplete="tel" disabled />
+                                                id="" value={this.state.telephone} placeholder="090 ......" autoComplete="tel" disabled />
                                         </div>
                                     </div>
 
@@ -99,7 +101,7 @@ render() {
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Company&nbsp;Name</label>
                                             <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value="" placeholder="Company Name" autoComplete="name" disabled />
+                                                id="" value={this.state.businessname} placeholder="Company Name" autoComplete="name" disabled />
                                         </div>
                                     </div>
 
@@ -154,9 +156,9 @@ render() {
                         <div className="card-body">
                             <img src={avatar}
                                 alt="profile picture" className=" rounded-circle" style={{ marginTop: '-80px', width:"105px", height:"105px" }} />
-                                <h6 className="mt-3">Rhoda Stone</h6>
+                                <h6 className="mt-3">{this.state.name}</h6>
                                 <p className="mt-2"><i class="fa fa-map-marker" aria-hidden="true"></i> Lagos <br/>
-                                <i class="fa fa-envelope" aria-hidden="true"></i> rhoda@gmail.com </p>
+                                <i class="fa fa-envelope" aria-hidden="true"></i> {this.state.email} </p>
                         </div>
                     </div>
                 </div>
@@ -174,7 +176,7 @@ render() {
                                     Product is empty!
                                     </div>
                                     <button type="button" className="btn btn-sm btn-primary new_product mb-2">
-                                        <Link to="/addclientproduct">
+                                <Link to={{ pathname: "/addclientproduct", search:this.props.location.pathname.split('/')[2] }}>
                                     <i className="fas fa-folder-plus" style={{color: '#fff'}} aria-hidden="true">
                                             <small className="newproduct" style={{color: '#fff'}}>&nbsp;Add&nbsp;New&nbsp;Product</small>
                                     </i>

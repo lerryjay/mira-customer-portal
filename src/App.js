@@ -15,6 +15,7 @@ import Dashboard from './pages/dashboard/dashboard';
 import ChangePassword from './pages/change_password/ChangePassword';
 import CreateTicket from './pages/create_ticket/create_ticket';
 import CreateProduct from './pages/createproduct/createproduct';
+import UpdateProduct from './pages/updateproduct/updateproduct';
 import AddPackage from './pages/addpackage/addpackage';
 import ProductDetails from './pages/product_details/product_details';
 import ViewProduct from './pages/viewproduct/viewproduct';
@@ -44,7 +45,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: true,
+      loggedIn: sessionStorage.getItem('loggedIn'),
       users: [],
       profile: [],
       admin: true,
@@ -57,15 +58,19 @@ class App extends Component {
     let form = new FormData(data);
 
     const headers = new Headers();
-    headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
-     fetch(HTTPURL + 'user/login', {
-        method: 'POST',
-        body: form,
-        headers: headers
+    headers.append('API-KEY', '97899c-7d0420-1273f0-901d29-84e2f8');
+    fetch(HTTPURL + 'user/login', {
+      method: 'POST',
+      body: form,
+      headers: headers
     })
     .then(response => response.json())
     .then(json => {
       console.log(json.data);
+     
+      sessionStorage.setItem('loggedIn', true);
+      sessionStorage.setItem('userId', json.data.userid);
+      sessionStorage.setItem('role', json.data.role);
       // Get user data from the database
       this.state.profile.push(json.data)
       console.log(this.state.profile[0], json.data, "profile")
@@ -78,20 +83,20 @@ class App extends Component {
       }
       return json;
     });
- 
-    this.setState({ loggedIn: true })
+;
+    this.setState({ loggedIn: sessionStorage.getItem('loggedIn') })
     console.log('Yuppie i logged ', data);
     return { status: true, message: 'Login successful' };
   }
 
   signupUser = (data) => {
     const headers = new Headers();
-    headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+    headers.append('API-KEY', '97899c-7d0420-1273f0-901d29-84e2f8');
     let form = new FormData(data);
     return fetch(HTTPURL + 'user/register', {
-        method: 'POST',
-        body: form,
-        headers: headers
+      method: 'POST',
+      body: form,
+      headers: headers
 
     })
     .then(response => response.json())
@@ -165,7 +170,7 @@ handleProductRoute = (e) => {
   })
 }
 
-  logoutUser = () => this.setState({ loggedIn: false });
+  logoutUser = () => this.setState({ loggedIn: sessionStorage.setItem('loggedIn', false) });
 
   getContext = () => {
     return {
@@ -181,6 +186,7 @@ handleProductRoute = (e) => {
 
 
   render() {
+    const {loggedIn, admin} = this.state;
 
     return (
 
@@ -194,34 +200,35 @@ handleProductRoute = (e) => {
                   :  (this.state.loggedIn && <ClientSidebar />)
                 }
                 
-                <div className="content">
                   <Switch>
                     {<Route path="/forgot_password" component={ForgotPassword} />}
                     {<Route path="/signup" component={SignUp} />}
                     {<Route path="/login" component={Login} />}
-                    {!this.state.loggedIn && <Route path="/" component={Login} />}
-                    {this.state.loggedIn && <Route exact path="/dashboard" component={Dashboard} />}
-                    {this.state.loggedIn && <Route path="/createclient" component={()=><CreateClient userId={userId} apiKey={apiKey}></CreateClient>} />}
-                    {this.state.loggedIn && <Route path="/createclientbyid" component={() => <CreateClientById userId={userId} apiKey={apiKey}></CreateClientById>} />}
-                    {this.state.loggedIn && <Route path="/createuser" component={CreateUser} />}
-                    {this.state.admin && this.state.loggedIn && <Route path="/profile" component={Profile} />}
-                    {!this.state.admin && this.state.loggedIn &&  <Route path="/clientprofile" component={ClientProfile} />}
-                    {this.state.loggedIn && <Route path="/ticketlist" component={TicketList} />}
-                    {this.state.loggedIn && <Route path="/viewclient" component={ViewClient} />}
-                    {this.state.loggedIn && <Route path="/listclient" component={ListClient} />}
-                    {this.state.loggedIn && <Route path="/changepassword" component={() => <ChangePassword apiKey={apiKey}></ChangePassword>} />}
-                    {this.state.loggedIn && <Route path="/createproduct" component={() => <CreateProduct apiKey={apiKey}></CreateProduct>} />}
-                    {this.state.loggedIn && <Route path="/addpackage" component={() => <AddPackage apiKey={apiKey}></AddPackage>} />}
-                    {this.state.loggedIn && <Route path="/addclientproduct" component={AddClientProduct} />}
-                    {this.state.loggedIn && <Route path="/viewticket" ccomponent={() => <ViewTicket apiKey={apiKey}></ViewTicket>} />}
-                    {this.state.loggedIn && <Route path="/productcart" component={ProductCart} />}
-                    {this.state.loggedIn && <Route path="/viewproduct" component={() => <ViewProduct apiKey={apiKey}></ViewProduct>} />}
-                    {!this.state.admin && this.state.loggedIn && <Route path="/view_product" component={ClientViewProduct} />}
-                    {this.state.loggedIn && <Route path="/productdetails" component={ProductDetails} />}
-                    {this.state.loggedIn && <Route path="/createticket" component={() => <CreateTicket apiKey={apiKey}></CreateTicket>} />}
+                    {!loggedIn && <Route path="/" component={Login} />}
+                <div className="content">
+                    {loggedIn && <Route exact path="/dashboard" component={Dashboard} />}
+                    {loggedIn && <Route path="/createclient" component={()=><CreateClient userId={userId} apiKey={apiKey}></CreateClient>} />}
+                    {loggedIn && <Route path="/createclientbyid" component={() => <CreateClientById userId={userId} apiKey={apiKey}></CreateClientById>} />}
+                    {loggedIn && <Route path="/createuser" component={CreateUser} />}
+                    {admin && loggedIn && <Route path="/profile" component={Profile} />}
+                    {!admin && loggedIn &&  <Route path="/clientprofile" component={ClientProfile} />}
+                    {loggedIn && <Route path="/ticketlist" component={TicketList} />}
+                    {loggedIn && <Route path="/viewclient" component={ViewClient} />}
+                    {loggedIn && <Route path="/listclient" component={ListClient} />}
+                    {loggedIn && <Route path="/changepassword" component={ChangePassword} />}
+                    {loggedIn && <Route path="/createproduct" component={()=><CreateProduct userId={userId} apiKey={apiKey}></CreateProduct>} />}
+                    {loggedIn && <Route path="/updateproduct" component={()=><UpdateProduct userId={userId} apiKey={apiKey}></UpdateProduct>} />}
+                    {loggedIn && <Route path="/addpackage" component={()=><AddPackage userId={userId} apiKey={apiKey}></AddPackage>} />}
+                    {loggedIn && <Route path="/addclientproduct" component={AddClientProduct} />}
+                    {loggedIn && <Route path="/viewticket" component={ViewTicket} />}
+                    {loggedIn && <Route path="/productcart" component={ProductCart} />}
+                    {loggedIn && <Route path="/viewproduct" component={ViewProduct} />}
+                    {!admin && loggedIn && <Route path="/view_product" component={ClientViewProduct} />}
+                    {loggedIn && <Route path="/productdetails" component={ProductDetails} />}
+                    {loggedIn && <Route path="/createticket" component={CreateTicket} />}
+                </div>
                     <Route component={NotFound} />
                   </Switch>
-                </div>
               </div>
             </Router>
           </Fragment>
@@ -230,7 +237,7 @@ handleProductRoute = (e) => {
     )
   };
 
-  
+
 }
 
 export default App;

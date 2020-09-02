@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
-
-import { HTTPURL } from '../../common/global_constant';
 import {withContext} from '../../common/context';
 import { HTTPURL, APIKEY } from '../../common/global_constant';
 
-class CreateProduct extends Component {
+class UpdateProduct extends Component {
     constructor(props){
         super(props);
         this.state = { 
             ...this.props, 
             name : '', 
+            id: '',
             description: '',
             errormessage: '',
             loading: false,
@@ -69,6 +68,8 @@ class CreateProduct extends Component {
         console.log(e, "Image removed")
         this.setState({ file: '',imageError : false})
         setTimeout(()=> this.setState({imageError: ''}),5000);
+        // let myElement = document.querySelector(".other_files");
+        // myElement.style.display = "none";
     }
     handleImageChange(e) {
         e.preventDefault();
@@ -108,6 +109,8 @@ class CreateProduct extends Component {
         reader.readAsDataURL(file)
     }
 
+    
+
     render() {
         let {imagePreviewUrl} = this.state;
             let imagePreview = null;
@@ -144,7 +147,7 @@ class CreateProduct extends Component {
                     
                             <div className="card">
                                 <div className="card-header bg-medium font-weight-bold text-dark">
-                                    ADD NEW PRODUCT
+                                    EDIT PRODUCT
                     </div>
                     
                                 <div className="card-body">
@@ -238,4 +241,4 @@ class CreateProduct extends Component {
         )
     }
 }
-export default withContext(CreateProduct);
+export default withContext(UpdateProduct);

@@ -33,10 +33,9 @@ class create_ticket extends Component {
         let data = document.getElementById("createticket")
 
         const headers = new Headers();
-        headers.append('API-KEY', this.state.apiKey)
-
-        let form = new FormData(data);
-        form.append("userid", "5f3e930330e28");
+        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+        let form = new FormData(document.getElementById("createticket"));
+        form.append("userid", sessionStorage.getItem('userId'));
 
         this.state.files.forEach(item=>{
             form.append('files[]', item);
@@ -88,7 +87,8 @@ class create_ticket extends Component {
 
     render() {
         let files = this.state.files.map( file=> {
-            this.state.imagePreviewUrl = URL.createObjectURL(file)
+            this.state.imagePreviewUrl = URL.createObjectURL(file) 
+            // this.setState({imagePreviewUrl: URL.createObjectURL(file) })
             return (
              file.name.match(/\.(jpg|jpeg|png|gif)$/)
                 ?< div className="imgPreview m-2" id="files">
@@ -113,7 +113,7 @@ class create_ticket extends Component {
             }
             <div className="row">
 
-                <div className="col-md-8 offset-2" id="profile">
+                <div className="col-md-8 " id="profile">
                     <form onSubmit={this.handleSubmit} id="createticket" encType="multipart/form-data">
 
 

@@ -7,7 +7,7 @@ class Profile extends Component{
         super(props);
         this.state = {
             ...this.props, 
-            name: ''
+            fullname: ''
         }
     }
 
@@ -16,6 +16,10 @@ class Profile extends Component{
         const edit = document.querySelector('#edit');
         let input = document.getElementsByTagName('input');
 
+//  edit(){
+//         // Make Form Editable
+//         let edit = document.querySelector('#edit');
+//         let input = document.getElementsByTagName('input');
 
         for (let d = input.length - 1; d >= 0; d--) {
             edit.addEventListener("click", function (e) {
@@ -73,8 +77,8 @@ class Profile extends Component{
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Name</label>
-                                            <input type="text" className="form-control form-control-sm" name="name"
-                                                id="name" value={profile.fullname} placeholder="Name" disabled autoComplete="name" onChange={this.handleInputChange}/>
+                                            <input type="text" className="form-control form-control-sm" name="fullname"
+                                                id="fullname" value={profile.fullname} placeholder="Name" autoComplete="fullname" onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
 
@@ -96,21 +100,21 @@ class Profile extends Component{
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Company&nbsp;Name</label>
-                                            <input type="text" className="form-control form-control-sm" name="name"
-                                                id="name" value="ghs" placeholder="john & Sons"  autoComplete="name" />
+                                            <input type="text" className="form-control form-control-sm" name="company"
+                                                id="company" value="" placeholder="john & Sons"  autoComplete="company" />
                                         </div>
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Company&nbsp;Address</label>
-                                            <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value="" placeholder="lorem lorem lorem" disabled autoComplete="name" />
+                                            <input type="text" className="form-control form-control-sm" name="address"
+                                                id="address" value="" placeholder="lorem lorem lorem" disabled autoComplete="address" />
                                         </div>
                                     </div>
 
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Name</label>
+                                            <label htmlFor="" className="sr-only">Image</label>
                                             <input type="file" className="file form-control-sm" name=""
                                                 id="" value="" placeholder=""/>
                                         </div>

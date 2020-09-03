@@ -31,7 +31,8 @@ class ListClient extends Component {
             headers: headers
         })
         .then(response => response.json())
-        .then(data => {
+            .then(data => {
+                console.log(data);
             this.setState({clients: data.data})
         });
     }

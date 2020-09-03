@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { HTTPURL } from '../../common/global_constant';
+import { HTTPURL, APIKEY } from '../../common/global_constant';
 import {withContext} from '../../common/context';
 
+const headers = new Headers();
 class AddClientProduct extends Component {
     constructor(props){
         super(props);
@@ -9,24 +10,41 @@ class AddClientProduct extends Component {
             ...this.props, 
             clientid : '', 
             productid: '',
-            modules: '',
+            modules: [],
             cost:'',
             products: '',
             product: [],
             errormessage: '',
             loading: false,
             successmessage: '',
+            selectedProduct: '',
+            selectedModules: []
         };
     }
+   
 
-    componentDidMount() {
+    componentWillMount() {
         this.getProducts();
         
     }
+    getModule(productId) {
+        fetch(HTTPURL + `product/modules?productid=${productId}&userid=${sessionStorage.getItem('userId')}`, {
+            method: 'GET',
+            headers: headers
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status == true) {
+                    console.log(result.data);
+                    this.setState({ modules: result.data });
+                }
+            });
+        
+        console.log(this.state.modules);
+    }
 
     getProducts() {
-        const headers = new Headers();
-        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
+        headers.append('API-KEY', APIKEY);
         fetch(HTTPURL + 'product', {
             method: 'GET',
             headers: headers
@@ -50,17 +68,49 @@ class AddClientProduct extends Component {
     
     handleInputChange = e => {
         const { name, value } = e.target
-        this.setState({ [name]: value,errormessage : '' });
+        this.setState({ [name]: value, errormessage: '' });
+       
     }
 
     handleSubmit = async e => {
         e.preventDefault()
-        this.setState({loading : true});
-        setTimeout(() => {
-            this.setState({loading : false});
-            this.setState({successmessage: 'Added Successfully!'})
-            setTimeout(() =>{
-                this.setState({successmessage: false});
+        this.setState({ loading: true });
+        let mod = '';
+        this.state.selectedModules.forEach(module => {
+            mod += module + ',';
+        });
+
+        var formdata = new FormData();
+        formdata.append("clientid", this.state.location.search.split('?')[1]);
+        formdata.append("productid", this.state.type);
+        formdata.append("modules", mod);
+        formdata.append("cost", this.state.cost);
+        formdata.append("userid", sessionStorage.getItem('userId') )
+
+        fetch(HTTPURL + 'clients/addproduct', {
+            method: 'POST',
+            headers: { 'API-KEY': APIKEY },
+            body: formdata
+        }).then(response => response.json())
+            .then(data => {
+                if (data.status == true) {
+                    this.setState({type: '', selectedModules: [], cost: ''})
+                    setTimeout(() => {
+                        this.setState({ loading: false });
+                        this.setState({ successmessage: 'Added Successfully!' })
+                    }, 3000);
+                } else {
+                    setTimeout(() => {
+                        this.setState({ successmessage: false });
+                    }, 5000);
+                }
+            })
+
+
+
+
+        
+           
 
                 // let data = document.getElementById("addclientproduct")
 
@@ -80,9 +130,31 @@ class AddClientProduct extends Component {
                 
                 //  console.log('submitting')
                 //  this.setState({productid: '', modules: '', cost: ''})
-            }, 5000);
-        }, 3000);
+         
+       
     
+    }
+
+    
+    
+    addModule = async (moduleId) =>   {
+       await this.setState((prevState) =>  ({
+            selectedModules: prevState.selectedModules.length == 0 ? [moduleId] : [...prevState.selectedModules, moduleId]
+        }));
+    }
+    removeModule = async (moduleId)=> {
+        await this.setState(prevState => ({
+            selectedModules: prevState.selectedModules.filter(mod => mod != moduleId)
+        }));
+    }
+    handleCheck = ({ target }) => {
+        if (target.checked) {
+            target.removeAttribute('checked');
+            this.addModule(target.id)
+        } else {
+            target.setAttribute('checked', true);
+            this.removeModule(target.id)
+        }
     }
 
     render() {
@@ -129,7 +201,7 @@ class AddClientProduct extends Component {
 
                                     <div className="col-md-12 mb-3">
                                             <div className="form-group">
-                                                <select onSelect={this.handleInputChange} name="type" id="type" className=" form-control form-select form-select-sm">
+                                            <select onChange={(e) => { this.getModule(e.target.value); this.setState({type: e.target.value}) } } value={this.state.type} name="type" id="type" className=" form-control form-select form-select-sm">
                                                
                                                     
                                                 <option value="" selected disabled>--Select&nbsp;Product&nbsp;Name--</option>
@@ -159,21 +231,14 @@ class AddClientProduct extends Component {
                                 </div>
 
                                 <div className="row">
-                                <div className="col-md-4">
-                                    <p className="list-group-item">Design <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                        </label>
-                                    </p>
-                                </div>
-                                <div className="col-md-4">
-                                <p className="list-group-item">Development <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                    </label>
-                                </p>
-                                </div>
-                                <div className="col-md-4">
-                                <p className="list-group-item">Hosting <label class="switch float-right"> <input type="checkbox"  /><span class="slider round"></span>
-                                    </label>
-                                </p>
-                                </div>
+                                    {this.state.modules.length > 0 ? 
+                                        this.state.modules.map(module => <div className="col-md-4">
+                                            <p className="list-group-item">{module.name} <label class="switch float-right"> <input type="checkbox" id={module.id} onClick={this.handleCheck} /><span class="slider round"></span>
+                                            </label>
+                                            </p>
+                                        </div>)
+                                    : <div>Select a product</div>}
+                                            
                             </div>
 
 

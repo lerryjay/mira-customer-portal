@@ -19,6 +19,29 @@ class UpdateProduct extends Component {
         };
 
     }
+
+    componentDidMount() {
+        this.getProduct();
+    }
+
+    getProduct() {
+        const productid = this.props.location.pathname.split('/')[2];
+        
+        const headers = new Headers();
+        headers.append('API-KEY', APIKEY );
+
+        fetch(`${HTTPURL}product/getproduct?productid=${productid}&userid=${sessionStorage.getItem('userId')}`, {
+            method: "GET",
+            headers: headers,
+        }).then(res => res.json())
+        .then(result => {
+            console.log(result, "result")
+            if (result.status == true) {
+                this.setState({ name: result.data.name, description: result.data.description, id: result.data.id})       
+            }
+         
+        })
+    }
     
     handleInputChange = e => {
         const { name, value } = e.target
@@ -29,15 +52,17 @@ class UpdateProduct extends Component {
         e.preventDefault()
         this.setState({loading : true});
 
-        let data = document.getElementById("createproduct")
-
         const headers = new Headers();
-        headers.append('API-KEY',APIKEY);
+        headers.append('API-KEY', APIKEY);
 
-        let form = new FormData(data);
-        form.append("userid", sessionStorage.getItem('userId'));
+        let form = new FormData();
+        form.append("userid", sessionStorage.getItem("userId"));
+        form.append("productid", this.state.id);
+        form.append("name", this.state.name);
+        form.append("description", this.state.description);
+        form.append('files[]', this.state.file);
 
-        fetch(HTTPURL + 'product/add', {
+        fetch(HTTPURL + 'product/update', {
             method: 'POST',
             body: form,
             headers: headers
@@ -147,7 +172,7 @@ class UpdateProduct extends Component {
                     
                             <div className="card">
                                 <div className="card-header bg-medium font-weight-bold text-dark">
-                                    EDIT PRODUCT
+                                    EDIT PRODUCT 
                     </div>
                     
                                 <div className="card-body">
@@ -205,8 +230,8 @@ class UpdateProduct extends Component {
                                        }
                                         <div className="form-group">
                                             <label htmlFor="" >Upload an Image</label> <br/>
-                                            <input type="file" className="form-file form-file-sm" name="image"
-                                                id="image" placeholder="" 
+                                            <input type="file" className="form-file form-file-sm" name="file"
+                                                id="file" placeholder="" 
                                                 onChange={(e)=>this.handleImageChange(e)} />
                                         </div>    
                                     </div>

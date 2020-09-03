@@ -66,14 +66,17 @@ class App extends Component {
     })
     .then(response => response.json())
     .then(json => {
+      // Get user data from the database
       console.log(json.data);
      
       sessionStorage.setItem('loggedIn', true);
       sessionStorage.setItem('userId', json.data.userid);
       sessionStorage.setItem('role', json.data.role);
-      // Get user data from the database
-      this.state.profile.push(json.data)
-      console.log(this.state.profile[0], json.data, "profile")
+      sessionStorage.setItem('name', json.data.fullname);
+      sessionStorage.setItem('email', json.data.email);
+      sessionStorage.setItem('imageurl', json.data.imageurl);
+      sessionStorage.setItem('telephone', json.data.telephone);
+
       if(json.data.role === "admin") {
         console.log("I'm an admin")
         this.setState({admin : true})
@@ -335,7 +338,7 @@ handleProductRoute = (e) => {
                     {loggedIn && <Route path="/listclient" component={ListClient} />}
                     {loggedIn && <Route path="/changepassword" component={ChangePassword} />}
                     {loggedIn && <Route path="/createproduct" component={()=><CreateProduct userId={userId} apiKey={apiKey}></CreateProduct>} />}
-                    {loggedIn && <Route path="/updateproduct" component={()=><UpdateProduct userId={userId} apiKey={apiKey}></UpdateProduct>} />}
+                    {loggedIn && <Route path="/updateproduct" component={UpdateProduct} />}
                     {loggedIn && <Route path="/addpackage" component={()=><AddPackage userId={userId} apiKey={apiKey}></AddPackage>} />}
                     {loggedIn && <Route path="/addclientproduct" component={AddClientProduct} />}
                     {loggedIn && <Route path="/viewticket" component={ViewTicket} />}

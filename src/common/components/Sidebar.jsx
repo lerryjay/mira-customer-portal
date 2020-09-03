@@ -21,7 +21,7 @@ const Sidebar = (props) => {
                 <ul className="list-unstyled components">
                     <div className="py-2 text-white text-center">
                         <img src={avatar} className="image_sidebar my-3" alt="" height="110px" width="110px" />
-                        <p className="image_name mb-0">Rhoda Stone</p>
+                        <p className="image_name mb-0">{sessionStorage.getItem("name")}</p>
                     </div>
                     <p className="mt-2 mb-2">MENU</p>
                     <hr className="bg-white mb-0 mt-0" />

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HTTPURL } from '../../common/global_constant';
+import { HTTPURL, APIKEY } from '../../common/global_constant';
 import {withContext} from '../../common/context';
 import { Link } from 'react-router-dom';
 
@@ -18,10 +18,14 @@ class TicketList extends Component {
     }
 
     componentDidMount(){
-        console.log(this.state,"props")
+        this.getTickets();
+    }
+
+    getTickets() {
+        
         const headers = new Headers();
-        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
-        fetch(HTTPURL + 'ticket/?userid=5f3e930330e28', {
+        headers.append('API-KEY', APIKEY);
+        fetch(HTTPURL + `ticket/?userid=${sessionStorage.getItem('userId')}`, {
             method: 'GET',
             headers: headers
         })
@@ -44,13 +48,12 @@ class TicketList extends Component {
             ticket.push(this.state.tickets[i])
             this.setState({ ticket: ticket });
         }
-
     }
 
-    handleViewMore = e => {
-         this.state.viewmore(e)
-        this.props.history.push('/viewticket');
-    }
+    // handleViewMore = e => {
+    //      this.state.viewmore(e)
+    //     this.props.history.push('/viewticket');
+    // }
 
      changeStatus(e,ticket) {
         
@@ -80,8 +83,7 @@ class TicketList extends Component {
 
                                     <div id='table' className="card pt-2 mt-3 justify-content-center shadow px-2">
                                         <div className="table-responsive">
-                                            <table
-                                                className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
+                                         <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
                                                 {/* <caption>Hello World!</caption> */}
                                                 <thead>
                                                     <tr>
@@ -135,7 +137,7 @@ class TicketList extends Component {
                                                             </select>
                                                             </td>
                                                             <td className="align-middle" style={{cursor:"pointer"}}>
-                                                                <Link onClick={this.handleViewMore}>
+                                                                <Link to={() => `/viewticket/${ticket.id}`}>
                                                     <span class="badge px-3 py-2 badge-primary" value={ticket.id} style={{cursor:"pointer"}}>View</span>
                                                                 </Link>
                                                             </td>

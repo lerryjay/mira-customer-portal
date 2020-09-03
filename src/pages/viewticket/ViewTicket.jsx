@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {withContext} from '../../common/context';
-import { HTTPURL } from '../../common/global_constant';
+import { HTTPURL, APIKEY,FILEURL } from '../../common/global_constant';
 
 
 class ViewTicket extends Component {
@@ -10,11 +10,15 @@ class ViewTicket extends Component {
         this.state = {
             ...this.props, 
             message: '',
+            title: '',
+            type: '',
+            id: '',
             userid: '',
             ticketid: '',
             updateData: false,
             files: '',
             inputfiles : [],
+            chat: '',
             chats: []   
         }
 
@@ -23,15 +27,38 @@ class ViewTicket extends Component {
 
     componentDidMount() {
             this.getChat();  
-
+            this.getTicket();
     }
-    getChat(){
-        // Set the userid and ticketid
-        this.setState({userid: '5f3e930330e28', ticketid: '5f447cb8e7b31'})
+
+    getTicket() {
+        const ticketid = this.props.location.pathname.split('/')[2];
         
         const headers = new Headers();
-        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
-        fetch(HTTPURL + 'ticket/replys?ticketid=5f447cb8e7b31&userid=5f3e930330e28', {
+        headers.append('API-KEY', APIKEY );
+
+        fetch(`${HTTPURL}ticket/getticket?userid=${sessionStorage.getItem('userId')}&ticketid=${ticketid}`, {
+            method: "GET",
+            headers: headers,
+        }).then(res => res.json())
+        .then(result => {
+            if (result.status == true) {
+                this.setState({ 
+                    type: result.data.type, 
+                    message: result.data.message, 
+                    title: result.data.title, 
+                    id: result.data.id
+                })       
+            }
+         
+        })
+    }
+
+    getChat(){
+        const ticketid = this.props.location.pathname.split('/')[2];
+        
+        const headers = new Headers();
+        headers.append('API-KEY',APIKEY);
+        fetch(HTTPURL + `ticket/replys?ticketid=${ticketid}&userid=${sessionStorage.getItem('userId')}`, {
             method: 'GET',
             headers: headers
         })
@@ -60,8 +87,12 @@ class ViewTicket extends Component {
 
 
         const headers = new Headers();
-        headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
-        let form = new FormData(document.getElementById("chatform"));
+        headers.append('API-KEY', APIKEY);
+
+        let form = new FormData();
+        form.append("message", this.state.chat);
+        form.append("userid", sessionStorage.getItem('userId'));
+        form.append("ticketid", this.state.id);
 
         this.state.inputfiles.forEach(item=>{
             form.append('files[]', item);
@@ -78,7 +109,6 @@ class ViewTicket extends Component {
         return json;
         });
 
-        // const res = await this.state.getchat(document.getElementById("chatform"));
         console.log('Message sent!')
          
         this.setState({message: '', files: ''})
@@ -106,13 +136,13 @@ class ViewTicket extends Component {
                 <div className="card home-chart mt-md-4">
                     <div className="card-header bg-medium font-weight-bold text-dark">
                         
-                    <span className="font-weight-bolder mr-4 ticket-title">TICKET ID: #{this.props.getTicket.id}</span>
+                    <span className="font-weight-bolder mr-4 ticket-title">TICKET ID: #{this.state.id}</span>
                                               
                     <span className="font-weight-bolder mr-4 ticket-title">
-                     <span className="uppercase">{this.props.getTicket.type}</span>: {this.props.getTicket.title}</span>
+                     <span className="uppercase">{this.state.type}</span>: {this.state.title}</span>
                         <div className="form-group  mt-2">
                             <textarea id="message" name="message" rows="5" cols="50" className="form-control text-left" 
-                            value={this.props.getTicket.message} required placeholder="Message" disabled
+                            value={this.state.message} required placeholder="Message" disabled
                                 />
                         </div>
                     </div>
@@ -123,13 +153,21 @@ class ViewTicket extends Component {
                                                      return(
                                                         <div>
                                                         {
-                                                            this.state.admin ? <div className="row mb-2" id="client">
+                                                            this.state.admin ? <div className="row mb-4" id="client">
                                                                 <div className="col-md-7 col-sm-12 ">
                                                                     <div className="chatbox" style={{background:'#a8afb5'}}>
                                                                     {chat.message}
                                                                     <br />
-                                                                    <small>{chat.sender_id}</small>
+                                                                    <small>{chat.role}</small>
                                                                     </div>
+                                                                        {JSON.parse(chat.files).map( file => {
+                                                                                return(
+                                                                                   <div className="mt-2 ml-3">
+                                                                                        <img src={FILEURL+file} height="50px" />
+                                                                                   </div>
+                                                                                )
+                                                                            })
+                                                                        }
                                                                 <span className="msg_time">{chat.createdat}</span>
                                                                 </div>
                                                                 <div className="col-md-5 col-sm-12 p-2">
@@ -140,11 +178,12 @@ class ViewTicket extends Component {
                                                                 <div className="col-md-5 col-sm-12 p-2">
                                                                 </div>
                                                                 <div className="col-md-7 col-sm-12 p-2 text-right text-white">
+                                                                    {chat.files}
                                                                     <div className="chatbox bg-secondary">
                                                                     
                                                                     {chat.message}
                                                                     <br />
-                                                                    <small>{chat.sender_id}</small>
+                                                                    <small>{chat.role}</small>
                                                                     </div>
                                                                 <span className="msg_time">{chat.createdat}</span>
                                                                 </div>
@@ -165,7 +204,7 @@ class ViewTicket extends Component {
     
     
                     <div className="card-footer p-0">
-                        <form onSubmit={this.handleSubmit} id="chatform"  encType="multipart/form-data">
+                        <form onSubmit={this.handleSubmit}  encType="multipart/form-data">
                         <div className="input-group">
                             <div className="input-group-prepend">
                                 <span className="input-group-text" style={{ backgroundColor: '#0a0b18', border: '#191a35' }} id="chat">
@@ -176,17 +215,9 @@ class ViewTicket extends Component {
                                 </span>
                             </div>
 
-                            <input type="text" className="form-control border-right-0"  id="message" name="message"
+                            <input type="text" className="form-control border-right-0"  id="chat" name="chat"
                              placeholder="Message" aria-label="chat" aria-describedby="chat" required
-                             value={this.state.message}  onChange={this.handleInputChange}/>
-
-                             <input type="hidden" className="form-control border-right-0"  id="userid" name="userid"
-                             placeholder="UserID" aria-label="chat" aria-describedby="chat" required
-                             value={this.state.userid}  onChange={this.handleInputChange} />
-
-                             <input type="hidden" className="form-control border-right-0"  id="ticketid" name="ticketid"
-                             placeholder="TicketID" aria-label="chat" aria-describedby="chat" required
-                             value={this.state.ticketid}  onChange={this.handleInputChange} />
+                             value={this.state.chat}  onChange={this.handleInputChange}/>
 
                             <button className="input-group-append">
                                 <span className="input-group-text bg-white" id="chat">

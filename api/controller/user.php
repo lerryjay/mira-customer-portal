@@ -20,7 +20,7 @@
     public function index()
     {
       extract($_GET);
-      $userId = $userid ?? $this->userId ?? '';
+      $userId = $this->userId ?? $userid ??  '';
       loadModel('user');
 
       $user = Self::validateUser($userId,true);
@@ -53,15 +53,14 @@
      **/
     public function register()
     {
-      $data = $this->validateRegistration();
-      extract($data);
+      extract($this->validateRegistration());
       $password = $this->encryptPassword($password);
       $imageurl = '';
       if(isset($_FILES['file'])){
         $imageurl = File::upload("file",'user',false);
         $imageurl ?: '';
       }
-      $response = $this->userModel->register($name,$email,$telephone,$password,$this->companyId,$imageurl);
+      $response = $this->userModel->register($firstname,$lastname,$othername,$email,$telephone,$password,$this->companyId,$imageurl);
       if($response){
         $_SESSION['companyid'] = $this->companyId;
         $_SESSION['userid'] = $response;
@@ -93,34 +92,48 @@
     private function validateRegistration()
     {
       extract($_POST);
-      $name       = isset($name) ? $name : '';
-      $email      = isset($email) ? $email : '';
-      $password   = isset($password) ? $password : '';
-      $telephone  = isset($telephone) ? $telephone : '';
+      $email      ??= '';
+      $firstname  ??= '';
+      $othername  ??= '';
+      $lastname   ??= '';
+      $password   ??= '';
+      $telephone  ??= '';
       $companyId  = isset($companyid) ? $companyid : '';
 
-      $emailValid      = Validate::email($email);
-      if($emailValid){ 
+      $emailInvalid      = Validate::email($email);
+      if($emailInvalid){ 
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>$emailValid, 'data'=>['field'=>'email']]));
+        $this->setOutput(json_encode(['status'=>false, 'message'=>$emailInvalid, 'data'=>['field'=>'email']]));
       }
-      $passwordValid   = Validate::password($password);
-      if($passwordValid){ 
+      $passwordInvalid   = Validate::password($password);
+      if($passwordInvalid){ 
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>$passwordValid, 'data'=>['field'=>'password']]));
+        $this->setOutput(json_encode(['status'=>false, 'message'=>$passwordInvalid, 'data'=>['field'=>'password']]));
       }
 
-      $telephoneValid  = Validate::telephone($telephone);
-      if($telephoneValid){ 
+      $telephoneInvalid  = Validate::telephone($telephone);
+      if($telephoneInvalid){ 
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>$telephoneValid, 'data'=>['field'=>'telphone']]));
+        $this->setOutput(json_encode(['status'=>false, 'message'=>$telephoneInvalid, 'data'=>['field'=>'telphone']]));
         return ;
       }
       
-      $nameValid       = Validate::string($name,false,false,4);
-      if($nameValid){
+      $firstnameInvalid  = Validate::string($firstname,false,true,2,200);
+      if($firstnameInvalid){
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>$nameValid, 'data'=>['field'=>'name']]));
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid firstname', 'data'=>['field'=>'firstname']]));
+      }
+      
+      $lastnameInvalid       = Validate::string($lastname,false,true,1);
+      if($lastnameInvalid){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid lastname', 'data'=>['field'=>'lastname']]));
+      } 
+
+      $othernameInvalid       = Validate::string($othername,false,true,2);
+      if($othernameInvalid && strlen($othername) > 0){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid othername', 'data'=>['field'=>'othername']]));
       } 
 
       // check email exists
@@ -138,7 +151,7 @@
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Telephone is associated with another account!', 'data'=>['field'=>'telephone']]));
       }
       // no errors
-      return ['telephone'=>$telephone,'email'=>$email,'name'=>$name,'password'=>$password,'companyId'=>$this->companyId];
+      return ['telephone'=>$telephone,'email'=>$email,'firstname'=>$firstname,'lastname'=>$lastname,'othername'=>$othername,'password'=>$password,'companyId'=>$this->companyId];
     }
 
     /**
@@ -194,7 +207,9 @@
             'data'=>[
               'email'=>$user['email'],
               'telephone'=>$user['telephone'],
-              'fullname'=>$user['name'],
+              'firstname'=>$user['firstname'],
+              'lastname'=>$user['lastname'],
+              'othername'=>$user['othername'],
               'companyid'=>$user['company_id'],
               'activation'=>$user['activation'],
               'imageurl'=>$user['imageurl'],
@@ -420,12 +435,10 @@
         'status'=>false,
         'message'=>'Invalid userid'
       ];
-      $data = $this->validateProfile();
-      extract($data);
-
+      extract($this->validateProfile());
       $user = $this->userModel->getUserById($userId);
       if($user){
-        $data = ['username'=>$username,'name'=>$name,'telephone'=>$telephone];
+        $data = ['username'=>$username,'firstname'=>$firstname,'lastname'=>$lastname,'othername'=>$othername,'telephone'=>$telephone];
         if(isset($_FILES['files']['image'])){
           $image = File::upload("image",'images');
           if($image) $data['imageurl'] = $image;
@@ -455,10 +468,12 @@
     private function validateProfile()
     {
       extract($_POST);
-      $name       = isset($name) ? $name : '';
+      $firstname  ??= '';
+      $othername  ??= '';
+      $lastname   ??= '';
+      $telephone  ??= '';
       $userId     = isset($userid) ? $userid : '';
       $username   = isset($username) ? $username : '';
-      $telephone  = isset($telephone) ? $telephone : '';
 
       if(!isset($userid)){
         $response = ['status'=>false,'message'=>"User not found"];
@@ -467,7 +482,7 @@
       }
 
       $usernameValid   = Validate::string($username,false,true,4);
-      if($usernameValid){ 
+      if($usernameValid && strlen($username) > 0){ 
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>$usernameValid, 'data'=>['field'=>'username']]));
       }
@@ -479,11 +494,23 @@
         return ;
       }
       
-      $nameValid       = Validate::string($name,false,true,4);
-      if($nameValid){
+      $firstnameInvalid  = Validate::string($firstname,false,true,2,200);
+      if($firstnameInvalid){
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>$nameValid, 'data'=>['field'=>'name']]));
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid firstname', 'data'=>['field'=>'firstname']]));
       }
+      
+      $lastnameInvalid   = Validate::string($lastname,false,true,2,200);
+      if($lastnameInvalid){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid lastname', 'data'=>['field'=>'lastname']]));
+      } 
+
+      $othernameInvalid  = Validate::string($othername,false,true,2);
+      if($othernameInvalid && strlen($othername) > 0){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid othername', 'data'=>['field'=>'othername']]));
+      } 
       
       // check email exists
       $usernameExists    = $this->userModel->getUserByLoginId($username);
@@ -491,7 +518,7 @@
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Username is associated with another account!', 'data'=>['field'=>'username']]));
       }
-      return ['username'=>$username,'telephone'=>$telephone,'name'=>$name,'userId'=>$userId];
+      return ['username'=>$username,'telephone'=>$telephone,'firstname'=>$firstname,'lastname'=>$lastname,'othername'=>$othername,'userId'=>$userId];
     }
 
     /**

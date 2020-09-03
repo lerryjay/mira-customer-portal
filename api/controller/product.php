@@ -108,7 +108,7 @@
     {
       loadController('user');
       extract($_POST);
-      $userId =  $userid ?? $this->userId;
+      $userId =  $this->userId ?? $userid ??  '';
       $user   = User::validateUser($userId,true);
       $name      = $name ?? '';
       $nameError =   Validate::string($name,false,true,4); 
@@ -301,7 +301,7 @@
       loadModel('product');
       loadController('user');
       extract($_POST);
-      $userId    = $userid ?? $this->userId ?? '';
+      $userId    = $this->userId ?? $userid ??  '';
       $productId = isset($productid) ? $productid : '';
       $user      = User::validateUser($userId,true);
       $this->productModel = new ProductModel();
@@ -349,6 +349,7 @@
       $this->setOutput(json_encode($response));
     }
 
+    
     /**
      * Valodate product module update
      *
@@ -379,27 +380,27 @@
       return ['name'=>$name,'description'=>$description,'user'=>$user, 'product'=>$product,'module'=>$module,'productId'=>$module['product_id'],'moduleId'=>$moduleId,'userId'=>$userId];
     }
 
-      /**
-       * Delete a module from the database
-       *
-       * @param HTTPGET $moduleid Module to be deleted
-       * @param HTTPGET $userid user performing the action
-       * @return [status:bool,message:string]
-       **/
-      public function deletemodule()
-      {
-        extract($this->validateusermodulepermission());
-        if($user['role'] !== 'admin'){
-          $this->setOutputHeader(['Content-type:application/json']);
-          $this->setOutput(json_encode(['status'=>false,'message'=>'You do not have the required permission to perform access this resource!']));
-        }
-        $deleted = $this->productModel->deleteProductModule($moduleId);
-        if($deleted)$response = ['status'=>true,'message'=>'Module delete successful!'];
-        else $response = ['status'=>false,'message'=>'Update failed. An unexpected error occured!'];
-  
+    /**
+     * Delete a module from the database
+     *
+     * @param HTTPGET $moduleid Module to be deleted
+     * @param HTTPGET $userid user performing the action
+     * @return [status:bool,message:string]
+     **/
+    public function deletemodule()
+    {
+      extract($this->validateusermodulepermission());
+      if($user['role'] !== 'admin'){
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode($response));
+        $this->setOutput(json_encode(['status'=>false,'message'=>'You do not have the required permission to perform access this resource!']));
       }
+      $deleted = $this->productModel->deleteProductModule($moduleId);
+      if($deleted)$response = ['status'=>true,'message'=>'Module delete successful!'];
+      else $response = ['status'=>false,'message'=>'Update failed. An unexpected error occured!'];
+
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
+    }
     
 
     /**
@@ -413,7 +414,7 @@
     {
       extract($_GET);
       extract($_POST);
-      $userId = $userid ?? $this->userId ?? '';
+      $userId = $this->userId ?? $userid ??  '';
       loadModel('product');
       loadController('user');
       $this->productModel = new ProductModel();
@@ -435,7 +436,7 @@
       extract($_POST);
       loadController('user');
       loadModel('product');
-      $userId = $userid ?? $this->userId ?? '';
+      $userId = $this->userId ?? $userid ??  '';
       $user   = User::validateUser($userId); 
       $this->productModel = new ProductModel();
       $product = $this->productModel->getProductById($productid);

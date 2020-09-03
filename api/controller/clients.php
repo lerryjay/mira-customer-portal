@@ -46,9 +46,9 @@ class Clients extends Controller
         $imageurl ?: '';
       }
       $password = 3224;//TODO : generate random login password
-      $clientUserId = $this->userModel->register($name,$email,$telephone,$this->encryptPassword($password),$companyId,$imageurl);
+      $clientUserId = $this->userModel->register($firstname,$lastname,$othername,$email,$telephone,$this->encryptPassword($password),$companyId,$imageurl);
     }
-    $register = $this->clientModel->addClient($clientUserId,$businessName);
+    $register = $this->clientModel->addClient($clientUserId,$businessName,$companyEmail,$companyTelephone,$companyAddress,$companyCountryId,$companyStateId,$companyLga);
     if($register){
       $response = ['status'=>true, 'message'=>'Client registration successful!'];
     }else $response = ['status'=>false, 'message'=>'Client registration failed due to an unexpected error!'];
@@ -68,73 +68,147 @@ class Clients extends Controller
   public function validateAddClient()
   {
     extract($_POST);
-      $name       ??= '';
-      $email      ??= '';
-      $password   ??= '';
-      $telephone  ??= '';
-      $userId       =  $userid ?? '';
-      $clientUserId =  $clientid ?? '';
-      $companyId    =  $companyId ?? '';
-      $businessName =  $businessname ?? '';
+    $lastname   ??= '';
+    $firstname  ??= '';
+    $othername  ??= '';
+    $email      ??= '';
+    $password   ??= '';
+    $telephone  ??= '';
+    
+    $lga        ??= '';
+    $address    ??= '';
+    $stateid    ??= '';
+    $countryid  ??= '';
+      
+    $companytelephone  ??= '';
+    $companyemail      ??= '';
+    $companylga        ??= '';
+    $companyaddress    ??= '';
+    $companystateid    ??= '';
+    $companycountryid  ??= '';
+
+    $userId       =  $userid ?? '';
+    $clientUserId =  $clientid ?? '';
+    $companyId    =  $companyId ?? '';
+    $businessName =  $businessname ?? '';
       
 
-      $emailValid      = Validate::email($email);
-      if($emailValid && strlen ($clientUserId) < 1){ 
+    $emailInvalid      = Validate::email($email);
+    if($emailInvalid && strlen ($clientUserId) < 1){ 
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>$emailValid, 'data'=>['field'=>'email']]));
-      }
+        $this->setOutput(json_encode(['status'=>false, 'message'=>$emailInvalid, 'data'=>['field'=>'email']]));
+    }
 
-      $telephoneValid  = Validate::telephone($telephone);
-      if($telephoneValid && strlen ($clientUserId) < 1){ 
+    
+
+    $telephoneInvalid  = Validate::telephone($telephone);
+    if($telephoneInvalid && strlen ($clientUserId) < 1){ 
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>$telephoneValid, 'data'=>['field'=>'telphone']]));
+        $this->setOutput(json_encode(['status'=>false, 'message'=>$telephoneInvalid, 'data'=>['field'=>'telphone']]));
         return ;
-      }
+    }
 
-      $businessNameValid       = Validate::string($businessName,false,false,4);
-      if($businessNameValid && strlen ($clientUserId) < 1){
+    $businessNameInvalid       = Validate::string($businessName,false,false,4);
+    if($businessNameInvalid && strlen ($clientUserId) < 1){
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>$businessNameValid, 'data'=>['field'=>'businessname']]));
-      } 
+        $this->setOutput(json_encode(['status'=>false, 'message'=>$businessNameInvalid, 'data'=>['field'=>'businessname']]));
+    } 
       
-      $nameValid       = Validate::string($name,false,false,4);
-      if($nameValid && strlen ($clientUserId) < 1){
+
+    $addressInvalid      = Validate::string($address,false,true,0,300);
+    if($addressInvalid  && strlen ($clientUserId) < 1 && strlen($address) > 0)
+    {
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>$nameValid, 'data'=>['field'=>'name']]));
-      } 
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid address', 'data'=>['field'=>'address']]));
+    }
 
-      loadModel('user');
-      loadModel('client');
-      loadController('user');
-      User::validateUser($userId,true);
-
-      //TODO : validate clientUserId is valid
-      $this->userModel = new UserModel();
-      $this->clientModel = new ClientModel();
-      // check email exists
-      $emailExists    = $this->userModel->getUserByLoginId($email);
-      if($emailExists && strlen ($clientUserId) < 1){
+    $countryInvalid      = Validate::string($countryid,false,true,0,20);
+    if($countryInvalid && strlen ($clientUserId) < 1 && strlen($countryid) > 0){ 
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>'Email is associated with another account!', 'data'=>['field'=>'email']]));
-      }
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid  country', 'data'=>['field'=>'countryid']]));
+    }
 
-      // check telephone exists
-      $telephoneExists = $this->userModel->getUserByTelephone($telephone);
-
-      if($telephoneExists && strlen ($clientUserId) < 1){ 
+    $stateInvalid      = Validate::string($stateid,false,true,0,20);;
+    if($stateInvalid && strlen ($clientUserId) < 1 && strlen($stateid) > 0){ 
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>'Telephone is associated with another account!', 'data'=>['field'=>'telephone']]));
-      }
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid  state', 'data'=>['field'=>'stateid']]));
+    }
 
-      if(strlen ($userid) > 0){
-        $clientExists = $this->clientModel->getClientByUserId($clientUserId);
-        if($clientExists){
-          $this->setOutputHeader(['Content-type:application/json']);
-          $this->setOutput(json_encode(['status'=>false, 'message'=>'Userid is associated with another client!', 'data'=>['field'=>'userid']]));
-        }
+    $lgaInvalid      = Validate::string($lga,false,true,0,200);;
+    if($lgaInvalid && strlen ($clientUserId) < 1 && strlen($lga) > 0){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Please provide  lga', 'data'=>['field'=>'lga']]));
+    }
+    
+    $companyemailInvalid      = Validate::email($companyemail);
+    if($companyemailInvalid){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid company email', 'data'=>['field'=>'companyemail']]));
+    }
+
+    $companyTelephoneInvalid  = Validate::telephone($companytelephone);
+    if($companyTelephoneInvalid){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid company telephone', 'data'=>['field'=>'companytelephone']]));
+        return;
+    }
+
+    $companyaddressInvalid      = Validate::string($companyaddress,false,true,4);
+    if($companyaddressInvalid){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid company address', 'data'=>['field'=>'companyaddress']]));
+    }
+
+    $companycountryInvalid      = Validate::string($companycountryid,false,true,4,20);
+    if($companycountryInvalid){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid company country', 'data'=>['field'=>'companycountryid']]));
+    }
+
+    $companystateInvalid      = Validate::string($companystateid,false,true,4,20);;
+    if($companystateInvalid){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid company state', 'data'=>['field'=>'companystateid']]));
+    }
+
+    $companylgaInvalid      = Validate::string($companylga,false,true,4,20);;
+    if($companylgaInvalid){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Please provide company lga', 'data'=>['field'=>'companylga']]));
+    }
+
+    loadModel('user');
+    loadModel('client');
+    loadController('user');
+    User::validateUser($userId,true);
+
+    //TODO : validate clientUserId is valid
+    $this->userModel = new UserModel();
+    $this->clientModel = new ClientModel();
+    // check email exists
+    $emailExists    = $this->userModel->getUserByLoginId($email);
+    if($emailExists && strlen ($clientUserId) < 1){
+        $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode(['status'=>false, 'message'=>'Email is associated with another account!', 'data'=>['field'=>'email']]));
+    }
+
+    // check telephone exists
+    $telephoneExists = $this->userModel->getUserByTelephone($telephone);
+
+    if($telephoneExists && strlen ($clientUserId) < 1){ 
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode(['status'=>false, 'message'=>'Telephone is associated with another account!', 'data'=>['field'=>'telephone']]));
+    }
+
+    if(strlen ($userid) > 0){
+      $clientExists = $this->clientModel->getClientByUserId($clientUserId);
+      if($clientExists){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Userid is associated with another client!', 'data'=>['field'=>'userid']]));
       }
-      // no errors
-      return ['telephone'=>$telephone,'businessName'=>$businessName,'email'=>$email,'name'=>$name,'password'=>$password,'companyId'=>$this->companyId,'clientUserId'=>$clientUserId];
+    }
+    // no errors
+    return ['telephone'=>$telephone,'businessName'=>$businessName,'email'=>$email,'lastname'=>$lastname,'othername'=>$othername,'firstname'=>$firstname,'password'=>$password,'companyId'=>$this->companyId,'clientUserId'=>$clientUserId,'companyTelephone'=>$companytelephone,'companyEmail'=>$companyemail,'companyAddress'=>$companyaddress,'companyStateId'=>$companystateid,'companyCountryId'=>$companycountryid,'companyLga'=>$companylga,'address'=>$address,'stateId'=>$stateid,'countryId'=>$countryid,'lga'=>$lga];
   }
 
   /**
@@ -147,7 +221,7 @@ class Clients extends Controller
   {
     extract($_GET);
 
-    $userId       = $userid ?? $this->userId ?? '';
+    $userId       = $this->userId ?? $userid ??  '';
     $clientUserId = $clientid ?? '';
     loadController('user');
     $user = User::validateUser($userId,true); 
@@ -173,7 +247,7 @@ class Clients extends Controller
   public function update()
   {
     extract($this->validateUpdateClient());
-    $update = $this->clientModel->updateClient($clientUserId,['name'=>$name]);
+    $update = $this->clientModel->updateClient($clientUserId,['businessname'=>$businessname,'telephone'=>$companyTelephone,'email'=>$companyEmail,'address'=>$companyAddress,'country_id'=>$companyCountryId,'state_id'=>$companyStateId,'lga'=>$companyLga]);
     if($update) $response = ['status'=>true,'message'=>'Product update sucessfully!'.$message];
     else $response = ['status'=>false,'message'=>'Client update failed due to an expected error!'];
     $this->setOutputHeader(['Content-type:application/json']);
@@ -190,8 +264,14 @@ class Clients extends Controller
   private function validateUpdateClient()
   {
     extract($_POST);
-
-    $userId       = $userid ?? $this->userId ?? '';
+    $companytelephone  ??= '';
+    $companyemail      ??= '';
+    $companylga        ??= '';
+    $companyaddress    ??= '';
+    $companystateid    ??= '';
+    $companycountryid  ??= '';
+    $businessName =  $businessname ?? '';
+    $userId       = $this->userId ?? $userid ??  '';
     $clientUserId = $clientid ?? '';
     loadController('user');
     $user = User::validateUser($userId,true); 
@@ -204,13 +284,51 @@ class Clients extends Controller
       $this->setOutput(json_encode(['status'=>false,'message'=>'Client does not exist' ])); 
     }
 
-    $name    ??= '';  
-    $nameError = Validate::string($name,false,true,4); 
-    if($nameError){
-      $this->setOutputHeader(['Content-type:application/json']);
-      $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid client name', 'data'=>['field'=>'name']]));
+    
+
+    $businessNameInvalid       = Validate::string($businessName,false,false,4);
+    if($businessNameInvalid && strlen ($clientUserId) < 1){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>$businessNameInvalid, 'data'=>['field'=>'businessname']]));
     } 
-    return ['name'=>$name,'clientUserId'=>$clientUserId,'client'=>$client,'user'=>$user,'userId'=>$userId];
+    
+    $companyemailInvalid      = Validate::email($companyemail);
+    if($companyemailInvalid){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid company email', 'data'=>['field'=>'companyemail']]));
+    }
+
+    $companyTelephoneInvalid  = Validate::telephone($companytelephone);
+    if($companyTelephoneInvalid){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid company telephone', 'data'=>['field'=>'companytelephone']]));
+        return;
+    }
+
+    $companyaddressInvalid      = Validate::string($companyaddress,false,true,4);
+    if($companyaddressInvalid){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid company address', 'data'=>['field'=>'companyaddress']]));
+    }
+
+    $companycountryInvalid      = Validate::string($companycountryid,false,true,4,20);
+    if($companycountryInvalid){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid company country', 'data'=>['field'=>'companycountryid']]));
+    }
+
+    $companystateInvalid      = Validate::string($companystateid,false,true,4,20);;
+    if($companystateInvalid){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid company state', 'data'=>['field'=>'companystateid']]));
+    }
+
+    $companylgaInvalid      = Validate::string($companylga,false,true,4,20);;
+    if($companylgaInvalid){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Please provide company lga', 'data'=>['field'=>'companylga']]));
+    }
+    return ['businessName'=>$businessName,'companyTelephone'=>$companytelephone,'companyEmail'=>$companyemail,'companyAddress'=>$companyaddress,'companyStateId'=>$companystateid,'companyCountryId'=>$companycountryid,'companyLga'=>$companylga,'clientUserId'=>$clientUserId,'client'=>$client,'user'=>$user,'userId'=>$userId];
   }
 
    /**
@@ -258,7 +376,7 @@ class Clients extends Controller
   private function validateAddClientProduct()
   {
     extract($_POST);
-    $userId  =  $userid ?? $this->userId ?? '';
+    $userId  =  $this->userId ?? $userid ??  '';
     $modules =  isset($modules) ? explode(',',$modules) : [];
     $cost  ??= 0;
     
@@ -340,7 +458,7 @@ class Clients extends Controller
   {
     extract($_POST);
 
-    $userId       = $userid ?? $this->userId ?? '';
+    $userId       = $this->userId ?? $userid ??  '';
     $productId    = $productid ?? '';
     $clientUserId = $clientid ?? '';
 
@@ -388,7 +506,7 @@ class Clients extends Controller
     loadModel('client');
     loadController('user');
     $clientUserId =  $clientid ?? '';
-    $userId       =  $userid ?? $this->userId ?? '';
+    $userId       =  $this->userId ?? $userid ??  '';
 
 
     $this->clientModel  = new ClientModel();

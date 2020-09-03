@@ -14,7 +14,7 @@
     public function index()
     {
       extract($_GET);
-      $userId = $userid ?? $this->userId ?? '';
+      $userId = $this->userId ?? $userid ??  '';
       loadModel('user');
       loadController('user');
 

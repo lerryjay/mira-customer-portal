@@ -103,7 +103,7 @@
      **/
     public function getModulesByProductId($productId,$status = 1)
     {
-      return $this->getModules('WHERE product_id = ? AND status = ? ','ii', [$productId,$status]);
+      return $this->getModules('WHERE product_id = ? AND status = ? ','si', [$productId,$status]);
     }
 
     /**

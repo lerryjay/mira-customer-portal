@@ -105,7 +105,7 @@
     public function validateNewTicket()
     {
       extract($_POST);
-      $userId      = isset($userid) ? $userid : $this->userId;
+      $userId      = $this->userId ?? $userid ??  '';
       $title       = isset($title) ? $title : '';
       $message     = isset($message) ? $message : '';
       $type        = isset($type) ? $type : '';

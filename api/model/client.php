@@ -11,11 +11,11 @@
      * @param String $businessName business name  of the client
      * @return boolean, false if !insert OR @return String  userId
      **/
-    public function addClient($userId,$businessName)
+    public function addClient($userId,$businessName,$email,$telephone,$address,$countryId,$stateId,$lga)
     {
-      $id = uniqid();
-      $insert =  $this->insert('clients',['id'=>$id,'user_id'=>$userId,'businessname'=>$businessName]);
-      if ($insert['status']) return $id;
+      // $id = uniqid();'id'=>$id,
+      $insert =  $this->insert('clients',['user_id'=>$userId,'businessname'=>$businessName,'telephone'=>$telephone,'email'=>$email,'address'=>$address,'country_id'=>$countryId,'state_id'=>$stateId,'lga'=>$lga]);
+      if ($insert['status']) return $userId;
       else return false;
     }
     
@@ -29,7 +29,7 @@
      **/
     public function getClient($condition = '',$bindString='',$bindValues=[])
     {
-      $sql = 'SELECT clients.*,name,email,telephone,username FROM clients INNER JOIN users ON users.id = clients.user_id '.$condition;
+      $sql = 'SELECT clients.businessname,clients.address,clients.telephone AS companytelephone,clients.email AS companyemail,clients.lga AS companylga,clients.address AS companyaddress,clients.country_id AS companycoutryid,clients.state_id AS companystateid, firstname,lastname,othername,users.email,users.telephone,username FROM clients INNER JOIN users ON users.id = clients.user_id '.$condition;
       $query = $this->query($sql,$bindString,$bindValues); 
       if($query) return $this->row;
       else return false;
@@ -44,7 +44,7 @@
      **/
     public function getClients($condition = '',$bindString = '',$bindValues = [])
     {
-      $sql = 'SELECT clients.*,name,email,telephone,username FROM clients INNER JOIN users ON users.id = clients.user_id '.$condition;
+      $sql = 'SELECT clients.businessname,clients.address,clients.telephone AS companytelephone,clients.email AS companyemail,clients.lga AS companylga,clients.address AS companyaddress,clients.country_id AS companycoutryid,clients.state_id AS companystateid, firstname,lastname,othername,users.email,users.telephone,username FROM clients INNER JOIN users ON users.id = clients.user_id '.$condition;
       $query = $this->query($sql,$bindString,$bindValues); 
       if($query) return $this->rows;
       else return false;
@@ -109,8 +109,8 @@
      **/
     public function addClientProducts($userId,$productId,$modules,$cost)
     {
-      $id = uniqid();
-      $insert =  $this->insert('clientproducts',['id'=>$id,'user_id'=>$userId,'product_id'=>$productId,'modules'=>$modules,'cost'=>$cost]);
+      // $id = uniqid();'id'=>$id,
+      $insert =  $this->insert('clientproducts',['user_id'=>$userId,'product_id'=>$productId,'modules'=>$modules,'cost'=>$cost]);
       if ($insert['status']) return $id;
       else return false;
     }
@@ -139,7 +139,6 @@
      **/
     public function getClientProduct($conditon,$bindString,$bindValues)
     {
-      
       $sql = 'SELECT *,(SELECT name FROM products WHERE id = product_id) AS name,(SELECT description FROM products WHERE id = product_id) AS description FROM clientproducts '.$condition;
       $query = $this->query($sql,$bindString,$bindValues); 
       if($query) return $this->row;

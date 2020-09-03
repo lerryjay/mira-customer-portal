@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import {withContext} from '../../common/context';
-import { HTTPURL } from '../../common/global_constant';
+import { HTTPURL, APIKEY } from '../../common/global_constant';
 
 
 class addpackage extends Component {
@@ -25,7 +25,7 @@ class addpackage extends Component {
 
     getProduct() {
         const headers = new Headers();
-        headers.append('API-KEY', this.state.apiKey);
+        headers.append('API-KEY', APIKEY);
         fetch(HTTPURL + 'product', {
             method: 'GET',
             headers: headers
@@ -57,7 +57,7 @@ class addpackage extends Component {
                 headers.append('API-KEY',this.state.apiKey);
 
                 let form = new FormData(data);
-                form.append("userid", this.props.userId);
+                form.append("userid", sessionStorage.getItem('userId'));
 
                 fetch(HTTPURL + 'product/addmodule', {
                     method: 'POST',

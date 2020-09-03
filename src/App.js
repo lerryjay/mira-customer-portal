@@ -15,6 +15,7 @@ import Dashboard from './pages/dashboard/dashboard';
 import ChangePassword from './pages/change_password/ChangePassword';
 import CreateTicket from './pages/create_ticket/create_ticket';
 import CreateProduct from './pages/createproduct/createproduct';
+import UpdateProduct from './pages/updateproduct/updateproduct';
 import AddPackage from './pages/addpackage/addpackage';
 import ProductDetails from './pages/product_details/product_details';
 import ViewProduct from './pages/viewproduct/viewproduct';
@@ -333,7 +334,8 @@ handleProductRoute = (e) => {
                     {loggedIn && <Route path="/viewclient" component={ViewClient} />}
                     {loggedIn && <Route path="/listclient" component={ListClient} />}
                     {loggedIn && <Route path="/changepassword" component={ChangePassword} />}
-                    {loggedIn && <Route path="/createproduct" component={CreateProduct} />}
+                    {loggedIn && <Route path="/createproduct" component={()=><CreateProduct userId={userId} apiKey={apiKey}></CreateProduct>} />}
+                    {loggedIn && <Route path="/updateproduct" component={()=><UpdateProduct userId={userId} apiKey={apiKey}></UpdateProduct>} />}
                     {loggedIn && <Route path="/addpackage" component={()=><AddPackage userId={userId} apiKey={apiKey}></AddPackage>} />}
                     {loggedIn && <Route path="/addclientproduct" component={AddClientProduct} />}
                     {loggedIn && <Route path="/viewticket" component={ViewTicket} />}

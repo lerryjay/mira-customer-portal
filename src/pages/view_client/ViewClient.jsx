@@ -156,9 +156,9 @@ render() {
                         <div className="card-body">
                             <img src={avatar}
                                 alt="profile picture" className=" rounded-circle" style={{ marginTop: '-80px', width:"105px", height:"105px" }} />
-                                <h6 className="mt-3">Rhoda Stone</h6>
+                                <h6 className="mt-3">{this.state.name}</h6>
                                 <p className="mt-2"><i class="fa fa-map-marker" aria-hidden="true"></i> Lagos <br/>
-                                <i class="fa fa-envelope" aria-hidden="true"></i> rhoda@gmail.com </p>
+                                <i class="fa fa-envelope" aria-hidden="true"></i> {this.state.email} </p>
                         </div>
                     </div>
                 </div>

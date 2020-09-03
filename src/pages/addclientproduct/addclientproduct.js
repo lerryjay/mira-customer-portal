@@ -129,7 +129,7 @@ class AddClientProduct extends Component {
 
                                     <div className="col-md-12 mb-3">
                                             <div className="form-group">
-                                                <select onChange={this.handleInputChange} name="type" id="type" className=" form-control form-select form-select-sm">
+                                                <select onSelect={this.handleInputChange} name="type" id="type" className=" form-control form-select form-select-sm">
                                                
                                                     
                                                 <option value="" selected disabled>--Select&nbsp;Product&nbsp;Name--</option>

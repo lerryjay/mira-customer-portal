@@ -54,9 +54,9 @@ class Login extends Component {
             this.setState({loading : true});
             setTimeout(() => {
                 this.setState({loading : false});
-                this.setState({successmessage: 'Login Successful'})
                 setTimeout(() =>{
-                    this.setState({successmessage: false});
+                    // this.setState({successmessage: false});
+                    this.setState({successmessage: 'Login Successful'})
                     const res = this.state.login(document.getElementById("loginform"));
                     this.props.history.push('/dashboard');
                 }, 2000);

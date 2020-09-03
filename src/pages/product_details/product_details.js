@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
 import image from '../../assets/images/Accsiss.png'
 import { HTTPURL, APIKEY } from '../../common/global_constant';
 import {withContext} from '../../common/context';
@@ -53,19 +52,15 @@ class product_details extends Component {
 
         const headers = new Headers();
         headers.append('API-KEY', APIKEY);
-        headers.append("userid", sessionStorage.getItem('userId'));
 
-        fetch(HTTPURL + `product/modules?productid=${productid}`, {
+        fetch(HTTPURL + `product/modules?productid=${productid}&userid=${sessionStorage.getItem('userId')}`, {
             method: 'GET',
             headers: headers
         })
         .then(response => response.json())
         .then(data => {
-            let userid = sessionStorage.getItem('userId')
-            if(userid) {
+            console.log(data.data,"packages")
                 // this.setState({packages: data.data})
-                console.log(data,"packages")
-            }
         });
     }
 
@@ -151,12 +146,10 @@ class product_details extends Component {
                             Oops, Product module is empty!
                         </div>
 
-                        <button type="button" className="btn btn-sm btn-primary new_product mb-2">
-                            <Link onClick={this.packageModal}>
+                        <button type="button" onClick={this.packageModal} className="btn btn-sm btn-primary new_product mb-2">
                         <i className="fas fa-folder-plus" style={{color: '#fff'}} aria-hidden="true">
                                 <small className="newproduct" style={{color: '#fff'}}>&nbsp;Add&nbsp;New&nbsp;Module</small>
                         </i>
-                            </Link>
                         </button>
 
                          <div className="row">

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { Redirect, BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { HTTPURL } from './common/global_constant';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { HTTPURL, APIKEY } from './common/global_constant';
 
 // import './App.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -45,7 +45,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: sessionStorage.getItem('loggedIn'),
+      // loggedIn: sessionStorage.getItem('loggedIn'),
+      loggedIn: true,
       users: [],
       profile: [],
       admin: true,
@@ -58,7 +59,7 @@ class App extends Component {
     let form = new FormData(data);
 
     const headers = new Headers();
-    headers.append('API-KEY', '97899c-7d0420-1273f0-901d29-84e2f8');
+    headers.append('API-KEY', APIKEY);
     fetch(HTTPURL + 'user/login', {
       method: 'POST',
       body: form,
@@ -102,7 +103,7 @@ class App extends Component {
     .then(response => response.json())
     .then(json => {
       console.log(json);
-      if(json.status == false) {
+      if(json.status === false) {
         console.log(json.message)
         return json.message
       }
@@ -143,7 +144,6 @@ class App extends Component {
    .then(response => response.json())
    .then(data => {
      console.log(data.data, "data");
-     this.state.getTicket = data.data
      this.setState({getTicket: data.data})
      
     })
@@ -164,7 +164,6 @@ handleProductRoute = (e) => {
  .then(response => response.json())
  .then(data => {
    console.log(data.data, "data");
-   this.state.getProduct = data.data
    this.setState({getProduct: data.data})
    
   })

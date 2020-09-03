@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {withContext} from '../../common/context';
-import { HTTPURL } from '../../common/global_constant';
+import { HTTPURL, APIKEY } from '../../common/global_constant';
 
 
 class ViewTicket extends Component {
@@ -10,6 +10,9 @@ class ViewTicket extends Component {
         this.state = {
             ...this.props, 
             message: '',
+            title: '',
+            type: '',
+            id: '',
             userid: '',
             ticketid: '',
             updateData: false,
@@ -23,13 +26,38 @@ class ViewTicket extends Component {
 
     componentDidMount() {
             this.getChat();  
-
+            this.getTicket();
     }
+
+    getTicket() {
+        const ticketid = this.props.location.pathname.split('/')[2];
+        
+        const headers = new Headers();
+        headers.append('API-KEY', APIKEY );
+
+        fetch(`${HTTPURL}ticket/getticket?userid=${sessionStorage.getItem('userId')}&ticketid=${ticketid}`, {
+            method: "GET",
+            headers: headers,
+        }).then(res => res.json())
+        .then(result => {
+            if (result.status == true) {
+                this.setState({ 
+                    type: result.data.type, 
+                    message: result.data.message, 
+                    title: result.data.title, 
+                    id: result.data.id
+                })       
+            }
+         
+        })
+    }
+
     getChat(){
+        const ticketid = this.props.location.pathname.split('/')[2];
         
         const headers = new Headers();
         headers.append('API-KEY','97899c-7d0420-1273f0-901d29-84e2f8');
-        fetch(HTTPURL + `ticket/replys?ticketid=5f447cb8e7b31&userid=5f3e930330e28`, {
+        fetch(HTTPURL + `ticket/replys?ticketid=${ticketid}&userid=${sessionStorage.getItem('userId')}`, {
             method: 'GET',
             headers: headers
         })
@@ -58,7 +86,7 @@ class ViewTicket extends Component {
 
 
         const headers = new Headers();
-        headers.append('API-KEY',this.state.apiKey);
+        headers.append('API-KEY', APIKEY);
         let form = new FormData(document.getElementById("chatform"));
 
         this.state.inputfiles.forEach(item=>{
@@ -103,13 +131,13 @@ class ViewTicket extends Component {
                 <div className="card home-chart mt-md-4">
                     <div className="card-header bg-medium font-weight-bold text-dark">
                         
-                    <span className="font-weight-bolder mr-4 ticket-title">TICKET ID: #{this.props.getTicket.id}</span>
+                    <span className="font-weight-bolder mr-4 ticket-title">TICKET ID: #{this.state.id}</span>
                                               
                     <span className="font-weight-bolder mr-4 ticket-title">
-                     <span className="uppercase">{this.props.getTicket.type}</span>: {this.props.getTicket.title}</span>
+                     <span className="uppercase">{this.state.type}</span>: {this.state.title}</span>
                         <div className="form-group  mt-2">
                             <textarea id="message" name="message" rows="5" cols="50" className="form-control text-left" 
-                            value={this.props.getTicket.message} required placeholder="Message" disabled
+                            value={this.state.message} required placeholder="Message" disabled
                                 />
                         </div>
                     </div>

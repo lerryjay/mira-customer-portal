@@ -103,7 +103,7 @@ const Sidebar = (props) => {
                             <i className="fas fa-key fa-fw mr-1"></i>&nbsp;Change&nbsp;Password
                         </li>
                     </NavLink>
-                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} className="text-center" to='/login' onClick={toggle2}>
+                    <NavLink className={`nav-item  ${props.location.pathname === "/" ? "active" : ""}`} className="text-center" to='login' onClick={toggle2}>
                         <p className=" last_" >
                             <i className="fas fa-power-off text-danger mr-1">&nbsp;<b
                                 style={{ color: "white" }}>&nbsp;Logout</b></i>

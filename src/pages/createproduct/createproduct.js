@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 
-import { HTTPURL } from '../../common/global_constant';
 import {withContext} from '../../common/context';
 import { HTTPURL, APIKEY } from '../../common/global_constant';
 

@@ -31,9 +31,7 @@ class Login extends Component {
         e.preventDefault()
 
         const { loginid, password} = this.state
-       
-        //Waste 3 seconds
-       
+    
         if(!Validators.validateEmail(loginid).status){
             const err = Validators.validateEmail(loginid).message
             this.setState({loading : true});
@@ -61,9 +59,7 @@ class Login extends Component {
                     this.props.history.push('/dashboard');
                 }, 2000);
             }, 3000);
-            // document.querySelector('.content').style.width = "";
-            // document.querySelector('.content').style.marginLeft = "100px";
-        //    const res = await this.state.login(document.getElementById("loginform"));
+         //    const res = await this.state.login(document.getElementById("loginform"));
         //    if(!res['status'])this.setState({errormessage: res['message']});
         //     else{
         //         document.querySelector('.content').style.width = "";
@@ -73,11 +69,6 @@ class Login extends Component {
         }
         console.log('submitting')
     }
-
-    // componentDidMount(){
-    //     document.querySelector('.content').style.width = "100vw";
-    //     document.querySelector('.content').style.marginLeft = "0";
-    //  }
 
 
     render() {
@@ -135,7 +126,7 @@ class Login extends Component {
                                         onChange={this.handleInputChange}/>
                                 </div>
                                 {this.state.loading ? 
-                                <button type="submit" className="btn btn-sm bg-btn">
+                                <button type="submit" className="btn btn-block bg-btn">
                                     <div className="spinner-border text-secondary" role="status" id="loader">
                                         <span className="sr-only">Loading...</span>
                                     </div>

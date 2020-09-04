@@ -22,7 +22,7 @@ class TicketList extends Component {
     }
 
     getTickets() {
-        console.log(this.state,"props")
+        
         const headers = new Headers();
         headers.append('API-KEY', APIKEY);
         fetch(HTTPURL + `ticket/?userid=${sessionStorage.getItem('userId')}`, {
@@ -37,7 +37,11 @@ class TicketList extends Component {
             // const indexOfFirstPage = indexOfLastPage - this.state.numberPerPage
             // const currentList = value.slice(indexOfFirstPage, indexOfLastPage)
             // console.log(currentList,"data data")
-            this.setState({tickets: data.data})
+            if(data.data === ''){
+                this.setState({tickets: data.message})
+            } else{
+                this.setState({tickets: data.data})
+            }
             // this.setState({currentList: currentList})
         });
 
@@ -80,78 +84,82 @@ class TicketList extends Component {
                                     TICKET LIST
                 </div>
                                 <div className="card-body">
-
-                                    <div id='table' className="card pt-2 mt-3 justify-content-center shadow px-2">
-                                        <div className="table-responsive">
-                          
-                                                className="table table-hov                  <table
-                                                className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
-                                                {/* <caption>Hello World!</caption> */}
-                                                <thead>
-                                                    <tr>
-                                                        <th>S/N</th>
-                                                        <th>Date&nbsp;&&nbsp;Time</th>
-                                                        <th>Client&nbsp;Name</th>
-                                                        <th>Email&nbsp;Address</th>
-                                                        <th>Ticket&nbsp;Type</th>
-                                                        <th><i className="fas fa-comments"></i>&nbsp;&nbsp;Message</th>
-                                                        <th>Status</th>
-                                                        <th>View&nbsp;Ticket</th>
-                                                    </tr>
-
-                                                </thead>
-                                                <tbody> 
-                                                    
-                                                {this.state.tickets.map( ticket => {
-                                                     return(
-
-                                                        <tr>
-                                                            <td>
-                                                                {this.state.id++}
-                                                            </td>
-                                                            <td>
-                                                                {ticket.createdat}
-                                                            </td>
-                                                            <td  onClick={this.handleRoute}>
-                                                                {ticket.client_name}
-                                                            </td>
-                                                            <td>
-                                                                {ticket.email}
-                                                            </td>
-                                                            <td>
-                                                                {ticket.type}
-                                                            </td>
-                                                            <td style={{minWidth: "120px", textAlign: "left"}}>
-                                                                {ticket.message}
-                                                            </td>
-                                                            <td className="align-middle" style={{minWidth: "105px"}}>
-                                                            <select className="custom-select custom-select-sm" onChange={(e) =>this.changeStatus(e,ticket)}>
-                                                                <option value="" selected > {ticket.ticketstatus}</option>
-                                                                <option className="btn btn-sm text-success" value="approved">
-                                                                    &#10003;
-                                                                    Approved</option>
-                                                                <option className="btn btn-sm text-danger" value="cancelled">
-                                                                    &#1008;
-                                                                    Cancelled</option>
-                                                                <option className="btn btn-sm btn-light text-warning" value="pending">
-                                                                    &#10070;
-                                                                    Pending</option>
-                                                            </select>
-                                                            </td>
-                                                            <td className="align-middle" style={{cursor:"pointer"}}>
-                                                                <Link to={() => `/viewticket/${ticket.id}`}>
-                                                    <span class="badge px-3 py-2 badge-primary" value={ticket.id} style={{cursor:"pointer"}}>View</span>
-                                                                </Link>
-                                                            </td>
-                                                        </tr>
-                                                     )
-                                                    })  
-                                                } 
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                {this.state.tickets == '' ?
+                                    <div>
+                                        <h3 className="text-center">No ticket records!</h3>
                                     </div>
+                                    :
+                                    <div id='table' className="card pt-2 mt-3 justify-content-center shadow px-2">
+                                    <div className="table-responsive">
+                                     <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
+                                            {/* <caption>Hello World!</caption> */}
+                                            <thead>
+                                                <tr>
+                                                    <th>S/N</th>
+                                                    <th>Date&nbsp;&&nbsp;Time</th>
+                                                    <th>Client&nbsp;Name</th>
+                                                    <th>Email&nbsp;Address</th>
+                                                    <th>Ticket&nbsp;Type</th>
+                                                    <th><i className="fas fa-comments"></i>&nbsp;&nbsp;Message</th>
+                                                    <th>Status</th>
+                                                    <th>View&nbsp;Ticket</th>
+                                                </tr>
 
+                                            </thead>
+                                            <tbody> 
+                                                
+                                            {this.state.tickets.map( ticket => {
+                                                 return(
+
+                                                    <tr>
+                                                        <td>
+                                                            {this.state.id++}
+                                                        </td>
+                                                        <td>
+                                                            {ticket.createdat}
+                                                        </td>
+                                                        <td  onClick={this.handleRoute}>
+                                                            {ticket.client_name}
+                                                        </td>
+                                                        <td>
+                                                            {ticket.email}
+                                                        </td>
+                                                        <td>
+                                                            {ticket.type}
+                                                        </td>
+                                                        <td style={{minWidth: "120px", textAlign: "left"}}>
+                                                            {ticket.message}
+                                                        </td>
+                                                        <td className="align-middle" style={{minWidth: "105px"}}>
+                                                        <select className="custom-select custom-select-sm" onChange={(e) =>this.changeStatus(e,ticket)}>
+                                                            <option value="" selected > {ticket.ticketstatus}</option>
+                                                            <option className="btn btn-sm text-success" value="approved">
+                                                                &#10003;
+                                                                Approved</option>
+                                                            <option className="btn btn-sm text-danger" value="cancelled">
+                                                                &#1008;
+                                                                Cancelled</option>
+                                                            <option className="btn btn-sm btn-light text-warning" value="pending">
+                                                                &#10070;
+                                                                Pending</option>
+                                                        </select>
+                                                        </td>
+                                                        <td className="align-middle" style={{cursor:"pointer"}}>
+                                                            <Link to={() => `/viewticket/${ticket.id}`}>
+                                                <span class="badge px-3 py-2 badge-primary" value={ticket.id} style={{cursor:"pointer"}}>View</span>
+                                                            </Link>
+                                                        </td>
+                                                    </tr>
+                                                 )
+                                                })  
+                                            } 
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            }
+                                 
 
                                 </div>
 

@@ -29,13 +29,14 @@ class CreateProduct extends Component {
         e.preventDefault()
         this.setState({loading : true});
 
-        let data = document.getElementById("createproduct")
-
         const headers = new Headers();
         headers.append('API-KEY',APIKEY);
 
-        let form = new FormData(data);
+        let form = new FormData();
         form.append("userid", sessionStorage.getItem('userId'));
+        form.append("name", this.state.name);
+        form.append("description", this.state.description);
+        form.append('file', this.state.file);
 
         fetch(HTTPURL + 'product/add', {
             method: 'POST',
@@ -201,8 +202,8 @@ class CreateProduct extends Component {
                                        }
                                         <div className="form-group">
                                             <label htmlFor="" >Upload an Image</label> <br/>
-                                            <input type="file" className="form-file form-file-sm" name="image"
-                                                id="image" placeholder="" 
+                                            <input type="file" className="form-file form-file-sm" name="file"
+                                                id="file" placeholder="" 
                                                 onChange={(e)=>this.handleImageChange(e)} />
                                         </div>    
                                     </div>

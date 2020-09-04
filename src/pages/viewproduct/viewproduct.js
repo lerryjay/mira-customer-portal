@@ -12,6 +12,7 @@ class viewproduct extends Component {
             ...props,
             products: [],
             showmodal: true,
+            id: '',
             loading: false
         }
     }
@@ -34,9 +35,29 @@ class viewproduct extends Component {
             });
     }
 
-    updateModal() {
+    showDeleteModal(e) {
+        // this.setState({id: e});
+        this.state.id = e
         let modal = document.getElementById("myModal")
         modal.style.display = "block";
+    }
+
+    deleteModal(e) {
+        let productid = e
+
+        const headers = new Headers();
+        headers.append('API-KEY', APIKEY);
+
+        fetch(HTTPURL + `product/delete?productid=${productid}&userid=${sessionStorage.getItem('userId')}`, {
+            method: 'GET',
+            headers: headers
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data, "deleted")
+            let modal = document.getElementById("myModal")
+            modal.style.display = "none";
+        });
     }
 
     closeModal() {
@@ -119,98 +140,13 @@ class viewproduct extends Component {
                                         <Link to={() => `/updateproduct/${product.id}`}>
                                             <i className="fa fa-edit mr-1"></i>
                                         </Link>
+                                        
+                                        <Link onClick={() => this.showDeleteModal(product.id)}>
                                         <i className="fa fa-trash text-danger"></i>
-
+                                        </Link>
 
 
                                     </div>
-
-                                    {this.state.showmodal ?
-                                        <div id="myModal" class="modal">
-                                            {/* Modal content  */}
-                                            <div class="modal-content text-center p-5">
-
-
-                                                <form onSubmit={this.handleSubmit} id="addpackage">
-
-                                                    <div className="card">
-                                                        <div className="card-header bg-medium font-weight-bold text-dark">
-                                                            EDIT PRODUCT
-            </div>
-
-                                                        <div className="card-body">
-
-                                                            <div className="row">
-                                                                <div className="col-md-12">
-                                                                    {/* Error Message */}
-                                                                    {this.state.errormessage != null && this.state.errormessage.length > 0 ?
-                                                                        <div className="alert alert-warning" role="alert">{this.state.errormessage}
-                                                                            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                                                                                <span aria-hidden="true">&times;</span>
-                                                                            </button>
-                                                                        </div>
-                                                                        :
-                                                                        <span></span>
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                            <div className="row">
-
-                                                                <div className="col-md-12 mb-1">
-                                                                </div>
-
-                                                                <div className="col-md-12 mb-1">
-                                                                    <div className="form-group">
-                                                                        <label htmlFor="" className="sr-only">Product Name</label>
-                                                                        <input type="text" className="form-control form-control-sm" name="prdname"
-                                                                            id="prdname" placeholder="Product Name"
-                                                                            value={product.name}
-                                                                            onChange={this.handleInputChange} />
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className="col-md-12">
-                                                                    <div className="form-group">
-                                                                        <label htmlFor="" className="sr-only">Product Description</label>
-                                                                        <textarea type="text" className="form-control form-control-sm" name="prddescription"
-                                                                            id="prddescription" placeholder="Product Description"
-                                                                            value={this.state.description}
-                                                                            onChange={this.handleInputChange} />
-                                                                    </div>
-                                                                </div>
-
-
-                                                            </div>
-
-                                                            <div className="row">
-                                                                <div className="col-md-6">
-                                                                    <button onClick={this.closeModal} className="btn-block btn btn-outline-secondary">Cancel</button>
-                                                                </div>
-                                                                <div className="col-md-6">
-                                                                    {this.state.loading ?
-                                                                        <button type="submit" className="btn btn-block btn-primary">
-                                                                            <div className="spinner-border text-secondary" role="status" id="loader">
-                                                                                <span className="sr-only">Loading...</span>
-                                                                            </div>
-                                                                        </button>
-                                                                        : <button type="submit" className="btn btn-primary btn-block">
-                                                                            <i className="fas fa-folder-open mr-2"></i>
-                                Save
-                            </button>
-                                                                    }
-
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        :
-                                        <span></span>
-                                    }
 
                                 </div>
 
@@ -222,6 +158,30 @@ class viewproduct extends Component {
                     </div>
 
 
+                    {this.state.showmodal ?  
+                    <div id="myModal" class="modal">
+                        {/* Modal content  */}
+                        <div class="modal-content text-center p-5">
+                            {/* <div className="delete-icon">
+                                &times;
+                            </div> */}
+                            <i class="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
+                            <h3>Are you sure?</h3>
+                            <p> Do you really want to delete this file?</p>
+                            <div className="row">
+                                <div className="col-md-6">                            
+                                    <button onClick={this.closeModal} className="btn-block btn btn-outline-secondary">Cancel</button>
+                                </div>
+                                <div className="col-md-6">
+                                    <button onClick={() => this.deleteModal(this.state.id)} className="btn btn-danger btn-block">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    :           
+                    <span></span> 
+                }
+    
 
                 </div>
 

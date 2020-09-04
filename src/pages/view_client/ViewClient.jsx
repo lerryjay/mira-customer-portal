@@ -10,7 +10,7 @@ class ViewClient extends Component{
         super(props);
         console.log(this.props);
         this.state = {
-            product: [],
+            id: 1,
             products: [],
             name: '',
             email: '',
@@ -19,6 +19,33 @@ class ViewClient extends Component{
 
         };
     }
+
+    getProducts() {
+        const clientid = this.props.location.pathname.split("/")[2];
+    
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+    
+        fetch(
+          HTTPURL +
+            `clients/products?userid=${sessionStorage.getItem("userId")}&clientid=${clientid}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if(data.data === false){
+              this.setState({ products: '' });
+              console.log("Oops, packages is empty")
+            } else {
+                this.setState({ products: data.data });
+                // return this.state.id++
+                console.log( "products", this.state.products)
+            }
+          });
+      }
    
     componentWillMount() {
         const clienId = this.props.location.pathname.split('/')[2];
@@ -27,21 +54,22 @@ class ViewClient extends Component{
             headers: { "api-key": APIKEY },
         }).then(res => res.json()).then(result => {
             if (result.status == true) {
-                this.setState({ name: result.data.name, email: result.data.email, telephone: result.data.telephone, businessname: result.data.businessname })       
+                this.setState({
+                    lastname: result.data.lastname,
+                    firstname: result.data.firstname,
+                    othername: result.data.othername,
+                    email: result.data.email, 
+                    telephone: result.data.telephone, 
+                    businessname: result.data.businessname,
+                    companyaddress: result.data.companyaddress 
+                })       
             }
          
         })
     }
 
     componentDidMount(){
-
-        let product = []
-        console.log('changed successfully!', product)
-        for (let i = 0; i < this.state.products.length; i++) {
-            console.log(this.state.products[i])
-            product.push(this.state.products[i])
-            this.setState({ product :  product });
-        }
+        this.getProducts();
     }
 
     edit() {
@@ -78,7 +106,7 @@ render() {
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Name</label>
                                             <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value={this.state.name} placeholder="Name" autoComplete="name" disabled />
+                                                id="" value={`${this.state.lastname} ${this.state.firstname} ${this.state.othername}`} placeholder="Name" autoComplete="name" disabled />
                                         </div>
                                     </div>
 
@@ -110,7 +138,7 @@ render() {
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Company&nbsp;Address</label>
                                             <input type="text" className="form-control form-control-sm" name=""
-                                                id="" value="" placeholder="Company Address" autoComplete="text" disabled />
+                                                id="" value={this.state.companyaddress} placeholder="Company Address" autoComplete="text" disabled />
                                         </div>
                                     </div>
 
@@ -164,77 +192,100 @@ render() {
                 </div>
             </div>
         
-        
-                        <div className="card">
-                            <div className="card-header bg-medium font-weight-bold text-dark">
-                                PRODUCTS
-                            </div>
-                            <div className="card-body">
-                                <div className="row">
-                                    <div className="col-md-12">
-                                    <div class="alert alert-warning" role="alert">
-                                    Product is empty!
-                                    </div>
-                                    <button type="button" className="btn btn-sm btn-primary new_product mb-2">
-                                <Link to={{ pathname: "/addclientproduct", search:this.props.location.pathname.split('/')[2] }}>
-                                    <i className="fas fa-folder-plus" style={{color: '#fff'}} aria-hidden="true">
-                                            <small className="newproduct" style={{color: '#fff'}}>&nbsp;Add&nbsp;New&nbsp;Product</small>
-                                    </i>
-                                        </Link>
-                                    </button>
 
-                                    {/* <div id='table' className="card pt-2 mt-3 justify-content-center shadow px-2">
-                                        <div className="table-responsive">
-                                            <table
-                                                className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
-                                               
-                                                <thead>
-                                                <tr>
-                                                <th className="py-2">S/N</th>
-                                                    <th className="py-2">Product&nbsp;Name</th>
-                                                    <th className="py-2">Packages</th>
-                                                    <th className="py-2">Price</th>
-                                                </tr>
-                                                    
-                                                </thead>
-                                                <tbody> 
-                                                    
-                                                {this.state.products.map( product => {
-                                                     return(
+            <div className="card">
+                <div className="card-header bg-medium font-weight-bold text-dark">
+                    PRODUCTS
+                </div>
+              <div className="card-body">
+                               <div className="row">
+                                   <div className="col">
+                                   <button type="button" className="btn btn-sm btn-primary new_product mb-2">
+                            <Link to={{ pathname: "/addclientproduct", search:this.props.location.pathname.split('/')[2] }}>
+                                <i className="fas fa-folder-plus" style={{color: '#fff'}} aria-hidden="true">
+                                        <small className="newproduct" style={{color: '#fff'}}>&nbsp;Add&nbsp;New&nbsp;Product</small>
+                                </i>
+                                    </Link>
+                                </button>
+                                   </div>
+                               </div>
+                {this.state.products === "" ? (
+                  <div class="alert alert-warning" role="alert">
+                    Oops, Product module is empty!
+                  </div>
+                ) : ( 
+                    <div className="card">
+                        <div className="card-body">
+                            <div className="row">
+                                <div className="col-md-12">
 
-                                                            <tr>
-                                                            <td>
-                                                                {product.productid}
-                                                            </td>
-                                                            <td>
-                                                                {product.name}
-                                                            </td>
-                                                            <td style={{maxWidth: "150px"}}>
-                                                                {product.packages}
-                                                            </td>
-                                                            <td>
-                                                                {product.price}
-                                                            </td>
-                                                        </tr>
-                                                     )
-                                                    })  
-                                                }  
+                                <div id='table' className="card pt-2 mt-3 justify-content-center shadow px-2">
+                                    <div className="table-responsive">
+                                        <table
+                                            className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
+                                           
+                                            <thead>
+                                            <tr>
+                                            <th className="py-2">S/N</th>
+                                                <th className="py-2">Product&nbsp;Name</th>
+                                                <th className="py-2">Packages</th>
+                                                <th className="py-2">Price</th>
+                                                <th className="py-2">Action</th>
+                                            </tr>
+                                                
+                                            </thead>
+                                            <tbody> 
+                                                
+                                            {this.state.products.map( product => {
+                                                 return(
+
+                                                        <tr>
+                                                        <td>
+                                                            {this.state.id++}
+                                                        </td>
+                                                        <td>
+                                                            {product.name}
+                                                        </td>
+                                                        <td style={{maxWidth: "150px"}}>
+                                                        {product.modules.map( module => {
+                                                            return(
+                                                                <span>{module.name} </span>
+                                                            )}
+                                                        )}
+                                                        </td>
+                                                        <td>
+                                                            {product.cost}
+                                                        </td>
+                                                        <td>
+                                                            <Link to={() => `/updateclientproduct/${product.id}`}>
+                                                                <i className="fa fa-edit mr-1"></i>
+                                                            </Link>
+                                                        </td>
+                                                    </tr>
+                                                 )
+                                                })  
+                                            }  
 
 
 
-                                       </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
- */}
-
+                                   </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                            </div>
 
-                    
+
+                                </div>
+                            </div>
                         </div>
-        </div>
+
+                
+                    </div>
+ 
+                  )}
+              </div>
+            </div>
+         
+          </div>
     )
 }
 }

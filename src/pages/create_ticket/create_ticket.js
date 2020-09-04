@@ -143,9 +143,9 @@ class create_ticket extends Component {
                                             <div className="form-group">
                                                 <select onChange={this.handleInputChange} name="type" id="type" className=" form-control form-select form-select-sm">
                                                     <option value="" selected disabled>--Select&nbsp;Ticket&nbsp;Type--</option>
-                                                    <option value="Complaint">Complaint</option>
-                                                    <option value="Request">Request</option>
-                                                    <option value="Enquiry">Enquiry</option>
+                                                    <option value="complaint">Complaint</option>
+                                                    <option value="request">Request</option>
+                                                    <option value="enquiry">Enquiry</option>
                                                 </select>
                                             </div>
                                         </div>

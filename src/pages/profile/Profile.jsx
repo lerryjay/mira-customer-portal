@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {withContext} from '../../common/context';
 import { HTTPURL } from '../../common/global_constant';
+import avatar from '../../assets/images/avatar.png'
+
 
 class Profile extends Component{
     constructor(props){
@@ -58,7 +60,6 @@ class Profile extends Component{
    render() {
     return (
         <div className="container mx-auto">
-        {this.props.profile.map(profile => 
             <div className="row mt-4">
 
                 <div className="col-md-8 mb-3" id="profile">
@@ -78,7 +79,7 @@ class Profile extends Component{
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Name</label>
                                             <input type="text" className="form-control form-control-sm" name="fullname"
-                                                id="fullname" value={profile.fullname} placeholder="Name" autoComplete="fullname" onChange={this.handleInputChange}/>
+                                                id="fullname" value={sessionStorage.getItem("firstname")} placeholder="Name" autoComplete="fullname" onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
 
@@ -86,14 +87,14 @@ class Profile extends Component{
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Email</label>
                                             <input type="text" className="form-control form-control-sm" name="email"
-                                                id="email" value={profile.email} placeholder="johndoe@mail.com" disabled autoComplete="email" onChange={this.handleInputChange}/>
+                                                id="email" value={sessionStorage.getItem("email")} placeholder="johndoe@mail.com" disabled autoComplete="email" onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Phone-number</label>
                                             <input type="text" className="form-control form-control-sm" name="telephone"
-                                                id="telephone" value={profile.telephone} placeholder="090 ......." disabled autoComplete="tel" onChange={this.handleInputChange}/>
+                                                id="telephone" value={sessionStorage.getItem("telephone")} placeholder="090 ......." disabled autoComplete="tel" onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
 
@@ -101,14 +102,14 @@ class Profile extends Component{
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Company&nbsp;Name</label>
                                             <input type="text" className="form-control form-control-sm" name="company"
-                                                id="company" value="" placeholder="john & Sons"  autoComplete="company" />
+                                                id="company" value={sessionStorage.getItem("company")} placeholder="john & Sons"  autoComplete="company" />
                                         </div>
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Company&nbsp;Address</label>
                                             <input type="text" className="form-control form-control-sm" name="address"
-                                                id="address" value="" placeholder="lorem lorem lorem" disabled autoComplete="address" />
+                                                id="address" value={sessionStorage.getItem("address")}  placeholder="lorem lorem lorem" disabled autoComplete="address" />
                                         </div>
                                     </div>
 
@@ -143,18 +144,18 @@ class Profile extends Component{
                         <div className="card-header">
                         </div>
                         <div className="card-body">
-                            <img src="https://miratechnologiesng.com/img/icons/miraicon.png"
-                                alt="profile picture" className="img-fluid" style={{ marginTop: '-80px' }} />
-                                <h6 className="mt-3">{profile.name} </h6>
+                        <img src={avatar} className="image_sidebar" alt="" height="110px" width="110px" style={{ marginTop: '-80px' }} />
+                            {/* <img src={avatar} 
+                                alt="profile picture" className="img-fluid" style={{ marginTop: '-80px' }} /> */}
+                                <h6 className="mt-3">{sessionStorage.getItem("name")} </h6>
                                 <p className="mt-2"><i class="fa fa-map-marker" aria-hidden="true"></i> Lagos <br/>
-                                <i class="fa fa-envelope" aria-hidden="true"></i> {profile.email} </p>
+                                <i class="fa fa-envelope" aria-hidden="true"></i> {sessionStorage.getItem("email")}</p>
                         </div>
                     </div>
                 </div>
 
        
             </div>
-                 )}
         </div>
     )
    }

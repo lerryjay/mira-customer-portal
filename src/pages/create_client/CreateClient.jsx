@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 
 import Validators  from "../../common/Validators";
+import { Link } from "react-router-dom";
 import {withContext} from '../../common/context';
-import { HTTPURL } from '../../common/global_constant';
+import { HTTPURL, APIKEY } from '../../common/global_constant';
 
 class CreateClient extends Component {
     constructor(props){
@@ -15,10 +16,12 @@ class CreateClient extends Component {
             firstname: '',
             lastname: '',
             othername:'',
-            address: '',
-            country: '',
-            state: '',
-            lga: '',
+            companyemail: '',
+            companytelephone: '',
+            companyaddress: '',
+            companycountryid: '',
+            companystateid: '',
+            companylga: '',
             businessname: '',
            
             errormessage: '',
@@ -50,14 +53,22 @@ class CreateClient extends Component {
         }else{
             this.setState({ loading: true });
             let myHeaders = new Headers();
-            myHeaders.append("api-key", this.state.apiKey);
+            myHeaders.append("api-key", APIKEY);
 
             var formdata = new FormData();
             formdata.append("email", this.state.email);
-            formdata.append("businessname", this.state.businessname);
             formdata.append("telephone", this.state.telephone);
-            formdata.append("name", this.state.name);
-            formdata.append("userid", this.props.userId);
+            formdata.append("firstname", this.state.firstname);
+            formdata.append("lastname", this.state.lastname);
+            formdata.append("othername", this.state.othername);
+            formdata.append("companyemail", this.state.companyemail);
+            formdata.append("businessname", this.state.businessname);
+            formdata.append("companytelephone", this.state.companytelephone);
+            formdata.append("companyaddress", this.state.companyaddress);
+            formdata.append("companycountryid", this.state.companycountryid);
+            formdata.append("companystateid", this.state.companystateid);
+            formdata.append("companylga", this.state.companylga);
+            formdata.append("userid",sessionStorage.getItem('userId') );
             
             fetch(`${HTTPURL}clients/add`, {
                 method: "POST",
@@ -65,41 +76,61 @@ class CreateClient extends Component {
                 body:formdata
             }).then(response => response.json()).
                 then(result => {
-                    if (result.status) {
+                    if(result.status == false) {
                         setTimeout(() => {
-                            this.setState({ loading: false });
-                            this.setState({ successmessage: 'Added Successfully!' })
-                            setTimeout(() => {
-                                this.setState({ successmessage: false });
-                                console.log('submitting')
-                                this.setState({ name: '', email: '', telephone: '' })
+                            this.setState({loading : false});
+                            this.setState({errormessage: result.message});
+                            setTimeout(() =>{
+                                this.setState({errormessage: false});
                             }, 5000);
                         }, 3000);
-                    } else {
-                        this.setState({ loading: true });
-                        setTimeout(() => {
-                            this.setState({ loading: false });
-                            this.setState({ errormessage: result.message });
-                            setTimeout(() => this.setState({ errormessage: '' }), 5000);
-                        }, 3000);   
                     }
-                  
+                    else{
+                        setTimeout(() => {
+                            this.setState({loading : false});
+                            this.setState({successmessage: result.message})
+                            console.log('submitting')
+                            this.setState({ 
+                                email: '', telephone: '', firstname: '',
+                                lastname: '', othername: '', companyemail: '',
+                                businessname: '', companytelephone: '', companyaddress: '',
+                                companycountryid: '', companystateid: '', companylga: ''
+                             })
+                            setTimeout(() =>{
+                                this.setState({successmessage: false});
+                            }, 5000);
+                        }, 3000);
+                    }
                 })
 
            
         }
     }
 
-    addClient() {
-        
-    }
 
 
     render() {
         return (
 
+            
             <div className="container mx-auto row">
-            {/* Success Message */}
+                <div className="container-fluid">
+                    <div className="col">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <Link to='/addclient'>
+                                        Home
+                                    </Link>
+                                </li>
+                                <li class="breadcrumb-item" aria-current="page">Add Client By Setup Profile</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+
+                <div className="row">
+                             {/* Success Message */}
             { this.state.successmessage ? 
                 <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
                     <span className="mt-3">{this.state.successmessage}</span>
@@ -137,7 +168,7 @@ class CreateClient extends Component {
                     
                             <div className="card">
                                 <div className="card-header bg-medium font-weight-bold text-dark">
-                                    ADD CLIENT
+                                    ADD CLIENT BY SETUP PROFILE
                     </div>
                     
                                 <div className="card-body">
@@ -148,7 +179,7 @@ class CreateClient extends Component {
                                             <label htmlFor="" className="sr-only">Last&nbsp;Name</label>
                                             <input type="text" className="form-control form-control-sm" name="lastname"
                                                 id="lastname" placeholder="Lastname"
-                                                value={this.state.name} required
+                                                value={this.state.lastname} required
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
@@ -166,7 +197,7 @@ class CreateClient extends Component {
                                             <label htmlFor="" className="sr-only">Other&nbsp;Name</label>
                                             <input type="text" className="form-control form-control-sm" name="othername"
                                                 id="othername" placeholder="Othername"
-                                                value={this.state.name} required
+                                                value={this.state.othername} required
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
@@ -183,10 +214,31 @@ class CreateClient extends Component {
 
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
+                                            <label htmlFor="" className="sr-only">companyEmail</label>
+                                            <input type="text" className="form-control form-control-sm" name="companyemail"
+                                                id="companyemail" placeholder="Company Email" 
+                                                value={this.state.companyemail} required
+                                                onChange={this.handleInputChange}/>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-6 mb-3">
+                                        <div className="form-group">
                                             <label htmlFor="" className="sr-only">Telephone</label>
                                             <input type="text" className="form-control form-control-sm" name="telephone"
                                                 id="telephone" placeholder="Phone no." required
                                                 value={this.state.telephone}
+                                                onChange={this.handleInputChange} />
+                                        </div>
+                                    </div>
+
+                                    
+                                    <div className="col-md-6 mb-3">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Company Telephone</label>
+                                            <input type="text" className="form-control form-control-sm" name="companytelephone"
+                                                id="companytelephone" placeholder="Company Telephone" required
+                                                value={this.state.companytelephone}
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
@@ -203,38 +255,38 @@ class CreateClient extends Component {
 
                                     <div className="col-md-4 mb-3">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Country</label>
-                                            <input type="text" className="form-control form-control-sm" name="country"
-                                                id="country" placeholder="Country"
-                                                value={this.state.country} required
+                                            <label htmlFor="" className="sr-only">companycountryid</label>
+                                            <input type="text" className="form-control form-control-sm" name="companycountryid"
+                                                id="companycountryid" placeholder="Country"
+                                                value={this.state.companycountryid} required
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
                                    <div className="col-md-4 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">State</label>
-                                            <input type="text" className="form-control form-control-sm" name="state"
-                                                id="state" placeholder="State"
-                                                value={this.state.state} required
+                                            <input type="text" className="form-control form-control-sm" name="companystateid"
+                                                id="companystateid" placeholder="State"
+                                                value={this.state.companystateid} required
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
                                    <div className="col-md-4 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Local&nbsp;Government&nbsp;Area</label>
-                                            <input type="text" className="form-control form-control-sm" name="lga"
-                                                id="lga" placeholder="Local Government Area"
-                                                value={this.state.lga} required
+                                            <input type="text" className="form-control form-control-sm" name="companylga"
+                                                id="companylga" placeholder="Local Government Area"
+                                                value={this.state.companylga} required
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
 
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Address</label>
-                                            <input type="text" className="form-control form-control-sm" name="address"
-                                                id="address" placeholder="Address" required
-                                                value={this.state.address}
+                                            <label htmlFor="" className="sr-only">Company Address</label>
+                                            <input type="text" className="form-control form-control-sm" name="companyaddress"
+                                                id="companyaddress" placeholder="Company Address" required
+                                                value={this.state.companyaddress}
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
@@ -247,7 +299,7 @@ class CreateClient extends Component {
                             <div className="card-footer">
                                 <div className="text-center">
                                 {this.state.loading ? 
-                                <button type="submit" className="btn btn-sm bg-btn">
+                                <button type="submit" className="btn btn-sm btn-primary px-4">
                                     <div className="spinner-border text-secondary" role="status" id="loader">
                                         <span className="sr-only">Loading...</span>
                                     </div>
@@ -263,6 +315,8 @@ class CreateClient extends Component {
                             </div>
                         </div>
                     </form>
+                </div>
+            
                 </div>
             </div>
 

@@ -12,6 +12,9 @@ class product_details extends Component {
       ...this.props,
       name: "",
       description: "",
+      editname: "",
+      editdescription: "",
+      editid: "",
       packages: [],
       pkgname: "",
       pkgdescription: "",
@@ -20,6 +23,7 @@ class product_details extends Component {
       loading: false,
       successmessage: "",
       showmodal: true,
+      showdeletemodal: true,
       selectedModule : {}
     };
     console.log(this.props);
@@ -65,9 +69,7 @@ class product_details extends Component {
 
     fetch(
       HTTPURL +
-        `product/modules?productid=${productid}&userid=${sessionStorage.getItem(
-          "userId"
-        )}`,
+        `product/modules?productid=${productid}&userid=${sessionStorage.getItem("userId")}`,
       {
         method: "GET",
         headers: headers,
@@ -75,9 +77,57 @@ class product_details extends Component {
     )
       .then((response) => response.json())
       .then((data) => {
-        this.setState({ packages: data.data });
-        console.log(this.state.packages, "packages");
+        if(data.data === false){
+          this.setState({ packages: '' });
+          console.log("Oops, packages is empty")
+        } else {
+          this.setState({ packages: data.data });
+          console.log(data, "packages")
+        }
+        
+        // console.log(this.state.packages, "packages");
       });
+  }
+
+  async showdeleteInfoModule(moduleid)
+  {
+    const selectedModule = this.state.packages.find(item=>item.id == moduleid);
+    await this.setState({selectedModule});
+    let modal = document.getElementById("deleteModal");
+    modal.style.display = "block";
+  }
+  
+  async deleteInfoModule()
+  {
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    const res  = await fetch(`${HTTPURL}product/deletemodule?moduleid=${this.state.selectedModule.id}&userid=${sessionStorage.getItem('userId')}`, {
+      method: 'GET',
+      headers: headers
+    })
+    console.log('edit module response',res);
+    //display success here
+  }
+
+
+  async showdeleteInfoModule(moduleid)
+  {
+    const selectedModule = this.state.packages.find(item=>item.id == moduleid);
+    await this.setState({selectedModule});
+    let modal = document.getElementById("deleteModal");
+    modal.style.display = "block";
+  }
+  
+  async deleteInfoModule()
+  {
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    const res  = await fetch(`${HTTPURL}product/deletemodule?moduleid=${this.state.selectedModule.id}&userid=${sessionStorage.getItem('userId')}`, {
+      method: 'GET',
+      headers: headers
+    })
+    console.log('delete module response',res);
+    //display success here
   }
 
   async infoModal(moduleid) {
@@ -91,7 +141,11 @@ class product_details extends Component {
   async updateModal(moduleid) {
 
     const selectedModule = this.state.packages.find(item=>item.id == moduleid);
-    await this.setState({selectedModule});
+    await this.setState({
+      editname: selectedModule.name, 
+      editdescription: selectedModule.description, 
+      editid: selectedModule.id 
+    });
     let modal = document.getElementById("updateModal");
     modal.style.display = "block";
   }
@@ -100,7 +154,10 @@ class product_details extends Component {
     let modal = document.getElementById("infoModal");
     modal.style.display = "none";
   }
-
+  closedeleteModal() {
+    let modal = document.getElementById("deleteModal");
+    modal.style.display = "none";
+  }
   closeupdateModal() {
     let modal = document.getElementById("updateModal");
     modal.style.display = "none";
@@ -170,9 +227,9 @@ class product_details extends Component {
         let form = new FormData();
         form.append("userid", sessionStorage.getItem("userId"));
         form.append("productid", this.state.id);
-        form.append("moduleid", this.state.selectedModule.id);
-        form.append("name", this.state.selectedModule.name);
-        form.append("description", this.state.selectedModule.description);
+        form.append("moduleid", this.state.editid);
+        form.append("name", this.state.editname);
+        form.append("description", this.state.editdescription);
 
         fetch(HTTPURL + "product/updatemodule", {
           method: "POST",
@@ -182,6 +239,8 @@ class product_details extends Component {
           .then((response) => response.json())
           .then((json) => {
             console.log(json);
+            let modal = document.getElementById("updateModal");
+            modal.style.display = "none";
             return json;
           });
         console.log("submitting");
@@ -250,7 +309,7 @@ class product_details extends Component {
                             <i value={module.id} style={{ cursor: "pointer" }}
                                className="fa fa-edit mr-1 text-primary"></i>
                               </Link>
-                              <Link to="/#">
+                            <Link onClick={() => this.showdeleteInfoModule(module.id)}>
                                 <i className="fa fa-trash mr-1 text-danger"></i>
                               </Link>
                             </label>
@@ -455,10 +514,10 @@ class product_details extends Component {
                             <input
                               type="text"
                               className="form-control form-control-sm"
-                              name="productid"
-                              id="productid"
+                              name="editname"
+                              id="editname"
                               placeholder="Module Name"
-                              value={this.state.selectedModule.name}
+                              value={this.state.editname}
                               onChange={this.handleInputChange}
                             />
                           </div>
@@ -473,10 +532,10 @@ class product_details extends Component {
                             <textarea
                               type="text"
                               className="form-control form-control-sm"
-                              name="pkgdescription"
-                              id="pkgdescription"
+                              name="editdescription"
+                              id="editdescription"
                               placeholder="Package Description"
-                              value={this.state.selectedModule.description}
+                              value={this.state.editdescription}
                               onChange={this.handleInputChange}
                             />
                           </div>
@@ -487,17 +546,41 @@ class product_details extends Component {
                       
 
                       <div className="row">
-                        <div className="col-md-12 text-center">
+                        <div className="col-md-6">
                           <button
-                          type="button"
+                            type="button"
                             onClick={this.closeupdateModal}
-                            className="btn-block btn btn-primary"
+                            className="btn-block btn btn-outline-secondary"
                           >
-                            OK
+                            Cancel
                           </button>
                         </div>
+                        <div className="col-md-6">
+                          {this.state.loading ? (
+                            <button
+                              type="submit"
+                              className="btn btn-block btn-primary"
+                            >
+                              <div
+                                className="spinner-border text-secondary"
+                                role="status"
+                                id="loader"
+                              >
+                                <span className="sr-only">Loading...</span>
+                              </div>
+                            </button>
+                          ) : (
+                            <button
+                              type="submit"
+                              className="btn btn-primary btn-block"
+                            >
+                              <i className="fas fa-folder-open mr-2"></i>
+                              Update
+                            </button>
+                          )}
+                        </div>
                       </div>
-                    </div>
+                      </div>
                   </div>
                 </form>
               </div>
@@ -505,6 +588,31 @@ class product_details extends Component {
           ) : (
             <span></span>
           )}
+
+          {/* Delete Module Info */}
+          {this.state.showmodal ?  
+              <div id="deleteModal" class="modal">
+                  {/* Modal content  */}
+                  <div class="modal-content text-center p-5">
+                      {/* <div className="delete-icon">
+                          &times;
+                      </div> */}
+                      <i class="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
+                      <h3>Are you sure?</h3>
+                      <p> Do you really want to delete this file?</p>
+                      <div className="row">
+                          <div className="col-md-6">                            
+                              <button onClick={this.closedeleteModal} className="btn-block btn btn-outline-secondary">Cancel</button>
+                          </div>
+                          <div className="col-md-6">
+                              <button onClick={() => this.deleteInfoModule(this.state.selectedModule.id)} className="btn btn-danger btn-block">Delete</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              :           
+              <span></span> 
+          }
           
         </div>
       </div>

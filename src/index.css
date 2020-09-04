@@ -763,6 +763,11 @@ select {
   color: #0a0b18;
 }
 
+.row.form{
+  height: 100vh;
+  align-items: center;
+}
+
 /* FORM */
 
 /* #profile div.card-header, #profile div.card-footer {

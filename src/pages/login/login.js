@@ -18,10 +18,6 @@ class Login extends Component {
             successmessage: ''
         };
     }
-
-    // componentDidMount() {
-    //     document.querySelector('.content').classList.add("contentlogin")
-    // }
     
     handleInputChange = e => {
         const { name, value } = e.target
@@ -54,9 +50,6 @@ class Login extends Component {
             setTimeout(() => {
                 this.setState({loading : false});
                 setTimeout(() =>{
-                    // this.setState({successmessage: false});
-                    this.setState({successmessage: 'Login Successful'})
-                    
                         let form = new FormData(document.getElementById("loginform"));
                     
                         const headers = new Headers();
@@ -88,6 +81,7 @@ class Login extends Component {
                               }
                              
                              
+                                this.setState({successmessage: 'Login Successful'})
                               this.props.history.push('/dashboard');
                             }else{
 
@@ -102,30 +96,10 @@ class Login extends Component {
                     
                           
                           });
-                 
-
-                    // console.log(res);
-                    // if(res){
-                    //     this.props.history.push('/dashboard');
-                    // }else{
-                    //     this.setState({loading : true});
-                    //     setTimeout(() => {
-                    //         this.setState({loading : false});
-                    //         this.setState({errormessage: 'Invalid username or password'});
-                    //         setTimeout(()=> this.setState({errormessage: ''}),5000);
-                    //     }, 3000);
-                    // }
 
                    
                 }, 2000);
             }, 3000);
-         //    const res = await this.state.login(document.getElementById("loginform"));
-        //    if(!res['status'])this.setState({errormessage: res['message']});
-        //     else{
-        //         document.querySelector('.content').style.width = "";
-        //          document.querySelector('.content').style.marginLeft = "";
-        //         this.props.history.push('/dashboard');
-        //     }
         }
         console.log('submitting')
     }
@@ -145,7 +119,8 @@ class Login extends Component {
                         </div>
                         :   <span></span>
                     }
-                <div className="col-md-6 mx-auto" style={{marginTop: "calc(50vh/1.6)"}}>
+                    <div className="row form ">
+                    <div className="col-md-6 mx-auto" >
                     <div className="card bg-light shadow border-0 py-3">
                         <div className="card-header bg-transparent text-center">
                             <img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt=""/>
@@ -186,11 +161,11 @@ class Login extends Component {
                                         onChange={this.handleInputChange}/>
                                 </div>
                                 {this.state.loading ? 
-                                <button type="submit" className="btn btn-block bg-btn">
-                                    <div className="spinner-border text-secondary" role="status" id="loader">
-                                        <span className="sr-only">Loading...</span>
-                                    </div>
-                                </button>
+            <button type="submit" className="btn btn-sm bg-btn">
+                <div className="spinner-border text-secondary" role="status" id="loader">
+                    <span className="sr-only">Loading...</span>
+                </div>
+            </button>
                                 : <button type="submit" className="btn btn-sm bg-btn">
                                         <i className="fas fa-sign-in-alt fa-fw mr-1"></i>
                                         SIGN IN
@@ -210,7 +185,9 @@ class Login extends Component {
                         </small>
                     </div>
                 </div>
-                </div>
+               
+                    </div>
+                 </div>
             </div>
         )
     }

@@ -85,8 +85,8 @@ class TicketList extends Component {
                 </div>
                                 <div className="card-body">
                                 {this.state.tickets == '' ?
-                                    <div>
-                                        <h3 className="text-center">No ticket records!</h3>
+                                    <div class="alert alert-warning" role="alert">
+                                        <h6 className="text-center">No ticket records!</h6>
                                     </div>
                                     :
                                     <div id='table' className="card pt-2 mt-3 justify-content-center shadow px-2">

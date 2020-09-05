@@ -43,7 +43,7 @@ import Nav from "./common/components/Nav";
 import ClientSidebar from "./common/components/ClientSidebar";
 import Sidebar from "./common/components/Sidebar";
 import NotFound from "./common/components/NotFound";
-import updateclientproduct from "./pages/updateclientproduct/updateclientproduct";
+import ClientProductDetails from "./pages/clientproductdetails/clientproductdetails";
 
 const apiKey = "97899c-7d0420-1273f0-901d29-84e2f8";
 const userId = "5f44ce52af9ba";
@@ -447,6 +447,12 @@ class App extends Component {
                       <Route
                         path="/updateclientproduct"
                         component={UpdateClientProduct}
+                      />
+                    )}
+                    {loggedIn && (
+                      <Route
+                        path="/clientproductdetails"
+                        component={ClientProductDetails}
                       />
                     )}
                   </div>

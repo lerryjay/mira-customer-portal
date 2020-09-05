@@ -80,13 +80,13 @@ class UpdateClientProduct extends Component {
             mod += module + ',';
         });
 
-        const clientid = this.props.location.pathname.split("/")[2];
+        // const clientid = this.props.location.pathname.split("/")[2];
         
         let myHeaders = new Headers();
         myHeaders.append("api-key", APIKEY);
 
         var formdata = new FormData();
-        formdata.append("clientid", clientid);
+        formdata.append("clientid", this.state.location.search.split('?')[1]);
         formdata.append("productid", this.state.type);
         formdata.append("modules", mod);
         formdata.append("cost", this.state.cost);

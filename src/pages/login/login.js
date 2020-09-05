@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import Validators  from "../../common/Validators";
 import {withContext} from '../../common/context';
+import { HTTPURL } from "../../common/global_constant";
 
 class Login extends Component {
 
@@ -42,7 +43,7 @@ class Login extends Component {
                 this.setState({errormessage: err});
                 setTimeout(()=> this.setState({errormessage: ''}),5000);
             }, 3000);
-        }else if(!Validators.validatePassword(password,1).status){
+        }else if(password == ''){
             const err = Validators.validatePassword(password,1).message;
            await this.setState({loading : true});
            setTimeout(() => {
@@ -57,8 +58,67 @@ class Login extends Component {
                 setTimeout(() =>{
                     // this.setState({successmessage: false});
                     this.setState({successmessage: 'Login Successful'})
-                    const res = this.state.login(document.getElementById("loginform"));
-                    this.props.history.push('/dashboard');
+                    
+                        let form = new FormData(document.getElementById("loginform"));
+                    
+                        const headers = new Headers();
+                        headers.append("API-KEY", "97899c-7d0420-1273f0-901d29-84e2f8");
+                        fetch(HTTPURL + "user/login", {
+                          method: "POST",
+                          body: form,
+                          headers: headers,
+                        })
+                          .then((response) => response.json())
+                          .then((json) => {
+                            // check if logged in
+                            if (json.status == true) {
+                              sessionStorage.setItem("loggedIn", true);
+                              sessionStorage.setItem("userId", json.data.userid);
+                              sessionStorage.setItem("role", json.data.role);
+                              sessionStorage.setItem("firstname", json.data.firstname);
+                              sessionStorage.setItem("lastname", json.data.lastname);
+                              sessionStorage.setItem("email", json.data.email);
+                              sessionStorage.setItem("imageurl", json.data.imageurl);
+                              sessionStorage.setItem("telephone", json.data.telephone);
+                    
+                              if (json.data.role === "admin") {
+                                console.log("I'm an admin");
+                                this.setState({ admin: true });
+                              } else {
+                                console.log("I'm a user");
+                                this.setState({ admin: false });
+                              }
+                             
+                             
+                              this.props.history.push('/dashboard');
+                            }else{
+
+                                this.setState({loading : true});
+                                    setTimeout(() => {
+                                        this.setState({loading : false});
+                                        this.setState({errormessage: 'Invalid username or password'});
+                                        setTimeout(()=> this.setState({errormessage: ''}),5000);
+                                    }, 3000);
+
+                            }
+                    
+                          
+                          });
+                 
+
+                    // console.log(res);
+                    // if(res){
+                    //     this.props.history.push('/dashboard');
+                    // }else{
+                    //     this.setState({loading : true});
+                    //     setTimeout(() => {
+                    //         this.setState({loading : false});
+                    //         this.setState({errormessage: 'Invalid username or password'});
+                    //         setTimeout(()=> this.setState({errormessage: ''}),5000);
+                    //     }, 3000);
+                    // }
+
+                   
                 }, 2000);
             }, 3000);
             // document.querySelector('.content').style.width = "";

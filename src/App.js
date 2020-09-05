@@ -52,8 +52,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: true,
-      admin: true,
+      loggedIn: sessionStorage.getItem("loggedIn") ,
+      admin: false,
     };
   }
 

@@ -3,7 +3,7 @@ import { HTTPURL, APIKEY } from '../../common/global_constant';
 import {withContext} from '../../common/context';
 
 const headers = new Headers();
-class AddClientProduct extends Component {
+class UpdateClientProduct extends Component {
     constructor(props){
         super(props);
         this.state = { 
@@ -80,18 +80,19 @@ class AddClientProduct extends Component {
             mod += module + ',';
         });
 
+        const clientid = this.props.location.pathname.split("/")[2];
         
         let myHeaders = new Headers();
         myHeaders.append("api-key", APIKEY);
 
         var formdata = new FormData();
-        formdata.append("clientid", this.state.location.search.split('?')[1]);
+        formdata.append("clientid", clientid);
         formdata.append("productid", this.state.type);
         formdata.append("modules", mod);
         formdata.append("cost", this.state.cost);
         formdata.append("userid", sessionStorage.getItem('userId') )
 
-        fetch(HTTPURL + 'clients/addproduct', {
+        fetch(HTTPURL + 'clients/updateproduct', {
             method: 'POST',
             headers: myHeaders,
             body: formdata
@@ -173,7 +174,7 @@ class AddClientProduct extends Component {
                     
                             <div className="card">
                                 <div className="card-header bg-medium font-weight-bold text-dark">
-                                    ADD CLIENT PRODUCT
+                                    UPDATE CLIENT PRODUCT
                     </div>
                     
                                 <div className="card-body">
@@ -260,4 +261,4 @@ class AddClientProduct extends Component {
         )
     }
 }
-export default withContext(AddClientProduct);
+export default withContext(UpdateClientProduct);

@@ -31,11 +31,14 @@ import ViewClient from './pages/view_client/ViewClient';
 import ListClient from './pages/list_client/ListClient';
 import ProductCart from './pages/productcart/ProductCart';
 import AddClientProduct from './pages/addclientproduct/addclientproduct'
+import AddClient from './pages/addclient/addclient';
+import UpdateClientProduct from './pages/updateclientproduct/updateclientproduct'
 
 import Nav from './common/components/Nav';
 import ClientSidebar from './common/components/ClientSidebar';
 import Sidebar from './common/components/Sidebar';
 import NotFound from './common/components/NotFound';
+import updateclientproduct from './pages/updateclientproduct/updateclientproduct';
 
 const apiKey = "97899c-7d0420-1273f0-901d29-84e2f8";
 const userId = "5f44ce52af9ba";
@@ -72,7 +75,8 @@ class App extends Component {
       sessionStorage.setItem('loggedIn', true);
       sessionStorage.setItem('userId', json.data.userid);
       sessionStorage.setItem('role', json.data.role);
-      sessionStorage.setItem('name', json.data.fullname);
+      sessionStorage.setItem('firstname', json.data.firstname);
+      sessionStorage.setItem('lastname', json.data.lastname);
       sessionStorage.setItem('email', json.data.email);
       sessionStorage.setItem('imageurl', json.data.imageurl);
       sessionStorage.setItem('telephone', json.data.telephone);
@@ -347,6 +351,8 @@ handleProductRoute = (e) => {
                     {!admin && loggedIn && <Route path="/view_product" component={ClientViewProduct} />}
                     {loggedIn && <Route path="/productdetails" component={ProductDetails} />}
                     {loggedIn && <Route path="/createticket" component={CreateTicket} />}
+                    {loggedIn && <Route path="/addclient" component={AddClient} />}
+                    {loggedIn && <Route path="/updateclientproduct" component={UpdateClientProduct} />}
                 </div>
                     <Route component={NotFound} />
                   </Switch>

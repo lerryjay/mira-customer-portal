@@ -87,7 +87,8 @@ class ListClient extends Component {
                                                         <tr>
                                                         <td className="align-middle">
                                                             <img src={avatar} alt="" width="30" height="30" className="rounded-circle" /></td>
-                                                            <td>{client.name} </td>
+                                                            <td>{client.lastname} {client.firstname} {client.othername}</td>
+                                                            
                                                         <td>{client.email} </td>
                                                             <td>{client.telephone} </td>
                                                             <td>{client.businessname}</td>

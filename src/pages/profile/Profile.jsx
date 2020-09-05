@@ -79,7 +79,7 @@ class Profile extends Component{
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Name</label>
                                             <input type="text" className="form-control form-control-sm" name="fullname"
-                                                id="fullname" value={sessionStorage.getItem("name")} placeholder="Name" autoComplete="fullname" onChange={this.handleInputChange}/>
+                                                id="fullname" value={sessionStorage.getItem("firstname")} placeholder="Name" autoComplete="fullname" onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
 

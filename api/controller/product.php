@@ -254,7 +254,7 @@
       
       $response['status']   = true;
       $response['message']  = 'Products modules retrived successfulty';
-      $response['data']     = $modules;
+      $response['data']     = $modules ? $modules : [];
 
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));

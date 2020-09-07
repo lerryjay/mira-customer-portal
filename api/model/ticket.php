@@ -68,7 +68,7 @@
      **/
     public function getTickets($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT *, (SELECT name FROM users WHERE id = customer_id) AS clientname,  (SELECT email FROM users WHERE id = customer_id) AS email FROM tickets '.$condition;
+      $sql = 'SELECT *, (SELECT businessname FROM clients WHERE user_id = customer_id) AS businssname, (SELECT firstname FROM users WHERE id = customer_id) AS clientname,  (SELECT email FROM users WHERE id = customer_id) AS email FROM tickets '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->rows;
       else return false;
@@ -84,7 +84,7 @@
      **/
     public function getTicket($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT *, (SELECT name FROM users WHERE id = customer_id) AS clientname,  (SELECT email FROM users WHERE id = customer_id) AS email FROM tickets '.$condition;
+      $sql = 'SELECT *, (SELECT businessname FROM clients WHERE user_id = customer_id) AS businssname, (SELECT CONCAT(firstname) FROM users WHERE id = customer_id) AS clientname,  (SELECT email FROM users WHERE id = customer_id) AS email FROM tickets '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->row;
       else return false;

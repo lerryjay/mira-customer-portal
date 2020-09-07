@@ -138,7 +138,7 @@
 
       loadModel('ticket');
       $this->ticketModel = new TicketModel();
-      return ['title'=>$title,'message'=>$message,'type'=>$type,'customerId'=>$customerId,'userId'=>$this->userId,'productId'=>$productId,'user'=>$user];
+      return ['title'=>$title,'message'=>$message,'type'=>$type,'customerId'=>$customerId,'userId'=>$userId,'productId'=>$productId,'user'=>$user];
     }
 
     /**
@@ -307,7 +307,6 @@
 
       $this->ticketModel = new TicketModel();
       $ticket   = $this->ticketModel->getTicketById($ticketId);
-      
       
       if(!$ticket){
         $this->setOutputHeader(['Content-type:application/json']);

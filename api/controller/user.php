@@ -29,7 +29,10 @@
       if($data){
         foreach($data as $user) {
           $users[] = [
-            'name'=>$user['name'],
+            'userid'=>$user['id'],
+            'firstname'=>$user['firstname'],
+            'lastname'=>$user['lastname'],
+            'othername'=>$user['othername'],
             'email'=>$user['email'],
             'telephone'=>$user['telephone'],
             'imageurl'=>$user['imageurl'],

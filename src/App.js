@@ -38,6 +38,8 @@ import ProductCart from "./pages/productcart/ProductCart";
 import AddClientProduct from "./pages/addclientproduct/addclientproduct";
 import AddClient from "./pages/addclient/addclient";
 import UpdateClientProduct from "./pages/updateclientproduct/updateclientproduct";
+import AddAdministrator from "./pages/addadministrator/addadministrator";
+import ListUsers from "./pages/listusers/listusers"
 
 import Nav from "./common/components/Nav";
 import ClientSidebar from "./common/components/ClientSidebar";
@@ -53,7 +55,7 @@ class App extends Component {
     super(props);
     this.state = {
       loggedIn: sessionStorage.getItem("loggedIn") ,
-      admin: false,
+      admin: true,
     };
   }
 
@@ -301,6 +303,18 @@ class App extends Component {
                       <Route
                         path="/clientproductdetails"
                         component={ClientProductDetails}
+                      />
+                    )}
+                    {loggedIn && (
+                      <Route
+                        path="/addadministrator"
+                        component={AddAdministrator}
+                      />
+                    )}
+                    {loggedIn && (
+                      <Route
+                        path="/listusers"
+                        component={ListUsers}
                       />
                     )}
                   </div>

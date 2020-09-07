@@ -139,12 +139,13 @@ class Profile extends Component{
                         <div className="card-header">
                         </div>
                         <div className="card-body">
-                        <img src={avatar} className="image_sidebar" alt="" height="110px" width="110px" style={{ marginTop: '-80px' }} />
+                            <img src={avatar} alt="" height="310px" width="310px" style={{ marginTop: '-80px' }} />
+                        {/* <img src={avatar} alt="" height="310px" width="310px" style={{ marginTop: '-80px' }} /> */}
                             {/* <img src={avatar} 
                                 alt="profile picture" className="img-fluid" style={{ marginTop: '-80px' }} /> */}
-                                <h6 className="mt-3">{sessionStorage.getItem("name")} </h6>
+                                {/* <h6 className="mt-3">{sessionStorage.getItem("name")} </h6>
                                 <p className="mt-2"><i class="fa fa-map-marker" aria-hidden="true"></i> Lagos <br/>
-                                <i class="fa fa-envelope" aria-hidden="true"></i> {sessionStorage.getItem("email")}</p>
+                                <i class="fa fa-envelope" aria-hidden="true"></i> {sessionStorage.getItem("email")}</p> */}
                         </div>
                     </div>
                 </div>

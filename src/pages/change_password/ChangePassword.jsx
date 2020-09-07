@@ -160,18 +160,17 @@ class ChangePassword extends Component {
                                 </div>
                                 
                                 {this.state.loading ? 
-                                <button type="submit" className="btn btn-sm bg-btn">
-                                    <div className="spinner-border text-secondary" role="status" id="loader">
-                                        <span className="sr-only">Loading...</span>
-                                    </div>
-                                </button>
-                                : 
-                                <button type="submit" className="btn btn-sm bg-btn">
-                                        <i className="fas fa-save fa-fw"></i>
-                                    Save
-                                </button>
+                                    <button type="submit" className="btn btn-sm bg-btn">
+                                        <div className="spinner-border text-secondary" role="status" id="loader">
+                                            <span className="sr-only">Loading...</span>
+                                        </div>
+                                    </button>
+                                    : 
+                                    <button type="submit" className="btn bg-btn px-5 py-2">
+                                            <i className="fas fa-save fa-fw pr-2"></i>
+                                        Save
+                                    </button>
                                 }
-                                
                             </form>
                         </div>
                     </div>

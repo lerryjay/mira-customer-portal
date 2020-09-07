@@ -25,7 +25,8 @@
       if($data){
         foreach($data as $user) {
           $users[] = [
-            'name'=>$user['name'],
+            'firstname'=>$user['firstname'],
+            'lastname'=>$user['lastname'],
             'email'=>$user['email'],
             'telephone'=>$user['telephone'],
             'imageurl'=>$user['imageurl'],
@@ -48,7 +49,7 @@
      * @return type
      * @throws conditon
      **/
-    public function add(Type $var = null)
+    public function add()
     {
       $data = $this->validateRegistration();
       extract($data);
@@ -58,7 +59,7 @@
         $imageurl = File::upload("file",'user',false);
         $imageurl ?: '';
       }
-      $response = $this->userModel->register($name,$email,$telephone,$password,$this->companyId,$imageurl,'admin');
+      $response = $this->userModel->register($firstname,$lastname,$othername,$email,$telephone,$password,$this->companyId,$imageurl,'admin');
       if($response){
         $response = [
           'status'=>true,
@@ -88,7 +89,9 @@
     private function validateRegistration()
     {
       extract($_POST);
-      $name       = isset($name) ? $name : '';
+      $firstname  = isset($firstname) ? $firstname : '';
+      $lastname   = isset($lastname) ? $lastname : '';
+      $othername  = isset($othername) ? $othername : '';
       $email      = isset($email) ? $email : '';
       $password   = isset($password) ? $password : '';
       $telephone  = isset($telephone) ? $telephone : '';
@@ -112,6 +115,24 @@
         return ;
       }
       
+      $firstnameInvalid       = Validate::string($firstname,false,false,2);
+      if($firstnameInvalid){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid firstname', 'data'=>['field'=>'firstname']]));
+      } 
+
+      $lasttnameInvalid       = Validate::string($lastname,false,false,2);
+      if($lasttnameInvalid){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid lastname', 'data'=>['field'=>'lastname']]));
+      } 
+
+      $othernameInvalid       = Validate::string($othername,false,false,1);
+      if($othernameInvalid && strlen($othername) > 0){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid othername', 'data'=>['field'=>'name']]));
+      } 
+
       $nameValid       = Validate::string($name,false,false,4);
       if($nameValid){
         $this->setOutputHeader(['Content-type:application/json']);
@@ -134,7 +155,7 @@
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Telephone is associated with another account!', 'data'=>['field'=>'telephone']]));
       }
       // no errors
-      return ['telephone'=>$telephone,'email'=>$email,'name'=>$name,'password'=>$password,'companyId'=>$this->companyId];
+      return ['telephone'=>$telephone,'email'=>$email,'firstname'=>$firstname,'lastname'=>$lastname,'othername'=>$othername,'password'=>$password,'companyId'=>$this->companyId];
     }
 
     /**

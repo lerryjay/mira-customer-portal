@@ -46,7 +46,7 @@ class Login extends Component {
                setTimeout(()=> this.setState({errormessage: ''}),5000);
            }, 3000);
         }else{
-            this.setState({loading : true});
+            setTimeout(()=> this.setState({loading : true}),3000);
             let form = new FormData(document.getElementById("loginform"));
             const res = await this.props.login(form);
             if(res.status){ 
@@ -55,6 +55,7 @@ class Login extends Component {
             }
             else{
                 this.setState({});
+                this.setState({loading : false});
                 this.setState({errormessage: 'Invalid username or password',loading : false});
                 setTimeout(()=> this.setState({errormessage: ''}),5000);
             }

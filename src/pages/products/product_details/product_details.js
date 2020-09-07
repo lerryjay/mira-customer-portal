@@ -249,7 +249,7 @@ class product_details extends Component {
         <div className="row product_details mt-4">
           <div className="col-md-6">
             {/* <img src={this.state.imageurl} onError={`this.src=${ placeholder }`} className="img-fluid" alt="" /> */}
-            <img src={FILEURL+this.state.imageurl} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
+            <img className="img-product" src={FILEURL+this.state.imageurl} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
           </div>
           <div className="col-md-6">
             <h4 className="text-dark">{this.state.name}</h4>
@@ -258,7 +258,7 @@ class product_details extends Component {
             </div>
           </div>
         </div>
-        <div className="row">
+        <div className="row mt-5">
           <div className="col-md-12 packages">
             <h5 className="text-dark text-center">MODULES</h5>
           </div>

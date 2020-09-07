@@ -128,7 +128,7 @@ class Products extends Component {
                             <div className="col-md-3 col-lg-4 col-sm-12" key={i}>
                                 <div className="card text-center products">
                                     {/* <img src={image} className="image_product" alt="" /> */}
-                                    <img src={FILEURL+product.imageurl} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
+                                    <img className="img-fluid" src={FILEURL+product.imageurl} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
                                     <div className="card-body">
                                         <h5 className="card-title">{product.name}</h5>
                                         {/* <Link  to={{ pathname:"", search}} onClick={this.handleViewMore}> */}

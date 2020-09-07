@@ -64,12 +64,13 @@ class Login extends Component {
     }
 
     showPassword() {
-        // var x = document.getElementById("password");
-        // if (x.type === "password") {
-        //     x.type = "text";
-        //   } else {
-        //     x.type = "password";
-        //   }
+        var input = document.getElementById("password");
+        console.log(input, "password type")
+        if (input.type === "password") {
+            input.type = "text";
+          } else {
+            input.type = "password";
+          }
     }
 
 
@@ -119,12 +120,12 @@ class Login extends Component {
                                 
 
                                 <div className="input-group mb-3">
-                                    <span className="input-group-text bg-white alt" id="password">
+                                    <span className="input-group-text bg-white alt" >
                                         <i className="fas fa-lock-open fa-fw"></i>
                                     </span>
-                                    <label htmlFor="password" className="sr-only">Password</label>
-                                    <input type="password" className="form-control alt alt2" id="password" name="password" placeholder="Password..."
-                                        aria-label="Password" aria-describedby="password" required
+                                    <label htmlFor="" className="sr-only">Password</label>
+                                    <input type="password" className="form-control alt alt2" id="password" name="password" placeholder="Password"
+                                        // aria-label="Password" aria-describedby="password" required
                                         value={this.state.password}
                                         onChange={this.handleInputChange}/>
                                         <span className="input-group-text bg-white alt" >

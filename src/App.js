@@ -46,6 +46,8 @@ import UpdateClientProduct from "./pages/clients/updateclientproduct/updateclien
 
 
 import CreateUser from "./pages/users/create_user/CreateUser";
+import Users from "./pages/users/Users";
+import Admin from "./pages/users/Admin";
 
 
 
@@ -294,6 +296,18 @@ class App extends Component {
                       <Route
                         path="/clientproductdetails"
                         component={ClientProductDetails}
+                      />
+                    )}
+                    {loggedIn && (
+                      <Route
+                        path="/users"
+                        component={Users}
+                      />
+                    )}
+                    {loggedIn && (
+                      <Route
+                        path="/admin"
+                        component={Admin}
                       />
                     )}
                   </div>

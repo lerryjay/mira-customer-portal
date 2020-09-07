@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { withContext } from '../../common/context'
 import { HTTPURL,FILEURL,APIKEY } from '../../common/global_constant'
 
-class Users extends Component {
+class Admin extends Component {
   constructor(props) {
     super(props);
     this.state = { ...this.props, users : [] }
@@ -13,7 +13,7 @@ class Users extends Component {
   {
     const headers = new Headers();
     headers.append('API-KEY',APIKEY);
-    const res = await fetch(HTTPURL + `user?userid=${ this.props.user.userid }`, {
+    const res = await fetch(HTTPURL + `admin?userid=${ this.props.user.userid }`, {
         headers: headers
     })
     .then(response => response.json());
@@ -31,7 +31,7 @@ class Users extends Component {
     return (
       <div className="container">
         <div className="w-100 text-center">
-          <h3>Customers </h3>
+          <h3>Administrators </h3>
         </div>
         <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
           <thead>
@@ -41,7 +41,7 @@ class Users extends Component {
               <th>Lastname</th>
               <th>Email</th>
               <th>Telephone</th>
-              <th>Business Name</th>
+              <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -54,7 +54,7 @@ class Users extends Component {
                   <td>{ user.lastname }</td>
                   <td>{ user.email }</td>
                   <td>{ user.telephone }</td>
-                  <td>{ user.isclient ? user.businessname : 'Not a client' }</td>
+                  <td>{ user.status  }</td>
                   <td> 
                     <div className="dropdown">
                         <button className="btn btn-secondary dropdown-toggle" type="button" id={"dropdownMenuButton"} data-toggle={"dropdown"} aria-haspopup={"true"} aria-expanded={"false"}>
@@ -77,4 +77,4 @@ class Users extends Component {
     )
   }
 }
-export default withContext(Users);
+export default withContext(Admin);

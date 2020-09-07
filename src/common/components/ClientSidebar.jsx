@@ -61,7 +61,7 @@ const ClientSidebar = (props) => {
 
                     <p className="mt-4 mb-2" >ACCOUNT</p>
                     <hr className="bg-white mt-0 mb-0" />
-                    <NavLink className={`dropdown-btn nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to="clientprofile" onClick={toggle2}>
+                    <NavLink className={`dropdown-btn nav-item  ${props.location.pathname === "/" ? "active" : ""}`} to="profile" onClick={toggle2}>
                         <li className="nav-item">
                             <i className="fas fa-user fa-fw mr-1"></i>&nbsp;Profile
                         </li>

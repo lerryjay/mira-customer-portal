@@ -18,32 +18,42 @@ import SignUp from "./pages/signup/signup";
 import ForgotPassword from "./pages/forgot_password/forgot_password";
 import Dashboard from "./pages/dashboard/dashboard";
 import ChangePassword from "./pages/change_password/ChangePassword";
-import CreateTicket from "./pages/create_ticket/create_ticket";
-import CreateProduct from "./pages/createproduct/createproduct";
-import UpdateProduct from "./pages/updateproduct/updateproduct";
-import AddPackage from "./pages/addpackage/addpackage";
-import ProductDetails from "./pages/product_details/product_details";
-import ViewProduct from "./pages/viewproduct/viewproduct";
-import ClientViewProduct from "./pages/clientviewproduct/clientviewproduct";
-import CreateClient from "./pages/create_client/CreateClient";
-import CreateClientById from "./pages/create_clientbyid/CreateClientById";
-import CreateUser from "./pages/create_user/CreateUser";
 import Profile from "./pages/profile/Profile";
-import ClientProfile from "./pages/clientprofile/ClientProfile";
-import TicketList from "./pages/ticket_list/TicketList";
-import ViewTicket from "./pages/viewticket/ViewTicket";
-import ViewClient from "./pages/view_client/ViewClient";
-import ListClient from "./pages/list_client/ListClient";
-import ProductCart from "./pages/productcart/ProductCart";
-import AddClientProduct from "./pages/addclientproduct/addclientproduct";
-import AddClient from "./pages/addclient/addclient";
-import UpdateClientProduct from "./pages/updateclientproduct/updateclientproduct";
+
+
+import Tickets from "./pages/tickets/Tickets";
+import CreateTicket from "./pages/tickets/create_ticket/create_ticket";
+import ViewTicket from "./pages/tickets/viewticket/ViewTicket";
+
+import Products from "./pages/products/Products";
+import ProductCart from "./pages/products/productcart/ProductCart";
+import CreateProduct from "./pages/products/createproduct/createproduct";
+import UpdateProduct from "./pages/products/updateproduct/updateproduct";
+import ProductDetails from "./pages/products/product_details/product_details";
+
+
+import Clients from "./pages/clients/Clients";
+import AddClient from "./pages/clients/addclient/addclient";
+import ViewClient from "./pages/clients/view_client/ViewClient";
+import CreateClient from "./pages/clients/create_client/CreateClient";
+import ClientProfile from "./pages/clients/clientprofile/ClientProfile";
+import ClientViewProduct from "./pages/clients/clientviewproduct/clientviewproduct";
+import CreateClientById from "./pages/clients/create_clientbyid/CreateClientById";
+import AddClientProduct from "./pages/clients/addclientproduct/addclientproduct";
+import ClientProductDetails from "./pages/clients/clientproductdetails/clientproductdetails";
+import UpdateClientProduct from "./pages/clients/updateclientproduct/updateclientproduct";
+
+
+
+import CreateUser from "./pages/users/create_user/CreateUser";
+
+
+
 
 import Nav from "./common/components/Nav";
 import ClientSidebar from "./common/components/ClientSidebar";
 import Sidebar from "./common/components/Sidebar";
 import NotFound from "./common/components/NotFound";
-import ClientProductDetails from "./pages/clientproductdetails/clientproductdetails";
 
 const apiKey = "97899c-7d0420-1273f0-901d29-84e2f8";
 const userId = "5f44ce52af9ba";
@@ -52,48 +62,49 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: sessionStorage.getItem("loggedIn") ,
+      loggedIn: false,
       admin: false,
+      user : {
+        role : 'admin'
+      }
     };
+    this.loginUser = this.loginUser.bind(this);
+  }
+  
+  componentDidMount(){
+    this.restoreUser();
   }
 
-  loginUser = (data) => {
-    let form = new FormData(data);
+  restoreUser()
+  {
+    if(sessionStorage.getItem('user')){
+      this.setState({ loggedIn : true, user : JSON.parse(sessionStorage.getItem('user'))})
+    }
+  }
+
+  loginUser = async (data) => {
 
     const headers = new Headers();
     headers.append("API-KEY", "97899c-7d0420-1273f0-901d29-84e2f8");
-    fetch(HTTPURL + "user/login", {
+    const res = await fetch(HTTPURL + "user/login", {
       method: "POST",
-      body: form,
+      body: data,
       headers: headers,
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        // check if logged in
-        if (json.status == true) {
-          sessionStorage.setItem("loggedIn", true);
-          sessionStorage.setItem("userId", json.data.userid);
-          sessionStorage.setItem("role", json.data.role);
-          sessionStorage.setItem("firstname", json.data.firstname);
-          sessionStorage.setItem("lastname", json.data.lastname);
-          sessionStorage.setItem("email", json.data.email);
-          sessionStorage.setItem("imageurl", json.data.imageurl);
-          sessionStorage.setItem("telephone", json.data.telephone);
-
-          if (json.data.role === "admin") {
-            console.log("I'm an admin");
-            this.setState({ admin: true });
-          } else {
-            console.log("I'm a user");
-            this.setState({ admin: false });
-          }
-          this.setState({ loggedIn: sessionStorage.getItem("loggedIn") });
-          console.log("Yuppie i logged ", data);
-          return { status: true, message: "Login successful" };
-        }
-
-        return {status: false, message: 'Invalid Username or Password'};
-      });
+    }).then((response) => response.json()).then((json) =>json);
+    console.log(res);
+    if (res['status'] == true) {
+      const { data } = res;
+      sessionStorage.setItem("loggedIn", true);
+      sessionStorage.setItem("userId", data.userid);
+      sessionStorage.setItem("user", JSON.stringify(data));
+      if (data.role === "admin") {
+        this.setState({user : data,admin: true });
+      } else {
+        this.setState({ admin: false });
+      }
+      this.setState({ loggedIn: sessionStorage.getItem("loggedIn") });
+      return { status: true, message: "Login successful" };
+    }else return {status: false, message: 'Invalid Username or Password'};
   };
 
   signupUser = (data) => {
@@ -150,13 +161,15 @@ class App extends Component {
       });
   };
 
-  logoutUser = () =>
-    this.setState({ loggedIn: sessionStorage.setItem("loggedIn", false) });
+  logoutUser = () =>{
+    this.setState({ loggedIn:  false, user : {}});
+    sessionStorage.clear();
+  }
 
   getContext = () => {
     return {
       ...this.state,
-      login: this.loginUser,
+      login: this.loginUser.bind(this),
       logout: this.logoutUser,
       signup: this.signupUser,
       forgotpassword: this.forgotPassword,
@@ -174,10 +187,7 @@ class App extends Component {
             <Router>
               <Nav />
               <div className="App" id="wrapper">
-                {this.state.admin
-                  ? this.state.loggedIn && <Sidebar />
-                  : this.state.loggedIn && <ClientSidebar />}
-
+                { loggedIn && <Sidebar />}
                 <Switch>
                   {<Route path="/forgot_password" component={ForgotPassword} />}
                   {<Route path="/signup" component={SignUp} />}
@@ -188,14 +198,7 @@ class App extends Component {
                       <Route exact path="/dashboard" component={Dashboard} />
                     )}
                     {loggedIn && (
-                      <Route
-                        path="/createclient"
-                        component={() => (
-                          <CreateClient
-                            userId={userId}
-                            apiKey={apiKey}
-                          ></CreateClient>
-                        )}
+                      <Route path="/createclient" component={() => (   <CreateClient userId={userId} apiKey={apiKey} ></CreateClient> )}
                       />
                     )}
                     {loggedIn && (
@@ -212,21 +215,21 @@ class App extends Component {
                     {loggedIn && (
                       <Route path="/createuser" component={CreateUser} />
                     )}
-                    {admin && loggedIn && (
+                    {loggedIn && (
                       <Route path="/profile" component={Profile} />
                     )}
                     {!admin && loggedIn && (
                       <Route path="/clientprofile" component={ClientProfile} />
                     )}
                     {loggedIn && (
-                      <Route path="/ticketlist" component={TicketList} />
+                      <Route path="/tickets" component={Tickets} />
                     )}
                     {loggedIn && (
                       <Route path="/viewclient" component={ViewClient} />
                     )}
                     {loggedIn && (
-                      <Route path="/listclient" component={ListClient} />
-                    )}
+                      <Route path="/clients" component={ Clients } />
+                    )} 
                     {loggedIn && (
                       <Route
                         path="/changepassword"
@@ -247,17 +250,7 @@ class App extends Component {
                     {loggedIn && (
                       <Route path="/updateproduct" component={UpdateProduct} />
                     )}
-                    {loggedIn && (
-                      <Route
-                        path="/addpackage"
-                        component={() => (
-                          <AddPackage
-                            userId={userId}
-                            apiKey={apiKey}
-                          ></AddPackage>
-                        )}
-                      />
-                    )}
+                    
                     {loggedIn && (
                       <Route
                         path="/addclientproduct"
@@ -271,7 +264,7 @@ class App extends Component {
                       <Route path="/productcart" component={ProductCart} />
                     )}
                     {loggedIn && (
-                      <Route path="/viewproduct" component={ViewProduct} />
+                      <Route path="/products" component={Products} />
                     )}
                     {!admin && loggedIn && (
                       <Route

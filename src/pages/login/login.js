@@ -63,6 +63,15 @@ class Login extends Component {
         console.log('submitting')
     }
 
+    showPassword() {
+        // var x = document.getElementById("password");
+        // if (x.type === "password") {
+        //     x.type = "text";
+        //   } else {
+        //     x.type = "password";
+        //   }
+    }
+
 
     render() {
         return(
@@ -118,6 +127,9 @@ class Login extends Component {
                                         aria-label="Password" aria-describedby="password" required
                                         value={this.state.password}
                                         onChange={this.handleInputChange}/>
+                                        <span className="input-group-text bg-white alt" >
+                                            <i className="fas fa-eye fa-fw" style={{cursor:'pointer'}} onClick={this.showPassword}></i>
+                                         </span>
                                 </div>
                                 {this.state.loading ? 
             <button type="submit" className="btn btn-sm bg-btn">

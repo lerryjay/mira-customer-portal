@@ -129,6 +129,25 @@ class ViewTicket extends Component {
 
             this.setState({ inputfiles  });
     }
+    showModal() {
+        // this.setState({id: e});
+        let modal2 = document.getElementById("myModal")
+        modal2.style.display = "block";
+
+        let img = document.getElementById("img");
+        let modalImg = document.getElementById("img01");
+        img.onclick = function(){
+            modal2.style.display = "block";
+            modalImg.src = this.src;
+        }
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        
+        span.onclick = function() { 
+            modal2.style.display = "none";
+        }
+    }
 
     render() {
         const reader = new FileReader();
@@ -150,11 +169,17 @@ class ViewTicket extends Component {
                             {
                                 this.state.attachedFiles.map(item=>
                                     <div className="col-6 col-md-4 col-lg-2">
-                                        <img src={FILEURL+item} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
+                                        <img id="img" onClick={this.showModal} src={FILEURL+item} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
                                     </div>
                                 )
                             }
                         </div>
+                    </div>
+
+                   {/* The Modal */}
+                    <div id="myModal" class="modal2">
+                        <span class="close">&times;</span>
+                        <img class="modal-content2" id="img01"/>
                     </div>
     
                     <div className="card-body" id="chatscroll" style={{ overflowY: 'scroll', minHeight: '400px', maxHeight: '450px' }}>
@@ -211,8 +236,36 @@ class ViewTicket extends Component {
     
     
     
-                    <div className="card-footer p-0">
+                    <div className="card-footer p-0 pb-3">
                         <form onSubmit={this.handleSubmit}  encType="multipart/form-data">
+                            
+                        <div className="container">
+                            <div className="row">
+                                <div className="col">
+                                <textarea name="chat" id="chat" cols="20" rows="10" required
+                                placeholder="Message" type="text" className="form-control my-3"
+                                value={this.state.chat}  onChange={this.handleInputChange}></textarea>
+                                
+                                <label id="file-name" className="text-white"></label>
+                                    <div className="row" id="preview">
+                                        {this.state.files}
+                                    </div>
+
+                                <label htmlFor="file-upload" className="btn btn-sm btn-primary py-2 px-3">Attach File</label> 
+                                <i className="font-weight-bold"> The only accepted files are *pdf, *jpg and *png</i>
+                                <input id="file-upload" name='files' type="file" style={{ display: 'none' }} onChange={this.fileChange} multiple accept=".png,.jpeg,.jpg,.gif" />
+
+
+                                
+                                <button type="submit" className="btn btn-sm btn-primary py-2 px-3 float-right">
+                                    <i className="fas fa-paper-plane fa-fw  mr-2"></i>
+                                    Send
+                                </button>
+
+                                </div>
+                            </div>
+                        </div>
+{/* 
                         <div className="input-group">
                             <div className="input-group-prepend">
                                 <span className="input-group-text" style={{ backgroundColor: '#0a0b18', border: '#191a35' }} id="chat">
@@ -233,11 +286,7 @@ class ViewTicket extends Component {
                                 </span>
                             </button>
                         </div>
-                        <label id="file-name" className="text-white"></label>
-    
-                        <div className="row" id="preview">
-                            {this.state.files}
-                        </div>
+                        */}
                         </form>
     
                     </div>

@@ -24,7 +24,7 @@ export default function Dashboard() {
                         <p className="border-top text-right py-2">9.823
             <br />
                             <small>
-                                Successful
+                                Resolved Tickets
             </small>
                         </p>
                     </div>
@@ -36,7 +36,7 @@ export default function Dashboard() {
                         <p className="border-top text-right py-2">9.823
             <br />
                             <small>
-                                Pending
+                                Pending Tickets
             </small>
                         </p>
                     </div>
@@ -59,7 +59,7 @@ export default function Dashboard() {
                 <div className="col-12 card-body shadow home-chart">
                     <div className="d-flex justify-content-between">
                         <div>
-                            <h4 className="card-title mb-0">Hello World!</h4>
+                            <h4 className="card-title mb-0">Welcome Back!</h4>
                             <div className="small text-muted">August 2020</div>
                         </div>
                     </div>

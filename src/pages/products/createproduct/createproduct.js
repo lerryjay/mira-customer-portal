@@ -53,11 +53,11 @@ class CreateProduct extends Component {
 
         setTimeout(() => {
             this.setState({loading : false});
-            // this.setState({successmessage: 'Added Successfully!'})
+            this.setState({successmessage: 'Product Saved Successfully!'})
             setTimeout(() =>{
                 this.setState({successmessage: false});
-                 this.setState({name: '', description: '', file: ''})
-            }, 5000);
+                 this.setState({name: '', description: '', file: '', imagePreviewUrl: '', imageurl: ''})
+            }, 2000);
         }, 3000);
     
     }
@@ -124,9 +124,6 @@ class CreateProduct extends Component {
             { this.state.successmessage ? 
                 <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
                     <span className="mt-3">{this.state.successmessage}</span>
-                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
                 </div>
                 :   <span></span>
             }
@@ -136,9 +133,6 @@ class CreateProduct extends Component {
                 { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
                     <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
                         {this.state.errormessage}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                     </div>
                     :   <span></span>
                 }
@@ -156,9 +150,6 @@ class CreateProduct extends Component {
                                 <div className="col-md-12">
                                     { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
                                         <div className="alert alert-warning" role="alert">{this.state.errormessage}
-                                        <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
                                         </div>
                                         : 
                                         <span></span>

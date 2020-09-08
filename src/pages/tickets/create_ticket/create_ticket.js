@@ -102,14 +102,16 @@ class create_ticket extends Component {
             this.state.imagePreviewUrl = URL.createObjectURL(file) 
             // this.setState({imagePreviewUrl: URL.createObjectURL(file) })
             return (
-             file.name.match(/\.(jpg|jpeg|png|gif)$/)
+             file.name.match(/\.(jpg|jpeg|png)$/)
                 ?< div className="imgPreview m-2" id="files">
             <i className="fa fa-trash" onClick={(e) => this.removeImage(e)}></i>
             <img src={this.state.imagePreviewUrl} className="imagePreview" />
-            </div> : <div className="other_files m-2" id="otherfiles" >
-            <i className="fa fa-trash" onClick={(e) => this.removeOtherImage(e)}></i>
-                {file.name}
-            </div>
+            </div> 
+            :   
+            <div className="other_files m-2" id="otherfiles" >
+                <i className="fa fa-trash" onClick={(e) => this.removeOtherImage(e)}></i>
+                    {file.name}
+                </div>
         )} )
         return (
             <div className="container-fluid content text-white">
@@ -191,9 +193,8 @@ class create_ticket extends Component {
                                             onChange={this.handleInputChange} />
                                         </div>
                                     </div>
-                                    
-                                    <div className="images">
-                                        { files }
+                                    <div className="row justify-content-center" id="preview">
+                                        {files}
                                     </div>
                                 </div>
 
@@ -202,6 +203,7 @@ class create_ticket extends Component {
 
                             <div className="card-footer">
                                 <label htmlFor="files" className="btn btn-sm btn-primary py-2 px-3">Attach File</label>
+                                <i className="font-weight-bold"> The only accepted files are *pdf, *jpg and *png</i>
                                 <input style={{display:'none'}} type={"file"}  id="files" 
                                 className="form-file form-file-sm" name="files[]"  placeholder="" multiple
                                 onChange={(e)=>this.handleImageChange(e)} />

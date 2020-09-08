@@ -41,7 +41,7 @@ const Nav = () => {
 
             <div>
                 <img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt="AppLogo" width="40" />
-                <span className="logoname text-uppercase h6">&nbsp; Miratechnologies</span>
+                <span className="logoname text-uppercase h6">&nbsp; Mira Technologies</span>
             </div>
 
             <button className="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#ticketNav"

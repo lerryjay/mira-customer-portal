@@ -24,7 +24,8 @@ class product_details extends Component {
       successmessage: "",
       showmodal: true,
       showdeletemodal: true,
-      selectedModule : {}
+      selectedModule : {},
+      updateData: false,
     };
     console.log(this.props);
   }
@@ -33,7 +34,14 @@ class product_details extends Component {
     this.getProduct();
     this.getModules();
   }
+  componentDidUpdate(){
+    if(this.state.updateData) this.getModules()
 
+ // Automatically scroll down to new messages
+    // var objDiv = document.getElementById("chatscroll");
+    // objDiv.scrollTop = objDiv.scrollHeight;
+
+ }
   getProduct() {
     const productid = this.props.location.pathname.split("/")[2];
 
@@ -82,6 +90,9 @@ class product_details extends Component {
           this.setState({ packages: [] });
         }
       });
+
+      
+      this.setState({updateData: false});
   }
 
   async showdeleteInfoModule(moduleid)
@@ -241,6 +252,9 @@ class product_details extends Component {
         console.log("submitting");
       }, 5000);
     }, 3000);
+
+    
+    this.setState({updateData: true});
   };
 
   render() {

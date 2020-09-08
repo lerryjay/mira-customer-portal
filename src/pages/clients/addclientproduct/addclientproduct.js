@@ -12,6 +12,9 @@ class AddClientProduct extends Component {
             productid: '',
             modules: [],
             cost: '',
+            trainingdate: '',
+            deploymentdate: '',
+            paymentdate: '',
             products: '',
             product: [],
             errormessage: '',
@@ -141,6 +144,23 @@ class AddClientProduct extends Component {
             this.removeModule(target.id)
         }
     }
+    
+    onFocus(e) {
+        e.currentTarget.type = "date";
+    }
+
+    deploymentDate(e){
+        e.currentTarget.type = "text";
+        e.currentTarget.placeholder = "Deployment Date";
+    }
+    trainingDate(e){
+        e.currentTarget.type = "text";
+        e.currentTarget.placeholder = "Training Date";
+    }
+    paymentDate(e){
+        e.currentTarget.type = "text";
+        e.currentTarget.placeholder = "Payment Date";
+    }
 
     render() {
         return (
@@ -213,9 +233,53 @@ class AddClientProduct extends Component {
                                         </div>
                                     </div>
 
+                                    <div className="col-md-4 mb-1">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Deployment Date</label>
+                                            <input className="form-control form-control-sm" name="deploymentdate"
+                                                id="deploymentdate" placeholder="Deployment Date" 
+                                                onBlur={this.deploymentDate} onFocus={this.onFocus}
+                                                value={this.state.deploymentdate}
+                                                onChange={this.handleInputChange} />
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-4 mb-1">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Payment Date</label>
+                                            <input type="paymentdate" className="form-control form-control-sm" name="paymentdate"
+                                                id="paymentdate" placeholder="Payment Date"
+                                                onBlur={this.paymentDate} onFocus={this.onFocus}
+                                                value={this.state.paymentdate}
+                                                onChange={this.handleInputChange} />
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-4 mb-1">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Training Date</label>
+                                            <input type="date" className="form-control form-control-sm" name="trainingdate"
+                                                id="trainingdate" placeholder="Training Date"
+                                                onBlur={this.trainingDate} onFocus={this.onFocus}
+                                                value={this.state.trainingdate}
+                                                onChange={this.handleInputChange} />
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-12">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Product Description</label>
+                                            <textarea type="text" className="form-control form-control-sm" name="remarks" rows="7"
+                                                id="remarks" placeholder="Remarks"
+                                                value={this.state.remarks}
+                                                onChange={this.handleInputChange} />
+                                        </div>
+                                    </div>
+
 
                                 </div>
 
+                                
                                 <div className="row">
                                     {
                                     this.state.modules.length > 0 ?

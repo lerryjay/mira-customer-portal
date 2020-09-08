@@ -111,6 +111,7 @@ class product_details extends Component {
       method: 'GET',
       headers: headers
     })
+    if(res['status']) this.getModules();
     console.log('edit module response',res);
     //display success here
   }
@@ -184,7 +185,7 @@ class product_details extends Component {
     this.setState({ [name]: value, errormessage: "" });
   };
 
-  handleSubmit = async (e) => {
+  saveModule = async (e) => {
     e.preventDefault();
     // this.setState({loading : true});
     setTimeout(() => {
@@ -206,12 +207,8 @@ class product_details extends Component {
           method: "POST",
           body: form,
           headers: headers,
-        })
-          .then((response) => response.json())
-          .then((json) => {
-            console.log(json);
-            return json;
-          });
+        }).then((response) => response.json())
+        .then((res) => {  if(res['status']) this.getModules(); });
         console.log("submitting");
         this.setState({ pkgname: "", pkgdescription: "" });
       }, 5000);
@@ -338,7 +335,7 @@ class product_details extends Component {
             <div id="myModal" class="modal">
               {/* Modal content  */}
               <div class="modal-content text-center p-5">
-                <form onSubmit={this.handleSubmit} id="addpackage">
+                <form onSubmit={this.saveModule} id="addpackage">
                   <div className="card">
                     <div className="card-header bg-medium font-weight-bold text-dark">
                       ADD NEW MODULE

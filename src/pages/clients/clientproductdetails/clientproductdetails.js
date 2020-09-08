@@ -24,7 +24,7 @@ class clientproductdetails extends Component {
       successmessage: "",
       showmodal: true,
       showdeletemodal: true,
-      selectedModule : {}
+      selectedModule: {}
     };
     console.log(this.props);
   }
@@ -67,7 +67,7 @@ class clientproductdetails extends Component {
 
     fetch(
       HTTPURL +
-        `product/modules?productid=${productid}&userid=${this.state.user.userid}`,
+      `product/modules?productid=${productid}&userid=${this.state.user.userid}`,
       {
         method: "GET",
         headers: headers,
@@ -75,14 +75,14 @@ class clientproductdetails extends Component {
     )
       .then((response) => response.json())
       .then((data) => {
-        if(data.data === false){
+        if (data.data === false) {
           this.setState({ packages: '' });
           console.log("Oops, packages is empty")
         } else {
           this.setState({ packages: data.data });
           console.log(data, "packages")
         }
-        
+
         // console.log(this.state.packages, "packages");
       });
   }
@@ -117,33 +117,33 @@ class clientproductdetails extends Component {
                     Oops, Product module is empty!
                   </div>
                 ) : (
-                  <div className="row">
-                    {this.state.packages.map((module) => {
-                      return (
-                        <div className="col-md-4">
-                          <p className="list-group-item">
-                            {module.name}
-                            <label class="switch float-right"> <input type="checkbox" id={module.id} onClick={this.handleCheck} /><span class="slider round"></span>
-                                            </label>
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+                    <div className="row">
+                      {this.state.packages.map((module) => {
+                        return (
+                          <div className="col-md-4">
+                            <p className="list-group-item">
+                              {module.name}
+                              <label class="switch float-right"> <input type="checkbox" id={module.id} onClick={this.handleCheck} /><span class="slider round"></span>
+                              </label>
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
               </div>
 
 
-          <div className="card-footer">
-                                <div className="float-right">
+              <div className="card-footer">
+                <div className="float-right">
 
-                                    <button type="submit" className="btn btn-sm btn-primary px-3">
-                                        <i className="fas fa-folder-open pr-2"></i>
+                  <button type="submit" className="btn btn-sm btn-primary px-3">
+                    <i className="fas fa-folder-open pr-2"></i>
                         Save
                     </button>
-                                
-                                </div>
-                            </div>
+
+                </div>
+              </div>
             </div>
           </div>
 

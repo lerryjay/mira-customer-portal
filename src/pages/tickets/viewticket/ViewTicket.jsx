@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {withContext} from '../../../common/context';
 import { HTTPURL, APIKEY,FILEURL } from '../../../common/global_constant';
 import placeholder from "../../../assets/images/product-placeholder.gif";
+import pdf_placeholder from  "../../../assets/images/pdf.png";
 
 
 class ViewTicket extends Component {
@@ -21,7 +22,8 @@ class ViewTicket extends Component {
             attachedFiles : [],
             inputfiles : [],
             chat: '',
-            chats: []   
+            chats: [],
+            previewFile : ''
         }
 
         this.fileChange = this.fileChange.bind(this);
@@ -81,14 +83,12 @@ class ViewTicket extends Component {
     }
 
     handleInputChange = e => {
-        const { name, value } = e.target
+        const { name, value } = e.target;
         this.setState({ [name]: value });
     }
 
     handleSubmit = async e => {
         e.preventDefault()
-        // console.log(e.target[0].files[0])
-
 
         const headers = new Headers();
         headers.append('API-KEY', APIKEY);
@@ -113,8 +113,6 @@ class ViewTicket extends Component {
         return json;
         });
 
-        console.log('Message sent!')
-         
         this.setState({message: '', files: ''})
         this.setState({updateData: true});
     }
@@ -129,25 +127,18 @@ class ViewTicket extends Component {
 
             this.setState({ inputfiles  });
     }
-    showModal() {
-        // this.setState({id: e});
+    showModal = (e,file)=> {
+        this.setState({previewFile: file });
         let modal2 = document.getElementById("myModal")
         modal2.style.display = "block";
 
-        let img = document.getElementById("img");
-        let modalImg = document.getElementById("img01");
-        img.onclick = function(){
-            modal2.style.display = "block";
-            modalImg.src = this.src;
-        }
-
-        // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
-        
         span.onclick = function() { 
             modal2.style.display = "none";
         }
     }
+
+
 
     render() {
         const reader = new FileReader();
@@ -169,7 +160,11 @@ class ViewTicket extends Component {
                             {
                                 this.state.attachedFiles.map(item=>
                                     <div className="col-6 col-md-4 col-lg-2">
-                                        <img id="img" onClick={this.showModal} src={FILEURL+item} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
+                                       {
+                                        item.match(/\.(jpg|jpeg|png)$/) ? <img id="img"  style={{ width : '100px', height : '100px'}} onClick={(e)=>this.showModal(e,item)} src={FILEURL+item} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/> 
+                                        : <img src={pdf_placeholder} onClick={(e)=>this.showModal(e,item)} style={{ width : '100px', height : '100px'}}/>
+                                    }
+                                        
                                     </div>
                                 )
                             }
@@ -177,9 +172,19 @@ class ViewTicket extends Component {
                     </div>
 
                    {/* The Modal */}
-                    <div id="myModal" class="modal2">
-                        <span class="close">&times;</span>
-                        <img class="modal-content2" id="img01"/>
+                    <div id="myModal" className="modal2">
+                        <div className="px-2 d-flex">
+                            <a download href={FILEURL+this.state.previewFile}  target="_blank" className="btn btn-primary rounded-0 top-left mr-auto" style={{ position: 'absolute'}}>Download</a> //implement download button later
+                            <span className="close">&times;</span>
+                        </div>
+                        <div className="d-flex justify-content-center align-content-center">
+                            <div className="bg-white">
+                            {
+                                this.state.previewFile.match(/\.(jpg|jpeg|png)$/) ? <img src={ FILEURL+this.state.previewFile } /> : <img src={ pdf_placeholder } />
+                            }
+                                
+                            </div>
+                        </div>
                     </div>
     
                     <div className="card-body" id="chatscroll" style={{ overflowY: 'scroll', minHeight: '400px', maxHeight: '450px' }}>
@@ -242,7 +247,7 @@ class ViewTicket extends Component {
                         <div className="container">
                             <div className="row">
                                 <div className="col">
-                                <textarea name="chat" id="chat" cols="20" rows="10" required
+                                <textarea name="chat" id="chat" cols="20" rows="4" required
                                 placeholder="Message" type="text" className="form-control my-3"
                                 value={this.state.chat}  onChange={this.handleInputChange}></textarea>
                                 
@@ -252,7 +257,7 @@ class ViewTicket extends Component {
                                     </div>
 
                                 <label htmlFor="file-upload" className="btn btn-sm btn-primary py-2 px-3">Attach File</label> 
-                                <i className="font-weight-bold"> The only accepted files are *pdf, *jpg and *png</i>
+                                <i className="font-weight-bold"> The only accepted files are *pdf, *jpg, *jpeg and *png</i>
                                 <input id="file-upload" name='files' type="file" style={{ display: 'none' }} onChange={this.fileChange} multiple accept=".png,.jpeg,.jpg,.gif" />
 
 

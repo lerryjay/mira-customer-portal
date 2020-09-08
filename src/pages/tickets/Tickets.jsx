@@ -42,19 +42,40 @@ class Tickets extends Component {
     //     this.props.history.push('/viewticket');
     // }
 
-     changeStatus(e,ticket) {
-        
-
+    ticketStatusUpdated(e,ticket) {
         const tickets = this.state.tickets.map(item=>{ 
             console.log(e.target.value);
-            if(item.ticketid == ticket.ticketid) item.ticketstatus  = e.target.value;
+            if(item.id == ticket.id){ 
+                item.ticketstatus  = e.target.value;
+                this.updateTicketStatus(ticket.id,e.target.value);
+            }
             return item;
         })
 
         this.setState({tickets});
         
-     }
-     render() {
+    }
+
+    async updateTicketStatus(ticketid,status){
+        const headers = new Headers();
+        headers.append('API-KEY', APIKEY);
+        const form = new FormData();
+        
+        form.append('ticketid',ticketid);
+        form.append('status',status);
+        form.append('userid',this.state.user.userid);
+        const res =  await fetch(HTTPURL + `ticket/updatestatus`, {
+            method: 'POST',
+            headers: headers,
+            body : form
+
+        }).then(response => response.json());
+        if(res['status']){
+
+        }
+    }
+    
+    render() {
 
         return (
             <div className="container">
@@ -80,10 +101,9 @@ class Tickets extends Component {
                                                 <tr>
                                                     <th>S/N</th>
                                                     <th>Date&nbsp;&&nbsp;Time</th>
-                                                    <th>Client&nbsp;Name</th>
-                                                    <th>Email&nbsp;Address</th>
+                                                    { this.state.user.role == 'admin' && <th >Client&nbsp;Name</th> }
+                                                    { this.state.user.role == 'admin' && <th>Email</th> }
                                                     <th>Ticket&nbsp;Type</th>
-                                                    <th><i className="fas fa-comments"></i>&nbsp;&nbsp;Message</th>
                                                     <th>Status</th>
                                                     <th>View&nbsp;Ticket</th>
                                                 </tr>
@@ -99,32 +119,22 @@ class Tickets extends Component {
                                                             {this.state.id++}
                                                         </td>
                                                         <td>
-                                                            {ticket.createdat}
+                                                            { (new Date(ticket.createdat)).toLocaleDateString() }
                                                         </td>
-                                                        <td  onClick={this.handleRoute}>
-                                                            {ticket.client_name}
-                                                        </td>
-                                                        <td>
-                                                            {ticket.email}
-                                                        </td>
+                                                        { this.state.user.role == 'admin' &&  <td  onClick={this.handleRoute}>
+                                                            {ticket.clientname}
+                                                        </td> }
+                                                        { this.state.user.role == 'admin' &&  <td>
+                                                            {ticket.email} 
+                                                        </td> }
                                                         <td>
                                                             {ticket.type}
                                                         </td>
-                                                        <td style={{minWidth: "120px", textAlign: "left"}}>
-                                                            {ticket.message}
-                                                        </td>
-                                                        <td className="align-middle" style={{minWidth: "105px"}}>
-                                                        <select className="custom-select custom-select-sm" onChange={(e) =>this.changeStatus(e,ticket)}>
-                                                            <option value="" selected > {ticket.ticketstatus}</option>
-                                                            <option className="btn btn-sm text-success" value="approved">
-                                                                &#10003;
-                                                                Approved</option>
-                                                            <option className="btn btn-sm text-danger" value="cancelled">
-                                                                &#1008;
-                                                                Cancelled</option>
-                                                            <option className="btn btn-sm btn-light text-warning" value="pending">
-                                                                &#10070;
-                                                                Pending</option>
+                                                        <td>
+                                                        <select className="custom-select custom-select-sm" value={ticket.ticketstatus} onChange={(e) =>this.ticketStatusUpdated(e,ticket)}>
+                                                            <option className="btn btn-sm text-success" value="resolved"> &#10003;&nbsp;&nbsp;Resolved </option>
+                                                            <option className="btn btn-sm text-danger" value="cancelled">&#1008;&nbsp;&nbsp;Cancelled</option>
+                                                            <option className="btn btn-sm btn-light text-warning" value="pending">&#10070;&nbsp;&nbsp;Pending</option>
                                                         </select>
                                                         </td>
                                                         <td className="align-middle" style={{cursor:"pointer"}}>

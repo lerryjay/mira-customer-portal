@@ -18,6 +18,7 @@ class Users extends Component {
     })
     .then(response => response.json());
     if(res['status']){
+      console.log(res['data'])
         this.setState({ users : res['data']});
     }
   }
@@ -25,6 +26,15 @@ class Users extends Component {
   componentDidMount()
   {
     this.getUsers();
+  }
+
+  showDropdown(userid){
+    let dropdown = document.getElementById(userid);
+    if(dropdown.style.display === "none"){
+      dropdown.style.display = "block";
+    } else {
+      dropdown.style.display = "none"
+    }
   }
 
   render() {
@@ -57,12 +67,13 @@ class Users extends Component {
                   <td>{ user.isclient ? user.businessname : 'Not a client' }</td>
                   <td> 
                     <div className="dropdown">
-                        <button className="btn btn-secondary dropdown-toggle" type="button" id={"dropdownMenuButton"} data-toggle={"dropdown"} aria-haspopup={"true"} aria-expanded={"false"}>
+                        <button className="btn btn-secondary dropdown-toggle" type="button" onClick={()=> this.showDropdown(user.userid)} id={"dropdownMenuButton"} data-toggle={"dropdown"} aria-haspopup={"true"} aria-expanded={"false"}>
                           Select
                         </button>
-                        <div className="dropdown-menu" aria-labelledby={"dropdownMenuButton"}>
-                          <a className="dropdown-item" href="#">Add as client</a>
+                        <div className="dropdown-menu" id={user.userid} aria-labelledby={"dropdownMenuButton"}>
+                          <a className="dropdown-item" href="#">View Profile</a>
                           <a className="dropdown-item" href="#">Create ticket</a>
+                          <a className="dropdown-item" href="#">Create Chat Account</a>
                           <div className="dropdown-divider"></div>
                           <a className="dropdown-item text-danger" href="#">Suspend Account</a>
                         </div>

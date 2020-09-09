@@ -82,8 +82,8 @@ class CreateProduct extends Component {
         for (var i = 0; i < e.target.files.length; i++) {
             images[i] = e.target.files.item(i);
         }
-        images = images.filter(file => file.name.match(/\.(jpg|jpeg|png|gif)$/))
-        
+        images = images.filter(file => file.name.match(/\.(jpg|jpeg|png)$/))
+
         if (images.length === 0){
 
             reader.onloadend = () => {

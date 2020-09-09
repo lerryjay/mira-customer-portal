@@ -37,15 +37,18 @@ import AddClient from "./pages/clients/addclient/addclient";
 import ViewClient from "./pages/clients/view_client/ViewClient";
 import CreateClient from "./pages/clients/create_client/CreateClient";
 import ClientProfile from "./pages/clients/clientprofile/ClientProfile";
-import ClientViewProduct from "./pages/clients/clientviewproduct/clientviewproduct";
+import ClientProducts from "./pages/clients/clientproducts/clientproducts";
 import CreateClientById from "./pages/clients/create_clientbyid/CreateClientById";
 import AddClientProduct from "./pages/clients/addclientproduct/addclientproduct";
 import ClientProductDetails from "./pages/clients/clientproductdetails/clientproductdetails";
 import UpdateClientProduct from "./pages/clients/updateclientproduct/updateclientproduct";
+import ViewClientProduct from "./pages/clients/viewclientproduct/viewclientproduct";
+import ViewProductCart from "./pages/clients/viewproductcart/viewproductcart"
 
 
 
 import CreateUser from "./pages/users/create_user/CreateUser";
+import AddAdmin from "./pages/users/addadministrator/addadministrator"
 import Users from "./pages/users/Users";
 import Admin from "./pages/users/Admin";
 
@@ -218,6 +221,9 @@ class App extends Component {
                       <Route path="/createuser" component={CreateUser} />
                     )}
                     {loggedIn && (
+                      <Route path="/addadmin" component={AddAdmin} />
+                    )}
+                    {loggedIn && (
                       <Route path="/profile" component={Profile} />
                     )}
                     {!admin && loggedIn && (
@@ -263,15 +269,18 @@ class App extends Component {
                       <Route path="/viewticket" component={ViewTicket} />
                     )}
                     {loggedIn && (
-                      <Route path="/productcart" component={ProductCart} />
-                    )}
-                    {loggedIn && (
                       <Route path="/products" component={Products} />
                     )}
                     {!admin && loggedIn && (
                       <Route
-                        path="/view_product"
-                        component={ClientViewProduct}
+                        path="/clientproducts"
+                        component={ClientProducts}
+                      />
+                    )}
+                    {!admin && loggedIn && (
+                      <Route
+                        path="/productcart"
+                        component={ProductCart}
                       />
                     )}
                     {loggedIn && (
@@ -293,6 +302,18 @@ class App extends Component {
                       />
                     )}
                     {loggedIn && (
+                      <Route
+                        path="/viewclientproduct"
+                        component={ViewClientProduct}
+                      />
+                    )}
+                    {!admin && loggedIn && (
+                      <Route
+                        path="/viewproductcart"
+                        component={ViewProductCart}
+                      />
+                    )}
+                    {!admin && loggedIn && (
                       <Route
                         path="/clientproductdetails"
                         component={ClientProductDetails}

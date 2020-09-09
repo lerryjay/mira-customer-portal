@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import image from "../../../assets/images/Accsiss.png";
-import { Link } from "react-router-dom";
-import { HTTPURL, APIKEY } from "../../../common/global_constant";
+import placeholder from "../../../assets/images/product-placeholder.gif";
+import { HTTPURL, APIKEY,FILEURL } from "../../../common/global_constant";
 import { withContext } from "../../../common/context";
 
 class clientproductdetails extends Component {
@@ -75,7 +75,7 @@ class clientproductdetails extends Component {
     )
       .then((response) => response.json())
       .then((data) => {
-        if (data.data === false) {
+        if (data.data.length === 0) {
           this.setState({ packages: '' });
           console.log("Oops, packages is empty")
         } else {
@@ -91,18 +91,21 @@ class clientproductdetails extends Component {
   render() {
     return (
       <div className="container mx-auto">
-        <div className="row product_details mt-4">
+        <div className="row mt-4">
           <div className="col-md-6">
-            <img src={image} className="img-fluid" alt="" />
-          </div>
-          <div className="col-md-6">
+            {/* <img src={this.state.imageurl} onError={`this.src=${ placeholder }`} className="img-fluid" alt="" /> */}
+            <div className="row justify-content-center">
+              <img className="image-product" src={FILEURL+this.state.imageurl} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
+            </div>
+            </div>
+          <div className="col-md-6 mt-4">
             <h4 className="text-dark">{this.state.name}</h4>
             <div className="description">
               <p>{this.state.description}</p>
             </div>
           </div>
         </div>
-        <div className="row">
+        <div className="row mt-5">
           <div className="col-md-12 packages">
             <h5 className="text-dark text-center">MODULES</h5>
           </div>

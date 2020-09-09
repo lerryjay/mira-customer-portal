@@ -125,15 +125,28 @@ class product_details extends Component {
     modal.style.display = "block";
   }
   
-  async deleteInfoModule()
+  deleteInfoModule()
   {
-    const headers = new Headers();
-    headers.append("API-KEY", APIKEY);
-    const res  = await fetch(`${HTTPURL}product/deletemodule?moduleid=${this.state.selectedModule.id}&userid=${this.state.user.userid}`, {
-      method: 'GET',
-      headers: headers
-    })
-    console.log('delete module response',res);
+    
+    this.setState({loading : true});
+    setTimeout(() => {
+      this.setState({ loading: false });
+      setTimeout(() => {
+        this.setState({ successmessage: false });
+
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+        const res  =  fetch(`${HTTPURL}product/deletemodule?moduleid=${this.state.selectedModule.id}&userid=${this.state.user.userid}`, {
+          method: 'GET',
+          headers: headers
+        })
+        console.log('delete module response',res);
+
+        this.setState({ successmessage: "Deleted Successfully!" });
+        let modal = document.getElementById("deleteModal");
+        modal.style.display = "none";
+      }, 5000);
+    }, 3000);
     //display success here
   }
 
@@ -187,10 +200,9 @@ class product_details extends Component {
 
   saveModule = async (e) => {
     e.preventDefault();
-    // this.setState({loading : true});
+    this.setState({loading : true});
     setTimeout(() => {
       this.setState({ loading: false });
-      this.setState({ successmessage: "Added Successfully!" });
       setTimeout(() => {
         this.setState({ successmessage: false });
 
@@ -210,19 +222,20 @@ class product_details extends Component {
         }).then((response) => response.json())
         .then((res) => {  if(res['status']) this.getModules(); });
         console.log("submitting");
+        this.setState({ successmessage: "Added Successfully!" });
+        let modal = document.getElementById("myModal");
+        modal.style.display = "none";
         this.setState({ pkgname: "", pkgdescription: "" });
-      }, 5000);
+      }, 2000);
     }, 3000);
   };
 
   handleUpdate = async (e) => {
     e.preventDefault();
-    // this.setState({loading : true});
+    this.setState({loading : true});
     setTimeout(() => {
-      this.setState({ loading: false });
-      this.setState({ successmessage: "Updated Successfully!" });
+      this.setState({ loading: true });
       setTimeout(() => {
-        this.setState({ successmessage: false });
 
         const headers = new Headers();
         headers.append("API-KEY", APIKEY);
@@ -242,12 +255,13 @@ class product_details extends Component {
           .then((response) => response.json())
           .then((json) => {
             console.log(json);
+            this.setState({ successmessage: "Updated Successfully!" });
             let modal = document.getElementById("updateModal");
             modal.style.display = "none";
             return json;
           });
         console.log("submitting");
-      }, 5000);
+      }, 2000);
     }, 3000);
 
     
@@ -257,10 +271,19 @@ class product_details extends Component {
   render() {
     return (
       <div className="container-fluid mx-auto">
-        <div className="row product_details mt-4">
+      {/* Success Message */}
+      { this.state.successmessage ? 
+          <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+              <span className="mt-3">{this.state.successmessage}</span>
+          </div>
+          :   <span></span>
+      }
+        <div className="row mt-4">
           <div className="col-md-6">
             {/* <img src={this.state.imageurl} onError={`this.src=${ placeholder }`} className="img-fluid" alt="" /> */}
-            <img className="img-product" src={FILEURL+this.state.imageurl} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
+            <div className="row justify-content-center">
+              <img className="image-product" src={FILEURL+this.state.imageurl} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
+            </div>
           </div>
           <div className="col-md-6">
             <h4 className="text-dark">{this.state.name}</h4>
@@ -389,6 +412,7 @@ class product_details extends Component {
                             </label>
                             <textarea
                               type="text"
+                              rows="8"
                               className="form-control form-control-sm"
                               name="pkgdescription"
                               id="pkgdescription"
@@ -464,7 +488,7 @@ class product_details extends Component {
                             <p>
                               
                               <span className="font-weight-bold">
-                                Name:
+                                Name:&nbsp;
                               </span>
                               {this.state.selectedModule.name}
                             </p>
@@ -473,7 +497,7 @@ class product_details extends Component {
                               <span className="font-weight-bold">
                                 Description:
                               </span>
-                              {this.state.selectedModule.description}
+                              <p>{this.state.selectedModule.description}</p>
                             </p>
                           </div>
                         </div>
@@ -538,6 +562,7 @@ class product_details extends Component {
                             </label>
                             <textarea
                               type="text"
+                              rows="8"
                               className="form-control form-control-sm"
                               name="editdescription"
                               id="editdescription"
@@ -600,7 +625,7 @@ class product_details extends Component {
           {this.state.showmodal ?  
               <div id="deleteModal" class="modal">
                   {/* Modal content  */}
-                  <div class="modal-content text-center p-5">
+                  <div class="modal-content modal-del text-center p-5">
                       {/* <div className="delete-icon">
                           &times;
                       </div> */}
@@ -612,7 +637,22 @@ class product_details extends Component {
                               <button onClick={this.closedeleteModal} className="btn-block btn btn-outline-secondary">Cancel</button>
                           </div>
                           <div className="col-md-6">
-                              <button onClick={() => this.deleteInfoModule(this.state.selectedModule.id)} className="btn btn-danger btn-block">Delete</button>
+                          {this.state.loading ? (
+                            <button
+                              type="submit"
+                              className="btn btn-block btn-primary"
+                            >
+                              <div
+                                className="spinner-border text-danger"
+                                role="status"
+                                id="loader"
+                              >
+                                <span className="sr-only">Loading...</span>
+                              </div>
+                            </button>
+                          ) : (
+                            <button onClick={() => this.deleteInfoModule(this.state.selectedModule.id)} className="btn btn-danger btn-block">Delete</button>
+                          )}
                           </div>
                       </div>
                   </div>

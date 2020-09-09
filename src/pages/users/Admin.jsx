@@ -17,6 +17,7 @@ class Admin extends Component {
         headers: headers
     })
     .then(response => response.json());
+    console.log(res['data'])
     if(res['status']){
         this.setState({ users : res['data']});
     }
@@ -25,6 +26,15 @@ class Admin extends Component {
   componentDidMount()
   {
     this.getUsers();
+  }
+
+  showDropdown(userid){
+    let dropdown = document.getElementById(userid);
+    if(dropdown.style.display === "none"){
+      dropdown.style.display = "block";
+    } else {
+      dropdown.style.display = "none"
+    }
   }
 
   render() {
@@ -57,14 +67,14 @@ class Admin extends Component {
                   <td>{ user.status  }</td>
                   <td> 
                     <div className="dropdown">
-                        <button className="btn btn-secondary dropdown-toggle" type="button" id={"dropdownMenuButton"} data-toggle={"dropdown"} aria-haspopup={"true"} aria-expanded={"false"}>
+                        <button className="btn btn-secondary dropdown-toggle" type="button" onClick={()=> this.showDropdown(`dropdown${index + 1}`)} id={"dropdownMenuButton"} data-toggle={"dropdown"} aria-haspopup={"true"} aria-expanded={"false"}>
                           Select
                         </button>
-                        <div className="dropdown-menu" aria-labelledby={"dropdownMenuButton"}>
-                          <a className="dropdown-item" href="#">Add as client</a>
-                          <a className="dropdown-item" href="#">Create ticket</a>
+                        <div className="dropdown-menu" id={`dropdown${index + 1}`} aria-labelledby={"dropdownMenuButton"}>
+                          <a className="dropdown-item" href="#">View Profile</a>
                           <div className="dropdown-divider"></div>
                           <a className="dropdown-item text-danger" href="#">Suspend Account</a>
+                          <a className="dropdown-item text-danger" href="#">Delete Account</a>
                         </div>
                       </div>
                     </td>

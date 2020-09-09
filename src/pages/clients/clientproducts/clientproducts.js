@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import { HTTPURL, APIKEY } from '../../../common/global_constant';
+import { HTTPURL, APIKEY,FILEURL } from '../../../common/global_constant';
 import { withContext } from '../../../common/context';
-import image from '../../../assets/images/Accsiss.png'
+import placeholder from "../../../assets/images/product-placeholder.gif";
 
 
 class clientviewproduct extends Component {
@@ -10,7 +10,6 @@ class clientviewproduct extends Component {
         super(props);
         this.state = {
             ...props,
-            fullname: '',
             products: [],
             id: '',
             loading: false
@@ -43,13 +42,13 @@ class clientviewproduct extends Component {
                     <div className="row my-2">
                         {this.state.products.map((product, i) => {
                             return (
-                                <div className="col-md-3 col-lg-4 col-sm-12" key={i}>
+                                <div className="col-md-3 col-lg-4 col-sm-12 my-2" key={i}>
                                     <div className="card text-center products">
-                                        <img src={image} className="image_product" alt="" />
+                                    <img className="img-fluid" src={FILEURL+product.imageurl} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
                                         <div className="card-body">
                                             <h5 className="card-title">{product.name}</h5>
                                             {/* <Link  to={{ pathname:"", search}} onClick={this.handleViewMore}> */}
-                                            <Link to={() => `/product_details/${product.id}`}>
+                                            <Link to={() => `/clientproductdetails/${product.id}`}>
                                                 <span class="badge px-3 py-2 badge-primary" value={product.id} style={{ cursor: "pointer", fontSize: 'medium' }}>View</span>
                                             </Link>
                                         </div>

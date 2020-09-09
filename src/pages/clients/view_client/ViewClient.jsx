@@ -255,7 +255,10 @@ class ViewClient extends Component {
                                                                             </td>
                                                                             <td>
                                                                                 <Link to={() => `/updateclientproduct/${product.id}`}>
-                                                                                    <i className="fa fa-edit mr-1"></i>
+                                                                                    <i className="fa fa-edit mr-3"></i>
+                                                                                </Link>
+                                                                                <Link to={() => `/viewclientproduct/${product.id}`}>
+                                                                                    <i className="fa fa-eye mr-1"></i>
                                                                                 </Link>
                                                                             </td>
                                                                         </tr>

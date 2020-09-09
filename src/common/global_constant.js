@@ -1,8 +1,8 @@
 
-// export const HTTPURL =  "http://192.168.1.4:8080/ticketapp/api/"; //'http://localhost/ticketapp/api/';
-// export const FILEURL = "http://192.168.1.4:8080/ticketapp/"; //'http://localhost/ticketapp/'
-export const HTTPURL =  'http://localhost/ticketapp/api/';
-export const FILEURL = 'http://localhost/ticketapp/'
+export const HTTPURL =  "http://192.168.1.4:8080/ticketapp/api/"; 
+export const FILEURL = "http://192.168.1.4:8080/ticketapp/"; 
+// export const HTTPURL =  'http://localhost/ticketapp/api/';
+// export const FILEURL = 'http://localhost/ticketapp/'
 export const APIKEY = "97899c-7d0420-1273f0-901d29-84e2f8";
 
 
@@ -14,10 +14,24 @@ export const clientMenu = [
     isActive: false
   },
   {
-    name: 'My Product',
-    route: '/clientproducts',
+    name: 'Product',
+    route: 'product',
     icon: '',
-    isActive: false
+    isActive: false,
+    sub: [
+      {
+        name: 'View Products',
+        route: '/clientproducts',
+        icon: '',
+        isActive: false
+      },
+      {
+        name: 'My Product',
+        route: '/productcart',
+        icon: '',
+        isActive: false
+      }
+    ]
   },
   {
     name: 'Ticket',

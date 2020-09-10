@@ -20,7 +20,7 @@ class create_ticket extends Component {
             successmessage: ''
         };
     }
-    
+
     handleInputChange = e => {
         let { name, value } = e.target
         if(name == 'customerid'){
@@ -123,7 +123,7 @@ class create_ticket extends Component {
                 </div>
         )} )
         return (
-            <div className="container-fluid content text-white">
+            <div className="container text-white">
             {/* Success Message */}
             { this.state.successmessage ? 
                 <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
@@ -134,8 +134,8 @@ class create_ticket extends Component {
                 </div>
                 :   <span></span>
             }
-            <div className="row">
-                <div className="col-md-8 " id="profile">
+            <div className="row justify-content-center">
+                <div className="col-md-10 " id="profile">
                     <form onSubmit={this.handleSubmit} id="createticket" encType="multipart/form-data">
                         <div className="card">
                             <div className="card-header bg-medium font-weight-bold text-dark">
@@ -170,7 +170,7 @@ class create_ticket extends Component {
                                     </div>
                                 </div>
                                 {
-                                    this.state.user.role == 'admin' &&  
+                                    this.state.user.role == 'admin' && 
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
                                             <input list="customers" name="customerid" id="customerid" onChange={this.handleInputChange} name="customerid" placeholder="Enter customer name" className="form-control" />

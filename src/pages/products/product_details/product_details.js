@@ -299,7 +299,7 @@ class product_details extends Component {
         </div>
 
         <div className="row mt-3">
-          <div className="col-md-10 offset-1">
+          <div className="col-md-12 ">
             <button
               type="button"
               onClick={this.packageModal}
@@ -582,7 +582,7 @@ class product_details extends Component {
                           <button
                             type="button"
                             onClick={this.closeupdateModal}
-                            className="btn-block btn btn-outline-secondary"
+                            className="btn-block btn btn-outline-secondary mb-2"
                           >
                             Cancel
                           </button>
@@ -634,7 +634,7 @@ class product_details extends Component {
                       <p> Do you really want to delete this file?</p>
                       <div className="row">
                           <div className="col-md-6">                            
-                              <button onClick={this.closedeleteModal} className="btn-block btn btn-outline-secondary">Cancel</button>
+                              <button onClick={this.closedeleteModal} className="btn-block btn btn-outline-secondary mb-2">Cancel</button>
                           </div>
                           <div className="col-md-6">
                           {this.state.loading ? (

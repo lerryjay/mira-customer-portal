@@ -128,7 +128,7 @@ class CreateProduct extends Component {
                 :   <span></span>
             }
 
-                <div className="col-md-8 mb-3 mt-4" id="profile">
+                <div className="col-md-8 mb-3 mt-4 box1" id="profile">
                  {/* Error Message */}
                 { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
                     <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
@@ -229,11 +229,11 @@ class CreateProduct extends Component {
                     </form>
                 </div>
             
-                <div className="col-md-4 text-center mt-4" id='img-avatar'>
+                <div className="col-md-4 text-center mt-4 box2" id='img-avatar'>
                 <div className="card">
                             {!this.state.imageurl ? 
                             <div className="card-body">
-                                <img src={placeholder} alt=""   height="205px" width="inherit" />
+                                <img src={placeholder} alt=""   height="205px" width="250px" />
 
                             </div>
 

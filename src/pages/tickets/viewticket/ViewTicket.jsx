@@ -146,8 +146,8 @@ class ViewTicket extends Component {
             return <img  src={URL.createObjectURL(file)} className="col-md-3"/>
         });
         return (
-            <div className="container mx-auto mt-md-5 shadow" id="profile">
-                <div className="card home-chart mt-md-4">
+            <div className="container mx-auto mt-md-5" id="profile">
+                <div className="card home-chart mt-4">
                     <div className="card-header bg-medium font-weight-bold text-dark">
                         <span className="font-weight-bolder mr-4 ticket-title">TICKET ID: #{this.state.id}</span>
                         <span className="font-weight-bolder mr-5 ticket-title">
@@ -161,8 +161,8 @@ class ViewTicket extends Component {
                                 this.state.attachedFiles.map(item=>
                                     <div className="col-6 col-md-4 col-lg-2">
                                        {
-                                        item.match(/\.(jpg|jpeg|png)$/) ? <img id="img"  style={{ width : '100px', height : '100px'}} onClick={(e)=>this.showModal(e,item)} src={FILEURL+item} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/> 
-                                        : <img src={pdf_placeholder} onClick={(e)=>this.showModal(e,item)} style={{ width : '100px', height : '100px'}}/>
+                                        item.match(/\.(jpg|jpeg|png)$/) ? <img id="img"  style={{ width : '100px', height : '100px'}} className="m-2"  onClick={(e)=>this.showModal(e,item)} src={FILEURL+item} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/> 
+                                        : <img src={pdf_placeholder} onClick={(e)=>this.showModal(e,item)} style={{ width : '100px', height : '100px'}} className="m-2" />
                                     }
                                         
                                     </div>
@@ -193,7 +193,7 @@ class ViewTicket extends Component {
                                 return(
                                 <div>
                                 {
-                                    this.state.admin ? <div className="row mb-4" id="client">
+                                    chat.role == "admin" ? <div className="row mb-4" id="client">
                                         <div className="col-md-7 col-sm-12 ">
                                             <div className="chatbox" style={{background:'#a8afb5'}}>
                                             {chat.message}
@@ -210,12 +210,12 @@ class ViewTicket extends Component {
                                                 }
                                         <span className="msg_time">{chat.createdat}</span>
                                         </div>
-                                        <div className="col-md-5 col-sm-12 p-2">
+                                        <div className="col-md-5 col-sm-12 ">
             
                                         </div>
                                     </div>
                                         :   <div className="row my-2" id="admin">
-                                        <div className="col-md-5 col-sm-12 p-2">
+                                        <div className="col-md-5 col-sm-12">
                                         </div>
                                         <div className="col-md-7 col-sm-12 p-2 text-right text-white">
                                             {chat.files}

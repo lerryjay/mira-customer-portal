@@ -682,7 +682,7 @@ p.image_name {
   margin-left: 100px !important;
 }
 .content {
-  width: calc(100vw - 200px) !important;
+  width: calc(100vw - 200px);
   margin-left: 200px !important;
   margin-top: 40px;
 }
@@ -723,7 +723,31 @@ p.image_name {
     overflow-y: auto;
   }
 
+  div.home {
+    padding: 0;
+  }
+
+  .ticket-title {
+    display: block;
+  }
+  .modal-content{
+    width: 300px !important;
+  }
+  .modal{
+    width: 100% !important;
+  }
+  .box1{
+    order:2
+  }
+  .box2{
+    order:1
+  }
+  .image-product {
+    width: 100%;
+    height: 300px;
+  }
 }
+
 /*
 
 @media only screen and (max-width: 1440px) {
@@ -783,10 +807,10 @@ div.carddd {
 }
 
 div.cardddd {
-  background: linear-gradient(45deg, #d16767 0%, #c14f4f 100%) !important;
-  border-color: #c14f4f !important;
+  background: linear-gradient(45deg, #17a2b8  0%, #17a2b8  100%) !important;
+  border-color: #17a2b8 !important;
   color: #fff;
-  box-shadow: 8px 8px 1px 1px #f09494;
+  box-shadow: 8px 8px 1px 1px #23d6f1;
 }
 
 div ul.components li, ul.components a p {

@@ -90,7 +90,7 @@ class clientproductdetails extends Component {
 
   render() {
     return (
-      <div className="container mx-auto">
+      <div className="container mx-auto mb-3">
         <div className="row mt-4">
           <div className="col-md-6">
             {/* <img src={this.state.imageurl} onError={`this.src=${ placeholder }`} className="img-fluid" alt="" /> */}
@@ -112,7 +112,7 @@ class clientproductdetails extends Component {
         </div>
 
         <div className="row mt-3">
-          <div className="col-md-10 offset-1">
+          <div className="col-md-12">
             <div className="card">
               <div className="card-body">
                 {this.state.packages === "" ? (

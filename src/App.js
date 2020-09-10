@@ -48,9 +48,12 @@ import ViewProductCart from "./pages/clients/viewproductcart/viewproductcart"
 
 
 import CreateUser from "./pages/users/create_user/CreateUser";
-import AddAdmin from "./pages/users/addadministrator/addadministrator"
+import AddAdmin from "./pages/users/addadministrator/addadministrator";
 import Users from "./pages/users/Users";
 import Admin from "./pages/users/Admin";
+import AdminProfile from "./pages/users/adminprofile/AdminProfile";
+import UserProfile from "./pages/users/userprofile/UserProfile";
+
 
 
 
@@ -330,6 +333,12 @@ class App extends Component {
                         path="/admin"
                         component={Admin}
                       />
+                    )}
+                    {loggedIn && (
+                      <Route path="/adminprofile" component={AdminProfile} />
+                    )}
+                    {loggedIn && (
+                      <Route path="/userprofile" component={UserProfile} />
                     )}
                   </div>
                   <Route component={NotFound} />

@@ -116,23 +116,7 @@ class CreateClientById extends Component {
         return (
 
             <div className="container mx-auto">
-                
-                <div className="container-fluid">
-                    <div className="col">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <Link to='/addclient'>
-                                        Home
-                                    </Link>
-                                </li>
-                                <li class="breadcrumb-item" aria-current="page">Add Client By UserID</li>
-                            </ol>
-                        </nav>
-                    </div>
-                </div>
-
-                <div className="row">
+                <div className="row justify-content-center">
                     
             {/* Success Message */}
             { this.state.successmessage ? 
@@ -145,7 +129,7 @@ class CreateClientById extends Component {
                 :   <span></span>
             }
 
-                <div className="col-md-8 offset-2 mb-3 mt-4" id="profile">
+                <div className="col-md-10 mb-3 mt-4" id="profile">
                     {/* Error Message */}
                     { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
                         <div className="alert alert-warning" role="alert">

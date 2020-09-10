@@ -55,17 +55,15 @@ class Clients extends Component {
         return (
             <div className="container-fluid">
                 <div className="row mt-4">
+            <div className="w-100 text-center">
+            <h3>CLIENT LIST </h3>
+            </div>
     
-                    <div className="col-md-12 mb-3" id="profile">
-                            <div className="card">
-                                <div className="card-header text-dark font-weight-bold">
-                                    List Client
-                </div>
+                    <div className="col-md-12" >
                                 <div className="card-body">
-    
-                                    <div id='table' className=" pt-2 mt-3 justify-content-center">
+                                    <div id='table' className=" pt-2 justify-content-center shadow">
                                         <div className="table-responsive">
-                                            <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark">
+                                            <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
                                                 <thead>
                                                     <tr>
                                                         <th><i className="fas fa-image"></i></th>
@@ -89,7 +87,7 @@ class Clients extends Component {
                                                             <td>{client.businessname}</td>
                                                         <td>
                                                             <Link to={() => `/viewClient/${client.user_id}`} >
-                                                                <span className="badge px-3 py-2 mr-2 badge-primary" value={client.id} style={{cursor:"pointer"}}>View</span>
+                                                                <span className="badge px-3 py-2 m-2 badge-primary" value={client.id} style={{cursor:"pointer"}}>View</span>
                                                             </Link>
                                                             <Link onClick={this.deleteModal}>
                                                                 <span className="badge px-3 py-2 badge-danger" id="myBtn" style={{cursor:"pointer"}}>Delete</span>
@@ -125,10 +123,10 @@ class Clients extends Component {
                             <h3>Are you sure?</h3>
                             <p> Do you really want to delete this file?</p>
                             <div className="row">
-                                <div className="col-md-6">                            
-                                    <button onClick={this.closeModal} className="btn-block btn btn-outline-secondary">Cancel</button>
+                                <div className="col-md-6 col-sm-6">                            
+                                    <button onClick={this.closeModal} className="btn-block btn btn-outline-secondary mb-2">Cancel</button>
                                 </div>
-                                <div className="col-md-6">
+                                <div className="col-md-6 col-sm-6">
                                     <button className="btn btn-danger btn-block">Delete</button>
                                 </div>
                             </div>
@@ -140,7 +138,6 @@ class Clients extends Component {
     
                  
 
-                </div>
             </div>
         )
     }

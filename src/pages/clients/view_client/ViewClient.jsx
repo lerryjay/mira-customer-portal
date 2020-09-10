@@ -87,7 +87,7 @@ class ViewClient extends Component {
             <div className="container-fluid mx-auto">
                 <div className="row mt-4">
 
-                    <div className="col-md-8 mb-3" id="profile">
+                    <div className="col-md-8 mb-3 box1" id="profile">
                         <form action="">
                             <div className="card">
                                 <div className="card-header bg-medium font-weight-bold text-dark">
@@ -174,7 +174,7 @@ class ViewClient extends Component {
                         </form>
                     </div>
 
-                    <div className="col-md-4 text-center" id='profilePix'>
+                    <div className="col-md-4 mb-3 text-center box2" id='profilePix'>
                         <div className="card">
                             <div className="card-header">
                             </div>
@@ -253,12 +253,12 @@ class ViewClient extends Component {
                                                                             <td>
                                                                                 {product.cost}
                                                                             </td>
-                                                                            <td>
+                                                                            <td style={{minWidth: "70px"}}>
                                                                                 <Link to={() => `/updateclientproduct/${product.id}`}>
-                                                                                    <i className="fa fa-edit mr-3"></i>
+                                                                                    <i className="fa fa-edit m-1"></i>
                                                                                 </Link>
                                                                                 <Link to={() => `/viewclientproduct/${product.id}`}>
-                                                                                    <i className="fa fa-eye mr-1"></i>
+                                                                                    <i className="fa fa-eye m-1"></i>
                                                                                 </Link>
                                                                             </td>
                                                                         </tr>

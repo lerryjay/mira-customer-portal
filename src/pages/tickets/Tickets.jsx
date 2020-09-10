@@ -37,11 +37,6 @@ class Tickets extends Component {
         }
     }
 
-    // handleViewMore = e => {
-    //      this.state.viewmore(e)
-    //     this.props.history.push('/viewticket');
-    // }
-
     ticketStatusUpdated(e,ticket) {
         const tickets = this.state.tickets.map(item=>{ 
             console.log(e.target.value);
@@ -80,17 +75,16 @@ class Tickets extends Component {
         return (
             <div className="container">
                 <div className="row mt-4">
+            <div className="w-100 text-center">
+            <h3>TICKET LIST </h3>
+            </div>
 
                     <div className="col-md-12 mb-3" id="profile">
-                        <form action="">
-                            <div className="card home-chart">
-                                <div className="card-header bg-medium font-weight-bold text-dark">
-                                    TICKET LIST
-                </div>
-                                <div className="card-body">
                                 {this.state.tickets == '' ?
+                                <div className="card-body">
                                     <div className="alert alert-warning" role="alert">
                                         <h6 className="text-center">No ticket records!</h6>
+                                    </div>
                                     </div>
                                     :
                                     <div id='table' className="card pt-2 mt-3 justify-content-center shadow px-2">
@@ -130,7 +124,7 @@ class Tickets extends Component {
                                                         <td>
                                                             {ticket.type}
                                                         </td>
-                                                        <td>
+                                                        <td style={{minWidth: "150px"}}>
                                                         <select className="custom-select custom-select-sm" value={ticket.ticketstatus} onChange={(e) =>this.ticketStatusUpdated(e,ticket)}>
                                                             <option className="btn btn-sm text-success" value="resolved"> &#10003;&nbsp;&nbsp;Resolved </option>
                                                             <option className="btn btn-sm text-danger" value="cancelled">&#1008;&nbsp;&nbsp;Cancelled</option>
@@ -154,10 +148,6 @@ class Tickets extends Component {
                             }
                                  
 
-                                </div>
-
-                            </div>
-                        </form>
                     </div>
                 </div>
                 
@@ -175,78 +165,7 @@ class Tickets extends Component {
                     </div> 
                </div>
                 
-                        
-                <div className="overlay"></div>
-
-                <div className="modal fade" id="viewTicket" tabIndex="-1" role="dialog" aria-labelledby="viewTicketTitle"
-                    aria-hidden="true">
-                    <div className="modal-dialog modal-dialog-centered" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                <form action="">
-                                    <div className="card">
-                                        <div className="card-header h6">
-                                            Create Ticket
-                            </div>
-                                        <div className="card-body">
-
-                                            <div className="row">
-
-                                                <div className="col-md-12 mb-3">
-                                                    <div className="form-group">
-                                                        <label htmlFor="" className="">Email</label>
-                                                        <input type="text" className="form-control form-control-sm" name="" id=""
-                                                            value="Johndoe@mail.com" placeholder="" disabled />
-                                                    </div>
-                                                </div>
-                                                <div className="col-md-6 mb-3">
-                                                    <div className="form-group">
-                                                        <label htmlFor="" className="">Subject</label>
-                                                        <input type="text" className="form-control form-control-sm" name="" id=""
-                                                            value="John" placeholder="" disabled />
-                                                    </div>
-                                                </div>
-                                                <div className="col-md-6 mb-3">
-                                                    <div className="form-group">
-                                                        <label htmlFor="type" className="">Ticket&nbsp;Type</label>
-                                                        <select name="type" id="type" className="form-select form-select-sm" disabled>
-                                                            <option value="" defaultValue disabled>--Select&nbsp;Ticket&nbsp;Type--
-                                                </option>
-                                                            <option value="complaint">complaint</option>
-                                                            <option value="request">Request</option>
-                                                            <option value="enquiry">Enquiry</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-md-12 mb-3">
-                                                    <div className="form-group">
-                                                        <label htmlFor="message">Message</label>
-                                                        <textarea id="message" name="message" rows="10" cols="50"
-                                                            className="form-control text-left" disabled>
-
-                                                        </textarea>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-
-                                        </div>
-
-                                    </div>
-                                </form>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
+                 </div>
         )
     }
 

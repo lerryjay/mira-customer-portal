@@ -111,9 +111,9 @@ class CreateClient extends Component {
 
     render() {
         return (
-            <div className="container mx-auto row">
+            <div className="container mx-auto row mt-4">
 
-                <div className="row">
+                <div className="col-md-12">
                     {/* Success Message */}
                     {this.state.successmessage ?
                         <div className="alert alert-success" role="alert" style={{ position: 'fixed', top: '70px', right: '10px', zIndex: '4' }}>

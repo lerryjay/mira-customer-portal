@@ -113,7 +113,7 @@ class Products extends Component {
         return (
             <div className="container-fluid">
 
-                <div className="row d-flex justify-content-end mr-5" >
+                <div className="row mt-4 d-flex justify-content-end mr-3" >
                     <button type="button" className="btn btn-sm btn-primary new_product">
                         <i className="fas fa-plus" aria-hidden="true">
                             <Link to="/createproduct">
@@ -125,7 +125,7 @@ class Products extends Component {
                 <div className="row mx-5 my-2">
                     {this.state.products.map((product, i) => {
                         return (
-                            <div className="col-md-3 col-lg-4 col-sm-12 my-2" key={i}>
+                            <div className="col-md-3 col-lg-4 col-sm-12 my-2 d-flex justify-content-center" key={i}>
                                 <div className="card text-center products">
                                     {/* <img src={image} className="image_product" alt="" /> */}
                                     <img className="img-fluid" src={FILEURL+product.imageurl} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>

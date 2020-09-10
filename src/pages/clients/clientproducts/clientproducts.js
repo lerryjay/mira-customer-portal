@@ -38,11 +38,11 @@ class clientviewproduct extends Component {
         return (
             <div className="container mx-auto row">
 
-                <div className="container">
+                <div className="container mt-4">
                     <div className="row my-2">
                         {this.state.products.map((product, i) => {
                             return (
-                                <div className="col-md-3 col-lg-4 col-sm-12 my-2" key={i}>
+                                <div className="col-md-3 col-lg-4 col-sm-12 my-2  d-flex justify-content-center" key={i}>
                                     <div className="card text-center products">
                                     <img className="img-fluid" src={FILEURL+product.imageurl} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
                                         <div className="card-body">

@@ -51,6 +51,8 @@ class ProductCart extends Component {
           <h3>My Products </h3>
         </div>
         <div className="row mt-4">
+          <div className="col-md-12">
+            
           <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
             {/* <caption>Hello World!</caption> */}
             <thead>
@@ -70,7 +72,7 @@ class ProductCart extends Component {
                     <td>{product.name}</td>
                     <td style={{ maxWidth: "150px" }}>{product.description}</td>
                     <td>{product.price}</td>
-                    <td className="align-middle" style={{cursor:"pointer"}}>
+                    <td style={{cursor:"pointer"}}>
                         <Link to={() => `/viewproductcart/${product.id}`}>
                             <span className="badge px-3 py-2 badge-primary" value={product.id} style={{cursor:"pointer"}}>View</span>
                         </Link>
@@ -80,6 +82,8 @@ class ProductCart extends Component {
               })}
             </tbody>
           </table>
+        
+          </div>
         </div>
     </div>
     );

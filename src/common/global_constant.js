@@ -16,7 +16,7 @@ export const clientMenu = [
   {
     name: 'Product',
     route: 'product',
-    icon: '',
+    icon: 'fab fa-buffer',
     isActive: false,
     sub: [
       {
@@ -36,7 +36,7 @@ export const clientMenu = [
   {
     name: 'Ticket',
     route: 'ticket',
-    icon: '',
+    icon: 'fa fa-ticket-alt',
     isActive: false,
     sub: [
       {
@@ -118,7 +118,7 @@ export const adminMenu = [
   },
   {
     name: 'Products',
-    icon: 'fa fa-ticket-alt',
+    icon: 'fab fa-buffer',
     isActive: false,
     sub: [
       {

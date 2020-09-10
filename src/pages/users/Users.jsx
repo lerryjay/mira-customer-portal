@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom';
 import { withContext } from '../../common/context'
 import { HTTPURL,FILEURL,APIKEY } from '../../common/global_constant'
 
@@ -67,13 +67,13 @@ class Users extends Component {
                   <td>{ user.isclient ? user.businessname : 'Not a client' }</td>
                   <td> 
                     <div className="dropdown">
-                        <button className="btn btn-secondary dropdown-toggle" type="button" onClick={()=> this.showDropdown(user.userid)} id={"dropdownMenuButton"} data-toggle={"dropdown"} aria-haspopup={"true"} aria-expanded={"false"}>
+                        <button className="btn btn-secondary btn-sm dropdown-toggle" type="button" onClick={()=> this.showDropdown(user.userid)} id={"dropdownMenuButton"} data-toggle={"dropdown"} aria-haspopup={"true"} aria-expanded={"false"}>
                           Select
                         </button>
                         <div className="dropdown-menu" id={user.userid} aria-labelledby={"dropdownMenuButton"}>
-                          <a className="dropdown-item" href="#">View Profile</a>
-                          <a className="dropdown-item" href="#">Create ticket</a>
-                          <a className="dropdown-item" href="#">Create Chat Account</a>
+                          <Link to={() => `/userprofile/${user.userid}`} className="dropdown-item"> View Profile </Link>
+                          <Link to={() => `/createticket/${user.userid}`} className="dropdown-item"> Create Ticket </Link>
+                          {!user.isclient && <Link to={() => `/createclient/${user.userid}`} className="dropdown-item"> Create Client Account </Link>}
                           <div className="dropdown-divider"></div>
                           <a className="dropdown-item text-danger" href="#">Suspend Account</a>
                         </div>

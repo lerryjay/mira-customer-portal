@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { withContext } from '../../common/context';
-import { HTTPURL } from '../../common/global_constant';
-import avatar from '../../assets/images/avatar.png'
+import { withContext } from '../../../common/context';
+import { HTTPURL } from '../../../common/global_constant';
+import avatar from '../../../assets/images/avatar.png'
 
 
 class Profile extends Component {

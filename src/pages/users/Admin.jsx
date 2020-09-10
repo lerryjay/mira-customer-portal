@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom';
 import { withContext } from '../../common/context'
 import { HTTPURL,FILEURL,APIKEY } from '../../common/global_constant'
 
@@ -43,6 +43,16 @@ class Admin extends Component {
         <div className="w-100 text-center">
           <h3>Administrators </h3>
         </div>
+        
+        <div className="row mt-4 d-flex justify-content-end mb-3 mr-2" >
+              <Link to="/addadmin">
+                <button type="button" className="btn btn-sm btn-primary new_product">
+                    <i className="fas fa-plus" aria-hidden="true">
+                        <small className="newproduct" style={{ color: '#fff' }}>&nbsp;Add&nbsp;Administrator</small>
+                    </i>
+                </button>
+              </Link>
+          </div>
         <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
           <thead>
             <tr>
@@ -67,11 +77,11 @@ class Admin extends Component {
                   <td>{ user.status  }</td>
                   <td> 
                     <div className="dropdown">
-                        <button className="btn btn-secondary dropdown-toggle" type="button" onClick={()=> this.showDropdown(`dropdown${index + 1}`)} id={"dropdownMenuButton"} data-toggle={"dropdown"} aria-haspopup={"true"} aria-expanded={"false"}>
+                        <button className="btn btn-secondary dropdown-toggle btn-sm" type="button" onClick={()=> this.showDropdown(`dropdown${index + 1}`)} id={"dropdownMenuButton"} data-toggle={"dropdown"} aria-haspopup={"true"} aria-expanded={"false"}>
                           Select
                         </button>
                         <div className="dropdown-menu" id={`dropdown${index + 1}`} aria-labelledby={"dropdownMenuButton"}>
-                          <a className="dropdown-item" href="#">View Profile</a>
+                          <Link to={() => `/userprofile/${user.userid}`} className="dropdown-item"> View Profile </Link>
                           <div className="dropdown-divider"></div>
                           <a className="dropdown-item text-danger" href="#">Suspend Account</a>
                           <a className="dropdown-item text-danger" href="#">Delete Account</a>

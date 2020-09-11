@@ -34,7 +34,7 @@ class viewproductcart extends Component {
                     <h4 className="text-dark">
                       &#8358;5000
                     </h4>
-                      <h6> <span className="font-weight-bold">NB:</span> To be renewed nnually</h6>
+                      <h6> <span className="font-weight-bold">NB:</span> To be renewed annually</h6>
                     
                     <div className="row mt-3">
                       <div className="col-md-6">
@@ -55,9 +55,6 @@ class viewproductcart extends Component {
                 </div>
                 
 
-               <div className="card">
-                 <div className="row">
-                    <div className="col-md-12 px-5 pb-5">
                       
                     <div className="row mt-4">
                           <div className="col-md-12">
@@ -113,11 +110,9 @@ class viewproductcart extends Component {
                           </div>
                       </div>
 
-                    </div>
-                 </div>
+           
                </div>
 
-          </div>
         
       </div>
 

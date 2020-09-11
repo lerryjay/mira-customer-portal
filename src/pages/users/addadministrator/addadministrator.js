@@ -41,15 +41,6 @@ class CreateClient extends Component {
                 this.setState({errormessage: err});
                 setTimeout(()=> this.setState({errormessage: ''}),5000);
             }, 3000);
-        }else if(!Validators.validatePassword(password,1).status){
-            console.log('Failed password validation');
-            const err = Validators.validatePassword(password,1).message;
-            this.setState({loading : true});
-            setTimeout(() => {
-                this.setState({loading : false});
-                this.setState({errormessage: err});
-                setTimeout(()=> this.setState({errormessage: ''}),5000);
-            }, 3000);
         }else{
                 this.setState({ loading: false })
 
@@ -60,7 +51,6 @@ class CreateClient extends Component {
             formdata.append("email", this.state.email);
             formdata.append("name", this.state.name);
             formdata.append("telephone", this.state.telephone);
-            formdata.append("password", this.state.password);
             formdata.append("userid",sessionStorage.getItem('userId') );
             
             fetch(`${HTTPURL}admin/add`, {
@@ -165,16 +155,6 @@ class CreateClient extends Component {
                                             <input type="text" className="form-control form-control-sm" name="telephone"
                                                 id="telephone" placeholder="Phone no." required
                                                 value={this.state.telephone}
-                                                onChange={this.handleInputChange} />
-                                        </div>
-                                    </div>
-
-                                    <div className="col-md-12 mb-3">
-                                        <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Password</label>
-                                            <input type="password" className="form-control form-control-sm" name="password"
-                                                id="password" placeholder="Password" required
-                                                value={this.state.password}
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {withContext} from '../../../common/context';
 import { HTTPURL, APIKEY } from '../../../common/global_constant';
+import placeholder from "../../../assets/images/product-placeholder.gif";
 
 class UpdateProduct extends Component {
     constructor(props){
@@ -156,7 +157,7 @@ class UpdateProduct extends Component {
                 :   <span></span>
             }
 
-                <div className="col-md-8 offset-2 mb-3 mt-4" id="profile">
+                <div className="col-md-8 mb-3 mt-4" id="profile">
                  {/* Error Message */}
                 { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
                     <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
@@ -216,25 +217,6 @@ class UpdateProduct extends Component {
                                         </div>
                                     </div>
 
-                                    <div className="col-md-12 mb-1"> 
-                                    {this.state.imageError !== false ? 
-                                        <div className="other_files mb-2">
-                                            <i className="fa fa-trash" onClick={(e) => this.removeOtherImage(e)}></i>
-                                            {this.state.file.name}
-                                        </div>
-                                        :
-                                        <div className="imgPreview mb-2">
-                                            <i className="fa fa-trash" onClick={(e) => this.removeImage(e)}></i>
-                                                {imagePreview}
-                                            </div>
-                                       }
-                                        <div className="form-group">
-                                            <label htmlFor="" >Upload an Image</label> <br/>
-                                            <input type="file" className="form-file form-file-sm" name="file"
-                                                id="file" placeholder="" 
-                                                onChange={(e)=>this.handleImageChange(e)} />
-                                        </div>    
-                                    </div>
 
                                 </div>
 
@@ -261,6 +243,31 @@ class UpdateProduct extends Component {
                         </div>
                     </form>
                 </div>
+
+                <div className="col-md-4 text-center mt-4 box2" id='img-avatar'>
+                <div className="card">
+                            {!this.state.imageurl ? 
+                            <div className="card-body">
+                                <img src={placeholder} alt=""   height="205px" width="250px" />
+
+                            </div>
+
+                            :
+                               <div className="card-body">
+                                <div className="imgPreview mb-2">
+                                    <i className="fa fa-trash" onClick={(e) => this.removeImage(e)}></i>
+                                        {imagePreview}
+                                </div>
+                            </div>
+                            }
+                            <label htmlFor="file" className="btn btn-sm btn-primary py-2 px-3">Attach Image</label>
+                                <input style={{display:'none'}} type={"file"}  id="file" 
+                                className="form-file form-file-sm" name="file"  placeholder=""
+                                onChange={(e)=>this.handleImageChange(e)} />
+                                
+                        </div>
+                </div>
+           
             </div>
 
         )

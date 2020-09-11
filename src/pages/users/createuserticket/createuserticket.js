@@ -15,12 +15,16 @@ class create_ticket extends Component {
             loading: false, 
             files: [],
             users : [],
+            selectedUser: '',
             previews: '',
             imagePreviewUrl: '',
             successmessage: ''
         };
     }
 
+    componentDidMount() {
+        
+    }
     handleInputChange = e => {
         let { name, value } = e.target
         if(name == 'customerid'){
@@ -43,6 +47,8 @@ class create_ticket extends Component {
         let form = new FormData(document.getElementById("createticket"));
         form.append("userid", this.state.user.userid);
         this.state.files.length < 1 && form.delete('files[]');
+        
+
         if(this.state.user.role == 'admin'){
             if(form.get('customerid').length < 1) console.log('no customer selected')//show error
             else{
@@ -99,6 +105,11 @@ class create_ticket extends Component {
         .then(response => response.json());
         if(res['status']){
             this.setState({ users : res['data']});
+            
+        const clientid = this.props.location.pathname.split("/")[2];
+        const selectedUser = this.state.users.find(item=>item.userid == clientid);
+        console.log(selectedUser,clientid, "sel")
+        this.setState({selectedUser})
         }
     }
 
@@ -173,13 +184,7 @@ class create_ticket extends Component {
                                     this.state.user.role == 'admin' && 
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
-                                            <input list="customers" name="customerid" id="customerid" onChange={this.handleInputChange} name="customerid" placeholder="Enter customer name" className="form-control" />
-                                            <datalist id="customers">
-                                               {
-                                                   this.state.users.map(user=> <option value={user.firstname+' '+user.lastname} />)
-                                               }
-                                            </datalist>
-                                           
+                                            <input list="customers" value={this.state.selectedUser.lastname + " " + this.state.selectedUser.firstname} name="customerid" id="customerid" onChange={this.handleInputChange} name="customerid" placeholder="Enter customer name" className="form-control" disabled/>
                                         </div>
                                     </div>
                                 }

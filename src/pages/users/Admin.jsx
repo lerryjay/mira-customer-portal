@@ -39,7 +39,7 @@ class Admin extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container mt-4">
         <div className="w-100 text-center">
           <h3>Administrators </h3>
         </div>
@@ -52,7 +52,14 @@ class Admin extends Component {
                     </i>
                 </button>
               </Link>
-          </div>
+          </div> 
+          {this.state.users.length === 0 ?
+            <div className="card-body">
+                <div className="alert alert-warning" role="alert">
+                    <h6 className="text-center">No Administrator records!</h6>
+                </div>
+                </div>
+                :
         <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
           <thead>
             <tr>
@@ -81,7 +88,7 @@ class Admin extends Component {
                           Select
                         </button>
                         <div className="dropdown-menu" id={`dropdown${index + 1}`} aria-labelledby={"dropdownMenuButton"}>
-                          <Link to={() => `/userprofile/${user.userid}`} className="dropdown-item"> View Profile </Link>
+                          <Link to='/admin' className="dropdown-item"> View Profile </Link>
                           <div className="dropdown-divider"></div>
                           <a className="dropdown-item text-danger" href="#">Suspend Account</a>
                           <a className="dropdown-item text-danger" href="#">Delete Account</a>
@@ -93,6 +100,7 @@ class Admin extends Component {
             }
           </tbody>
         </table>
+  }
       </div>
     )
   }

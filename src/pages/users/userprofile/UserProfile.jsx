@@ -89,171 +89,100 @@ class Profile extends Component {
             </div>
 
             <div className="col-md-6 ">
-              <h3 className="text-dark">{this.state.selectedUser.businessname}</h3>
+              <h3 className="text-dark">
+                {this.state.selectedUser.businessname}
+              </h3>
               <div className="row mt-3">
-                <div className="col-md-12">  
+                <div className="col-md-12">
                   <h6>
                     {" "}
-                    <span className="font-weight-bold">
-                      Lastname:
-                    </span>{" "}
+                    <span className="font-weight-bold">Lastname:</span>{" "}
                     {this.state.selectedUser.lastname}
                   </h6>
                   <h6>
                     {" "}
-                    <span className="font-weight-bold">
-                      Firstname:
-                    </span>{" "}
+                    <span className="font-weight-bold">Firstname:</span>{" "}
                     {this.state.selectedUser.firstname}
-                  </h6>    
+                  </h6>
                   <h6>
                     {" "}
-                    <span className="font-weight-bold">
-                      Othername:
-                    </span>{" "}
+                    <span className="font-weight-bold">Othername:</span>{" "}
                     {this.state.selectedUser.othername}
-                  </h6>    
+                  </h6>
                   <h6>
                     {" "}
-                    <span className="font-weight-bold">
-                      Telephone:
-                    </span>{" "}
+                    <span className="font-weight-bold">Telephone:</span>{" "}
                     {this.state.selectedUser.telephone}
-                  </h6>    
+                  </h6>
                   <h6>
                     {" "}
-                    <span className="font-weight-bold">
-                      Email:
-                    </span>{" "}
+                    <span className="font-weight-bold">Email:</span>{" "}
                     {this.state.selectedUser.email}
-                  </h6>   
-                  </div>  
-                </div>
-            </div>
-          </div>
+                  </h6>
+                  <div className="row">
+                   {!this.state.selectedUser.isclient && <Link
+                      to={{
+                        pathname: "/createclientbyid",
+                        search: this.props.location.pathname.split("/")[2],
+                      }}
+                    >
+                      <button
+                        type="button"
+                        className="btn mt-3 m-2 btn-primary mb-2"
+                      >
+                        <small className="newproduct" style={{ color: "#fff" }}>
+                        Create Account
+                        </small>
+                      </button>
+                    </Link>}
 
-          <div className="row">
-            <div className="col-md-12 px-5 pb-5">
-              <div className="row mt-4">
-                <div className="col-md-12">
-                  <h5 className="text-dark font-weight-bold">
-                    Contact Information
-                  </h5>
-                </div>
-                <div className="col-md-12">
-                  <p>
-                    loremlorem loremloremv loremlorem loremlorem loremlorem
-                    loremlorem loremlorem loremlorem loremlorem loremlorem
-                    loremlorem loremlorem loremlorem loremlorem loremlorem
-                    loremlorem loremlorem loremlorem loremlorem loremlorem
-                    loremlorem loremlorem.{" "}
-                  </p>
-                </div>
-              </div>
-              <div className="row mt-4">
-                <div className="col-md-12 packages">
-                  <h5 className="text-dark font-weight-bold">Products</h5>
-                </div>
-                <div className="col-md-12">
-                <div className="row">
-                  <div className="col">
+                    <Link to={() => `/editclient/${this.state.selectedUser.userid}`}>
+                      <button
+                        type="button"
+                        className="btn mt-3 m-2 btn-primary mb-2"
+                      >
+                        <small className="newproduct" style={{ color: "#fff" }}>
+                          &nbsp;Edit&nbsp;Account&nbsp;
+                        </small>
+                      </button>
+                    </Link>
+
+                    <Link to={() => `/createuserticket/${this.state.selectedUser.userid}`}>
+                      <button
+                        type="button"
+                        className="btn mt-3 m-2 btn-primary mb-2"
+                      >
+                        <small className="newproduct" style={{ color: "#fff" }}>
+                          &nbsp;Create&nbsp;Ticket&nbsp;
+                        </small>
+                      </button>
+                    </Link>
+
+                    <Link to={() => `/viewClient/${this.state.selectedUser.userid}`}>
+                      <button
+                        type="button"
+                        className="btn mt-3 m-2 btn-primary mb-2"
+                      >
+                        <small className="newproduct" style={{ color: "#fff" }}>
+                          &nbsp;Company&nbsp;Profile&nbsp;
+                        </small>
+                      </button>
+                    </Link>
+
                     <button
                       type="button"
-                      className="btn btn-sm btn-primary new_product mb-2"
+                      className="btn mt-3 m-2 btn-danger mb-2"
                     >
-                      <Link
-                        to={{
-                          pathname: "/addclientproduct",
-                          search: this.props.location.pathname.split("/")[2],
-                        }}
-                      >
-                        <i
-                          className="fas fa-folder-plus"
-                          style={{ color: "#fff" }}
-                          aria-hidden="true"
-                        >
-                          <small
-                            className="newproduct"
-                            style={{ color: "#fff" }}
-                          >
-                            &nbsp;Add&nbsp;New&nbsp;Product
-                          </small>
-                        </i>
-                      </Link>
+                      <small className="newproduct" style={{ color: "#fff" }}>
+                        &nbsp;Suspend&nbsp;Account&nbsp;
+                      </small>
                     </button>
                   </div>
                 </div>
-                {this.state.products === "" ? (
-                  <div class="alert alert-warning" role="alert">
-                    Oops, Product module is empty!
-                  </div>
-                ) : (
-                  <div className="card">
-                    <div className="card-body">
-                      <div className="row">
-                        <div className="col-md-12">
-                          <div
-                            id="table"
-                            className="card pt-2 mt-3 justify-content-center shadow px-2"
-                          >
-                            <div className="table-responsive">
-                              <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
-                                <thead>
-                                  <tr>
-                                    <th className="py-2">S/N</th>
-                                    <th className="py-2">Product&nbsp;Name</th>
-                                    {/* <th className="py-2">Packages</th> */}
-                                    <th className="py-2">Price</th>
-                                    <th className="py-2">Action</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {this.state.products.map((product, index) => {
-                                    return (
-                                      <tr>
-                                        <td>{index + 1}</td>
-                                        <td>{product.name}</td>
-                                        {/* <td style={{maxWidth: "150px"}}>
-                                                        {product.modules.map( module => {
-                                                            return(
-                                                                <span>{module.name} </span>
-                                                            )}
-                                                        )}
-                                                        </td> */}
-                                        <td>{product.cost}</td>
-                                        <td style={{ minWidth: "70px" }}>
-                                          <Link
-                                            to={() =>
-                                              `/updateclientproduct/${product.id}`
-                                            }
-                                          >
-                                            <i className="fa fa-edit m-1"></i>
-                                          </Link>
-                                          <Link
-                                            to={() =>
-                                              `/viewclientproduct/${product.id}`
-                                            }
-                                          >
-                                            <i className="fa fa-eye m-1"></i>
-                                          </Link>
-                                        </td>
-                                      </tr>
-                                    );
-                                  })}
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                </div>
               </div>
             </div>
           </div>
-      </div>
+         </div>
       </div>
     );
   }

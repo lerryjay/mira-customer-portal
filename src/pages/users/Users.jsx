@@ -39,10 +39,17 @@ class Users extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container mt-4">
         <div className="w-100 text-center">
           <h3>Customers </h3>
         </div>
+        {this.state.users.length === 0 ?
+                                <div className="card-body">
+                                    <div className="alert alert-warning" role="alert">
+                                        <h6 className="text-center">No Customer records!</h6>
+                                    </div>
+                                    </div>
+                                    :
         <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
           <thead>
             <tr>
@@ -72,7 +79,7 @@ class Users extends Component {
                         </button>
                         <div className="dropdown-menu" id={user.userid} aria-labelledby={"dropdownMenuButton"}>
                           <Link to={() => `/userprofile/${user.userid}`} className="dropdown-item"> View Profile </Link>
-                          <Link to={() => `/createticket/${user.userid}`} className="dropdown-item"> Create Ticket </Link>
+                          <Link to={() => `/createuserticket/${user.userid}`} className="dropdown-item"> Create Ticket </Link>
                           {!user.isclient && <Link to={() => `/createclient/${user.userid}`} className="dropdown-item"> Create Client Account </Link>}
                           <div className="dropdown-divider"></div>
                           <a className="dropdown-item text-danger" href="#">Suspend Account</a>
@@ -84,6 +91,7 @@ class Users extends Component {
             }
           </tbody>
         </table>
+  }
       </div>
     )
   }

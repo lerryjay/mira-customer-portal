@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { HTTPURL } from "../../../common/context";
 import { withContext } from "../../../common/context";
 import { Link } from 'react-router-dom';
+import placeholder from "../../../assets/images/product-placeholder.gif";
 
 class ProductCart extends Component {
   constructor(props) {
@@ -46,15 +47,37 @@ class ProductCart extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container mt-4">
         <div className="w-100 text-center">
           <h3>My Products </h3>
         </div>
-        <div className="row mt-4">
-          <div className="col-md-12">
+        <div className="container mt-4">
+          <div className="row my-2">
+                        {this.state.products.map((product, i) => {
+                            return (
+                                <div className="col-md-3 col-lg-4 col-sm-12 my-2  d-flex justify-content-center" key={i}>
+                                    <div className="card text-center products">
+                                    <img className="img-fluid" src={placeholder} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
+                                        <div className="card-body">
+                                            <h5 className="card-title">{product.name}</h5>
+                                            <Link to={() => `/viewproductcart/${product.id}`}>
+                                                <span class="badge px-3 py-2 badge-primary" value={product.id} style={{ cursor: "pointer", fontSize: 'medium' }}>View</span>
+                                            </Link>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+
+
+                            )
+                        }
+                        )}
             
-          <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
-            {/* <caption>Hello World!</caption> */}
+          {/* <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
+            
             <thead>
               <tr>
                 <th>S/N</th>
@@ -82,7 +105,7 @@ class ProductCart extends Component {
               })}
             </tbody>
           </table>
-        
+         */}
           </div>
         </div>
     </div>

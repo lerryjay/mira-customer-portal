@@ -495,7 +495,7 @@ input:checked + .slider:before {
 
 /* Ticket Chat */
 .chatbox{
-  border-radius: 30px;
+  border-radius: 8px;
   padding: 10px 20px;
 }
 .msg_time {

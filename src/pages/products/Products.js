@@ -114,14 +114,21 @@ class Products extends Component {
             <div className="container-fluid">
 
                 <div className="row mt-4 d-flex justify-content-end mr-3" >
+                            <Link to="/createproduct">
                     <button type="button" className="btn btn-sm btn-primary new_product">
                         <i className="fas fa-plus" aria-hidden="true">
-                            <Link to="/createproduct">
                                 <small className="newproduct" style={{ color: '#fff' }}>&nbsp;Add&nbsp;Product</small>
-                            </Link>
                         </i>
                     </button>
+                            </Link>
                 </div>
+                                {this.state.products.length === 0 ?
+                                <div className="card-body">
+                                    <div className="alert alert-warning" role="alert">
+                                        <h6 className="text-center"> Product is empty!</h6>
+                                    </div>
+                                    </div>
+                                    :
                 <div className="row mx-5 my-2">
                     {this.state.products.map((product, i) => {
                         return (
@@ -151,10 +158,13 @@ class Products extends Component {
 
 
 
+                        
                         )
                     }
                     )}
+                    
                 </div>
+            }
 
 
                 {this.state.showmodal ?

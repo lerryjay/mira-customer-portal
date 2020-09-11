@@ -8,7 +8,7 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       ...this.props,
-      ticketlist: "",
+      ticketlist: 0,
       products: "",
       clients: ""
     };

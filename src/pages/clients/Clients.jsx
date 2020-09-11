@@ -61,6 +61,13 @@ class Clients extends Component {
     
                     <div className="col-md-12" >
                                 <div className="card-body">
+                                {this.state.clients.length === 0 ?
+                                <div className="card-body">
+                                    <div className="alert alert-warning" role="alert">
+                                        <h6 className="text-center">No client records!</h6>
+                                    </div>
+                                    </div>
+                                    :
                                     <div id='table' className=" pt-2 justify-content-center shadow">
                                         <div className="table-responsive">
                                             <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
@@ -103,7 +110,7 @@ class Clients extends Component {
                                             </table>
                                         </div>
                                     </div>
-    
+                                }
                                 </div>
     
                             

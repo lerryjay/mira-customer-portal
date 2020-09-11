@@ -15,8 +15,9 @@ class ViewClient extends Component {
             name: '',
             email: '',
             telephone: '',
-            businessname: ''
-
+            businessname: '',
+            userid: '',
+          isloading: true
         };
     }
 
@@ -58,7 +59,9 @@ class ViewClient extends Component {
                     email: result.data.email,
                     telephone: result.data.telephone,
                     businessname: result.data.businessname,
-                    companyaddress: result.data.companyaddress
+                    companyaddress: result.data.companyaddress,
+                    userid: result.data.user_id,
+                    isloading: false
                 })
             }
 
@@ -68,157 +71,211 @@ class ViewClient extends Component {
     componentDidMount() {
         this.getProducts();
     }
-
-    edit() {
-        // Make Form Editable
-        let edit = document.querySelector('#edit');
-        let input = document.getElementsByTagName('input');
-
-
-        for (let d = input.length - 1; d >= 0; d--) {
-            edit.addEventListener("click", function (e) {
-                input[d].removeAttribute("disabled");
-            });
-        };
-    }
-
+    
     render() {
         return (
-            <div className="container-fluid mx-auto">
+            <div className="container mx-auto row">
+              <div className="col-md-12 mb-3 mt-4" id="profile">
+                <div className="w-100 text-center">
+                  <h3>CLIENT INFORMATION </h3>
+                </div>
+      
                 <div className="row mt-4">
+                  <div className="col-md-4 text-center box2 mb-3" id="profilePix">
+                    <div className="card">
+                      <div className="card-header"></div>
+                      <div className="card-body">
+                        <img
+                          src={avatar}
+                          alt=""
+                          className="image_sidebar"
+                          height="inherit"
+                          width="170px"
+                          style={{ marginTop: "-80px" }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                    {!this.state.isloading && (
+                  <div className="col-md-6 ">
+                    <h3 className="text-dark">{this.state.businessname}</h3>
+                    <div className="row mt-3">
+                      <div className="col-md-12">  
+                        <h6>
+                          {" "}
+                          <span className="font-weight-bold">
+                            Lastname:
+                          </span>{" "}
+                          {this.state.lastname}
+                        </h6>
+                        <h6>
+                          {" "}
+                          <span className="font-weight-bold">
+                            Firstname:
+                          </span>{" "}
+                          {this.state.firstname}
+                        </h6>    
+                        <h6>
+                          {" "}
+                          <span className="font-weight-bold">
+                            Othername:
+                          </span>{" "}
+                          {this.state.othername}
+                        </h6>    
+                        <h6>
+                          {" "}
+                          <span className="font-weight-bold">
+                            Telephone:
+                          </span>{" "}
+                          {this.state.telephone}
+                        </h6>    
+                        <h6>
+                          {" "}
+                          <span className="font-weight-bold">
+                            Email:
+                          </span>{" "}
+                          {this.state.email}
+                        </h6>   
+                  <div className="row">
 
-                    <div className="col-md-8 mb-3 box1" id="profile">
-                        <form action="">
-                            <div className="card">
-                                <div className="card-header bg-medium font-weight-bold text-dark">
-                                    CLIENT INFORMATION
-                <span className="float-right" id='edit' style={{ cursor: 'pointer' }} onClick={this.edit}><i className="fas fa-pen-square fa-2x"></i>
-                                    </span>
-                                </div>
-                                <div className="card-body">
+                    <Link to={() => `/editclient/${this.state.userid}`}>
+                      <button
+                        type="button"
+                        className="btn mt-3 m-2 btn-primary mb-2"
+                      >
+                        <small className="newproduct" style={{ color: "#fff" }}>
+                          &nbsp;Edit&nbsp;Account&nbsp;
+                        </small>
+                      </button>
+                    </Link>
 
-                                    <div className="row">
-
-                                        <div className="col-md-6 mb-0">
-                                            <div className="form-group">
-                                                <label htmlFor="" className="sr-only">Name</label>
-                                                <input type="text" className="form-control form-control-sm" name=""
-                                                    id="" value={`${this.state.lastname} ${this.state.firstname} ${this.state.othername}`} placeholder="Name" autoComplete="name" disabled />
-                                            </div>
-                                        </div>
-
-                                        <div className="col-md-6 mb-0">
-                                            <div className="form-group">
-                                                <label htmlFor="" className="sr-only">Email</label>
-                                                <input type="email" className="form-control form-control-sm" name=""
-                                                    id="" value={this.state.email} placeholder="johnDoe@mail.com" autoComplete="email" disabled />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-6 mb-0">
-                                            <div className="form-group">
-                                                <label htmlFor="" className="sr-only">Telephone</label>
-                                                <input type="tel" className="form-control form-control-sm" name=""
-                                                    id="" value={this.state.telephone} placeholder="090 ......" autoComplete="tel" disabled />
-                                            </div>
-                                        </div>
-
-                                        <div className="col-md-6 mb-0">
-                                            <div className="form-group">
-                                                <label htmlFor="" className="sr-only">Company&nbsp;Name</label>
-                                                <input type="text" className="form-control form-control-sm" name=""
-                                                    id="" value={this.state.businessname} placeholder="Company Name" autoComplete="name" disabled />
-                                            </div>
-                                        </div>
-
-
-                                        <div className="col-md-6 mb-0">
-                                            <div className="form-group">
-                                                <label htmlFor="" className="sr-only">Company&nbsp;Address</label>
-                                                <input type="text" className="form-control form-control-sm" name=""
-                                                    id="" value={this.state.companyaddress} placeholder="Company Address" autoComplete="text" disabled />
-                                            </div>
-                                        </div>
-
-                                        <div className="col-md-6 mb-0">
-                                            <div className="form-group">
-                                                <label htmlFor="" className="sr-only">Image</label>
-                                                <input type="file" className="form-file form-file-sm" name=""
-                                                    id="" placeholder="" />
-                                            </div>
-                                        </div>
-
-
-                                        {/* <div className="col-md-12 mb-0">
-                                        <div className="form-group">
-                                            <textarea id="message" name="message" rows="5" cols="50" className="form-control text-left form-control-sm" 
-                                            value="" required placeholder="Describe yourself" />
-                                        </div>
-                                    </div> */}
-
-                                    </div>
-
-
-                                </div>
-
-                                <div className="card-footer">
-                                    <div className="float-right">
-
-                                        <button className="btn btn-sm btn-primary px-3">
-                                            <i className="fas fa-folder-open pr-2"></i>
-                        Save
+                    <Link to={() => `/createuserticket/${this.state.userid}`}>
+                      <button
+                        type="button"
+                        className="btn mt-3 m-2 btn-primary mb-2"
+                      >
+                        <small className="newproduct" style={{ color: "#fff" }}>
+                          &nbsp;Create&nbsp;Ticket&nbsp;
+                        </small>
+                      </button>
+                    </Link>
+                    <button
+                      type="button"
+                      className="btn mt-3 m-2 btn-danger mb-2"
+                    >
+                      <small className="newproduct" style={{ color: "#fff" }}>
+                        &nbsp;Suspend&nbsp;Account&nbsp;
+                      </small>
                     </button>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div className="col-md-4 mb-3 text-center box2" id='profilePix'>
-                        <div className="card">
-                            <div className="card-header">
-                            </div>
-                            <div className="card-body">
-                                <img src={avatar}
-                                    alt="profile picture" className=" rounded-circle" style={{ marginTop: '-80px', width: "105px", height: "105px" }} />
-                                <h6 className="mt-3">{this.state.name}</h6>
-                                <p className="mt-2"><i class="fa fa-map-marker" aria-hidden="true"></i> Lagos <br />
-                                    <i class="fa fa-envelope" aria-hidden="true"></i> {this.state.email} </p>
-                            </div>
-                        </div>
-                    </div>
+                  </div>
+                </div>  
+                      </div>
+                  </div>
+                    )}
                 </div>
-
-
-                <div className="card">
-                    <div className="card-header bg-medium font-weight-bold text-dark">
-                        PRODUCTS
-                </div>
-                    <div className="card-body">
-                        <div className="row">
-                            <div className="col">
-                                <button type="button" className="btn btn-sm btn-primary new_product mb-2">
-                                    <Link to={{ pathname: "/addclientproduct", search: this.props.location.pathname.split('/')[2] }}>
-                                        <i className="fas fa-folder-plus" style={{ color: '#fff' }} aria-hidden="true">
-                                            <small className="newproduct" style={{ color: '#fff' }}>&nbsp;Add&nbsp;New&nbsp;Product</small>
-                                        </i>
-                                    </Link>
-                                </button>
-                            </div>
+                
+                <div className="row">
+                  <div className="col-md-12 px-5 pb-5">
+                    <div className="row mt-4">
+                      <div className="col-md-12">
+                        <h5 className="text-dark font-weight-bold mb-3">
+                          Company Information
+                        </h5>
+                      </div>
+                      <div className="col-md-12">  
+                        <h6>
+                          {" "}
+                          <span className="font-weight-bold">
+                            Company Email:
+                          </span>{" "}
+                          {this.state.companyemail}
+                        </h6>
+                        <h6>
+                          {" "}
+                          <span className="font-weight-bold">
+                            Company Telephone:
+                          </span>{" "}
+                          {this.state.companytel}
+                        </h6>
+                        <h6>
+                          {" "}
+                          <span className="font-weight-bold">
+                            Company Address:
+                          </span>{" "}
+                          {this.state.companyaddress}
+                        </h6>
+                        </div>  
+                      <div className="col-md-12">  
+                        <h6>
+                          {" "}
+                          <span className="font-weight-bold">
+                            Country:
+                          </span>{" "}
+                          {this.state.country}
+                        </h6>
+                        <h6>
+                          {" "}
+                          <span className="font-weight-bold">
+                            State:
+                          </span>{" "}
+                          {this.state.state}
+                        </h6>
+                        <h6>
+                          {" "}
+                          <span className="font-weight-bold">
+                            Local Government Area:
+                          </span>{" "}
+                          {this.state.lga}
+                        </h6>
+                        </div>  
+                      
+                    </div>
+                    <div className="row mt-4">
+                      <div className="col-md-12 packages">
+                        <h5 className="text-dark font-weight-bold">Products</h5>
+                      </div>
+                      <div className="col-md-12">
+                      <div className="row">
+                        <div className="col">
+                            <Link
+                              to={{
+                                pathname: "/addclientproduct",
+                                search: this.props.location.pathname.split("/")[2],
+                              }}
+                            >
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-primary new_product mb-2"
+                          >
+                              <i
+                                className="fas fa-folder-plus"
+                                style={{ color: "#fff" }}
+                                aria-hidden="true"
+                              >
+                                <small
+                                  className="newproduct"
+                                  style={{ color: "#fff" }}
+                                >
+                                  &nbsp;Add&nbsp;New&nbsp;Product
+                                </small>
+                              </i>
+                          </button>
+                            </Link>
                         </div>
-                        {this.state.products === "" ? (
-                            <div class="alert alert-warning" role="alert">
-                                Oops, Product module is empty!
-                            </div>
-                        ) : (
-                                <div className="card">
-                                    <div className="card-body">
-                                        <div className="row">
-                                            <div className="col-md-12">
-
-                                                <div id='table' className="card pt-2 mt-3 justify-content-center shadow px-2">
-                                                    <div className="table-responsive">
-                                                        <table
+                      </div>
+                      {this.state.products.length === 0 ? (
+                        <div class="alert alert-warning" role="alert">
+                          Oops, Product module is empty!
+                        </div>
+                      ) : (
+                            <div className="row">
+                              <div className="col-md-12">
+                                <div
+                                  id="table"
+                                  className="card pt-2 mt-3 justify-content-center shadow px-2"
+                                >
+                                  <div className="table-responsive">
+                                  <table
                                                             className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
 
                                                             <thead>
@@ -270,22 +327,18 @@ class ViewClient extends Component {
 
                                                             </tbody>
                                                         </table>
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-
+                                  </div>
                                 </div>
-
-                            )}
+                              </div>
+                            </div>
+                      )}
+                      </div>
                     </div>
+                  </div>
                 </div>
-
             </div>
+            </div>
+        
         )
     }
 }

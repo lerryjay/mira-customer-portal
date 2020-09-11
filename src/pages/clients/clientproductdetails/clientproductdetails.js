@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import image from "../../../assets/images/Accsiss.png";
+import { Link } from "react-router-dom";
 import placeholder from "../../../assets/images/product-placeholder.gif";
 import { HTTPURL, APIKEY,FILEURL } from "../../../common/global_constant";
 import { withContext } from "../../../common/context";
@@ -87,6 +88,19 @@ class clientproductdetails extends Component {
       });
   }
 
+  async infoModal(moduleid) {
+
+    const selectedModule = this.state.packages.find(item=>item.id == moduleid);
+    await this.setState({selectedModule});
+    let modal = document.getElementById("infoModal");
+    modal.style.display = "block";
+  }
+
+  closeinfoModal() {
+    let modal = document.getElementById("infoModal");
+    modal.style.display = "none";
+  }
+
 
   render() {
     return (
@@ -120,35 +134,86 @@ class clientproductdetails extends Component {
                     Oops, Product module is empty!
                   </div>
                 ) : (
-                    <div className="row">
-                      {this.state.packages.map((module) => {
-                        return (
-                          <div className="col-md-4">
-                            <p className="list-group-item">
-                              {module.name}
-                              <label class="switch float-right"> <input type="checkbox" id={module.id} onClick={this.handleCheck} /><span class="slider round"></span>
-                              </label>
-                            </p>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
+                  <div className="row">
+                    {/* {this.state.packages} */}
+                    {this.state.packages.map((module) => {
+                      return (
+                        <div className="col-md-4">
+                          <p className="list-group-item">
+                            {module.name}
+                            <label class=" float-right">
+                            <Link onClick={() => this.infoModal(module.id)}>
+                            <i value={module.id} style={{ cursor: "pointer" }}
+                                className="fa fa-info-circle mr-3 text-info"
+                              ></i>
+                            </Link>
+                            </label>
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
 
-              <div className="card-footer">
-                <div className="float-right">
-
-                  <button type="submit" className="btn btn-sm btn-primary px-3">
-                    <i className="fas fa-folder-open pr-2"></i>
-                        Save
-                    </button>
-
-                </div>
-              </div>
             </div>
           </div>
+
+          {/* Show module info */}
+          {this.state.showmodal ? (
+            <div id="infoModal" class="modal">
+              {/* Modal content  */}
+              <div class="modal-content p-5">
+                <form>
+                  <div className="card">
+                    <div className="card-header bg-medium font-weight-bold text-dark text-center">
+                      MODULE INFORMATION
+                    </div>
+
+                    <div className="card-body">
+                      <div className="row">
+                        <div className="col-md-12 mb-1"></div>
+
+                        <div className="col-md-12 mb-1">
+                          <div className="form-group">
+                            <p>
+                              
+                              <span className="font-weight-bold">
+                                Name:&nbsp;
+                              </span>
+                              {this.state.selectedModule.name}
+                            </p>
+                            <p>
+                              
+                              <span className="font-weight-bold">
+                                Description:
+                              </span>
+                              <p>{this.state.selectedModule.description}</p>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="row">
+                        <div className="col-md-12 text-center">
+                          <button
+                          type="button"
+                            onClick={this.closeinfoModal}
+                            className="btn-block btn btn-primary"
+                          >
+                            OK
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          ) : (
+            <span></span>
+          )}
 
         </div>
       </div>

@@ -80,7 +80,7 @@ class Tickets extends Component {
             </div>
 
                     <div className="col-md-12 mb-3" id="profile">
-                                {this.state.tickets == '' ?
+                                {this.state.tickets.length === 0 ?
                                 <div className="card-body">
                                     <div className="alert alert-warning" role="alert">
                                         <h6 className="text-center">No ticket records!</h6>
@@ -124,7 +124,7 @@ class Tickets extends Component {
                                                         <td>
                                                             {ticket.type}
                                                         </td>
-                                                        <td style={{minWidth: "150px"}}>
+                                                        <td style={{maxWidth: "150px"}}>
                                                         <select className="custom-select custom-select-sm" value={ticket.ticketstatus} onChange={(e) =>this.ticketStatusUpdated(e,ticket)}>
                                                             <option className="btn btn-sm text-success" value="resolved"> &#10003;&nbsp;&nbsp;Resolved </option>
                                                             <option className="btn btn-sm text-danger" value="cancelled">&#1008;&nbsp;&nbsp;Cancelled</option>
@@ -152,7 +152,7 @@ class Tickets extends Component {
                 </div>
                 
 
-               <div className="row justify-content-center text-center">
+               {/* <div className="row justify-content-center text-center">
                 <div className="pagination">
                         <a href="#">&laquo;</a>
                         <a href="#">1</a>
@@ -163,7 +163,7 @@ class Tickets extends Component {
                         <a href="#">6</a>
                         <a href="#">&raquo;</a>
                     </div> 
-               </div>
+               </div> */}
                 
                  </div>
         )

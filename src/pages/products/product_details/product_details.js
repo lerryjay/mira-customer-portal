@@ -282,7 +282,7 @@ class product_details extends Component {
           <div className="col-md-6">
             {/* <img src={this.state.imageurl} onError={`this.src=${ placeholder }`} className="img-fluid" alt="" /> */}
             <div className="row justify-content-center">
-              <img className="image-product" src={FILEURL+this.state.imageurl} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
+              <img className="image-product px-3" src={FILEURL+this.state.imageurl} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
             </div>
           </div>
           <div className="col-md-6">
@@ -317,7 +317,7 @@ class product_details extends Component {
             </button>
             <div className="card">
               <div className="card-body">
-                {this.state.packages === "" ? (
+                {this.state.packages.length === 0 ? (
                   <div class="alert alert-warning" role="alert">
                     Oops, Product module is empty!
                   </div>
@@ -332,15 +332,15 @@ class product_details extends Component {
                             <label class=" float-right">
                             <Link onClick={() => this.infoModal(module.id)}>
                             <i value={module.id} style={{ cursor: "pointer" }}
-                                className="fa fa-info-circle mr-1 text-info"
+                                className="fa fa-info-circle mr-3 text-info"
                               ></i>
                             </Link>
                             <Link onClick={() => this.updateModal(module.id)}>
                             <i value={module.id} style={{ cursor: "pointer" }}
-                               className="fa fa-edit mr-1 text-primary"></i>
+                               className="fa fa-edit mr-3 text-primary"></i>
                               </Link>
                             <Link onClick={() => this.showdeleteInfoModule(module.id)}>
-                                <i className="fa fa-trash mr-1 text-danger"></i>
+                                <i className="fa fa-trash mr-2 text-danger"></i>
                               </Link>
                             </label>
                           </p>

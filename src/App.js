@@ -43,7 +43,8 @@ import AddClientProduct from "./pages/clients/addclientproduct/addclientproduct"
 import ClientProductDetails from "./pages/clients/clientproductdetails/clientproductdetails";
 import UpdateClientProduct from "./pages/clients/updateclientproduct/updateclientproduct";
 import ViewClientProduct from "./pages/clients/viewclientproduct/viewclientproduct";
-import ViewProductCart from "./pages/clients/viewproductcart/viewproductcart"
+import ViewProductCart from "./pages/clients/viewproductcart/viewproductcart";
+import EditClient from "./pages/clients/editclient/EditClient"
 
 
 
@@ -53,6 +54,7 @@ import Users from "./pages/users/Users";
 import Admin from "./pages/users/Admin";
 import AdminProfile from "./pages/users/adminprofile/AdminProfile";
 import UserProfile from "./pages/users/userprofile/UserProfile";
+import CreateUserTicket from "./pages/users/createuserticket/createuserticket"
 
 
 
@@ -70,7 +72,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: false,
+      loggedIn: true,
       admin: false,
       user : {
         role : 'admin'
@@ -332,6 +334,18 @@ class App extends Component {
                       <Route
                         path="/admin"
                         component={Admin}
+                      />
+                    )}
+                    {loggedIn && (
+                      <Route
+                        path="/editclient"
+                        component={EditClient}
+                      />
+                    )}
+                    {loggedIn && (
+                      <Route
+                        path="/createuserticket"
+                        component={CreateUserTicket}
                       />
                     )}
                     {loggedIn && (

@@ -35,7 +35,7 @@ class viewclientproduct extends Component {
               <h6>
                 {" "}
                 <span className="font-weight-bold">NB:</span> To be renewed
-                nnually
+                annually
               </h6>
 
               <div className="row mt-3">
@@ -101,8 +101,6 @@ class viewclientproduct extends Component {
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-md-12 px-5 pb-5">
               <div className="row mt-4">
                 <div className="col-md-12">
                   <h5 className="text-dark font-weight-bold">Remarks</h5>
@@ -152,8 +150,6 @@ class viewclientproduct extends Component {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
       </div>
     );
   }

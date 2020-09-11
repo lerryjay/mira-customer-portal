@@ -522,6 +522,40 @@ class Clients extends Controller
   }
 
   /**
+   * undocumented function summary
+   *
+   * Undocumented function long description
+   *
+   * @param Type $var Description
+   * @return type
+   * @throws conditon
+   **/
+  public function deleteproduct()
+  {
+    extract($_GET);
+
+    $userId = $this->userId ?? $userid ?? '';
+    $clientproductid ??= '';
+
+    loadController('user');
+
+    $user = User::validateUser($userId,true);
+    $response = ['status'=>false,'message'=>'Invalid client product id'];
+    
+    $invalidId  = Validate::string($clientproductid,false,true,2);
+    if(!$invalidId){
+      loadModel('client');
+      $this->clientModel = new ClientModel();
+      $deleted  = $this->clientModel->deleteClientProduct($clientproductid);
+      if($deleted)     {
+        $response = ['status'=>true,'message'=>'Product deleted successfully'];
+      }else $response['message'] =  'Unable to delete product';
+    }
+    $this->setOutputHeader(['Content-type:application/json']);
+    $this->setOutput(json_encode($response));
+  }
+
+  /**
    * Undocumented function long description
    *
    * @param Type $var Description
@@ -592,15 +626,36 @@ class Clients extends Controller
    * @return type
    * @throws conditon
    **/
-  public function deletelicensefile()
+  public function deletedeploymentfile()
   {
     extract($_GET);
     $fileindex ??= '';
-    $productid ??= '';
-    $userid    ??= '';
-    $clientid  ??= '';
+    $clientproductid ??= '';
+    $userId = $this->userId ?? $userid ?? '';
 
-    
+
+    loadController('user');
+
+    $user = User::validateUser($userId,true);
+    $response = ['status'=>false,'message'=>'Invalid client product id'];
+    $invalidId  = Validate::string($clientproductid,false,true,2);
+    if(!$invalidId){
+      loadModel('client');
+      $this->clientModel = new ClientModel();
+      $product  = $this->clientModel->getClientProductByClientProductId($clientproductid);
+      if($product)     {
+        loadModel('product');
+        $this->productModel = new ProductModel();
+        $product['files'] = strlen($product['files']) > 1 ? explode(',',$product['files']) : [];
+        array_splice($product['files'],$fileindex,1);
+        $deleted  = $this->clientModel->updateClientProducts($clientproductid,['files'=>implode(',',$product['files'])]);
+        if($deleted)     {
+          $response = ['status'=>true,'message'=>'File deleted successfully'];
+        }else $response['message'] =  'Invalid file index';
+      }else $response['message'] =  'Invalid client product';
+    }
+    $this->setOutputHeader(['Content-type:application/json']);
+    $this->setOutput(json_encode($response));
   }
 
   /**

@@ -124,9 +124,9 @@
      * @param Type $data array client data to be updated
      * @return bool
      **/
-    public function updateClientProducts($userId,$productId,$data = [])
+    public function updateClientProducts($clientProductId,$data = [])
     {
-      return $this->update('clientproducts',$data, ['user_id'=>$userId,'product_id'=>$productId]);
+      return $this->update('clientproducts',$data, ['id'=>$clientProductId]);
     }
 
     /**
@@ -214,13 +214,9 @@
      * @return type
      * @throws conditon
      **/
-    public function deleteClientProduct($userId,$productId)
+    public function deleteClientProduct($clientProductId)
     {
-      return $this->update('clientproducts',['status'=>0], ['user_id'=>$userId,'product_id'=>$productId]);
+      return $this->update('clientproducts',['status'=>0], ['id'=>$clientProductId]);
     }
-
-
-
-    
   }
 ?>

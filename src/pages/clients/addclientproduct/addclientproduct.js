@@ -18,8 +18,7 @@ class AddClientProduct extends Component {
       paymentstatus: "",
       licensecoverage: "",
       expirationdate: '',
-      products: "",
-      product: [],
+      products: [],
       errormessage: "",
       loading: false,
       files: [],
@@ -57,12 +56,13 @@ class AddClientProduct extends Component {
 
   getProducts() {
     headers.append("API-KEY", APIKEY);
-    fetch(HTTPURL + "product", {
+    fetch(HTTPURL + `product?userid=${ this.state.user.userid}`, {
       method: "GET",
       headers: headers,
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data)
         this.setState({ products: data.data });
 
         })
@@ -289,10 +289,10 @@ class AddClientProduct extends Component {
                         className=" form-control form-select form-select-sm"
                       >
                         <option value="" selected disabled>
-                          --Select&nbsp;Product&nbsp;Name--
+                          ---Select&nbsp;product---&nbsp;
                         </option>
 
-                        {this.state.product.map((product) => {
+                        {this.state.products.map((product) => {
                           return (
                             <option value={product.id}>{product.name}</option>
                           );
@@ -336,7 +336,7 @@ class AddClientProduct extends Component {
                         value={this.state.licensecoverage}
                       >
                         <option value="" selected disabled>
-                          --Select&nbsp;Liscence&nbsp;Coverage--
+                          --License&nbsp;coverage--
                         </option>
                         <option value="monthly">Monthly</option>
                         <option value="quaterly">Quarterly</option>

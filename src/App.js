@@ -72,10 +72,10 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: true,
+      loggedIn: false,
       admin: false,
       user : {
-        role : 'admin'
+        role : 'user'
       }
     };
     this.loginUser = this.loginUser.bind(this);

@@ -255,6 +255,7 @@ class product_details extends Component {
           .then((response) => response.json())
           .then((json) => {
             console.log(json);
+            if(json['status']) this.getModules();
             this.setState({ successmessage: "Updated Successfully!" });
             let modal = document.getElementById("updateModal");
             modal.style.display = "none";

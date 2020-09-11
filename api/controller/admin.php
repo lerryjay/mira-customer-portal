@@ -25,6 +25,7 @@
       if($data){
         foreach($data as $user) {
           $users[] = [
+            'adminid'=>$user['id'],
             'firstname'=>$user['firstname'],
             'lastname'=>$user['lastname'],
             'email'=>$user['email'],

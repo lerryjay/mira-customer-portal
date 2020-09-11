@@ -107,10 +107,11 @@
      * @param Type $var Description
      * @return type
      **/
-    public function addClientProducts($userId,$productId,$modules,$cost)
+    public function addClientProducts($userId,$productId,$modules,$cost,$remarks,$deploymentDate,$deploymentStatus,$trainingDate,$trainingStatus,$paymentDate,$paymentStatus,$licenseDuration,$expiryDate,$attachedFiles)
     {
+      // var_dump($userId,$productId,$modules,$cost,$remarks,$deploymentDate,$deploymentStatus,$trainingDate,$trainingStatus,$paymentDate,$paymentStatus,$licenseDuration,$expiryDate,$attachedFiles);
       $id = uniqid();
-      $insert =  $this->insert('clientproducts',['id'=>$id,'user_id'=>$userId,'product_id'=>$productId,'modules'=>$modules,'cost'=>$cost]);
+      $insert =  $this->insert('clientproducts',['id'=>$id,'user_id'=>$userId,'product_id'=>$productId,'modules'=>$modules,'cost'=>$cost,'paymentdate'=>$paymentDate,'paymentstatus'=>$paymentStatus,'deploymentdate'=>$deploymentDate,'deploymentstatus'=>$deploymentStatus,'trainingdate'=>$trainingDate,'trainingstatus'=>$trainingStatus,'licenseduration'=>$licenseDuration,'expirydate'=>$expiryDate,'files'=>$attachedFiles,'remarks'=>$remarks]);
       if ($insert['status']) return $id;
       else return false;
     }
@@ -137,9 +138,9 @@
      * @return type
      * @throws conditon
      **/
-    public function getClientProduct($conditon,$bindString,$bindValues)
+    public function getClientProduct($condition,$bindString,$bindValues)
     {
-      $sql = 'SELECT *,(SELECT name FROM products WHERE id = product_id) AS name,(SELECT description FROM products WHERE id = product_id) AS description FROM clientproducts '.$condition;
+      $sql = 'SELECT *,(SELECT name FROM products WHERE id = product_id) AS name,(SELECT imageurl FROM products WHERE id = product_id) AS imageurl,(SELECT description FROM products WHERE id = product_id) AS description FROM clientproducts '.$condition;
       $query = $this->query($sql,$bindString,$bindValues); 
       if($query) return $this->row;
       else return false;
@@ -188,6 +189,20 @@
     public function getClientProductsByClientProducts($clientId,$productId,$status = 1)
     {
       return $this->getClientProducts('WHERE user_id = ? AND product_id AND status = ?','ssi',[$clientId,$productId,$status]);
+    }
+
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
+    public function getClientProductByClientProductId($clientProductId,$status = 1)
+    {
+      return $this->getClientProduct('WHERE id = ? AND status = ?','si',[$clientProductId,$status]);
     }
 
     /**

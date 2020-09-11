@@ -80,7 +80,7 @@
       $data = $this->validateNewTicket();
       extract($data);
       
-      if($_FILES){
+      if(isset($_FILES['files']) && count($_FILES['files']) > 0){
         $files = File::upload("files",'ticket',true);
         if($files['data']) $files = json_encode($files['data']);
         else $files   = json_encode([]);

@@ -54,6 +54,7 @@
     {
       $data = $this->validateRegistration();
       extract($data);
+      $password = 3224;//TODO : generate random login password
       $password = $this->encryptPassword($password);
       $imageurl = '';
       if(isset($_FILES['file'])){
@@ -94,7 +95,6 @@
       $lastname   = isset($lastname) ? $lastname : '';
       $othername  = isset($othername) ? $othername : '';
       $email      = isset($email) ? $email : '';
-      $password   = isset($password) ? $password : '';
       $telephone  = isset($telephone) ? $telephone : '';
       $companyId  = isset($companyid) ? $companyid : '';
 
@@ -102,11 +102,6 @@
       if($emailValid){ 
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>$emailValid, 'data'=>['field'=>'email']]));
-      }
-      $passwordValid   = Validate::password($password);
-      if($passwordValid){ 
-        $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>$passwordValid, 'data'=>['field'=>'password']]));
       }
 
       $telephoneValid  = Validate::telephone($telephone);
@@ -134,11 +129,6 @@
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid othername', 'data'=>['field'=>'name']]));
       } 
 
-      $nameValid       = Validate::string($name,false,false,4);
-      if($nameValid){
-        $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>$nameValid, 'data'=>['field'=>'name']]));
-      } 
       loadModel('user');
       $this->userModel = new UserModel();
       // check email exists
@@ -156,7 +146,7 @@
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Telephone is associated with another account!', 'data'=>['field'=>'telephone']]));
       }
       // no errors
-      return ['telephone'=>$telephone,'email'=>$email,'firstname'=>$firstname,'lastname'=>$lastname,'othername'=>$othername,'password'=>$password,'companyId'=>$this->companyId];
+      return ['telephone'=>$telephone,'email'=>$email,'firstname'=>$firstname,'lastname'=>$lastname,'othername'=>$othername,'companyId'=>$this->companyId];
     }
 
     /**

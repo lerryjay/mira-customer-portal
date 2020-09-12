@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { withContext } from "../../common/context";
+import { Link } from "react-router-dom";
 import { HTTPURL, APIKEY } from "../../common/global_constant";
 import Chart from "./Chart";
 
@@ -10,13 +11,25 @@ class Dashboard extends Component {
       ...this.props,
       ticketlist: 0,
       products: "",
-      clients: ""
+      clients: "",
+      id: 1,
+      tickets: [],
     };
   }
 
   componentDidMount() {
-    this.getTickets();
-    this.getProduct();
+    this.getLoader()
+  }
+
+  getLoader() {
+    setTimeout(() => {
+      this.setState({ loader: true });
+      setTimeout(() => {
+        this.setState({ loader: false });
+        this.getTickets();
+        this.getProduct();
+      }, 3000);
+    });
   }
 
   async getTickets() {
@@ -31,10 +44,42 @@ class Dashboard extends Component {
     ).then((response) => response.json());
     if (res["status"]) {
       let tickets = res["data"];
-      this.setState({ ticketlist: tickets.length });
+      for (let i = 0; i < this.state.tickets.length; i++) {
+        tickets.push(this.state.tickets[i]);
+      }
+      this.setState({ tickets });
     }
   }
-  
+
+  ticketStatusUpdated(e, ticket) {
+    const tickets = this.state.tickets.map((item) => {
+      console.log(e.target.value);
+      if (item.id == ticket.id) {
+        item.ticketstatus = e.target.value;
+        this.updateTicketStatus(ticket.id, e.target.value);
+      }
+      return item;
+    });
+
+    this.setState({ tickets });
+  }
+
+  async updateTicketStatus(ticketid, status) {
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    const form = new FormData();
+
+    form.append("ticketid", ticketid);
+    form.append("status", status);
+    form.append("userid", this.state.user.userid);
+    const res = await fetch(HTTPURL + `ticket/updatestatus`, {
+      method: "POST",
+      headers: headers,
+      body: form,
+    }).then((response) => response.json());
+    if (res["status"]) {
+    }
+  }
   getProduct() {
     const headers = new Headers();
     headers.append('API-KEY', APIKEY);
@@ -51,6 +96,20 @@ class Dashboard extends Component {
   render() {
     return (
       <div>
+      {this.state.loader && (
+        <div className="spin-center">
+          <span class="text-primary ">
+            <span
+              class="spinner-grow spinner-grow-sm mr-2"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span style={{ fontSize: "14px" }}>Loading...</span>
+          </span>
+        </div>
+      )}
+        {!this.state.loader && 
+        <div>
         <div className="row mt-3 mx-3 text-white">
             {/* <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
               <div className="p-2 card card1">
@@ -106,7 +165,7 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
-
+  
         <div className="row card mt-3 mx-4 justify-content-center mx-2">
           <div className="col-12 card-body shadow home-chart">
             <div className="d-flex justify-content-between">
@@ -119,106 +178,113 @@ class Dashboard extends Component {
           </div>
         </div>
 
-        <div id="table" className="card pt-2 my-3 mx-4 shadow px-2">
-          <h6 className="h6 text-left mt-2 mb-3">Ticket&nbsp;Table</h6>
-          <div className="table-responsive">
-            <table
-              id="text"
-              className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark"
-            >
-              <caption>Hello World!</caption>
-              <thead>
-                <tr>
-                  <th>S/N</th>
-                  <th>
-                    <i className="fas fa-user-graduate"></i>
-                  </th>
-                  <th>Date&nbsp;&&nbsp;Time</th>
-                  <th>Client&nbsp;Name</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>
-                    <img
-                      src="https://miratechnologiesng.com/img/icons/miraicon.png"
-                      alt=""
-                      width="30"
-                    />
-                  </td>
-                  <td>
-                    2020&nbsp;-&nbsp;08&nbsp;-&nbsp;17&nbsp;/&nbsp;09:15:56
-                  </td>
-                  <td>Hello&nbsp;World</td>
-                  <td>
-                    <button className="btn btn-sm btn-success d-none">
-                      Approved&nbsp;<i className="fas fa-check-double"></i>
-                    </button>
-                    <button className="btn btn-sm btn-danger">
-                      Cancelled&nbsp;<i className="fas fa-times"></i>
-                    </button>
-                    <button className="btn btn-sm btn-warning d-none">
-                      Pending&nbsp;<i className="fas fa-comments"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>
-                    <img
-                      src="https://miratechnologiesng.com/img/icons/miraicon.png"
-                      alt=""
-                      width="30"
-                    />
-                  </td>
-                  <td>
-                    2020&nbsp;-&nbsp;08&nbsp;-&nbsp;17&nbsp;/&nbsp;09:15:56
-                  </td>
-                  <td>Hello&nbsp;World</td>
-                  <td>
-                    <button className="btn btn-sm btn-success">
-                      Approved&nbsp;<i className="fas fa-check-double"></i>
-                    </button>
-                    <button className="btn btn-sm btn-danger d-none">
-                      Cancelled&nbsp;<i className="fas fa-times"></i>
-                    </button>
-                    <button className="btn btn-sm btn-warning d-none">
-                      Pending&nbsp;<i className="fas fa-comments"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>
-                    <img
-                      src="https://miratechnologiesng.com/img/icons/miraicon.png"
-                      alt=""
-                      width="30"
-                    />
-                  </td>
-                  <td>
-                    2020&nbsp;-&nbsp;08&nbsp;-&nbsp;17&nbsp;/&nbsp;09:15:56
-                  </td>
-                  <td>Hello&nbsp;World</td>
-                  <td>
-                    <button className="btn btn-sm btn-success d-none">
-                      Approved&nbsp;<i className="fas fa-check-double"></i>
-                    </button>
-                    <button className="btn btn-sm btn-danger d-none">
-                      Cancelled&nbsp;<i className="fas fa-times"></i>
-                    </button>
-                    <button className="btn btn-sm btn-warning">
-                      Pending&nbsp;<i className="fas fa-comments"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <div className="col-md-12 mb-3" id="profile">
+            {!this.state.loader && this.state.tickets.length === 0 ? (
+              <div className="card-body">
+                <div className="alert alert-warning" role="alert">
+                  <h6 className="text-center">No ticket records!</h6>
+                </div>
+              </div>
+            ) : (
+              !this.state.loader && (
+                <div
+                  id="table"
+                  className="card pt-2 mt-3 justify-content-center shadow px-2"
+                >
+                <h6 className="h6 text-left mt-2 mb-3 font-weight-bold">Ticket&nbsp;List</h6>
+                  <div className="table-responsive">
+                    <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
+                      {/* <caption>Hello World!</caption> */}
+                      <thead>
+                        <tr>
+                          <th>S/N</th>
+                          <th>Date&nbsp;&&nbsp;Time</th>
+                          {this.state.user.role == "admin" && (
+                            <th>Client&nbsp;Name</th>
+                          )}
+                          {this.state.user.role == "admin" && <th>Email</th>}
+                          <th>Ticket&nbsp;Type</th>
+                          <th>Status</th>
+                          <th>View&nbsp;Ticket</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.state.tickets.map((ticket,index) => {
+                          return (
+                            <tr>
+                            <td>{ index + 1}</td>
+                              <td>
+                                {new Date(
+                                  ticket.createdat
+                                ).toLocaleDateString()}
+                              </td>
+                              {this.state.user.role == "admin" && (
+                                <td onClick={this.handleRoute}>
+                                  {ticket.clientname}
+                                </td>
+                              )}
+                              {this.state.user.role == "admin" && (
+                                <td>{ticket.email}</td>
+                              )}
+                              <td>{ticket.type}</td>
+                              <td style={{ maxWidth: "150px" }}>
+                                <select
+                                  className="custom-select custom-select-sm"
+                                  value={ticket.ticketstatus}
+                                  onChange={(e) =>
+                                    this.ticketStatusUpdated(e, ticket)
+                                  }
+                                >
+                                  <option
+                                    className="btn btn-sm text-success"
+                                    value="resolved"
+                                  >
+                                    {" "}
+                                    &#10003;&nbsp;&nbsp;Resolved{" "}
+                                  </option>
+                                  <option
+                                    className="btn btn-sm text-danger"
+                                    value="cancelled"
+                                  >
+                                    &#1008;&nbsp;&nbsp;Cancelled
+                                  </option>
+                                  <option
+                                    className="btn btn-sm btn-light text-warning"
+                                    value="pending"
+                                  >
+                                    &#10070;&nbsp;&nbsp;Pending
+                                  </option>
+                                </select>
+                              </td>
+                              <td
+                                className="align-middle"
+                                style={{ cursor: "pointer" }}
+                              >
+                                <Link to={() => `/viewticket/${ticket.id}`}>
+                                  <span
+                                    className="badge px-3 py-2 badge-primary"
+                                    value={ticket.id}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    View
+                                  </span>
+                                </Link>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )
+            )}
           </div>
-        </div>
+       
         <div className="overlay"></div>
+        </div>
+  }
+        
       </div>
     );
   }

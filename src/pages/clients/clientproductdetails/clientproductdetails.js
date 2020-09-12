@@ -31,9 +31,19 @@ class clientproductdetails extends Component {
   }
 
   componentDidMount() {
-    this.getProduct();
-    this.getModules();
-  }
+   this.getLoader();
+ }
+ 
+ getLoader() {
+   setTimeout(() => {
+     this.setState({ loader: true });
+     setTimeout(() => {
+       this.setState({ loader: false });
+       this.getProduct();
+       this.getModules();
+     }, 3000);
+   });
+ }
 
   getProduct() {
     const productid = this.props.location.pathname.split("/")[2];
@@ -105,6 +115,22 @@ class clientproductdetails extends Component {
   render() {
     return (
       <div className="container mx-auto mb-3">
+
+             {this.state.loader && (
+            <div className="spin-center">
+              <span class="text-primary ">
+                <span
+                  class="spinner-grow spinner-grow-sm mr-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span style={{ fontSize: "14px" }}>Loading...</span>
+              </span>
+            </div>
+          )}
+           <div>
+              
+       {!this.state.loader && <div>
         <div className="row mt-4">
           <div className="col-md-6">
             {/* <img src={this.state.imageurl} onError={`this.src=${ placeholder }`} className="img-fluid" alt="" /> */}
@@ -216,7 +242,11 @@ class clientproductdetails extends Component {
           )}
 
         </div>
-      </div>
+    
+        </div>
+  }</div>
+           
+          </div>
     );
   }
 }

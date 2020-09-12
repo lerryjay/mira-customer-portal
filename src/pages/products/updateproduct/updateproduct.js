@@ -157,7 +157,7 @@ class UpdateProduct extends Component {
                 :   <span></span>
             }
 
-                <div className="col-md-8 mb-3 mt-4" id="profile">
+                <div className="col-md-8 mb-3 mt-4 box1" id="profile">
                  {/* Error Message */}
                 { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
                     <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>

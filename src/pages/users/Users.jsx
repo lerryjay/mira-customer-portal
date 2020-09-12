@@ -6,7 +6,11 @@ import { HTTPURL,FILEURL,APIKEY } from '../../common/global_constant'
 class Users extends Component {
   constructor(props) {
     super(props);
-    this.state = { ...this.props, users : [] }
+    this.state = { 
+      ...this.props, 
+      users : [],
+      loader: false
+    }
   }
 
   async getUsers()
@@ -23,10 +27,20 @@ class Users extends Component {
     }
   }
 
-  componentDidMount()
-  {
-    this.getUsers();
+  getLoader() {
+    setTimeout(() => {
+      this.setState({ loader : true});
+      setTimeout(() => {
+        this.setState({ loader : false});
+        this.getUsers();
+      }, 3000);
+    });
   }
+
+  componentDidMount() {
+    this.getLoader();
+  }
+
 
   showDropdown(userid){
     let dropdown = document.getElementById(userid);
@@ -43,14 +57,24 @@ class Users extends Component {
         <div className="w-100 text-center">
           <h3>Customers </h3>
         </div>
-        {this.state.users.length === 0 ?
+
+        {this.state.loader && 
+        <div className="spin-center">
+        <span class="text-primary ">
+          <span class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></span>
+          Loading...
+        </span>
+        </div>
+        }
+
+        {!this.state.loader && this.state.users.length === 0 ?
                                 <div className="card-body">
                                     <div className="alert alert-warning" role="alert">
                                         <h6 className="text-center">No Customer records!</h6>
                                     </div>
                                     </div>
                                     :
-        <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
+      !this.state.loader && <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
           <thead>
             <tr>
               <th>S/N</th>

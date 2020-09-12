@@ -16,8 +16,9 @@ class AddClientProduct extends Component {
       deploymentdate: "",
       paymentdate: "",
       paymentstatus: "",
-      licensecoverage: "",
+      liscenseduration: "",
       expirationdate: '',
+      remarks:'',
       products: [],
       errormessage: "",
       loading: false,
@@ -84,12 +85,22 @@ class AddClientProduct extends Component {
     let myHeaders = new Headers();
     myHeaders.append("api-key", APIKEY);
 
-    var formdata = new FormData();
-    formdata.append("clientid", this.state.location.search.split("?")[1]);
-    formdata.append("productid", this.state.type);
+    var formdata = new FormData(document.getElementById("addclientproduct"));
+
+    formdata.append("clientid", this.props.location.pathname.split("/")[2]);
     formdata.append("modules", mod);
-    formdata.append("cost", this.state.cost);
     formdata.append("userid", this.state.user.userid);
+    // formdata.append("productid", this.state.type);
+    // formdata.append("cost", this.state.cost);
+    // formdata.append("liscenseduration", this.state.liscenseduration);
+    // formdata.append("paymentstatus", this.state.paymentstatus);
+    // formdata.append("deploymentstatus", this.state.deploymentstatus);
+    // formdata.append("trainingstatus", this.state.trainingstatus);
+    // formdata.append("paymentdate", this.state.paymentdate);
+    // formdata.append("trainingdate", this.state.trainingdate);
+    // formdata.append("deploymentdate", this.state.deploymentdate);
+    // formdata.append("remarks", this.state.remarks);
+    // formdata.append('files[]', this.state.files);
 
     fetch(HTTPURL + "clients/addproduct", {
       method: "POST",
@@ -311,7 +322,7 @@ class AddClientProduct extends Component {
                           Cost
                         </label>
                         <input
-                          type="number"
+                          type=""
                           className="form-control form-control-sm py-3"
                           name="cost"
                           id="cost"
@@ -331,12 +342,14 @@ class AddClientProduct extends Component {
                       <select
                         className=" form-control form-select form-select-sm"
                         onChange={(e) => {
-                          this.setState({ licensecoverage: e.target.value });
+                          this.setState({ liscenseduration: e.target.value });
                         }}
-                        value={this.state.licensecoverage}
+                        id="liscenseduration"
+                        name="liscenseduration"
+                        value={this.state.liscenseduration}
                       >
                         <option value="" selected disabled>
-                          --License&nbsp;coverage--
+                          License&nbsp;Duration
                         </option>
                         <option value="monthly">Monthly</option>
                         <option value="quaterly">Quarterly</option>
@@ -347,19 +360,25 @@ class AddClientProduct extends Component {
                   </div>
 
                   <div className="col-md-6 mb-1">
-                    <div className="form-group">
+                    <div className=" form-group">
                       <label htmlFor="" className="sr-only">
                         Payment Status
                       </label>
-                      <input
-                        type="text"
-                        className="form-control form-control-sm "
+                      <select
+                        className=" form-control form-select form-select-sm"
+                        onChange={(e) => {
+                          this.setState({ paymentstatus: e.target.value });
+                        }}
+                        value={this.state.paymentstatus}
                         name="paymentstatus"
                         id="paymentstatus"
-                        placeholder="Payment Status"
-                        value={this.state.paymentstatus}
-                        onChange={this.handleInputChange}
-                      />
+                      >
+                          <option value="" selected disabled>
+                            Payment&nbsp;Status&nbsp;
+                          </option>
+                              <option value="pending">Pending</option>
+                              <option value="completed">Completed</option>
+                        </select>
                     </div>
                   </div>
 
@@ -370,7 +389,7 @@ class AddClientProduct extends Component {
                       </label>
                       <input
                         type="paymentdate"
-                        className="form-control form-control-sm"
+                        className="form-control form-control-sm "
                         name="paymentdate"
                         id="paymentdate"
                         placeholder="Payment Date"
@@ -385,23 +404,29 @@ class AddClientProduct extends Component {
                     </div>
                   </div>
 
-                  
                   <div className="col-md-6 mb-1">
-                    <div className="form-group">
+                    <div className=" form-group">
                       <label htmlFor="" className="sr-only">
-                        Deployment Status
+                      Deployment Status
                       </label>
-                      <input
-                        type="text"
-                        className="form-control form-control-sm "
+                      <select
+                        className=" form-control form-select form-select-sm"
+                        onChange={(e) => {
+                          this.setState({ deploymentstatus: e.target.value });
+                        }}
+                        value={this.state.deploymentstatus}
                         name="deploymentstatus"
                         id="deploymentstatus"
-                        placeholder="Deployment Status"
-                        value={this.state.deploymentstatus}
-                        onChange={this.handleInputChange}
-                      />
+                      >
+                          <option value="" selected disabled>
+                          Deployment&nbsp;Status&nbsp;
+                          </option>
+                              <option value="pending">Pending</option>
+                              <option value="completed">Completed</option>
+                        </select>
                     </div>
                   </div>
+                  
 
                   <div className="col-md-6 mb-1">
                     <div className="form-group">
@@ -422,19 +447,25 @@ class AddClientProduct extends Component {
                   </div>
 
                   <div className="col-md-6 mb-1">
-                    <div className="form-group">
+                    <div className=" form-group">
                       <label htmlFor="" className="sr-only">
-                        Training Status
+                      Training Status
                       </label>
-                      <input
-                        type="text"
-                        className="form-control form-control-sm "
+                      <select
+                        className=" form-control form-select form-select-sm"
+                        onChange={(e) => {
+                          this.setState({ trainingstatus: e.target.value });
+                        }}
+                        value={this.state.trainingstatus}
                         name="trainingstatus"
                         id="trainingstatus"
-                        placeholder="Training Status"
-                        value={this.state.trainingstatus}
-                        onChange={this.handleInputChange}
-                      />
+                      >
+                          <option value="" selected disabled>
+                          Training&nbsp;Status&nbsp;
+                          </option>
+                              <option value="pending">Pending</option>
+                              <option value="completed">Completed</option>
+                        </select>
                     </div>
                   </div>
 
@@ -449,25 +480,34 @@ class AddClientProduct extends Component {
                         name="trainingdate"
                         id="trainingdate"
                         placeholder="Training Date"
+                        onBlur={this.trainingDate}
+                        onFocus={this.onFocus}
+                        value={this.state.trainingdate}
                         onChange={this.handleInputChange}
                       />
                     </div>
                   </div>
 
                   <div className="col-md-6 mb-1">
-                    <div className="form-group">
+                    <div className=" form-group">
                       <label htmlFor="" className="sr-only">
                       Expiration Status
                       </label>
-                      <input
-                        type="text"
-                        className="form-control form-control-sm "
+                      <select
+                        className=" form-control form-select form-select-sm"
+                        onChange={(e) => {
+                          this.setState({ expirationstatus: e.target.value });
+                        }}
+                        value={this.state.expirationstatus}
                         name="expirationstatus"
                         id="expirationstatus"
-                        placeholder="Expiration Status"
-                        value={this.state.expirationstatus}
-                        onChange={this.handleInputChange}
-                      />
+                      >
+                          <option value="" selected disabled>
+                          Expiration&nbsp;Status&nbsp;
+                          </option>
+                              <option value="pending">Pending</option>
+                              <option value="completed">Completed</option>
+                        </select>
                     </div>
                   </div>
 
@@ -482,6 +522,8 @@ class AddClientProduct extends Component {
                         name="expirationdate"
                         id="expirationdate"
                         placeholder="Expiration Date"
+                        onBlur={this.expirationDate}
+                        onFocus={this.onFocus}
                         value={this.state.expirationdate}
                         onChange={this.handleInputChange}
                       />
@@ -557,7 +599,7 @@ class AddClientProduct extends Component {
                 </i>
                 <input
                   style={{ display: "none" }}
-                  type={"file"}
+                  type="file"
                   id="files"
                   className="form-file form-file-sm"
                   name="files[]"

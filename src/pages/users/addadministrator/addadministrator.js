@@ -11,9 +11,9 @@ class CreateClient extends Component {
         this.state = { 
             ...this.props, 
             email : '', 
-            name: '',
+            firstname: '',
+            lastname: '',
             telephone : '' ,
-            password: '',
            
             errormessage: '',
             loading: false, 
@@ -30,7 +30,7 @@ class CreateClient extends Component {
     handleSubmit = async e => {
         e.preventDefault()
 
-        const { email, password} = this.state
+        const { email} = this.state
 
         if(!Validators.validateEmail(email).status){
             console.log('Failed email validation');
@@ -49,7 +49,8 @@ class CreateClient extends Component {
 
             var formdata = new FormData();
             formdata.append("email", this.state.email);
-            formdata.append("name", this.state.name);
+            formdata.append("firstname", this.state.firstname);
+            formdata.append("lastname", this.state.lastname);
             formdata.append("telephone", this.state.telephone);
             formdata.append("userid",sessionStorage.getItem('userId') );
             
@@ -74,7 +75,7 @@ class CreateClient extends Component {
                             this.setState({successmessage: result.message})
                             console.log('submitting')
                             this.setState({ 
-                                email: '', telephone: '', name: '', password: ''
+                                email: '', telephone: '', firstname: '', lastname: ''
                              })
                             setTimeout(() =>{
                                 this.setState({successmessage: false});
@@ -131,10 +132,20 @@ class CreateClient extends Component {
                                 <div className="row">
                                    <div className="col-md-12 mb-3">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Name</label>
-                                            <input type="text" className="form-control form-control-sm" name="name"
-                                                id="name" placeholder="Name"
-                                                value={this.state.name} required
+                                            <label htmlFor="" className="sr-only">Lastname</label>
+                                            <input type="text" className="form-control form-control-sm" name="lastname"
+                                                id="lastname" placeholder="Lastname"
+                                                value={this.state.lastname} required
+                                                onChange={this.handleInputChange} />
+                                        </div>
+                                    </div>
+                                    
+                                   <div className="col-md-12 mb-3">
+                                        <div className="form-group">
+                                            <label htmlFor="" className="sr-only">Firstname</label>
+                                            <input type="text" className="form-control form-control-sm" name="firstname"
+                                                id="firstname" placeholder="Firstname"
+                                                value={this.state.firstname} required
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>

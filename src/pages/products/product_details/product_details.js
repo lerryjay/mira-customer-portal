@@ -30,18 +30,24 @@ class product_details extends Component {
     console.log(this.props);
   }
 
-  componentDidMount() {
-    this.getProduct();
-    this.getModules();
-  }
   componentDidUpdate(){
     if(this.state.updateData) this.getModules()
-
- // Automatically scroll down to new messages
-    // var objDiv = document.getElementById("chatscroll");
-    // objDiv.scrollTop = objDiv.scrollHeight;
-
  }
+
+ componentDidMount() {
+  this.getLoader();
+}
+
+getLoader() {
+  setTimeout(() => {
+    this.setState({ loader: true });
+    setTimeout(() => {
+      this.setState({ loader: false });
+      this.getProduct();
+      this.getModules();
+    }, 3000);
+  });
+}
   getProduct() {
     const productid = this.props.location.pathname.split("/")[2];
 
@@ -272,7 +278,23 @@ class product_details extends Component {
   render() {
     return (
       <div className="container-fluid mx-auto">
-      {/* Success Message */}
+        
+        {this.state.loader && (
+            <div className="spin-center">
+              <span class="text-primary ">
+                <span
+                  class="spinner-grow spinner-grow-sm mr-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span style={{ fontSize: "14px" }}>Loading...</span>
+              </span>
+            </div>
+          )}
+
+{!this.state.loader && (
+   <div>
+                {/* Success Message */}
       { this.state.successmessage ? 
           <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
               <span className="mt-3">{this.state.successmessage}</span>
@@ -663,7 +685,10 @@ class product_details extends Component {
           }
           
         </div>
-      </div>
+     
+          </div>
+)}
+   </div>
     );
   }
 }

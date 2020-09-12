@@ -5,101 +5,137 @@ import { HTTPURL, APIKEY, FILEURL } from "../../../common/global_constant";
 import { withContext } from "../../../common/context";
 import pdf_placeholder from "../../../assets/images/pdf.png";
 
-
 class viewclientproduct extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       ...this.props,
-      productname: '',
-      productdescription: '',
-      remarks: '',
+      productname: "",
+      productdescription: "",
+      remarks: "",
       modules: [],
-      cost: '',
+      cost: "",
       imageurl: "",
-      paymentdate: '',
-      trainingdate: '',
-      deploymentdate: '',
-      paymentstatus: '',
-      trainingstatus: '',
-      licenseduration: '',
-      deploymentstatus: '',
-      clientproductid: '',
+      paymentdate: "",
+      trainingdate: "",
+      deploymentdate: "",
+      paymentstatus: "",
+      trainingstatus: "",
+      licenseduration: "",
+      deploymentstatus: "",
+      clientproductid: "",
       previewFile: "",
-      files: []
+      product_id:'',
+      files: [],
     };
     console.log(this.props);
   }
 
   async getClientProduct() {
     const headers = new Headers();
-    headers.append('API-KEY', APIKEY);
-    const res = await fetch(`${HTTPURL}clients/getproductdata?userid=${this.state.user.userid}&clientproductid=${this.state.clientproductid}`, {
-      method: "GET",
-      headers: headers,
-    }).then(res => res.json());
-    if (res['status']) {
-      const { name, description, paymentstatus, paymentdate, licenseduration, deploymentdate, deploymentstatus, cost, trainingdate, trainingstatus, files, imageurl, remarks, modules } = res.data;
-      this.setState({ productname: name, productdescription: description, paymentstatus, paymentdate, licenseduration, deploymentdate, deploymentstatus, cost, trainingdate, trainingstatus, files, imageurl, remarks,modules });
+    headers.append("API-KEY", APIKEY);
+    const res = await fetch(
+      `${HTTPURL}clients/getproductdata?userid=${this.state.user.userid}&clientproductid=${this.state.clientproductid}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    ).then((res) => res.json());
+    if (res["status"]) {
+      const {
+        name,
+        description,
+        paymentstatus,
+        paymentdate,
+        licenseduration,
+        deploymentdate,
+        deploymentstatus,
+        cost,
+        trainingdate,
+        trainingstatus,
+        files,
+        imageurl,
+        remarks,
+        modules,
+        product_id
+      } = res.data;
+      this.setState({
+        productname: name,
+        productdescription: description,
+        paymentstatus,
+        paymentdate,
+        licenseduration,
+        deploymentdate,
+        deploymentstatus,
+        cost,
+        trainingdate,
+        trainingstatus,
+        files,
+        imageurl,
+        remarks,
+        modules,
+        product_id
+      });
     }
   }
 
   async componentDidMount() {
-    const clientproductid = this.props.location.pathname.split('/')[2];
+    const clientproductid = this.props.location.pathname.split("/")[2];
     await this.setState({ clientproductid });
     this.getClientProduct();
   }
+closeModal() {
+  let modal2 = document.getElementById("myModal");
 
+  var span = document.getElementsByClassName("close2")[0];
+  span.onclick = function () {
+    modal2.style.display = "none";
+  };
+}
   showModal = (e, file) => {
     this.setState({ previewFile: file });
-    let modal2 = document.getElementById("myModal")
+    let modal2 = document.getElementById("myModal");
     modal2.style.display = "block";
 
-    var span = document.getElementsByClassName("close")[0];
-    span.onclick = function () {
-      modal2.style.display = "none";
-    }
-  }
+  };
 
   render() {
     return (
       <div className="container mx-auto row">
         <div className="col-md-12 mb-3 mt-4" id="profile">
-          <div id="myModal" className="modal2">
-            <div className="px-2 d-flex">
-              <a download href={FILEURL + this.state.previewFile} target="_blank" className="btn btn-primary rounded-0 top-left mr-auto" style={{ position: 'absolute' }}>Download</a> //implement download button later
-              <span className="close">&times;</span>
-            </div>
-            <div className="d-flex justify-content-center align-content-center">
-              <div className="bg-white">
-                {
-                  this.state.previewFile.match(/\.(jpg|jpeg|png)$/) ? <img src={FILEURL + this.state.previewFile} /> : <img src={pdf_placeholder} />
-                }
-              </div>
-            </div>
-          </div>
           <div className="w-100 text-center">
             <h3>PRODUCT DETAILS </h3>
           </div>
 
           <div className="row mt-4">
             <div className="col-md-4">
-              <img className="img-product" src={FILEURL + this.state.imageurl} onError={(e) => { e.target.onerror = null; e.target.src = placeholder }} />
+              <img
+                className="img-product"
+                src={FILEURL + this.state.imageurl}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = placeholder;
+                }}
+              />
             </div>
             <div className="col-md-7 offset-md-1">
               <h3 className="text-dark">{this.state.productname}</h3>
-              <h6>
-                {this.state.productdescription}
-              </h6>
+              <h6>{this.state.productdescription}</h6>
 
               <div className="row mt-5">
-                <Link className="btn mt-3 m-2 btn-primary mb-2 rounded-0 px-5" to={() => `/editclient/${this.state.userid}`}>
+                <Link
+                  className="btn mt-3 m-2 btn-primary mb-2 rounded-0 px-5"
+                  to={() => `/updateclientproduct/${this.state.product_id}`}
+                >
                   <small className="newproduct" style={{ color: "#fff" }}>
                     &nbsp;Update&nbsp;
-                    </small>
+                  </small>
                 </Link>
-                <button type="button" className="btn mt-3 m-2 btn-danger mb-2 rounded-0  px-5" >
+                <button
+                  type="button"
+                  className="btn mt-3 m-2 btn-danger mb-2 rounded-0  px-5"
+                >
                   <small className="newproduct" style={{ color: "#fff" }}>
                     &nbsp;Delete
                   </small>
@@ -162,47 +198,118 @@ class viewclientproduct extends Component {
               <h5 className="text-dark font-weight-bold">Remarks</h5>
             </div>
             <div className="col-md-12">
-                {this.state.remarks == '' ?
-                  <div className="alert alert-warning" role="alert">
-                    <h6 className="text-center">Edit client product to add a remark!</h6>
-                  </div> : this.state.remarks
-                }
+              {this.state.remarks == "" ? (
+                <div className="alert alert-warning" role="alert">
+                  <h6 className="text-center">
+                    Edit client product to add a remark!
+                  </h6>
+                </div>
+              ) : (
+                this.state.remarks
+              )}
             </div>
           </div>
           <div className="row mt-4">
             <div className="col-md-12 packages">
               <h5 className="text-dark font-weight-bold">Modules</h5>
             </div>
-            {
-              this.state.modules.length > 0 ?
-                this.state.modules.map((item) => <div className="col-md-3">
-                  <p className="list-group-item">{item.name}</p>
-                </div>) : <div className="col-md-12 alert alert-warning" role="alert">
-                  <h6 className="text-center">You have not added any module for this client product!</h6>
+            <div className="col-md-12">
+              {this.state.modules.length > 0 ? (
+                this.state.modules.map((item) => (
+                  <div className="col-md-3">
+                    <p className="list-group-item">{item.name}</p>
+                  </div>
+                ))
+              ) : (
+                <div className="col-md-12 alert alert-warning" role="alert">
+                  <h6 className="text-center">
+                    You have not added any module for this client product!
+                  </h6>
                 </div>
-            }
+              )}
+            </div>
           </div>
 
           <div className="row mt-4">
-            <div className="col-md-12">
-              <h5 className="text-dark font-weight-bold">
+            <div className="col-md-8">
+              <h5 className="text-dark font-weight-bold mt-2">
                 Attached Licenses & Files
-                  </h5>
+              </h5>
             </div>
-            {
-              this.state.files.length ?
-                this.state.files.map((item) => <div className="col-md-3 col-lg-2 text-center">
-                  {
-                    item.match(/\.(jpg|jpeg|png)$/) ? <img id="img" style={{ width: '100px', height: '100px' }} className="m-2" onClick={(e) => this.showModal(e, item)} src={FILEURL + item} onError={(e) => { e.target.onerror = null; e.target.src = placeholder }} />
-                      : <img src={pdf_placeholder} onClick={(e) => this.showModal(e, item)} style={{ width: '100px', height: '100px' }} className="m-2" />
-                  }<br /> {item}
+            <div className="col-md-4 ">
+              <div className="row justify-content-end d-flex mb-2 mr-3">
+              <label htmlFor="file" className="btn btn-sm btn-primary py-2 px-3">Attach Files</label>
+                  <input style={{display:'none'}} type={"file"}  id="file" 
+                  className="form-file form-file-sm" name="file"  placeholder=""
+                  onChange={(e)=>this.handleImageChange(e)} />
                 </div>
-                ) : <div className="col-md-12 alert alert-warning" role="alert">
-                  <h6 className="text-center">No files were attached corresponding to this deployment!</h6>
+            </div>
+
+            <div className="col-md-12">
+              {this.state.files.length ? (
+                this.state.files.map((item) => (
+                  <div className="col-md-3 col-lg-2 text-center py-2">
+                    {item.match(/\.(jpg|jpeg|png)$/) ? (
+                      <img
+                        id="img"
+                        style={{ width: "100px", height: "100px" }}
+                        className="m-2"
+                        onClick={(e) => this.showModal(e, item)}
+                        src={FILEURL + item}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = placeholder;
+                        }}
+                      />
+                    ) : (
+                      <img
+                        src={pdf_placeholder}
+                        onClick={(e) => this.showModal(e, item)}
+                        style={{ width: "100px", height: "100px" }}
+                        className="m-2"
+                      />
+                    )}
+                    <br /> {item}
+                  </div>
+                ))
+              ) : (
+                <div className="col-md-12 alert alert-warning" role="alert">
+                  <h6 className="text-center">
+                    No files were attached corresponding to this deployment!
+                  </h6>
                 </div>
-            }
+              )}
+            </div>
           </div>
-        </div>
+        
+        
+        
+          <div className="row col-md-12">
+          <div id="myModal" className="modal2">
+            <div className="px-2 d-flex">
+              <a
+                download
+                href={FILEURL + this.state.previewFile}
+                target="_blank"
+                className="btn btn-primary rounded-0 top-left mr-auto"
+                style={{ position: "absolute" }}
+              >
+                Download
+              </a>{" "}
+              //implement download button later
+              <span className="close close2" onClick={this.closeModal}>&times;</span>
+            </div>
+            <div className="d-flex justify-content-center align-content-center">
+                {this.state.previewFile.match(/\.(jpg|jpeg|png)$/) ? (
+                  <img src={FILEURL + this.state.previewFile} />
+                ) : (
+                  <img src={pdf_placeholder} />
+                )}
+            </div>
+          </div>
+          </div>
+          
+          </div>
       </div>
     );
   }

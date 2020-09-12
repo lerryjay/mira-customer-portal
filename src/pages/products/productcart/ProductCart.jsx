@@ -34,7 +34,12 @@ class ProductCart extends Component {
       ],
     };
   }
+
   componentDidMount() {
+    this.getLoader();
+}
+
+getProduct() {
     let product = [];
     console.log("changed successfully!", product);
     for (let i = 0; i < this.state.products.length; i++) {
@@ -42,8 +47,17 @@ class ProductCart extends Component {
       product.push(this.state.products[i]);
       this.setState({ product: product });
     }
+}
+
+getLoader() {
+    setTimeout(() => {
+      this.setState({ loader: true });
+      setTimeout(() => {
+        this.setState({ loader: false });
+        this.getProduct();
+      }, 3000);
+    });
   }
-  
 
   render() {
     return (
@@ -51,6 +65,21 @@ class ProductCart extends Component {
         <div className="w-100 text-center">
           <h3>My Products </h3>
         </div>
+
+        {this.state.loader && (
+            <div className="spin-center">
+              <span class="text-primary ">
+                <span
+                  class="spinner-grow spinner-grow-sm mr-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span style={{ fontSize: "14px" }}>Loading...</span>
+              </span>
+            </div>
+          )}
+
+  {  !this.state.loader &&       
         <div className="container mt-4">
           <div className="row my-2">
                         {this.state.products.map((product, i) => {
@@ -108,7 +137,8 @@ class ProductCart extends Component {
          */}
           </div>
         </div>
-    </div>
+ }
+     </div>
     );
   }
 }

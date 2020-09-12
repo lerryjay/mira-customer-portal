@@ -9,6 +9,21 @@ class Admin extends Component {
     this.state = { ...this.props, users : [] }
   }
 
+  componentDidMount()
+  {
+    this.getLoader();
+  }
+
+  getLoader() {
+    setTimeout(() => {
+      this.setState({ loader: true });
+      setTimeout(() => {
+        this.setState({ loader: false });
+        this.getUsers();
+      }, 3000);
+    });
+  }
+
   async getUsers()
   {
     const headers = new Headers();
@@ -23,10 +38,6 @@ class Admin extends Component {
     }
   }
 
-  componentDidMount()
-  {
-    this.getUsers();
-  }
 
   showDropdown(userid){
     let dropdown = document.getElementById(userid);
@@ -43,6 +54,18 @@ class Admin extends Component {
         <div className="w-100 text-center">
           <h3>Administrators </h3>
         </div>
+          {this.state.loader && (
+            <div className="spin-center">
+              <span class="text-primary ">
+                <span
+                  class="spinner-grow spinner-grow-sm mr-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span style={{ fontSize: "14px" }}>Loading...</span>
+              </span>
+            </div>
+          )}
         
         <div className="row mt-4 d-flex justify-content-end mb-3 mr-2" >
               <Link to="/addadmin">
@@ -53,14 +76,14 @@ class Admin extends Component {
                 </button>
               </Link>
           </div> 
-          {this.state.users.length === 0 ?
+          {!this.state.loader && this.state.users.length === 0 ?
             <div className="card-body">
                 <div className="alert alert-warning" role="alert">
                     <h6 className="text-center">No Administrator records!</h6>
                 </div>
                 </div>
                 :
-        <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
+                !this.state.loader && <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
           <thead>
             <tr>
               <th>S/N</th>
@@ -88,7 +111,7 @@ class Admin extends Component {
                           Select
                         </button>
                         <div className="dropdown-menu" id={`dropdown${index + 1}`} aria-labelledby={"dropdownMenuButton"}>
-                          <Link to='/admin' className="dropdown-item"> View Profile </Link>
+                        <Link to={() => `/adminprofile/${user.adminid}`} className="dropdown-item"> View Profile </Link>
                           <div className="dropdown-divider"></div>
                           <a className="dropdown-item text-danger" href="#">Suspend Account</a>
                           <a className="dropdown-item text-danger" href="#">Delete Account</a>

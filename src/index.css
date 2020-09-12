@@ -189,18 +189,26 @@ div.card {
   from {transform:scale(0)} 
   to {transform:scale(1)}
 }
-
+.spin-center {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+}
 /* The Close Button */
 .close {
   position: absolute;
   top: 15px;
   right: 35px;
-  color: #f1f1f1;
+  color: #fff !important;
+  opacity: 1 !important;
   font-size: 40px;
   font-weight: bold;
   transition: 0.3s;
 }
-
+.close2 {
+  position: absolute;
+  top: 100px !important;
+}
 .close:hover,
 .close:focus {
   color: #bbb;
@@ -569,7 +577,7 @@ input:checked + .slider:before {
 
 /* The Close Button */
 .close {
-  color: #aaaaaa;
+  color: #fff;
   position: absolute;
   top: 15px;
   right: 35px;

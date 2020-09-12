@@ -13,6 +13,19 @@ class Profile extends Component {
         }
         console.log(this.props.user.lastname)
     }
+
+    componentDidMount() {
+        this.getLoader();
+      }
+      
+      getLoader() {
+        setTimeout(() => {
+          this.setState({ loader: true });
+          setTimeout(() => {
+            this.setState({ loader: false });
+          }, 3000);
+        });
+      }
     
     editp() {
         // Make Form Editable
@@ -99,6 +112,22 @@ class Profile extends Component {
             } 
         return (
             <div className="container mx-auto">
+                  {this.state.loader && (
+            <div className="spin-center">
+              <span class="text-primary ">
+                <span
+                  class="spinner-grow spinner-grow-sm mr-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span style={{ fontSize: "14px" }}>Loading...</span>
+              </span>
+            </div>
+          )}
+           <div>
+           </div>
+           
+           {!this.state.loader &&
                 <div className="row mt-4">
 
                     <div className="col-md-8 box1 mb-3" id="profile">
@@ -194,7 +223,8 @@ class Profile extends Component {
 
 
                 </div>
-            </div>
+          }
+             </div>
         )
     }
 

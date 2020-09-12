@@ -17,8 +17,18 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    this.getUsers();
-    this.getProducts();
+    this.getLoader();
+  }
+
+  getLoader() {
+    setTimeout(() => {
+      this.setState({ loader: true });
+      setTimeout(() => {
+        this.setState({ loader: false });
+        this.getUsers();
+        this.getProducts();
+      }, 3000);
+    });
   }
 
   async getUsers() {
@@ -66,13 +76,26 @@ class Profile extends Component {
   render() {
     return (
       <div className="container mx-auto row">
-        <div className="col-md-12 mb-3 mt-4" id="profile">
+          {this.state.loader && (
+            <div className="spin-center">
+              <span class="text-primary ">
+                <span
+                  class="spinner-grow spinner-grow-sm mr-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span style={{ fontSize: "14px" }}>Loading...</span>
+              </span>
+            </div>
+          )}
+          
+          {!this.state.loader &&  <div className="col-md-12 mb-3 mt-4" id="profile">
           <div className="w-100 text-center">
             <h3>PROFILE INFORMATION </h3>
           </div>
 
           <div className="row mt-4">
-            <div className="col-md-4 text-center box2 mb-3" id="profilePix">
+            <div className="col-md-4 text-center mb-3" id="profilePix">
               <div className="card">
                 <div className="card-header"></div>
                 <div className="card-body">
@@ -183,7 +206,7 @@ class Profile extends Component {
             </div>
           </div>
          </div>
-      </div>
+      }</div>
     );
   }
 }

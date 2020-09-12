@@ -20,9 +20,19 @@ class Clients extends Component {
     }
 
     componentDidMount(){
-        this.getClient();
+        this.getLoader();
     }
 
+    getLoader() {
+        setTimeout(() => {
+          this.setState({ loader: true });
+          setTimeout(() => {
+            this.setState({ loader: false });
+            this.getClient();
+          }, 3000);
+        });
+      }
+    
     async getClient() {
         const headers = new Headers();
         headers.append('API-KEY', APIKEY );
@@ -58,17 +68,29 @@ class Clients extends Component {
             <div className="w-100 text-center">
             <h3>CLIENT LIST </h3>
             </div>
+          {this.state.loader && (
+            <div className="spin-center">
+              <span class="text-primary ">
+                <span
+                  class="spinner-grow spinner-grow-sm mr-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span style={{ fontSize: "14px" }}>Loading...</span>
+              </span>
+            </div>
+          )}
     
                     <div className="col-md-12" >
                                 <div className="card-body">
-                                {this.state.clients.length === 0 ?
+                                {!this.state.loader && this.state.clients.length === 0 ?
                                 <div className="card-body">
                                     <div className="alert alert-warning" role="alert">
                                         <h6 className="text-center">No client records!</h6>
                                     </div>
                                     </div>
                                     :
-                                    <div id='table' className=" pt-2 justify-content-center shadow">
+                                    !this.state.loader && <div id='table' className=" pt-2 justify-content-center shadow">
                                         <div className="table-responsive">
                                             <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
                                                 <thead>

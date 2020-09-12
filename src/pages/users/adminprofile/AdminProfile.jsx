@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withContext } from '../../../common/context';
-import { HTTPURL } from '../../../common/global_constant';
+import { HTTPURL, FILEURL, APIKEY } from "../../../common/global_constant";
 import avatar from '../../../assets/images/avatar.png'
 
 
@@ -9,11 +9,38 @@ class Profile extends Component {
         super(props);
         this.state = {
             ...this.props,
-            fullname: ''
+            users: [],
+            selectedUser: {}
         }
         console.log(this.props.user.lastname)
     }
-    
+
+    componentDidMount()
+    {
+      this.getAdmins();
+    }
+
+    async getAdmins()
+    {
+      const headers = new Headers();
+      headers.append('API-KEY',APIKEY);
+      const res = await fetch(HTTPURL + `admin?userid=${ this.props.user.userid }`, {
+          headers: headers
+      })
+      .then(response => response.json());
+      console.log(res['data'])
+      if(res['status']){
+          this.setState({ users : res['data']});
+
+        // Admin's Profile info
+        const adminid = this.props.location.pathname.split("/")[2];
+        const selectedUser = this.state.users.find(
+            (item) => item.adminid == adminid
+        );
+        await this.setState({ selectedUser });
+      }
+    }
+  
     editp() {
         // Make Form Editable
         const edit = document.querySelector('#edit');
@@ -115,12 +142,12 @@ class Profile extends Component {
                                         <div className="form-group col-md-6 mb-3">
                                             <label htmlFor="" className="sr-only">Lastname</label>
                                             <input type="text" className="form-control form-control-sm" name="fullname"
-                                                id="fullname" value={this.props.user.lastname}  placeholder="Name" autoComplete="fullname" onChange={this.handleInputChange} />
+                                                id="fullname" value={this.state.selectedUser.lastname}  placeholder="Name" autoComplete="fullname" onChange={this.handleInputChange} />
                                         </div>
                                         <div className="form-group col-md-6 mb-3">
                                             <label htmlFor="" className="sr-only">Firstname</label>
                                             <input type="text" className="form-control form-control-sm" name="fullname"
-                                                id="fullname" value={this.props.user.firstname} placeholder="Name" autoComplete="fullname" onChange={this.handleInputChange} />
+                                                id="fullname" value={this.state.selectedUser.firstname} placeholder="Name" autoComplete="fullname" onChange={this.handleInputChange} />
                                         </div>
                                     </div>
 
@@ -128,12 +155,12 @@ class Profile extends Component {
                                             <div className="form-group col-md-6 mb-3">
                                                 <label htmlFor="" className="sr-only">Email</label>
                                                 <input type="text" className="form-control form-control-sm" name="email"
-                                                    id="email" value={this.props.user.email} placeholder="johndoe@mail.com" disabled autoComplete="email" onChange={this.handleInputChange} />
+                                                    id="email" value={this.state.selectedUser.email} placeholder="johndoe@mail.com" disabled autoComplete="email" onChange={this.handleInputChange} />
                                             </div>
                                             <div className="form-group col-md-6 mb-3">
                                                 <label htmlFor="" className="sr-only">Phone-number</label>
                                                 <input type="text" className="form-control form-control-sm" name="telephone"
-                                                    id="telephone" value={this.props.user.telephone} placeholder="090 ......." disabled autoComplete="tel" onChange={this.handleInputChange} />
+                                                    id="telephone" value={this.state.selectedUser.telephone} placeholder="090 ......." disabled autoComplete="tel" onChange={this.handleInputChange} />
                                             </div>
                                         
 

@@ -12,14 +12,26 @@ class clientviewproduct extends Component {
             ...props,
             products: [],
             id: '',
-            loading: false
+            loading: false,
+            loader: false
         }
     }
 
+    
     componentDidMount() {
-        this.getProduct();
+        this.getLoader();
     }
 
+    getLoader() {
+        setTimeout(() => {
+          this.setState({ loader: true });
+          setTimeout(() => {
+            this.setState({ loader: false });
+            this.getProduct();
+          }, 3000);
+        });
+      }
+      
     getProduct() {
         const headers = new Headers();
         headers.append('API-KEY', APIKEY);
@@ -38,9 +50,29 @@ class clientviewproduct extends Component {
         return (
             <div className="container mx-auto row">
 
-                <div className="container mt-4">
+            {this.state.loader && (
+              <div className="spin-center">
+                <span class="text-primary ">
+                  <span
+                    class="spinner-grow spinner-grow-sm mr-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  <span style={{ fontSize: "14px" }}>Loading...</span>
+                </span>
+              </div>
+            )}
+
+                <div className="container mt-4"> 
+                {!this.state.loader &&  this.state.products.length === 0 ?
+                    <div className="card-body">
+                        <div className="alert alert-warning" role="alert">
+                            <h6 className="text-center"> Product is empty!</h6>
+                        </div>
+                        </div>
+                        :
                     <div className="row my-2">
-                        {this.state.products.map((product, i) => {
+                        {!this.state.loader && this.state.products.map((product, i) => {
                             return (
                                 <div className="col-md-3 col-lg-4 col-sm-12 my-2  d-flex justify-content-center" key={i}>
                                     <div className="card text-center products">
@@ -64,6 +96,7 @@ class clientviewproduct extends Component {
                         }
                         )}
                     </div>
+    }
     
 
                 </div>

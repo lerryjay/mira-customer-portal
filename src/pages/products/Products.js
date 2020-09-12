@@ -18,9 +18,19 @@ class Products extends Component {
     }
 
     componentDidMount() {
-        this.getProduct();
+        this.getLoader();
     }
 
+    getLoader() {
+        setTimeout(() => {
+          this.setState({ loader: true });
+          setTimeout(() => {
+            this.setState({ loader: false });
+            this.getProduct();
+          }, 3000);
+        });
+      }
+      
     getProduct() {
         const headers = new Headers();
         headers.append('API-KEY', APIKEY);
@@ -112,6 +122,19 @@ class Products extends Component {
     render() {
         return (
             <div className="container-fluid">
+                
+          {this.state.loader && (
+            <div className="spin-center">
+              <span class="text-primary ">
+                <span
+                  class="spinner-grow spinner-grow-sm mr-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span style={{ fontSize: "14px" }}>Loading...</span>
+              </span>
+            </div>
+          )}
 
                 <div className="row mt-4 d-flex justify-content-end mr-3" >
                             <Link to="/createproduct">
@@ -122,7 +145,7 @@ class Products extends Component {
                     </button>
                             </Link>
                 </div>
-                                {this.state.products.length === 0 ?
+                                {!this.state.loader &&  this.state.products.length === 0 ?
                                 <div className="card-body">
                                     <div className="alert alert-warning" role="alert">
                                         <h6 className="text-center"> Product is empty!</h6>
@@ -130,7 +153,7 @@ class Products extends Component {
                                     </div>
                                     :
                 <div className="row mx-5 my-2">
-                    {this.state.products.map((product, i) => {
+                    {!this.state.loader &&  this.state.products.map((product, i) => {
                         return (
                             <div className="col-md-3 col-lg-4 col-sm-12 my-2 d-flex justify-content-center" key={i}>
                                 <div className="card text-center products">

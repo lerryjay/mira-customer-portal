@@ -62,11 +62,12 @@ class AddClientProduct extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     this.setState({ loading: true });
-    let mod = "";
-    this.state.selectedModules.forEach((module) => {
-      mod += module + ",";
-    });
-
+    const mod = this.state.selectedModules.toString();
+    console.log('modules shey dami can see',mod);
+    // this.state.selectedModules.forEach((module) => {
+    //   mod += module + ",";
+    // });
+    
     let myHeaders = new Headers();
     myHeaders.append("api-key", APIKEY);
 

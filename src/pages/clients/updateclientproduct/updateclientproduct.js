@@ -127,28 +127,13 @@ class UpdateClientProduct extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     this.setState({ loading: true });
-<<<<<<< HEAD
-=======
-    // let mod = "";
-    // this.state.modules.forEach((module) => {
-    //   mod += JSON.stringify(module.name) + ",";
-    // });
-
-    const modules = JSON.stringify(this.state.modules);
->>>>>>> bcc7edd26675f1a6909bac919a019541a550ce4e
 
     let myHeaders = new Headers();
     myHeaders.append("api-key", APIKEY);
 
     var formdata = new FormData();
-<<<<<<< HEAD
     formdata.append("clientproductid", this.props.location.pathname.split("/")[2]);
     formdata.append("modules", this.state.selectedModules.toString());
-=======
-    formdata.append("clientid", this.props.location.pathname.split("/")[2]);
-    formdata.append("productid", this.state.productid);
-    formdata.append("modules", modules);
->>>>>>> bcc7edd26675f1a6909bac919a019541a550ce4e
     formdata.append("cost", this.state.cost);
     formdata.append("userid", this.state.user.userid);
     formdata.append("licenseduration", this.state.licenseduration);
@@ -171,23 +156,12 @@ class UpdateClientProduct extends Component {
   };
 
   handleCheck = ({ target }) => {
-<<<<<<< HEAD
     const index = this.state.selectedModules.findIndex(item=> item === target.value);
     const { selectedModules } = this.state;
-    console.log(target.value,index);
     if (index > -1) {
       selectedModules.splice(index,1);
     } else {
       selectedModules.push(target.value);
-=======
-    if (target.checked) {
-      target.setAttribute("checked", true);
-      this.removeModule(target.id);
-    } else {
-      target.removeAttribute("checked");
-      this.addModule(target.id);
-      console.log(target.checked)
->>>>>>> bcc7edd26675f1a6909bac919a019541a550ce4e
     }
     this.setState({ selectedModules });
   };

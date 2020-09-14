@@ -10,7 +10,7 @@
      * @param String $message - html string message
      * @return bool 
      **/
-    public function sendMail($email,$subject,$message)
+    public static function sendMail($email,$subject,$message)
     {
       require BASE_PATH.'/api/model/phpmailer/class.phpmailer.php';
       $headers = 'MIME-Version: 1.0'. "\r\n";

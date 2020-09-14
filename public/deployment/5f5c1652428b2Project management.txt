@@ -1,0 +1,31 @@
+Agile framework. The most popular Agile frameworks include Scrum, Crystal, Dynamic Systems Development Method, 
+and Feature-Driven Development. Mendix
+
+  Extreme Programming is an Agile framework centered around engineering principles and is focused on ensuring 
+  delivery of high-quality software. Extreme Programming teams work collaboratively in short development cycles 
+  and are flexible and adaptable to change. Extreme Programming utilizes user stories and frequent small, planned releases.
+
+  Scrum is a lightweight Agile framework with broad applicability for managing and controlling iterative and incremental 
+  projects of all types. In addition, there are other frameworks for Agile development. Two other well-received frameworks 
+  are Kanban and Extreme Programming.
+
+  Kanban focuses on a visualized workflow where work is broken down into small pieces. By respecting well-defined project limits, 
+  following explicit process policies, and measuring and managing flow, Kanban is especially attuned for identifying bottlenecks and waste, 
+  as well as reducing wait time
+
+PRINCE2: This framework is highly structured with a heavy emphasis on upfront planning.
+
+CCPM (critical chain project management): Critical chain focuses primarily on resource allocation across the project.
+
+
+Lean: A lean framework focuses on minimizing wasted effort and resources. Process improvement techniques are often 
+incorporated into this framework.
+
+XPM (extreme project management): XPM was designed for complex projects that occur in fast-changing environments. 
+Emphasis is on stakeholder management as plans and schedules are rapidly changing.
+
+Scrum: This framework was also designed for industries undergoing rapid change. Using this framework, projects are often 
+broken down and planned in 2-4 week sprints.
+
+Waterfall: This framework is one of the traditional approaches to project management. Waterfall requires a project to be 
+planned beginning to end, with no phase of a project beginning until the previous one has ended

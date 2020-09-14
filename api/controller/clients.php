@@ -247,8 +247,8 @@ class Clients extends Controller
   public function update()
   {
     extract($this->validateUpdateClient());
-    $update = $this->clientModel->updateClient($clientUserId,['businessname'=>$businessname,'telephone'=>$companyTelephone,'email'=>$companyEmail,'address'=>$companyAddress,'country_id'=>$companyCountryId,'state_id'=>$companyStateId,'lga'=>$companyLga]);
-    if($update) $response = ['status'=>true,'message'=>'Product update sucessfully!'.$message];
+    $update = $this->clientModel->updateClient($clientUserId,['businessname'=>$businessName,'telephone'=>$companyTelephone,'email'=>$companyEmail,'address'=>$companyAddress,'country_id'=>$companyCountryId,'state_id'=>$companyStateId,'lga'=>$companyLga]);
+    if($update) $response = ['status'=>true,'message'=>'Product update sucessfully!'];
     else $response = ['status'=>false,'message'=>'Client update failed due to an expected error!'];
     $this->setOutputHeader(['Content-type:application/json']);
     $this->setOutput(json_encode($response));
@@ -359,10 +359,10 @@ class Clients extends Controller
     $data = $this->validateAddClientProduct();
     extract($data);
 
-    $attachedFiles = '';
+    $attachedFiles = [];
     if(isset($_FILES['files'])){
       $attachedFiles = File::upload("files",'deployment',true);
-      $attachedFiles = $attachedFiles['status'] ? $attachedFiles['data']: '';
+      $attachedFiles = $attachedFiles['status'] ? $attachedFiles['data']: [];
     }
 
     switch ($licenseDuration) {
@@ -486,14 +486,8 @@ class Clients extends Controller
   {
     extract($this->validateUpdateProduct());
     loadModel('client');
+    
     $this->clientModel = new ClientModel();
-
-
-    $attachedFiles = '';
-    if(isset($_FILES['files'])){
-      $attachedFiles = File::upload("files",'license',true);
-      $attachedFiles = $attachedFiles['status'] ? $attachedFiles['data']: '';
-    }
 
     switch ($licenseDuration) {
       case 'weekly':
@@ -513,7 +507,7 @@ class Clients extends Controller
         break;
     }
 
-    $updated = $this->clientModel->updateClientProducts($clientUserId,$productId,['modules'=>$modules,'deploymentdate'=>$deploymentDate,'deploymentstatus'=>$deploymentStatus,'trainingdate'=>$trainingDate,'trainingstatus'=>$trainingStatus,'expirydate'=>$expiryDate,'licenseduration'=>$licenseDuration,'licensefiles'=>$attachedFiles]);
+    $updated = $this->clientModel->updateClientProducts($clientProductId,['modules'=>$modules,'deploymentdate'=>$deploymentDate,'deploymentstatus'=>$deploymentStatus,'trainingdate'=>$trainingDate,'trainingstatus'=>$trainingStatus,'expirydate'=>$expiryDate,'licenseduration'=>$licenseDuration,'remarks'=>$remarks]);
     
     if($updated) $response = ['status'=>true,'message'=>'Client product update sucessfully!'];
     else $response = ['status'=>false,'message'=>'Client product update failed due to an expected error!'];
@@ -565,10 +559,19 @@ class Clients extends Controller
   private function validateUpdateProduct()
   {
     extract($_POST);
-
+    $error        = false;
     $userId       = $this->userId ?? $userid ??  '';
-    $productId    = $productid ?? '';
-    $clientUserId = $clientid ?? '';
+    $clientproductid ??= '';
+
+    loadController('user');
+    loadModel('client');
+    $this->clientModel = new ClientModel();
+    $product  = $this->clientModel->getClientProductByClientProductId($clientproductid);
+    $invalidId  = Validate::string($clientproductid,false,true,2);
+    if(!$invalidId || !$product){
+      $error = 'Invalid or unverifyable client product id ';
+    }
+    
 
     $modules      = explode(',',$modules) ?? [];
     $remarks      ??= ''; 
@@ -594,14 +597,16 @@ class Clients extends Controller
     loadController('user');
 
     $user = User::validateUser($userId,true);
-
+    $productId    = !$product ? '' : $product['product_id'];
+    $clientUserId = $clientId ?? $product['user_id'] ?? '';
+    
     $this->productModel = new ProductModel();
-    $product = $this->productModel->getProductById($productId);
+    $product      = $this->productModel->getProductById($productId);
     if(!$product){
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode(['status'=>false,'message'=>'Product does not exist' ])); 
     }
-
+    
     $productModules  = $this->productModel->getModulesByProductId($productId);
     
     foreach ($productModules as $module) {
@@ -614,9 +619,64 @@ class Clients extends Controller
       $this->setOutput(json_encode(['status'=>false,'message'=>'Invalid modules supplied!','data'=>['modules'=>$modules] ])); 
     }else $modules = $_POST['modules'];
 
-    return ['user'=>$user,'userId'=>$userId,'clientUserId'=>$clientUserId,'modules'=>$modules,'product'=>$product,'productId'=>$productId,'trainingDate'=>$trainingdate,'trainingStatus'=>$trainingstatus,'paymentDate'=>$paymentdate,'paymentStatus'=>$paymentstatus,'licenseDuration'=>$licenseperiod,'deploymentDate'=>$deploymentdate,'deploymentStatus'=>$deploymentstatus,'remarks'=>$remarks];
+    return ['clientProductId'=>$clientproductid,'user'=>$user,'userId'=>$userId,'clientUserId'=>$clientUserId,'modules'=>$modules,'product'=>$product,'productId'=>$productId,'trainingDate'=>$trainingdate,'trainingStatus'=>$trainingstatus,'paymentDate'=>$paymentdate,'paymentStatus'=>$paymentstatus,'licenseDuration'=>$licenseduration,'deploymentDate'=>$deploymentdate,'deploymentStatus'=>$deploymentstatus,'remarks'=>$remarks];
   }
 
+  /**
+   * undocumented function summary
+   *
+   * Undocumented function long description
+   *
+   * @param Type $var Description
+   * @return type
+   * @throws conditon
+   **/
+  public function getHypothenus(int $a, int $b):int
+  {
+    # code...
+  }
+
+  /**
+   * undocumented function summary
+   *
+   * Undocumented function long description
+   *
+   * @param Type $var Description
+   * @return type
+   * @throws conditon
+   **/
+  public function adddeploymentfile()
+  {
+    extract($_POST);
+    $clientproductid ??= '';
+    $userId = $this->userId ?? $userid ?? '';
+
+    loadController('user');
+
+    $user = User::validateUser($userId,true);
+    $response = ['status'=>false,'message'=>'Invalid client product id'];
+    $invalidId  = Validate::string($clientproductid,false,true,2);
+    if(!$invalidId){
+      loadModel('client');
+      $this->clientModel = new ClientModel();
+      $product  = $this->clientModel->getClientProductByClientProductId($clientproductid);
+      if($product)     {
+        loadModel('product');
+        $attachedFiles = '';
+        if(isset($_FILES['files'])){
+          $attachedFiles = File::upload("files",'deployment',true);
+          $attachedFiles = $attachedFiles['status'] ? $attachedFiles['data']: '';
+
+          $attachedFiles = strlen($product['files']) > 0 ? array_merge(explode(',',$product['files']),$attachedFiles) : $attachedFiles;
+          $attachedFileString = implode(',',$attachedFiles);
+          $updated = $this->clientModel->updateClientProducts($clientproductid,['files'=>$attachedFileString]);
+          if($updated) $response =  ['status'=>true,'message'=>'File upload success', 'data'=>$attachedFiles];
+        }else $response['message'] = 'File upload failed! Please check file type or if file is attached';
+      }
+    }
+    $this->setOutputHeader(['Content-type:application/json']);
+    $this->setOutput(json_encode($response));
+  }
   /**
    * undocumented function summary
    *
@@ -683,21 +743,25 @@ class Clients extends Controller
       $this->setOutput(json_encode(['status'=>false,'message'=>'Client does not exist' ])); 
     }
 
-    User::validateUser($userId,true);
-    $products = $this->clientModel->getClientProductsByClient($clientUserId);
-    if($products){
-      loadModel('product');
-      $this->productModel = new ProductModel();
-      for ($i=0; $i < count($products); $i++) { 
-        $products[$i]['modules'] = explode(',',$products[$i]['modules']);
-        $modules = [];
-        foreach ($products[$i]['modules'] as $module) {
-          $modules[] = $this->productModel->getModuleInfo($module);
+    $user = User::validateUser($userId);
+    if($user['role'] !== 'admin'  && $clientUserId !== $userId){
+      $response = [ 'status'=>false,'message'=>'You don\'t have the right priviledges to access this resource'];
+    }else{
+      $products = $this->clientModel->getClientProductsByClient($clientUserId);
+      if($products){
+        loadModel('product');
+        $this->productModel = new ProductModel();
+        for ($i=0; $i < count($products); $i++) { 
+          $products[$i]['modules'] = explode(',',$products[$i]['modules']);
+          $modules = [];
+          foreach ($products[$i]['modules'] as $module) {
+            $modules[] = $this->productModel->getModuleInfo($module);
+          }
+          $products[$i]['modules'] = $modules;
         }
-        $products[$i]['modules'] = $modules;
-      }
-      $response = ['status'=>true,'message'=>'Clients products successfully retrieved','data'=>$products];
-    }else $response = ['status'=>false,'message'=>'No products has been added for this client!'];
+        $response = ['status'=>true,'message'=>'Clients products successfully retrieved','data'=>$products];
+      }else $response = ['status'=>false,'message'=>'No products has been added for this client!'];
+    }
     $this->setOutputHeader(['Content-type:application/json']);
     $this->setOutput(json_encode($response));
   }
@@ -721,26 +785,30 @@ class Clients extends Controller
 
     loadController('user');
 
-    $user = User::validateUser($userId,true);
-    $response = ['status'=>false,'message'=>'Invalid client product id'];
-    
+    $user = User::validateUser($userId);
+    $response = ['status'=>false,'message'=>'Invalid client product id'];   
     $invalidId  = Validate::string($clientproductid,false,true,2);
     if(!$invalidId){
       loadModel('client');
       $this->clientModel = new ClientModel();
       $product  = $this->clientModel->getClientProductByClientProductId($clientproductid);
-      if($product)     {
-        loadModel('product');
-        $this->productModel = new ProductModel();
-        $product['files'] = strlen($product['files']) > 1 ? explode(',',$product['files']) : [];
-        $product['modules'] = explode(',',$product['modules']);
-        $modules = [];
-        foreach ($product['modules'] as $module) {
-          $module = $this->productModel->getModuleInfo($module);
-          if($module) $modules[] = $module;
+      
+      if($product){
+        if($user['role'] !== 'admin'  && $product['user_id'] !== $userId){
+          $response = [ 'status'=>false,'message'=>'You don\'t have the right priviledges to access this resource'];
+        }else{
+          loadModel('product');
+          $this->productModel = new ProductModel();
+          $product['files'] = strlen($product['files']) > 1 ? explode(',',$product['files']) : [];
+          $product['modules'] = explode(',',$product['modules']);
+          $modules = [];
+          foreach ($product['modules'] as $module) {
+            $module = $this->productModel->getModuleInfo($module);
+            if($module) $modules[] = $module;
+          }
+          $product['modules'] = $modules;
+          $response = ['status'=>true,'message'=>'Client product retrieved successfully', 'data'=>$product];
         }
-        $product['modules'] = $modules;
-        $response = ['status'=>true,'message'=>'Client product retrieved successfully', 'data'=>$product];
       }else $response['message'] =  'Invalid client product';
     }
     $this->setOutputHeader(['Content-type:application/json']);

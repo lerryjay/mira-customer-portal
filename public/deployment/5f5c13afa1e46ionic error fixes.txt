@@ -1,0 +1,16 @@
+lintInfrastruture error 
+class....... not found 
+
+
+solution append under android in platform/android/app/build.gradle
+
+
+lintOptions {
+    checkReleaseBuilds false
+}
+
+
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+
+https://www.obejor.com.ng/index.php?route=extension/payment/mobileravecallback/callback&reference=1954-5f2176c506275&flwref=FLW286835254&txref=1954-5f2176c506275https://www.obejor.com.ng/index.php?route=extension/payment/mobileravecallback/callback&reference=1954-5f2176c506275&flwref=FLW286835254&txref=1954-5f2176c506275

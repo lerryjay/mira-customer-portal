@@ -110,6 +110,13 @@ body, .bg-img {
   border: 0;
   transition: box-shadow 0.15s ease;
 }
+.alt_right {
+  border-right: none !important;
+}
+
+.alt_left {
+  border-left: none !important;
+}
 
 div.card, div.bottom_link {
   width: inherit;
@@ -171,6 +178,9 @@ div.card {
   display: block;
   width: 80%;
   max-width: 700px;
+}
+.bg-card{
+  background: none !important;
 }
 /* Add Animation */
 .modal-content2 {  

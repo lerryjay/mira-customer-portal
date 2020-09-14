@@ -65,7 +65,7 @@ class App extends Component {
       users : [],
       tickets : [],
       user : {
-        role : 'user'
+        role : 'admin'
       }
     };
     this.loginUser  = this.loginUser.bind(this);

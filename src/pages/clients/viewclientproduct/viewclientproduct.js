@@ -135,7 +135,8 @@ class viewclientproduct extends Component {
 
   render() {
     return (
-      <div className="container mx-auto row">
+      <div className="container mx-auto ">
+      <div className="card bg-card mt-4">
         <div className="col-md-12 mb-3 mt-4" id="profile">
           <div className="w-100 text-center">
             <h3>DEPLOYMENT DETAILS </h3>
@@ -319,35 +320,14 @@ class viewclientproduct extends Component {
           </div>
         </div>
 
-        <div className="row col-md-12">
-          <div id="fileModal" className="modal2">
-            <div className="px-2 d-flex">
-              <a
-                download
-                href={FILEURL + this.state.previewFile}
-                target="_blank"
-                className="btn btn-primary rounded-0 top-left mr-auto"
-                style={{ position: "absolute" }}
-              >
-                Download
-              </a>{" "}
-              //implement download button later
-              <span className="close close2" onClick={(e) => this.closeModal("fileModal")}>&times;</span>
-            </div>
-            <div className="d-flex justify-content-center align-content-center">
-              {this.state.previewFile.match(/\.(jpg|jpeg|png)$/) ? (
-                <img src={FILEURL + this.state.previewFile} />
-              ) : (
-                  <img src={pdf_placeholder} />
-                )}
-            </div>
-          </div>
-
           <div id="moduleModal" className="modal2">
             <div className="px-2 d-flex">
-              <span className="close close2" onClick={(e) => this.closeModal("moduleModal")}>&times;</span>
+              <span className="close close3" onClick={(e) => this.closeModal("moduleModal")}>&times;</span>
             </div>
-            <div className="card">
+            <div className="container">
+              <div className="row">
+                <div className="col-md-12 px-3">
+                <div className="card">
               <div className="card-body">
                 <div className="row">
                 {
@@ -376,8 +356,35 @@ class viewclientproduct extends Component {
                 </div>
               </div>
             </div>
+      
+                </div>
+              </div>
+            </div>
+            </div>
+
+        <div id="fileModal" className="modal2">
+            <div className="px-2 d-flex">
+              <a
+                download
+                href={FILEURL + this.state.previewFile}
+                target="_blank"
+                className="btn btn-primary rounded-0 top-left mr-auto"
+                style={{ position: "absolute" }}
+              >
+                Download
+              </a>{" "}
+              <span className="close close3" onClick={(e) => this.closeModal("fileModal")}>&times;</span>
+            </div>
+            <div className="d-flex justify-content-center align-content-center">
+              {this.state.previewFile.match(/\.(jpg|jpeg|png)$/) ? (
+                <img src={FILEURL + this.state.previewFile} />
+              ) : (
+                  <img src={pdf_placeholder} />
+                )}
+            </div>
           </div>
-        </div>
+      
+      </div>
       </div>
     );
   }

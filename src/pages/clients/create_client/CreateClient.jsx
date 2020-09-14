@@ -88,7 +88,6 @@ class CreateClient extends Component {
                     else {
                         setTimeout(() => {
                             this.setState({ loading: false });
-                            this.setState({ successmessage: result.message })
                             console.log('submitting')
                             this.setState({
                                 email: '', telephone: '', firstname: '',
@@ -96,6 +95,7 @@ class CreateClient extends Component {
                                 businessname: '', companytelephone: '', companyaddress: '',
                                 companycountryid: '', companystateid: '', companylga: ''
                             })
+                            this.setState({ successmessage: result.message })
                             setTimeout(() => {
                                 this.setState({ successmessage: false });
                             }, 5000);

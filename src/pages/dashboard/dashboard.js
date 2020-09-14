@@ -9,15 +9,13 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       ...this.props,
-      ticketlist: 0,
-      products: "",
       clients: "",
       id: 1,
     };
   }
 
   componentDidMount() {
-    this.getLoader()
+    console.log(this.state.products)
   }
 
   getLoader() {
@@ -55,7 +53,7 @@ class Dashboard extends Component {
             <div className="p-2 card card1">
               <i className="fab fa-buffer fa-fw fa-2x mb-2"></i>
               <p className="border-top text-right py-2">
-                {this.state.products}
+                {this.state.products.length}
                 <br />
                 <small>Products</small>
               </p>
@@ -87,7 +85,7 @@ class Dashboard extends Component {
             <div className="p-2 card cardddd">
               <i className="fas fa-ticket-alt fa-fw fa-2x mb-2"></i>
               <p className="border-top text-right py-2">
-                {this.state.ticketlist}
+                {this.state.tickets.length}
                 <br />
                 <small>Tickets</small>
               </p>

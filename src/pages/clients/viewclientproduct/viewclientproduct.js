@@ -33,6 +33,7 @@ class viewclientproduct extends Component {
     console.log(this.props);
   }
 
+  
   async getClientProduct() {
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
@@ -105,6 +106,7 @@ class viewclientproduct extends Component {
   }
 
   showFileModal = (e, file) => {
+    window.scrollTo(0,0)
     this.setState({ previewFile: file });
     let modal2 = document.getElementById("fileModal");
     modal2.style.display = "block";
@@ -112,6 +114,7 @@ class viewclientproduct extends Component {
   };
 
   showModuleModal = e => {
+    window.scrollTo(0,0);
     let modal2 = document.getElementById("moduleModal");
     modal2.style.display = "block";
   };

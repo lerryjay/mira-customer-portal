@@ -34,7 +34,7 @@ class CreateClientById extends Component {
     handleSubmit = async e => {
         e.preventDefault()
 
-        const { businessname, clientid } = this.state
+        const { businessname, clientid, } = this.state
 
         if(!businessname){
            this.setState({loading : true});
@@ -78,9 +78,10 @@ class CreateClientById extends Component {
                     else{
                         setTimeout(() => {
                             this.setState({loading : false});
-                            this.setState({successmessage: result.message})
                             console.log('submitting')
-                            this.setState({name: '', email: '', telephone: ''})
+                            this.setState({businessname: '', clientid: '', companycountryid: '', companyaddress: '',
+                                        companystateid: '', companylga: '', companyemail: '', companytelephone: '',  })
+                            this.setState({successmessage: result.message})
                             setTimeout(() =>{
                                 this.setState({successmessage: false});
                             }, 5000);

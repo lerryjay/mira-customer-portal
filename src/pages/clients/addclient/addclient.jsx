@@ -13,9 +13,9 @@ class AddClient extends Component {
             <div className="container ">
                 <div className="row">
                     <div className="col-md-8 offset-2">
-                        <div className="row">
+                        <div className="row pt-3">
                             
-                            <div className="col">
+                            <div className="col pt-3">
                             <div className="card text-center products">
                                 <div className="card-body">
                                     <h5 className="card-title">From Existing Users</h5>
@@ -27,7 +27,7 @@ class AddClient extends Component {
                             </div>
                             </div>
 
-                            <div className="col">
+                            <div className="col pt-3">
                             <div className="card text-center products">
                                 <div className="card-body">
                                     <h5 className="card-title">Setup New Profile</h5>

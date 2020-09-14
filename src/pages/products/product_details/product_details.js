@@ -32,46 +32,36 @@ class product_details extends Component {
 
   componentDidUpdate(){
     if(this.state.updateData) this.getModules()
- }
+  }
 
- componentDidMount() {
-  this.getLoader();
-}
-
-getLoader() {
-  setTimeout(() => {
+  async componentDidMount() {
     this.setState({ loader: true });
-    setTimeout(() => {
-      this.setState({ loader: false });
-      this.getProduct();
-      this.getModules();
-    }, 3000);
-  });
-}
-  getProduct() {
+    await this.getProduct();
+    this.getModules();
+    this.setState({ loader: false });
+  }
+
+  async getProduct() {
     const productid = this.props.location.pathname.split("/")[2];
 
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
 
-    fetch(
+    const result = await fetch(
       `${HTTPURL}product/getproduct?productid=${productid}&userid=${this.state.user.userid}`,
       {
         method: "GET",
         headers: headers,
       }
-    )
-      .then((res) => res.json())
-      .then((result) => {
-        if (result.status == true) {
-          this.setState({
-            name: result.data.name,
-            description: result.data.description,
-            id: result.data.id,
-            imageurl : result.data.imageurl
-          });
-        }
+    ).then((res) => res.json())
+    if(result['status']){
+      this.setState({
+        name: result.data.name,
+        description: result.data.description,
+        id: result.data.id,
+        imageurl : result.data.imageurl
       });
+    }
   }
 
   getModules() {
@@ -315,14 +305,9 @@ getLoader() {
             </div>
           </div>
         </div>
-        <div className="row mt-5">
-          <div className="col-md-12 packages">
-            <h5 className="text-dark text-center">MODULES</h5>
-          </div>
-        </div>
-
-        <div className="row mt-3">
-          <div className="col-md-12 ">
+        <div className="row mt-5 px-5 d-flex">
+          {/* <div className="col-md-12 packages"> */}
+            <h5 className="text-dark mr-auto">MODULES</h5>
             <button
               type="button"
               onClick={this.packageModal}
@@ -338,6 +323,11 @@ getLoader() {
                 </small>
               </i>
             </button>
+          {/* </div> */}
+        </div>
+
+          <div className="col-md-12 ">
+            
             <div className="card">
               <div className="card-body">
                 {this.state.packages.length === 0 ? (
@@ -686,7 +676,6 @@ getLoader() {
           
         </div>
      
-          </div>
 )}
    </div>
     );

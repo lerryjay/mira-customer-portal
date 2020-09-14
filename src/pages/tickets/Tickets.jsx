@@ -11,23 +11,12 @@ class Tickets extends Component {
       currentPage: 1,
       numberPerPage: 10,
       id: 1,
-      tickets: [],
       currentList: [],
     };
   }
 
   componentDidMount() {
-    this.getLoader();
-  }
-
-  getLoader() {
-    setTimeout(() => {
-      this.setState({ loader: true });
-      setTimeout(() => {
-        this.setState({ loader: false });
-        this.getTickets();
-      }, 3000);
-    });
+  
   }
 
   async getTickets() {
@@ -86,28 +75,16 @@ class Tickets extends Component {
           <div className="w-100 text-center">
             <h3>TICKET LIST </h3>
           </div>
-          {this.state.loader && (
-            <div className="spin-center">
-              <span class="text-primary ">
-                <span
-                  class="spinner-grow spinner-grow-sm mr-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                <span style={{ fontSize: "14px" }}>Loading...</span>
-              </span>
-            </div>
-          )}
 
           <div className="col-md-12 mb-3" id="profile">
-            {!this.state.loader && this.state.tickets.length === 0 ? (
+            { this.state.tickets.length === 0 ? (
               <div className="card-body">
                 <div className="alert alert-warning" role="alert">
                   <h6 className="text-center">No ticket records!</h6>
                 </div>
               </div>
             ) : (
-              !this.state.loader && (
+            (
                 <div
                   id="table"
                   className="card pt-2 mt-3 justify-content-center shadow px-2"

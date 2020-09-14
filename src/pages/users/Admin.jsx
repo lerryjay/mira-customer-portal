@@ -9,19 +9,11 @@ class Admin extends Component {
     this.state = { ...this.props, users : [] }
   }
 
-  componentDidMount()
+  async componentDidMount()
   {
-    this.getLoader();
-  }
-
-  getLoader() {
-    setTimeout(() => {
-      this.setState({ loader: true });
-      setTimeout(() => {
-        this.setState({ loader: false });
-        this.getUsers();
-      }, 3000);
-    });
+    this.setState({ loader: true });
+    await this.getUsers();
+    this.setState({ loader: false });
   }
 
   async getUsers()
@@ -32,7 +24,6 @@ class Admin extends Component {
         headers: headers
     })
     .then(response => response.json());
-    console.log(res['data'])
     if(res['status']){
         this.setState({ users : res['data']});
     }

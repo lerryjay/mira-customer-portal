@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import { HTTPURL, APIKEY,FILEURL } from '../../common/global_constant';
+import { HTTPURL, APIKEY, FILEURL } from '../../common/global_constant';
 import { withContext } from '../../common/context';
 import placeholder from "../../assets/images/product-placeholder.gif";
 
@@ -9,8 +9,7 @@ class Products extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ...props,
-            products: [],
+            ...this.props,
             showmodal: true,
             id: '',
             loading: false
@@ -18,35 +17,9 @@ class Products extends Component {
     }
 
     componentDidMount() {
-        this.getLoader();
-    }
-
-    getLoader() {
-        setTimeout(() => {
-          this.setState({ loader: true });
-          setTimeout(() => {
-            this.setState({ loader: false });
-            this.getProduct();
-          }, 3000);
-        });
-      }
-      
-    getProduct() {
-        const headers = new Headers();
-        headers.append('API-KEY', APIKEY);
-        fetch(HTTPURL + 'product', {
-            method: 'GET',
-            headers: headers
-        })
-            .then(response => response.json())
-            .then(data => {
-                this.setState({ products: data.data })
-                console.log(this.state.products)
-            });
     }
 
     showDeleteModal(e) {
-        // this.setState({id: e});
         this.state.id = e
         let modal = document.getElementById("myModal")
         modal.style.display = "block";
@@ -67,7 +40,7 @@ class Products extends Component {
                 console.log(data, "deleted")
                 let modal = document.getElementById("myModal")
                 modal.style.display = "none";
-                this.getProduct();
+                this.state.getProducts();
             });
     }
 
@@ -122,73 +95,65 @@ class Products extends Component {
     render() {
         return (
             <div className="container-fluid">
-                
-          {this.state.loader && (
-            <div className="spin-center">
-              <span class="text-primary ">
-                <span
-                  class="spinner-grow spinner-grow-sm mr-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                <span style={{ fontSize: "14px" }}>Loading...</span>
-              </span>
-            </div>
-          )}
+
+                {this.state.loader && (
+                    <div className="spin-center">
+                        <span class="text-primary ">
+                            <span
+                                class="spinner-grow spinner-grow-sm mr-2"
+                                role="status"
+                                aria-hidden="true"
+                            ></span>
+                            <span style={{ fontSize: "14px" }}>Loading...</span>
+                        </span>
+                    </div>
+                )}
 
                 <div className="row mt-4 d-flex justify-content-end mr-3" >
-                            <Link to="/createproduct">
-                    <button type="button" className="btn btn-sm btn-primary new_product">
-                        <i className="fas fa-plus" aria-hidden="true">
+                    <Link to="/createproduct">
+                        <button type="button" className="btn btn-sm btn-primary new_product">
+                            <i className="fas fa-plus" aria-hidden="true">
                                 <small className="newproduct" style={{ color: '#fff' }}>&nbsp;Add&nbsp;Product</small>
-                        </i>
-                    </button>
-                            </Link>
+                            </i>
+                        </button>
+                    </Link>
                 </div>
-                                {!this.state.loader &&  this.state.products.length === 0 ?
-                                <div className="card-body">
-                                    <div className="alert alert-warning" role="alert">
-                                        <h6 className="text-center"> Product is empty!</h6>
-                                    </div>
-                                    </div>
-                                    :
-                <div className="row mx-5 my-2">
-                    {!this.state.loader &&  this.state.products.map((product, i) => {
-                        return (
-                            <div className="col-md-3 col-lg-4 col-sm-12 my-2 d-flex justify-content-center" key={i}>
-                                <div className="card text-center products">
-                                    {/* <img src={image} className="image_product" alt="" /> */}
-                                    <img className="img-fluid" src={FILEURL+product.imageurl} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
-                                    <div className="card-body">
-                                        <h5 className="card-title">{product.name}</h5>
-                                        {/* <Link  to={{ pathname:"", search}} onClick={this.handleViewMore}> */}
-                                        <Link to={() => `/productdetails/${product.id}`}>
-                                            <span class="badge px-3 py-2 badge-primary" value={product.id} style={{ cursor: "pointer", fontSize: 'medium' }}>View</span>
+   
+                    <div className="row mx-5 my-2">
+                        {this.state.products.map((product, i) => {
+                            return (
+                                <div className="col-md-3 col-lg-4 col-sm-12 my-2 d-flex justify-content-center" key={i}>
+                                    <div className="card text-center products">
+                                        {/* <img src={image} className="image_product" alt="" /> */}
+                                        <img className="img-fluid" src={FILEURL + product.imageurl} onError={(e) => { e.target.onerror = null; e.target.src = placeholder }} />
+                                        <div className="card-body">
+                                            <h5 className="card-title">{product.name}</h5>
+                                            {/* <Link  to={{ pathname:"", search}} onClick={this.handleViewMore}> */}
+                                            <Link to={() => `/productdetails/${product.id}`}>
+                                                <span className="badge px-3 py-2 badge-primary" value={product.id} style={{ cursor: "pointer", fontSize: 'medium' }}>View</span>
+                                            </Link>
+                                        </div>
+                                        <Link to={() => `/updateproduct/${product.id}`}>
+                                            <i className="fa fa-edit mr-1"></i>
                                         </Link>
+
+                                        <Link onClick={() => this.showDeleteModal(product.id)}>
+                                            <i className="fa fa-trash text-danger"></i>
+                                        </Link>
+
+
                                     </div>
-                                    <Link to={() => `/updateproduct/${product.id}`}>
-                                        <i className="fa fa-edit mr-1"></i>
-                                    </Link>
-
-                                    <Link onClick={() => this.showDeleteModal(product.id)}>
-                                        <i className="fa fa-trash text-danger"></i>
-                                    </Link>
-
 
                                 </div>
 
-                            </div>
 
 
 
-                        
-                        )
-                    }
-                    )}
-                    
-                </div>
-            }
+                            )
+                        }
+                        )}
 
+                    </div>
 
                 {this.state.showmodal ?
                     <div id="myModal" class="modal">

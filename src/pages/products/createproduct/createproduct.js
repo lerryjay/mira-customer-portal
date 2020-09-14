@@ -40,26 +40,12 @@ class CreateProduct extends Component {
         form.append("description", this.state.description);
         form.append('file', this.state.file);
 
-        fetch(HTTPURL + 'product/add', {
-            method: 'POST',
-            body: form,
-            headers: headers
-        })
-        .then(response => response.json())
-        .then(json => {
-          console.log(json);
-          return json;
-        });
-
-        setTimeout(() => {
-            this.setState({loading : false});
-            this.setState({successmessage: 'Product Saved Successfully!'})
-            setTimeout(() =>{
-                this.setState({successmessage: false});
-                 this.setState({name: '', description: '', file: '', imagePreviewUrl: '', imageurl: ''})
-            }, 2000);
-        }, 3000);
-    
+        const res = await fetch(HTTPURL + 'product/add', {  method: 'POST',body: form, headers: headers }).then(response => response.json());
+        if(res['status']){
+            this.setState({loading : false,name: '', description: '', file: '', imagePreviewUrl: '', imageurl: ''});
+            this.state.showAlert('success','Product Saved Successfully!');
+            this.state.getProducts();
+        }
     }
 
     removeImage(e) {
@@ -92,11 +78,7 @@ class CreateProduct extends Component {
                     imagePreviewUrl: '',
                     imageError: "Upload a valid Image"
                 });
-                
-                
             }
-            
-            
         } else {
             this.setState({imageError: false})
                 reader.onloadend = () => {
@@ -105,8 +87,7 @@ class CreateProduct extends Component {
                         imagePreviewUrl: reader.result
                     });
                 }
-            }
-
+        }
         reader.readAsDataURL(file)
     }
 
@@ -114,7 +95,7 @@ class CreateProduct extends Component {
         let {imagePreviewUrl} = this.state;
             let imagePreview = null;
             if (imagePreviewUrl) {
-                this.state.imageurl = true
+                this.setState({imageurl:false})
             imagePreview = (<img src={imagePreviewUrl} className="imagePreview"/>);
             } 
         return (

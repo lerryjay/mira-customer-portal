@@ -26,7 +26,7 @@ class viewclientproduct extends Component {
       deploymentstatus: "",
       clientproductid: "",
       previewFile: "",
-      product_id:'',
+      product_id: '',
       files: [],
     };
     console.log(this.props);
@@ -85,20 +85,37 @@ class viewclientproduct extends Component {
     await this.setState({ clientproductid });
     this.getClientProduct();
   }
-closeModal() {
-  let modal2 = document.getElementById("myModal");
+  closeModal() {
+    let modal2 = document.getElementById("myModal");
 
-  var span = document.getElementsByClassName("close2")[0];
-  span.onclick = function () {
-    modal2.style.display = "none";
-  };
-}
+    var span = document.getElementsByClassName("close2")[0];
+    span.onclick = function () {
+      modal2.style.display = "none";
+    };
+  }
   showModal = (e, file) => {
     this.setState({ previewFile: file });
     let modal2 = document.getElementById("myModal");
     modal2.style.display = "block";
 
   };
+
+  async handleFileAttachment(e){
+    const { user, clientproductid } = this.state;
+    const form = new FormData(document.getElementById('fileForm'));
+    form.append('userid',user.userid);
+    form.append('clientproductid',clientproductid);
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    const res = await fetch(`${HTTPURL}clients/adddeploymentfile`,{
+      method: "POST",
+      headers: headers,
+      body : form
+    }).then(res=>res.json());
+    if(res['status']){
+      this.setState({ files: res.data });
+    }
+  }
 
   render() {
     return (
@@ -126,7 +143,7 @@ closeModal() {
               <div className="row mt-5">
                 <Link
                   className="btn mt-3 m-2 btn-primary mb-2 rounded-0 px-5"
-                  to={() => `/updateclientproduct/${this.state.product_id}`}
+                  to={() => `/updateclientproduct/${this.state.clientproductid}`}
                 >
                   <small className="newproduct" style={{ color: "#fff" }}>
                     &nbsp;Update&nbsp;
@@ -205,30 +222,34 @@ closeModal() {
                   </h6>
                 </div>
               ) : (
-                this.state.remarks
-              )}
+                  this.state.remarks
+                )}
             </div>
           </div>
-          <div className="row mt-4">
-            <div className="col-md-12 packages">
+          <div className="row mt-4 mb-3">
+            <div className="col-md-4 packages">
               <h5 className="text-dark font-weight-bold">Modules</h5>
             </div>
-            <div className="col-md-12">
-              {this.state.modules.length > 0 ? (
-                this.state.modules.map((item) => (
-                  <div className="col-md-3">
-                    <p className="list-group-item">{item.name}</p>
-                  </div>
-                ))
-              ) : (
+            <div className="col-md-8 text-right">
+              <button className="btn btn-success rounded-0 btn-sm py-1 px-2">Edit Modules</button>
+            </div>
+          </div>
+          <div className="row">
+            {this.state.modules.length > 0 ? (
+              this.state.modules.map((item) => (
+                <div className="col-md-3">
+                  <p className="list-group-item">{item.name}</p>
+                </div>
+              ))
+            ) : (
                 <div className="col-md-12 alert alert-warning" role="alert">
                   <h6 className="text-center">
                     You have not added any module for this client product!
                   </h6>
                 </div>
               )}
-            </div>
           </div>
+          {/* </div> */}
 
           <div className="row mt-4">
             <div className="col-md-8">
@@ -236,32 +257,32 @@ closeModal() {
                 Attached Licenses & Files
               </h5>
             </div>
-            <div className="col-md-4 ">
-              <div className="row justify-content-end d-flex mb-2 mr-3">
-              <label htmlFor="file" className="btn btn-sm btn-primary py-2 px-3">Attach Files</label>
-                  <input style={{display:'none'}} type={"file"}  id="file" 
-                  className="form-file form-file-sm" name="file"  placeholder=""
-                  onChange={(e)=>this.handleImageChange(e)} />
-                </div>
+            <div className="col-md-4 text-right">
+              <form id="fileForm">
+              <label htmlFor="file" className="btn btn-sm btn-primary py-1 px-3">Attach Files</label>
+                <input style={{ display: 'none' }} type={"file"} id="file"
+                className="form-file form-file-sm" name="files[]" multiple placeholder=""
+                onChange={(e) => this.handleFileAttachment(e)} />
+              </form>
             </div>
-
-            <div className="col-md-12">
-              {this.state.files.length ? (
-                this.state.files.map((item) => (
-                  <div className="col-md-3 col-lg-2 text-center py-2">
-                    {item.match(/\.(jpg|jpeg|png)$/) ? (
-                      <img
-                        id="img"
-                        style={{ width: "100px", height: "100px" }}
-                        className="m-2"
-                        onClick={(e) => this.showModal(e, item)}
-                        src={FILEURL + item}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = placeholder;
-                        }}
-                      />
-                    ) : (
+          </div>
+          <div className="row">
+            {this.state.files.length ? (
+              this.state.files.map((item) => (
+                <div className="col-md-3 col-lg-2 text-center py-2">
+                  {item.match(/\.(jpg|jpeg|png)$/) ? (
+                    <img
+                      id="img"
+                      style={{ width: "100px", height: "100px" }}
+                      className="m-2"
+                      onClick={(e) => this.showModal(e, item)}
+                      src={FILEURL + item}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = placeholder;
+                      }}
+                    />
+                  ) : (
                       <img
                         src={pdf_placeholder}
                         onClick={(e) => this.showModal(e, item)}
@@ -269,22 +290,22 @@ closeModal() {
                         className="m-2"
                       />
                     )}
-                    <br /> {item}
-                  </div>
-                ))
-              ) : (
+                  <br /> {item}
+                </div>
+              ))
+            ) : (
                 <div className="col-md-12 alert alert-warning" role="alert">
                   <h6 className="text-center">
                     No files were attached corresponding to this deployment!
                   </h6>
                 </div>
               )}
-            </div>
           </div>
-        
-        
-        
-          <div className="row col-md-12">
+        </div>
+
+
+
+        <div className="row col-md-12">
           <div id="myModal" className="modal2">
             <div className="px-2 d-flex">
               <a
@@ -300,17 +321,15 @@ closeModal() {
               <span className="close close2" onClick={this.closeModal}>&times;</span>
             </div>
             <div className="d-flex justify-content-center align-content-center">
-                {this.state.previewFile.match(/\.(jpg|jpeg|png)$/) ? (
-                  <img src={FILEURL + this.state.previewFile} />
-                ) : (
+              {this.state.previewFile.match(/\.(jpg|jpeg|png)$/) ? (
+                <img src={FILEURL + this.state.previewFile} />
+              ) : (
                   <img src={pdf_placeholder} />
                 )}
             </div>
           </div>
-          </div>
-          
-          </div>
-      </div>
+        </div>
+      // </div>
     );
   }
 }

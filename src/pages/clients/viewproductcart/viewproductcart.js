@@ -1,114 +1,143 @@
 import React, { Component } from "react";
 import placeholder from "../../../assets/images/product-placeholder.gif";
-import { Link } from "react-router-dom";
-import { HTTPURL, APIKEY,FILEURL } from "../../../common/global_constant";
+import { HTTPURL, APIKEY, FILEURL } from "../../../common/global_constant";
 import { withContext } from "../../../common/context";
-import image from "../../../assets/images/mira.png"
-import image2 from "../../../assets/images/Accsiss.png"
-import image3 from "../../../assets/images/asset1.jpeg"
-import pdf_placeholder from "../../../assets/images/pdf.png";
 
-class viewproductcart extends Component {
+class viewclientproduct extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       ...this.props,
+      productname: "",
+      productdescription: "",
+      remarks: "",
+      modules: [],
+      cost: "",
+      imageurl: "",
+      paymentdate: "",
+      trainingdate: "",
+      deploymentdate: "",
+      paymentstatus: "",
+      trainingstatus: "",
+      licenseduration: "",
+      deploymentstatus: "",
+      clientproductid: "",
       previewFile: "",
+      product_id: '',
+      files: [],
     };
-    console.log(this.props);
   }
 
-  componentDidMount() {
-    this.getLoader();
-  }
-  
-  getLoader() {
-    setTimeout(() => {
-      this.setState({ loader: true });
-      setTimeout(() => {
-        this.setState({ loader: false });
-      }, 3000);
-    });
+  async getClientProduct() {
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    const res = await fetch(
+      `${HTTPURL}clients/getproductdata?userid=${this.state.user.userid}&clientproductid=${this.state.clientproductid}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    ).then((res) => res.json());
+    if (res["status"]) {
+      const {
+        name,
+        description,
+        paymentstatus,
+        paymentdate,
+        licenseduration,
+        deploymentdate,
+        deploymentstatus,
+        cost,
+        trainingdate,
+        trainingstatus,
+        files,
+        imageurl,
+        remarks,
+        modules,
+        product_id
+      } = res.data;
+      this.setState({
+        productname: name,
+        productdescription: description,
+        paymentstatus,
+        paymentdate,
+        licenseduration,
+        deploymentdate,
+        deploymentstatus,
+        cost,
+        trainingdate,
+        trainingstatus,
+        files,
+        imageurl,
+        remarks,
+        modules,
+        product_id
+      });
+    }
   }
 
+  async componentDidMount() {
+    const clientproductid = this.props.location.pathname.split("/")[2];
+    await this.setState({ clientproductid });
+    this.getClientProduct();
+  }
   closeModal() {
     let modal2 = document.getElementById("myModal");
-    
+
     var span = document.getElementsByClassName("close2")[0];
     span.onclick = function () {
       modal2.style.display = "none";
     };
   }
+  showModal = (e, file) => {
+    this.setState({ previewFile: file });
+    let modal2 = document.getElementById("myModal");
+    modal2.style.display = "block";
 
-    showModal = (e, file) => {
-      this.setState({ previewFile: file });
-      let modal2 = document.getElementById("myModal");
-      modal2.style.display = "block";
-  
-    };
-  
+  };
+
+  async handleFileAttachment(e){
+    const { user, clientproductid } = this.state;
+    const form = new FormData(document.getElementById('fileForm'));
+    form.append('userid',user.userid);
+    form.append('clientproductid',clientproductid);
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    const res = await fetch(`${HTTPURL}clients/adddeploymentfile`,{
+      method: "POST",
+      headers: headers,
+      body : form
+    }).then(res=>res.json());
+    if(res['status']){
+      this.setState({ files: res.data });
+    }
+  }
+
   render() {
     return (
       <div className="container mx-auto row">
-         {this.state.loader && (
-            <div className="spin-center">
-              <span class="text-primary ">
-                <span
-                  class="spinner-grow spinner-grow-sm mr-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                <span style={{ fontSize: "14px" }}>Loading...</span>
-              </span>
-            </div>
-          )}
-          {!this.state.loader &&
         <div className="col-md-12 mb-3 mt-4" id="profile">
-          <div id="myModal" className="modal2">
-            <div className="px-2 d-flex">
-              <a
-                download
-                href={FILEURL + this.state.previewFile}
-                target="_blank"
-                className="btn btn-primary rounded-0 top-left mr-auto"
-                style={{ position: "absolute" }}
-              >
-                Download
-              </a>{" "}
-              <span className="close close2" onClick={this.closeModal}>&times;</span>
+          <div className="w-100 text-center">
+            <h3>PRODUCT DETAILS </h3>
+          </div>
+
+          <div className="row mt-4">
+            <div className="col-md-4">
+              <img
+                className="img-product"
+                src={FILEURL + this.state.imageurl}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = placeholder;
+                }}
+              />
             </div>
-            <div className="d-flex justify-content-center align-content-center">
-              <div className="bg-white">
-                {this.state.previewFile.match(/\.(jpg|jpeg|png)$/) ? (
-                  <img src={FILEURL + this.state.previewFile} />
-                ) : (
-                  <img src={pdf_placeholder} />
-                )}
-              </div>
+            <div className="col-md-7 offset-md-1">
+              <h3 className="text-dark">{this.state.productname}</h3>
+              <h6>{this.state.productdescription}</h6>
             </div>
           </div>
-          
-              <div className="w-100 text-center">
-                <h3>PRODUCT DETAILS </h3>
-              </div>
-
-                <div className="row mt-4">
-                  <div className="col-md-4">
-                    <img className="img-product" src={image}/>
-                  </div>
-                  <div className="col-md-7 offset-md-1">
-                    <h3 className="text-dark">Mira HPro</h3>
-                    <h6 className="text-dark">
-                    loremlorem loremloremv loremlorem loremlorem loremlorem loremlorem
-                          loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem
-                          loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem
-                          loremlorem loremlorem loremlorem loremlorem.
-                    </h6>
-                      
-
-                  </div>
-                </div>
           <div className="my-5">
             <div className="col-md-12">
               <h5 className="text-dark font-weight-bold">Cost & Timeline</h5>
@@ -158,69 +187,29 @@ class viewproductcart extends Component {
               </tfoot>
             </table>
           </div>
-
-                      
-                    <div className="row mt-4">
-                          <div className="col-md-12">
-                            <h5 className="text-dark font-weight-bold">Remarks</h5>
-                          </div>
-                          <div className="col-md-12"> 
-                          <p>loremlorem loremloremv loremlorem loremlorem loremlorem loremlorem
-                          loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem
-                          loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem
-                          loremlorem loremlorem loremlorem loremlorem. </p>
-                          </div>
-                      </div>
-                      <div className="row mt-4">
-                          <div className="col-md-12 packages">
-                            <h5 className="text-dark font-weight-bold">Modules</h5>
-                          </div>
-                          <div className="col-md-4">
-                              <p className="list-group-item">
-                                Payroll
-                              </p>
-                            </div>
-                          <div className="col-md-4">
-                              <p className="list-group-item">
-                                Payroll
-                              </p>
-                          </div>
-                          <div className="col-md-4">
-                              <p className="list-group-item">
-                                Payroll
-                              </p>
-                          </div>
-                          <div className="col-md-4">
-                              <p className="list-group-item">
-                                Payroll
-                              </p>
-                          </div>
-                          <div className="col-md-4">
-                              <p className="list-group-item">
-                                Payroll
-                              </p>
-                          </div>
-                      </div>
-            
-                      <div className="row mt-4">
-                          <div className="col-md-12">
-                            <h5 className="text-dark font-weight-bold">Attached License and Files</h5>
-                          </div>
-                          <div className="col-md-3 py-2"> 
-                            <img className="img-product" src={pdf_placeholder} />
-                          </div>
-                          <div className="col-md-3 py-2"> 
-                            <img className="img-product" src={pdf_placeholder}/>
-                          </div>
-                      </div>
-
-           
-               </div>
-
-                }
+          <div className="row mt-4 mb-3">
+            <div className="col-md-4 packages">
+              <h5 className="text-dark font-weight-bold">Modules</h5>
+            </div>
+          </div>
+          <div className="row">
+            {this.state.modules.length > 0 ? (
+              this.state.modules.map((item) => (
+                <div className="col-md-3">
+                  <p className="list-group-item">{item.name}</p>
+                </div>
+              ))
+            ) : (
+                <div className="col-md-12 alert alert-warning" role="alert">
+                  <h6 className="text-center">
+                    Modules have not been updated!
+                  </h6>
+                </div>
+              )}
+          </div>
+        </div>
       </div>
-
-     );
+    );
   }
 }
-export default withContext(viewproductcart);
+export default withContext(viewclientproduct);

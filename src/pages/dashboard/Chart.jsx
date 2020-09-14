@@ -39,7 +39,7 @@ const Chart = () => {
                 options={{
                     title: {
                         display: true,
-                        text: "Hello World",
+                        text: "Ticket Statistics",
                         fontSize: 20,
                         animation: {
                             easing: "easeInOutBack",

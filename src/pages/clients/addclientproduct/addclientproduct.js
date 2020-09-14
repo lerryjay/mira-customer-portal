@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { HTTPURL, APIKEY } from "../../../common/global_constant";
 import { withContext } from "../../../common/context";
 
-const headers = new Headers();
+
 class AddClientProduct extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +19,6 @@ class AddClientProduct extends Component {
       liscenseduration: "",
       expirationdate: '',
       remarks:'',
-      products: [],
       errormessage: "",
       loading: false,
       files: [],
@@ -33,9 +32,10 @@ class AddClientProduct extends Component {
   }
 
   componentWillMount() {
-    this.getProducts();
   }
   getModule(productId) {
+    const headers = new Headers();
+    headers.append("API-KEY",APIKEY);
     fetch(
       HTTPURL +
         `product/modules?productid=${productId}&userid=${this.state.user.userid}`,
@@ -54,21 +54,6 @@ class AddClientProduct extends Component {
 
     console.log(this.state.modules);
   }
-
-  getProducts() {
-    headers.append("API-KEY", APIKEY);
-    fetch(HTTPURL + `product?userid=${ this.state.user.userid}`, {
-      method: "GET",
-      headers: headers,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data)
-        this.setState({ products: data.data });
-
-        })
-  }
-
   handleInputChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value, errormessage: "" });

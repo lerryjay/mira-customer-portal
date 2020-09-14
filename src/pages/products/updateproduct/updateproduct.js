@@ -70,7 +70,7 @@ class UpdateProduct extends Component {
         })
         .then(response => response.json())
         .then(json => {
-          console.log(json);
+          this.props.history.goBack();
           return json;
         });
 

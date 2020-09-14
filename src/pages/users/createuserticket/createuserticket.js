@@ -30,7 +30,6 @@ class create_ticket extends Component {
         if(name == 'customerid'){
             const user = this.state.users.find(user=> user.firstname+' '+user.lastname  === value);
             if(user) value = user.userid;
-            console.log(user,value)
         }
         this.setState({ [name]: value,errormessage : '' });
     }
@@ -39,8 +38,6 @@ class create_ticket extends Component {
         e.preventDefault()
 
         this.setState({loading : true});
-
-        let data = document.getElementById("createticket")
 
         const headers = new Headers();
         headers.append('API-KEY',APIKEY);
@@ -114,7 +111,7 @@ class create_ticket extends Component {
     }
 
     componentDidMount(){
-        this.props.user.role == 'admin' && this.getUsers();
+        this.props.user.role === 'admin' && this.getUsers();
     }
 
     render() {

@@ -16,20 +16,13 @@ class Profile extends Component {
     };
   }
 
-  componentDidMount() {
-    this.getLoader();
+  async componentDidMount() {
+    this.setState({ loader: true });
+    await this.getUsers();
+    this.setState({ loader: false });
   }
 
-  getLoader() {
-    setTimeout(() => {
-      this.setState({ loader: true });
-      setTimeout(() => {
-        this.setState({ loader: false });
-        this.getUsers();
-        this.getProducts();
-      }, 3000);
-    });
-  }
+
 
   async getUsers() {
     const headers = new Headers();

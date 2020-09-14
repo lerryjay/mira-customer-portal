@@ -14,19 +14,6 @@ class Profile extends Component {
         console.log(this.props.user.lastname)
     }
 
-    componentDidMount() {
-        this.getLoader();
-      }
-      
-      getLoader() {
-        setTimeout(() => {
-          this.setState({ loader: true });
-          setTimeout(() => {
-            this.setState({ loader: false });
-          }, 3000);
-        });
-      }
-    
     editp() {
         // Make Form Editable
         const edit = document.querySelector('#edit');

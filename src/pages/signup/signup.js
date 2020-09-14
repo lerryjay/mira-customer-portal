@@ -27,7 +27,7 @@ class SignUp extends Component {
       //handles form submission
     handleSubmit = async e => {
         e.preventDefault()
-        const { name, email, password, telephone } = this.state
+        const {  email, password } = this.state
         await this.setState({loading : true});
         setTimeout(() =>this.setState({loading : false}), 3000);
         //Waste 3 seconds

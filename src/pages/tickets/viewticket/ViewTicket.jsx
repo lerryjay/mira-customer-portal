@@ -28,59 +28,35 @@ class ViewTicket extends Component {
     this.fileChange = this.fileChange.bind(this);
   }
 
-  componentDidMount() {
-    this.getLoader();
+  async componentDidMount() {
+    this.state.showLoader();
+    await this.getChat();
+    await this.getTicket();
+    this.state.hideLoader();
   }
 
-//   componentDidUpdate() {
-//     this.updateChat();
-//   }
-
-//   updateChat() {
-//     if (this.state.updateData) this.getChat();
-
-//     // Automatically scroll down to new messages
-//     var objDiv = document.getElementById("chatscroll");
-//     objDiv.scrollTop = objDiv.scrollHeight;
-//   }
-
-  getLoader() {
-    setTimeout(() => {
-      this.setState({ loader: true });
-      setTimeout(() => {
-        this.setState({ loader: false });
-        this.getChat();
-        this.getTicket();
-      }, 3000);
-    });
-  }
-
-  getTicket() {
+  async getTicket() {
     const ticketid = this.props.location.pathname.split("/")[2];
 
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
 
-    fetch(
+    const result = await fetch(
       `${HTTPURL}ticket/getticket?userid=${this.state.user.userid}&ticketid=${ticketid}`,
       {
         method: "GET",
         headers: headers,
       }
-    )
-      .then((res) => res.json())
-      .then((result) => {
-        if (result.status == true) {
-          this.setState({
-            type: result.data.type,
-            message: result.data.message,
-            title: result.data.title,
-            id: result.data.id,
-            attachedFiles: JSON.parse(result.data.files),
-          });
-          console.log(JSON.parse(result.data.files));
-        }
+    ).then((res) => res.json());
+    if (result.status) {
+      this.setState({
+        type: result.data.type,
+        message: result.data.message,
+        title: result.data.title,
+        id: result.data.id,
+        attachedFiles: JSON.parse(result.data.files),
       });
+    }
   }
 
   getChat() {
@@ -160,23 +136,10 @@ class ViewTicket extends Component {
   render() {
     const reader = new FileReader();
     this.state.files = this.state.inputfiles.map((file) => {
-      return <img src={URL.createObjectURL(file)} className="col-md-3" />;
+      return <img src={URL.createObjectURL(file)} className="col-md-3" alt="attachment"/>;
     });
     return (
       <div className="container mx-auto mt-md-5" id="profile">
-        {this.state.loader && (
-          <div className="spin-center">
-            <span class="text-primary ">
-              <span
-                class="spinner-grow spinner-grow-sm mr-2"
-                role="status"
-                aria-hidden="true"
-              ></span>
-              <span style={{ fontSize: "14px" }}>Loading...</span>
-            </span>
-          </div>
-        )}
-        {!this.state.loader && (
           <div className="card home-chart mt-4">
             <div className="card-header bg-medium font-weight-bold text-dark">
               <span className="font-weight-bolder mr-4 ticket-title">
@@ -224,6 +187,7 @@ class ViewTicket extends Component {
                   download
                   href={FILEURL + this.state.previewFile}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="btn btn-primary rounded-0 top-left mr-auto"
                   style={{ position: "absolute" }}
                 >
@@ -256,7 +220,7 @@ class ViewTicket extends Component {
                 {this.state.chats.map((chat) => {
                   return (
                     <div>
-                      {chat.role == "admin" ? (
+                      {chat.role === "admin" ? (
                         <div className="row mb-4" id="client">
                           <div className="col-md-7 col-sm-12 ">
                             <div
@@ -270,7 +234,7 @@ class ViewTicket extends Component {
                             {JSON.parse(chat.files).map((file) => {
                               return (
                                 <div className="mt-2 ml-3">
-                                  <img src={FILEURL + file} height="50px" />
+                                  <img src={FILEURL + file} height="50px" alt={file}/>
                                 </div>
                               );
                             })}
@@ -351,32 +315,10 @@ class ViewTicket extends Component {
                     </div>
                   </div>
                 </div>
-                {/* 
-                        <div className="input-group">
-                            <div className="input-group-prepend">
-                                <span className="input-group-text" style={{ backgroundColor: '#0a0b18', border: '#191a35' }} id="chat">
-                                    <label className="custom-file-upload" htmlFor="file-upload">
-                                        <i className="fas fa-paperclip fa-fw text-white" style={{ cursor: 'pointer' }} ></i>
-                                    </label>
-                                    <input id="file-upload" name='files' type="file" style={{ display: 'none' }} onChange={this.fileChange} multiple accept=".png,.jpeg,.jpg,.gif" />
-                                </span>
-                            </div>
 
-                            <input type="text" className="form-control border-right-0"  id="chat" name="chat"
-                             placeholder="Message" aria-label="chat" aria-describedby="chat" required
-                             value={this.state.chat}  onChange={this.handleInputChange}/>
-
-                            <button className="input-group-append">
-                                <span className="input-group-text bg-white" id="chat">
-                                    <i type="submit" className="fas fa-paper-plane fa-fw" style={{ cursor: 'pointer', color: '#0a0b18' }}></i>
-                                </span>
-                            </button>
-                        </div>
-                        */}
               </form>
             </div>
           </div>
-        )}{" "}
       </div>
     );
   }

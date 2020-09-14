@@ -8,9 +8,6 @@ import { clientMenu, adminMenu } from '../global_constant';
 const Sidebar = (props) => {
     console.log(props);
     const { user } =  props;
-    const [clientDropdownOpen, setClientDropdown] = useState('none');
-    const [productDropdownOpen, setProductDropdown] = useState('none');
-    const [ticketDropdownOpen, setTicketDropdown] = useState('none');
     
     const toggle2 = () => {
         //Link click remove sidebar

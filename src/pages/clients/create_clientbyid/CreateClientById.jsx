@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 
-import Validators  from "../../../common/Validators";
-import { Link } from "react-router-dom";
 import {withContext} from '../../../common/context';
 import { HTTPURL, APIKEY } from '../../../common/global_constant';
 
@@ -23,27 +21,9 @@ class CreateClientById extends Component {
             errormessage: '',
             loading: false, 
             successmessage: '',
-            users: []
         };
     }
     componentWillMount() {
-        this.getClient()
-    }
-
-    getClient = () => {
-        
-        let myHeaders = new Headers();
-        myHeaders.append("api-key", APIKEY);
-
-        fetch(`${HTTPURL}user?userid=${this.state.user.userid}`, {
-            method: "GET",
-            headers: myHeaders,
-        }).then(res => res.json()).then(result => {
-            console.log(result, "users")
-            if (result.status) {
-                this.setState({ users: result.data });
-            }
-        })
     }
     
     handleInputChange = e => {

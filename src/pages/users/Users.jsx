@@ -8,7 +8,6 @@ class Users extends Component {
     super(props);
     this.state = { 
       ...this.props, 
-      users : [],
       loader: false
     }
   }
@@ -27,18 +26,8 @@ class Users extends Component {
     }
   }
 
-  getLoader() {
-    setTimeout(() => {
-      this.setState({ loader : true});
-      setTimeout(() => {
-        this.setState({ loader : false});
-        this.getUsers();
-      }, 3000);
-    });
-  }
 
   componentDidMount() {
-    this.getLoader();
   }
 
 

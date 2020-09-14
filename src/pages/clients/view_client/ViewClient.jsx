@@ -48,6 +48,7 @@ class ViewClient extends Component {
   }
 
   componentWillMount() {
+    this.state.showLoader();
     const clienId = this.props.location.pathname.split("/")[2];
     fetch(
       `${HTTPURL}clients/getclient?clientid=${clienId}&userid=${this.state.user.userid}`,
@@ -58,7 +59,9 @@ class ViewClient extends Component {
     )
       .then((res) => res.json())
       .then((result) => {
+        this.state.hideLoader();
         if (result.status == true) {
+          this.getProducts();
           this.setState({
             lastname: result.data.lastname,
             firstname: result.data.firstname,
@@ -79,19 +82,10 @@ class ViewClient extends Component {
       });
   }
 
-  componentDidMount() {
-    this.getLoader();
+  async componentDidMount() {
+    
   }
 
-  getLoader() {
-    setTimeout(() => {
-      this.setState({ loader: true });
-      setTimeout(() => {
-        this.setState({ loader: false });
-        this.getProducts();
-      }, 3000);
-    });
-  }
 
   closedeleteModal() {
     let modal = document.getElementById("deleteModal");
@@ -279,7 +273,7 @@ class ViewClient extends Component {
                     <div className="col-md-12">
                       {this.state.products.length === 0 ? (
                         <div class="alert alert-warning" role="alert">
-                          Oops, Product module is empty!
+                          No product has been added for this client!
                         </div>
                       ) : (
                         <div className="row">

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withContext } from '../../../common/context';
-import { HTTPURL, FILEURL, APIKEY } from "../../../common/global_constant";
+import { HTTPURL, APIKEY } from "../../../common/global_constant";
 import avatar from '../../../assets/images/avatar.png'
 
 
@@ -35,7 +35,7 @@ class Profile extends Component {
         // Admin's Profile info
         const adminid = this.props.location.pathname.split("/")[2];
         const selectedUser = this.state.users.find(
-            (item) => item.adminid == adminid
+            (item) => item.adminid === adminid
         );
         await this.setState({ selectedUser });
       }

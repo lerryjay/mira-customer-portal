@@ -1,10 +1,8 @@
 import React, {Component} from 'react'
 import { Link } from "react-router-dom";
-import image from '../../assets/images/dammy.jpg'
 import avatar from '../../assets/images/avatar.png'
 import {withContext} from '../../common/context';
 import { HTTPURL, APIKEY } from '../../common/global_constant';
-import ViewClient from './view_client/ViewClient';
 
 class Clients extends Component {
     constructor(props) {
@@ -13,25 +11,19 @@ class Clients extends Component {
         this.state = {
             ...this.props, 
             showmodal: true,
+            loading : true,
             clients: []
-
         }
 
     }
 
-    componentDidMount(){
-        this.getLoader();
+    async componentDidMount(){
+        this.state.showLoader();
+        await this.getClient();
+        this.setState({ loading : false  });
+        this.state.hideLoader();
     }
 
-    getLoader() {
-        setTimeout(() => {
-          this.setState({ loader: true });
-          setTimeout(() => {
-            this.setState({ loader: false });
-            this.getClient();
-          }, 3000);
-        });
-      }
     
     async getClient() {
         const headers = new Headers();
@@ -42,12 +34,6 @@ class Clients extends Component {
         }).then(response => response.json());
 
         if(res['status']) this.setState({ clients : res['data']})
-    }
-
-    handleViewMore = e => {
-        console.log(e.target.attributes.value.value)
-        // this.props.viewclient(e)
-        // this.props.history.push('/viewClient');
     }
 
     deleteModal() {
@@ -68,29 +54,18 @@ class Clients extends Component {
             <div className="w-100 text-center">
             <h3>CLIENT LIST </h3>
             </div>
-          {this.state.loader && (
-            <div className="spin-center">
-              <span class="text-primary ">
-                <span
-                  class="spinner-grow spinner-grow-sm mr-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                <span style={{ fontSize: "14px" }}>Loading...</span>
-              </span>
-            </div>
-          )}
+
     
                     <div className="col-md-12" >
                                 <div className="card-body">
-                                {!this.state.loader && this.state.clients.length === 0 ?
+                                {!this.state.loading && this.state.clients.length === 0 ?
                                 <div className="card-body">
                                     <div className="alert alert-warning" role="alert">
                                         <h6 className="text-center">No client records!</h6>
                                     </div>
                                     </div>
                                     :
-                                    !this.state.loader && <div id='table' className=" pt-2 justify-content-center shadow">
+                                    !this.state.loading && <div id='table' className=" pt-2 justify-content-center shadow">
                                         <div className="table-responsive">
                                             <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
                                                 <thead>

@@ -16,9 +16,9 @@ class UpdateClientProduct extends Component {
       deploymentdate: "",
       paymentdate: "",
       paymentstatus: "",
-      liscenseduration: "",
+      licenseduration: "",
       expirationdate: '',
-      remarks:'',
+      remarks: '',
       products: [],
       errormessage: "",
       loading: false,
@@ -32,13 +32,16 @@ class UpdateClientProduct extends Component {
     };
   }
 
-  componentWillMount() {
+  async componentWillMount() {
+    const clientproductid = this.props.location.pathname.split("/")[2];
+    await this.setState({ clientproductid });
+    this.getClientProduct();
     this.getProducts();
   }
   getModule(productId) {
     fetch(
       HTTPURL +
-        `product/modules?productid=${productId}&userid=${this.state.user.userid}`,
+      `product/modules?productid=${productId}&userid=${this.state.user.userid}`,
       {
         method: "GET",
         headers: headers,
@@ -47,7 +50,6 @@ class UpdateClientProduct extends Component {
       .then((response) => response.json())
       .then((result) => {
         if (result.status == true) {
-          console.log(result.data);
           this.setState({ modules: result.data });
         }
       });
@@ -55,9 +57,56 @@ class UpdateClientProduct extends Component {
     console.log(this.state.modules);
   }
 
+  async getClientProduct() {
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    const res = await fetch(
+      `${HTTPURL}clients/getproductdata?userid=${this.state.user.userid}&clientproductid=${this.state.clientproductid}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    ).then((res) => res.json());
+    console.log(res)
+    if (res["status"]) {
+      const {
+        paymentstatus,
+        paymentdate,
+        licenseduration,
+        deploymentdate,
+        deploymentstatus,
+        cost,
+        trainingdate,
+        trainingstatus,
+        files,
+        imageurl,
+        remarks,
+        modules,
+        product_id
+      } = res.data;
+      this.getModule(product_id);
+      this.setState({
+        productid: product_id,
+        paymentstatus,
+        paymentdate,
+        licenseduration,
+        deploymentdate,
+        deploymentstatus,
+        cost,
+        trainingdate,
+        trainingstatus,
+        imageurl,
+        remarks,
+        // selectedModules : modules.map(item=>item.id),
+        product_id
+      });
+      modules.forEach(element => this.addModule);
+    }
+  }
+
   getProducts() {
     headers.append("API-KEY", APIKEY);
-    fetch(HTTPURL + `product?userid=${ this.state.user.userid}`, {
+    fetch(HTTPURL + `product?userid=${this.state.user.userid}`, {
       method: "GET",
       headers: headers,
     })
@@ -66,7 +115,7 @@ class UpdateClientProduct extends Component {
         console.log(data)
         this.setState({ products: data.data });
 
-        })
+      })
   }
 
   handleInputChange = (e) => {
@@ -77,10 +126,7 @@ class UpdateClientProduct extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     this.setState({ loading: true });
-    let mod = "";
-    this.state.selectedModules.forEach((module) => {
-      mod += module + ",";
-    });
+    const modules = this.state.modules.toString();
 
     let myHeaders = new Headers();
     myHeaders.append("api-key", APIKEY);
@@ -88,10 +134,10 @@ class UpdateClientProduct extends Component {
     var formdata = new FormData();
     formdata.append("clientid", this.props.location.pathname.split("/")[2]);
     formdata.append("productid", this.state.type);
-    formdata.append("modules", mod);
+    formdata.append("modules", modules);
     formdata.append("cost", this.state.cost);
     formdata.append("userid", this.state.user.userid);
-    formdata.append("liscenseduration", this.state.liscenseduration);
+    formdata.append("licenseduration", this.state.licenseduration);
     formdata.append("paymentstatus", this.state.paymentstatus);
     formdata.append("deploymentstatus", this.state.deploymentstatus);
     formdata.append("trainingstatus", this.state.trainingstatus);
@@ -99,7 +145,6 @@ class UpdateClientProduct extends Component {
     formdata.append("trainingdate", this.state.trainingdate);
     formdata.append("deploymentdate", this.state.deploymentdate);
     formdata.append("remarks", this.state.remarks);
-    formdata.append('files[]', this.state.files);
 
     fetch(HTTPURL + "clients/updateproduct", {
       method: "POST",
@@ -168,6 +213,8 @@ class UpdateClientProduct extends Component {
     e.currentTarget.type = "text";
     e.currentTarget.placeholder = "Deployment Date";
   }
+
+
   trainingDate(e) {
     e.currentTarget.type = "text";
     e.currentTarget.placeholder = "Training Date";
@@ -199,35 +246,17 @@ class UpdateClientProduct extends Component {
     this.setState({ files: files });
   }
 
-  paymentDate(date,licenseCoverage) {
+  paymentDate(date, licenseCoverage) {
 
     if (licenseCoverage == "monthly") {
-         date = new Date()
-        let expiration = `${date.getUTCMonth() + 1}/${date.getUTCDay()}/${date.getUTCFullYear() + 1 }`
-        this.setState({ expirationdate : expiration });
-        console.log(this.state.expirationdate)
-      } 
+      date = new Date()
+      let expiration = `${date.getUTCMonth() + 1}/${date.getUTCDay()}/${date.getUTCFullYear() + 1}`
+      this.setState({ expirationdate: expiration });
+      console.log(this.state.expirationdate)
+    }
   }
 
   render() {
-    let files = this.state.files.map((file) => {
-      this.state.imagePreviewUrl = URL.createObjectURL(file);
-      // this.setState({imagePreviewUrl: URL.createObjectURL(file) })
-      return file.name.match(/\.(jpg|jpeg|png)$/) ? (
-        <div className="imgPreview m-2" id="files">
-          <i className="fa fa-trash" onClick={(e) => this.removeImage(e)}></i>
-          <img src={this.state.imagePreviewUrl} className="imagePreview" />
-        </div>
-      ) : (
-        <div className="other_files m-2" id="otherfiles">
-          <i
-            className="fa fa-trash"
-            onClick={(e) => this.removeOtherImage(e)}
-          ></i>
-          {file.name}
-        </div>
-      );
-    });
     return (
       <div className="container mx-auto row">
         {/* Success Message */}
@@ -253,27 +282,27 @@ class UpdateClientProduct extends Component {
             </button>
           </div>
         ) : (
-          <span></span>
-        )}
+            <span></span>
+          )}
 
         <div className="col-md-12 mb-3 mt-4" id="profile">
           {/* Error Message */}
           {this.state.errormessage != null &&
-          this.state.errormessage.length > 0 ? (
-            <div className="alert alert-warning" role="alert">
-              {this.state.errormessage}
-              <button
-                type="button"
-                className="close"
-                data-dismiss="alert"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-          ) : (
-            <span></span>
-          )}
+            this.state.errormessage.length > 0 ? (
+              <div className="alert alert-warning" role="alert">
+                {this.state.errormessage}
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="alert"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            ) : (
+              <span></span>
+            )}
 
           <form onSubmit={this.handleSubmit} id="addclientproduct">
             <div className="card">
@@ -281,45 +310,42 @@ class UpdateClientProduct extends Component {
                 UPDATE CLIENT PRODUCT
               </div>
 
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-md-12"></div>
-                </div>
-                <div className="row">
-                  <div className="col-md-12 mb-3">
-                    <div className="form-group">
-                      <select
-                        onChange={(e) => {
-                          this.getModule(e.target.value);
-                          this.setState({ type: e.target.value });
-                        }}
-                        value={this.state.type}
-                        name="type"
-                        id="type"
-                        className=" form-control form-select form-select-sm"
-                      >
-                        <option value="" selected disabled>
-                          ---Select&nbsp;product---&nbsp;
+              <div className="card-body px-5">
+                <div className="form-group row mb-3">
+                  <select
+                    onChange={(e) => {
+                      this.getModule(e.target.value);
+                      this.setState({ type: e.target.value });
+                    }}
+                    value={this.state.productid}
+                    name="productid"
+                    id="productid"
+                    className=" form-control form-select form-select-sm"
+                    disabled
+                  >
+                    <option value="" selected disabled>
+                      ---Select&nbsp;product---&nbsp;
                         </option>
 
-                        {this.state.products.map((product) => {
-                          return (
-                            <option value={product.id}>{product.name}</option>
-                          );
-                        })}
-                      </select>
-                    </div>
-                  </div>
+                    {this.state.products.map((product) => {
+                      return (
+                        <option value={product.id}>{product.name}</option>
+                      );
+                    })}
+                  </select>
+                </div>
 
-                  <div className="col-md-6 mb-1">
+                <div className="row">
+                  <div className="col-md-4 mb-1">
                     <div className="form-group">
+                      <label htmlFor="cost" className="font-weight-bold">
+                        Total Cost
+                      </label>
                       <div className="input-group mb-3">
                         <span className="input-group-text bg-white py-1 alt">
                           &#8358;
-                        </span>
-                        <label htmlFor="" className="sr-only">
-                          Cost
-                        </label>
+                          </span>
+
                         <input
                           type=""
                           className="form-control form-control-sm py-3"
@@ -333,57 +359,9 @@ class UpdateClientProduct extends Component {
                     </div>
                   </div>
 
-                  <div className="col-md-6 mb-1">
+                  <div className="col-md-4 mb-1">
                     <div className="form-group">
-                      <label htmlFor="" className="sr-only">
-                        Liscence Coverage
-                      </label>
-                      <select
-                        className=" form-control form-select form-select-sm"
-                        onChange={(e) => {
-                          this.setState({ liscenseduration: e.target.value });
-                        }}
-                        id="liscenseduration"
-                        name="liscenseduration"
-                        value={this.state.liscenseduration}
-                      >
-                        <option value="" selected disabled>
-                          License&nbsp;Duration
-                        </option>
-                        <option value="monthly">Monthly</option>
-                        <option value="quaterly">Quarterly</option>
-                        <option value="biannually">Bianually</option>
-                        <option value="annually">Annually</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="col-md-6 mb-1">
-                    <div className=" form-group">
-                      <label htmlFor="" className="sr-only">
-                        Payment Status
-                      </label>
-                      <select
-                        className=" form-control form-select form-select-sm"
-                        onChange={(e) => {
-                          this.setState({ paymentstatus: e.target.value });
-                        }}
-                        value={this.state.paymentstatus}
-                        name="paymentstatus"
-                        id="paymentstatus"
-                      >
-                          <option value="" selected disabled>
-                            Payment&nbsp;Status&nbsp;
-                          </option>
-                              <option value="pending">Pending</option>
-                              <option value="completed">Completed</option>
-                        </select>
-                    </div>
-                  </div>
-
-                  <div className="col-md-6 mb-1">
-                    <div className="form-group">
-                      <label htmlFor="" className="sr-only">
+                      <label htmlFor="paymentdate" className="font-weight-bold">
                         Payment Date
                       </label>
                       <input
@@ -395,6 +373,7 @@ class UpdateClientProduct extends Component {
                         onBlur={this.paymentDate}
                         onFocus={this.onFocus}
                         value={this.state.paymentdate}
+                        style={{ height: '35px' }}
                         onChange={(e) => {
                           this.paymentDate(e.target.value, this.state.licensecoverage);
                           this.setState({ paymentdate: e.target.value });
@@ -403,10 +382,37 @@ class UpdateClientProduct extends Component {
                     </div>
                   </div>
 
+                  <div className="col-md-4 mb-1">
+                    <div className=" form-group">
+                      <label htmlFor="paymentstatus" className="font-weight-bold">
+                        Payment Status
+                      </label>
+                      <select
+                        className=" form-control form-select form-select-sm"
+                        onChange={(e) => {
+                          this.setState({ paymentstatus: e.target.value });
+                        }}
+                        value={this.state.paymentstatus}
+                        name="paymentstatus"
+                        id="paymentstatus"
+                        style={{ height: '35px' }}
+                      >
+                        <option value="" selected disabled>
+                          Payment&nbsp;Status&nbsp;
+                          </option>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                      </select>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div className="row">
                   <div className="col-md-6 mb-1">
                     <div className=" form-group">
-                      <label htmlFor="" className="sr-only">
-                      Deployment Status
+                      <label htmlFor="deploymentstatus" className="font-weight-bold">
+                        Deployment Status
                       </label>
                       <select
                         className=" form-control form-select form-select-sm"
@@ -416,20 +422,21 @@ class UpdateClientProduct extends Component {
                         value={this.state.deploymentstatus}
                         name="deploymentstatus"
                         id="deploymentstatus"
+                        style={{ height: '35px' }}
                       >
-                          <option value="" selected disabled>
+                        <option value="" selected disabled>
                           Deployment&nbsp;Status&nbsp;
                           </option>
-                              <option value="pending">Pending</option>
-                              <option value="completed">Completed</option>
-                        </select>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                      </select>
                     </div>
                   </div>
-                  
+
 
                   <div className="col-md-6 mb-1">
                     <div className="form-group">
-                      <label htmlFor="" className="sr-only">
+                      <label htmlFor="deploymentdate" className="font-weight-bold">
                         Deployment Date
                       </label>
                       <input
@@ -441,14 +448,16 @@ class UpdateClientProduct extends Component {
                         onFocus={this.onFocus}
                         value={this.state.deploymentdate}
                         onChange={this.handleInputChange}
+                        style={{ height: '35px' }}
                       />
                     </div>
                   </div>
-
+                </div>
+                <div className="row">
                   <div className="col-md-6 mb-1">
                     <div className=" form-group">
-                      <label htmlFor="" className="sr-only">
-                      Training Status
+                      <label htmlFor="trainingstatus" className="font-weight-bold">
+                        Training Status
                       </label>
                       <select
                         className=" form-control form-select form-select-sm"
@@ -458,19 +467,20 @@ class UpdateClientProduct extends Component {
                         value={this.state.trainingstatus}
                         name="trainingstatus"
                         id="trainingstatus"
+                        style={{ height: '35px' }}
                       >
-                          <option value="" selected disabled>
+                        <option value="" selected disabled>
                           Training&nbsp;Status&nbsp;
                           </option>
-                              <option value="pending">Pending</option>
-                              <option value="completed">Completed</option>
-                        </select>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                      </select>
                     </div>
                   </div>
 
                   <div className="col-md-6 mb-1">
                     <div className="form-group">
-                      <label htmlFor="" className="sr-only">
+                      <label htmlFor="trainingdate" className="font-weight-bold">
                         Training Date
                       </label>
                       <input
@@ -483,40 +493,44 @@ class UpdateClientProduct extends Component {
                         onFocus={this.onFocus}
                         value={this.state.trainingdate}
                         onChange={this.handleInputChange}
+                        style={{ height: '35px' }}
                       />
                     </div>
                   </div>
-
-                  <div className="col-md-6 mb-1">
-                    <div className=" form-group">
-                      <label htmlFor="" className="sr-only">
-                      Expiration Status
-                      </label>
+                </div>
+                <div className="row">
+                  <div className="col-md-4 mb-1">
+                    <div className="form-group">
+                      <label htmlFor="licenseduration" className="font-weight-bold">
+                        License Coverage
+                        </label>
                       <select
                         className=" form-control form-select form-select-sm"
                         onChange={(e) => {
-                          this.setState({ expirationstatus: e.target.value });
+                          this.setState({ licenseduration: e.target.value });
                         }}
-                        value={this.state.expirationstatus}
-                        name="expirationstatus"
-                        id="expirationstatus"
+                        id="licenseduration"
+                        name="licenseduration"
+                        value={this.state.licenseduration}
+                        style={{ height: '35px' }}
                       >
-                          <option value="" selected disabled>
-                          Expiration&nbsp;Status&nbsp;
+                        <option value="" selected disabled>
+                          License&nbsp;Duration
                           </option>
-                              <option value="pending">Pending</option>
-                              <option value="completed">Completed</option>
-                        </select>
+                        <option value="monthly">Monthly</option>
+                        <option value="quaterly">Quarterly</option>
+                        <option value="biannually">Bianually</option>
+                        <option value="annually">Annually</option>
+                      </select>
                     </div>
                   </div>
-
-                  <div className="col-md-6 mb-1">
+                  <div className="col-md-4 mb-1">
                     <div className="form-group">
-                      <label htmlFor="" className="sr-only">
+                      <label htmlFor="expirationdate" className="font-weight-bold">
                         Expiration Date
                       </label>
                       <input
-                      
+                         style={{ height: '35px' }}
                         className="form-control form-control-sm"
                         name="expirationdate"
                         id="expirationdate"
@@ -525,14 +539,19 @@ class UpdateClientProduct extends Component {
                         onFocus={this.onFocus}
                         value={this.state.expirationdate}
                         onChange={this.handleInputChange}
+                        readOnly
                       />
                     </div>
                   </div>
-
+                  <div className="col-md-4 text-center">
+                    <button className="btn btn-warning text-light btn-sm mt-4">Renew</button>
+                  </div>
+                </div>
+                <div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
-                      <label htmlFor="" className="sr-only">
-                        Product Description
+                      <label htmlFor="remarks" className="font-weight-bold">
+                        Deployment Remarks
                       </label>
                       <textarea
                         type="text"
@@ -558,8 +577,9 @@ class UpdateClientProduct extends Component {
                             {" "}
                             <input
                               type="checkbox"
-                              id={module.id}
+                              value={module.id}
                               onClick={this.handleCheck}
+                              checked={ this.state.selectedModules.findIndex(item=>item === module.id)}
                             />
                             <span className="slider round"></span>
                           </label>
@@ -567,21 +587,17 @@ class UpdateClientProduct extends Component {
                       </div>
                     ))
                   ) : (
-                    <div>
-                      <div className="container-fluid">
-                        <div
-                          className="alert alert-warning text-center"
-                          role="alert"
-                        >
-                          Select a product!
+                      <div>
+                        <div className="container-fluid">
+                          <div
+                            className="alert alert-warning text-center"
+                            role="alert"
+                          >
+                            Select a product!
+                        </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="row justify-content-center" id="preview">
-                  {files}
+                    )}
                 </div>
               </div>
 
@@ -597,24 +613,24 @@ class UpdateClientProduct extends Component {
                         role="status"
                         id="loader"
                       >
-                        <span className="sr-only">Loading...</span>
+                        <span className="">Loading...</span>
                       </div>
                     </button>
                   ) : (
-                    <button
-                      type="submit"
-                      className="btn btn-sm btn-primary px-3 py-2"
-                    >
-                      <i className="fas fa-folder-open mr-2"></i>
+                      <button
+                        type="submit"
+                        className="btn btn-sm btn-primary px-3 py-2"
+                      >
+                        <i className="fas fa-folder-open mr-2"></i>
                       Save
-                    </button>
-                  )}
+                      </button>
+                    )}
                 </div>
               </div>
             </div>
           </form>
         </div>
-      </div>
+      </div >
     );
   }
 }

@@ -126,14 +126,19 @@ class UpdateClientProduct extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     this.setState({ loading: true });
-    const modules = this.state.modules.toString();
+    // let mod = "";
+    // this.state.modules.forEach((module) => {
+    //   mod += JSON.stringify(module.name) + ",";
+    // });
+
+    const modules = JSON.stringify(this.state.modules);
 
     let myHeaders = new Headers();
     myHeaders.append("api-key", APIKEY);
 
     var formdata = new FormData();
     formdata.append("clientid", this.props.location.pathname.split("/")[2]);
-    formdata.append("productid", this.state.type);
+    formdata.append("productid", this.state.productid);
     formdata.append("modules", modules);
     formdata.append("cost", this.state.cost);
     formdata.append("userid", this.state.user.userid);
@@ -197,11 +202,12 @@ class UpdateClientProduct extends Component {
   };
   handleCheck = ({ target }) => {
     if (target.checked) {
-      target.removeAttribute("checked");
-      this.addModule(target.id);
-    } else {
       target.setAttribute("checked", true);
       this.removeModule(target.id);
+    } else {
+      target.removeAttribute("checked");
+      this.addModule(target.id);
+      console.log(target.checked)
     }
   };
 

@@ -123,11 +123,11 @@ class Login extends Component {
                                         <i className="fas fa-lock-open fa-fw"></i>
                                     </span>
                                     <label htmlFor="" className="sr-only">Password</label>
-                                    <input type="password" className="form-control alt alt2" id="password" name="password" placeholder="Password"
+                                    <input type="password" className="form-control alt alt_right" id="password" name="password" placeholder="Password"
                                         // aria-label="Password" aria-describedby="password" required
                                         value={this.state.password}
                                         onChange={this.handleInputChange}/>
-                                        <span className="input-group-text bg-white alt" >
+                                        <span className="input-group-text bg-white alt alt_left" >
                                             <i className="fas fa-eye fa-fw" style={{cursor:'pointer'}} onClick={this.showPassword}></i>
                                          </span>
                                 </div>

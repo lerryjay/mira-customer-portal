@@ -12,6 +12,7 @@ class create_ticket extends Component {
             title: '',
             type: '',
             message: '',
+            customerid: '',
             loading: false,
             files: [],
             users: [],
@@ -58,7 +59,8 @@ class create_ticket extends Component {
         })
             .then(response => response.json());
         if (res['status']) {
-            this.setState({ successmessage: 'Ticket Created Successfully', loading: false, title: '', type: '', message: '' })
+            this.setState({ loading: false });
+            this.setState({ successmessage: 'Ticket Created Successfully', loading: false, title: '', type: '', message: '', customerid: ''})
             setTimeout(() => this.setState({ successmessage: false }), 5000);
         }
     }

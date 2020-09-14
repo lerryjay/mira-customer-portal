@@ -35,6 +35,10 @@ class ViewTicket extends Component {
     this.state.hideLoader();
   }
 
+  componentDidUpdate(){
+    if(this.state.updateData) this.getChat()
+  }
+
   async getTicket() {
     const ticketid = this.props.location.pathname.split("/")[2];
 
@@ -108,7 +112,7 @@ class ViewTicket extends Component {
         return json;
       });
 
-    this.setState({ message: "", files: "" });
+    this.setState({ chat: "", files: "" });
     this.setState({ updateData: true });
   };
 
@@ -126,6 +130,7 @@ class ViewTicket extends Component {
     this.setState({ previewFile: file });
     let modal2 = document.getElementById("myModal");
     modal2.style.display = "block";
+
 
     var span = document.getElementsByClassName("close")[0];
     span.onclick = function () {
@@ -193,17 +198,14 @@ class ViewTicket extends Component {
                 >
                   Download
                 </a>{" "}
-                //implement download button later
                 <span className="close">&times;</span>
               </div>
               <div className="d-flex justify-content-center align-content-center">
-                <div className="bg-white">
                   {this.state.previewFile.match(/\.(jpg|jpeg|png)$/) ? (
                     <img src={FILEURL + this.state.previewFile} />
                   ) : (
                     <img src={pdf_placeholder} />
                   )}
-                </div>
               </div>
             </div>
 

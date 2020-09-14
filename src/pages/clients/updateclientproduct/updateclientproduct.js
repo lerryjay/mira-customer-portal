@@ -36,7 +36,7 @@ class UpdateClientProduct extends Component {
     const clientproductid = this.props.location.pathname.split("/")[2];
     await this.setState({ clientproductid });
     this.getClientProduct();
-    this.getProducts();
+    this.props.user.role === 'admin' && this.getProducts();
   }
   getModule(productId) {
     fetch(

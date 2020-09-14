@@ -15,6 +15,7 @@ class viewclientproduct extends Component {
       productdescription: "",
       remarks: "",
       modules: [],
+      productmodules: [],
       cost: "",
       imageurl: "",
       paymentdate: "",
@@ -77,42 +78,57 @@ class viewclientproduct extends Component {
         modules,
         product_id
       });
+      this.getModule(product_id);
     }
   }
+
+  async getModule(productId) {
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    const result = await fetch(`${HTTPURL}product/modules?productid=${productId}&userid=${this.state.user.userid}`, { method: "GET", headers: headers})
+    .then((response) => response.json())
+    if (result.status) {
+      this.setState({  productmodules : result.data });
+    }
+  }
+
 
   async componentDidMount() {
     const clientproductid = this.props.location.pathname.split("/")[2];
     await this.setState({ clientproductid });
     this.getClientProduct();
   }
-  closeModal() {
-    let modal2 = document.getElementById("myModal");
 
-    var span = document.getElementsByClassName("close2")[0];
-    span.onclick = function () {
-      modal2.style.display = "none";
-    };
+  closeModal(id) {
+    let modal2 = document.getElementById(id);
+    modal2.style.display = "none";
   }
-  showModal = (e, file) => {
+
+  showFileModal = (e, file) => {
     this.setState({ previewFile: file });
-    let modal2 = document.getElementById("myModal");
+    let modal2 = document.getElementById("fileModal");
     modal2.style.display = "block";
 
   };
 
-  async handleFileAttachment(e){
+  showModuleModal = e => {
+    let modal2 = document.getElementById("moduleModal");
+    modal2.style.display = "block";
+  };
+
+  async handleFileAttachment(e) {
     const { user, clientproductid } = this.state;
     const form = new FormData(document.getElementById('fileForm'));
-    form.append('userid',user.userid);
-    form.append('clientproductid',clientproductid);
+    form.append('userid', user.userid);
+    form.append('clientproductid', clientproductid);
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
-    const res = await fetch(`${HTTPURL}clients/adddeploymentfile`,{
+    const res = await fetch(`${HTTPURL}clients/adddeploymentfile`, {
       method: "POST",
       headers: headers,
-      body : form
-    }).then(res=>res.json());
-    if(res['status']){
+      body: form
+    }).then(res => res.json());
+    if (res['status']) {
       this.setState({ files: res.data });
     }
   }
@@ -122,7 +138,7 @@ class viewclientproduct extends Component {
       <div className="container mx-auto row">
         <div className="col-md-12 mb-3 mt-4" id="profile">
           <div className="w-100 text-center">
-            <h3>PRODUCT DETAILS </h3>
+            <h3>DEPLOYMENT DETAILS </h3>
           </div>
 
           <div className="row mt-4">
@@ -231,7 +247,7 @@ class viewclientproduct extends Component {
               <h5 className="text-dark font-weight-bold">Modules</h5>
             </div>
             <div className="col-md-8 text-right">
-              <button className="btn btn-success rounded-0 btn-sm py-1 px-2">Edit Modules</button>
+              <button className="btn btn-success rounded-0 btn-sm py-1 px-2" onClick={this.showModuleModal}>Edit Modules</button>
             </div>
           </div>
           <div className="row">
@@ -259,10 +275,10 @@ class viewclientproduct extends Component {
             </div>
             <div className="col-md-4 text-right">
               <form id="fileForm">
-              <label htmlFor="file" className="btn btn-sm btn-primary py-1 px-3">Attach Files</label>
+                <label htmlFor="file" className="btn btn-sm btn-primary py-1 px-3">Attach Files</label>
                 <input style={{ display: 'none' }} type={"file"} id="file"
-                className="form-file form-file-sm" name="files[]" multiple placeholder=""
-                onChange={(e) => this.handleFileAttachment(e)} />
+                  className="form-file form-file-sm" name="files[]" multiple placeholder=""
+                  onChange={(e) => this.handleFileAttachment(e)} />
               </form>
             </div>
           </div>
@@ -275,7 +291,7 @@ class viewclientproduct extends Component {
                       id="img"
                       style={{ width: "100px", height: "100px" }}
                       className="m-2"
-                      onClick={(e) => this.showModal(e, item)}
+                      onClick={(e) => this.showFileModal(e, item)}
                       src={FILEURL + item}
                       onError={(e) => {
                         e.target.onerror = null;
@@ -285,7 +301,7 @@ class viewclientproduct extends Component {
                   ) : (
                       <img
                         src={pdf_placeholder}
-                        onClick={(e) => this.showModal(e, item)}
+                        onClick={(e) => this.showFileModal(e, item)}
                         style={{ width: "100px", height: "100px" }}
                         className="m-2"
                       />
@@ -303,10 +319,8 @@ class viewclientproduct extends Component {
           </div>
         </div>
 
-
-
         <div className="row col-md-12">
-          <div id="myModal" className="modal2">
+          <div id="fileModal" className="modal2">
             <div className="px-2 d-flex">
               <a
                 download
@@ -318,7 +332,7 @@ class viewclientproduct extends Component {
                 Download
               </a>{" "}
               //implement download button later
-              <span className="close close2" onClick={this.closeModal}>&times;</span>
+              <span className="close close2" onClick={(e) => this.closeModal("fileModal")}>&times;</span>
             </div>
             <div className="d-flex justify-content-center align-content-center">
               {this.state.previewFile.match(/\.(jpg|jpeg|png)$/) ? (
@@ -328,8 +342,43 @@ class viewclientproduct extends Component {
                 )}
             </div>
           </div>
+
+          <div id="moduleModal" className="modal2">
+            <div className="px-2 d-flex">
+              <span className="close close2" onClick={(e) => this.closeModal("moduleModal")}>&times;</span>
+            </div>
+            <div className="card">
+              <div className="card-body">
+                <div className="row">
+                {
+                  this.state.productmodules.map((module) => (
+                    <div className="col-md-4">
+                      <p className="list-group-item">
+                        {module.name}
+                        <label className="switch float-right">
+                          <input
+                            type="checkbox"
+                            value={module.id}
+                            onClick={this.handleCheck}
+                            checked={ this.state.modules.findIndex(item=>item === module.id)}
+                          />
+                          <span className="slider round"></span>
+                        </label>
+                      </p>
+                    </div>
+                  ))
+                }
+                </div>
+                <div className="row">
+                  <div className="col-md-12 text-center">
+                    <button className="btn btn-success rounded-0 px-4">Update Modules</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      // </div>
+      </div>
     );
   }
 }

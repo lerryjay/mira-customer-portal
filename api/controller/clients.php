@@ -248,7 +248,7 @@ class Clients extends Controller
   {
     extract($this->validateUpdateClient());
     $update = $this->clientModel->updateClient($clientUserId,['businessname'=>$businessName,'telephone'=>$companyTelephone,'email'=>$companyEmail,'address'=>$companyAddress,'country_id'=>$companyCountryId,'state_id'=>$companyStateId,'lga'=>$companyLga]);
-    if($update) $response = ['status'=>true,'message'=>'Product update sucessfully!'];
+    if($update) $response = ['status'=>true,'message'=>'Client updated sucessfully!'];
     else $response = ['status'=>false,'message'=>'Client update failed due to an expected error!'];
     $this->setOutputHeader(['Content-type:application/json']);
     $this->setOutput(json_encode($response));
@@ -311,19 +311,19 @@ class Clients extends Controller
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid company address', 'data'=>['field'=>'companyaddress']]));
     }
 
-    $companycountryInvalid      = Validate::string($companycountryid,false,true,4,20);
+    $companycountryInvalid      = Validate::integar($companycountryid);
     if($companycountryInvalid){ 
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid company country', 'data'=>['field'=>'companycountryid']]));
     }
 
-    $companystateInvalid      = Validate::string($companystateid,false,true,4,20);;
+    $companystateInvalid      = Validate::integar($companystateid);;
     if($companystateInvalid){ 
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid company state', 'data'=>['field'=>'companystateid']]));
     }
 
-    $companylgaInvalid      = Validate::string($companylga,false,true,4,20);;
+    $companylgaInvalid      = Validate::string($companylga,false,true,4,120);;
     if($companylgaInvalid){ 
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Please provide company lga', 'data'=>['field'=>'companylga']]));
@@ -342,7 +342,29 @@ class Clients extends Controller
    **/
   public function delete()
   {
-    # code...
+    extract($_POST);
+    
+    $deleteuser ??= false;
+    $userid ??= '';
+    $clientid ??= '';
+
+    loadController('user');
+    $user = User::validateUser($userid,true);
+    loadModel('client');
+    $this->clientModel = new ClientModel();
+    $deleted = $this->clientModel->delete($clientid);
+    if($deleted) {
+      $response =  ['status'=>true,'message'=>'Client account deleted successfully'];
+      if($deleteuser){
+        loadModel('user');
+        $this->userModel =  new UserModel();
+        $userdeleted = $this->userModel->updateUser($clientid,['status'=> 0 ]);
+        if(!$userdeleted) $response['message'] .= ' Unable to delete user account';
+      } 
+    }else $response =  ['status'=>false,'message'=>'Client account delete failed'];
+
+    $this->setOutputHeader(['Content-type:application/json']);
+    $this->setOutput(json_encode($response)); 
   }
 
   /**
@@ -620,20 +642,6 @@ class Clients extends Controller
     }else $modules = $_POST['modules'];
 
     return ['clientProductId'=>$clientproductid,'user'=>$user,'userId'=>$userId,'clientUserId'=>$clientUserId,'modules'=>$modules,'product'=>$product,'productId'=>$productId,'trainingDate'=>$trainingdate,'trainingStatus'=>$trainingstatus,'paymentDate'=>$paymentdate,'paymentStatus'=>$paymentstatus,'licenseDuration'=>$licenseduration,'deploymentDate'=>$deploymentdate,'deploymentStatus'=>$deploymentstatus,'remarks'=>$remarks];
-  }
-
-  /**
-   * undocumented function summary
-   *
-   * Undocumented function long description
-   *
-   * @param Type $var Description
-   * @return type
-   * @throws conditon
-   **/
-  public function getHypothenus(int $a, int $b):int
-  {
-    # code...
   }
 
   /**

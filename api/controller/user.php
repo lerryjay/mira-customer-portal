@@ -554,6 +554,27 @@
       $this->setOutput(json_encode($response));
     }
 
+    public function suspend()
+    {
+      extract($_POST);
+      loadModel('user');
+
+      $clientid ??= '';
+      $userid ??= '';
+
+      loadController('user');
+      $user = User::validateUser($userid,true);
+
+      $this->userModel = new UserModel();
+
+      $update = $this->userModel->updateUser($clientid,['activation'=>'SUSPENDED']);
+      if($update) $response =  ['status'=>true,'message'=>'Account updated sucessfully'];
+      else  $response =  ['status'=>true,'message'=>'Account update failed'];
+
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
+    }
+
 
     /**
      * validate that a user exists within the database

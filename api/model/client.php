@@ -96,7 +96,7 @@
      * @return type
      * @throws conditon
      **/
-    public function delete()
+    public function delete($userId)
     {
       return $this->update('clients',['status'=>0], ['user_id'=>$userId]);
     }

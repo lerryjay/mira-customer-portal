@@ -342,7 +342,7 @@ class Clients extends Controller
    **/
   public function delete()
   {
-    extract($_POST);
+    extract($_GET);
     
     $deleteuser ??= false;
     $userid ??= '';

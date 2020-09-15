@@ -160,7 +160,7 @@
      **/
     public function suspend()
     {
-      extract($_POST);
+      extract($_GET);
       loadModel('user');
 
       $adminid ??= '';

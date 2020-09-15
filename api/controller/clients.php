@@ -476,7 +476,7 @@ class Clients extends Controller
 
     $invalidModules = [];
     $productModules = $this->productModel->getModulesByProductId($productId);
-    
+    $productModules = $productModules ?: [];
     foreach ($productModules as $module) {
       $itemExist = array_search($module['id'],$modules);
       if($itemExist !== false) array_splice($modules,$itemExist);

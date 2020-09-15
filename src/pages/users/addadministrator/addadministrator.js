@@ -58,9 +58,9 @@ class CreateClient extends Component {
                 method: "POST",
                 headers: myHeaders,
                 body:formdata
-            }).then(response => response.json()).
-                then(result => {
-                    if(result.status == false) {
+            }).then(response => response.json())
+                .then(result => {
+                    if(result.status === false) {
                         setTimeout(() => {
                             this.setState({loading : false});
                             this.setState({errormessage: result.message});

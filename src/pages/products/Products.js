@@ -12,12 +12,15 @@ class Products extends Component {
             ...this.props,
             showmodal: true,
             id: '',
-            loading: false
+            loading: false,
+            updateData: false
         }
     }
 
-    componentDidMount() {
-    }
+   
+  componentDidUpdate(){
+    if(this.state.updateData) {return this.state.products}
+  }
 
     showDeleteModal(e) {
         this.state.id = e
@@ -40,8 +43,8 @@ class Products extends Component {
                 console.log(data, "deleted")
                 let modal = document.getElementById("myModal")
                 modal.style.display = "none";
-                this.state.getProducts();
             });
+            this.setState({ updateData: true });
     }
 
     closeModal() {

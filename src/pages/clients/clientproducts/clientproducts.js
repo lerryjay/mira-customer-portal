@@ -76,7 +76,7 @@ class clientviewproduct extends Component {
                             return (
                                 <div className="col-md-3 col-lg-4 col-sm-12 my-2  d-flex justify-content-center" key={i}>
                                     <div className="card text-center products">
-                                    <img className="img-fluid" src={FILEURL+product.imageurl} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}}/>
+                                    <img className="img-fluid" src={FILEURL+product.imageurl} onError={(e)=>{e.target.onerror = null; e.target.src= placeholder}} alt=""/>
                                         <div className="card-body">
                                             <h5 className="card-title">{product.name}</h5>
                                             {/* <Link  to={{ pathname:"", search}} onClick={this.handleViewMore}> */}

@@ -92,7 +92,7 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
-        { this.state.user.role == 'admin' &&
+        { this.state.user.role ==='admin' &&
           <div className="row card mt-3 mx-4 justify-content-center mx-2">
             <div className="col-12 card-body shadow home-chart">
               <div className="d-flex justify-content-between">
@@ -115,10 +115,10 @@ class Dashboard extends Component {
                   <tr>
                     <th>S/N</th>
                     <th>Date&nbsp;&&nbsp;Time</th>
-                    {this.state.user.role == "admin" && (
+                    {this.state.user.role === "admin" && (
                       <th>Client&nbsp;Name</th>
                     )}
-                    {this.state.user.role == "admin" && <th>Email</th>}
+                    {this.state.user.role === "admin" && <th>Email</th>}
                     <th>Ticket&nbsp;Type</th>
                     <th>Status</th>
                     <th>View&nbsp;Ticket</th>
@@ -134,12 +134,12 @@ class Dashboard extends Component {
                             ticket.createdat
                           ).toLocaleDateString()}
                         </td>
-                        {this.state.user.role == "admin" && (
+                        {this.state.user.role === "admin" && (
                           <td onClick={this.handleRoute}>
                             {ticket.clientname}
                           </td>
                         )}
-                        {this.state.user.role == "admin" && (
+                        {this.state.user.role === "admin" && (
                           <td>{ticket.email}</td>
                         )}
                         <td>{ticket.type}</td>

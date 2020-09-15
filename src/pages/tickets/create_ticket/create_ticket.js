@@ -60,7 +60,8 @@ class create_ticket extends Component {
             .then(response => response.json());
         if (res['status']) {
             this.setState({ loading: false });
-            this.setState({ successmessage: 'Ticket Created Successfully', loading: false, title: '', type: '', message: '', customerid: ''})
+            document.getElementById("createticket").reset()
+            this.setState({ successmessage: 'Ticket Created Successfully', loading: false, imagePreviewUrl: '', title: '', type: '', message: '', customerid: '', file: ''})
             setTimeout(() => this.setState({ successmessage: false }), 5000);
         }
     }

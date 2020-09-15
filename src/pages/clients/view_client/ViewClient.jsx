@@ -60,7 +60,7 @@ class ViewClient extends Component {
       .then((res) => res.json())
       .then((result) => {
         this.state.hideLoader();
-        if (result.status == true) {
+        if (result.status === true) {
           this.getProducts();
           this.setState({
             lastname: result.data.lastname,
@@ -94,7 +94,7 @@ class ViewClient extends Component {
 
   async showdeleteModal(productid) {
     const selectedProduct = this.state.products.find(
-      (item) => item.id == productid
+      (item) => item.id === productid
     );
     await this.setState({ selectedProduct });
     let modal = document.getElementById("deleteModal");

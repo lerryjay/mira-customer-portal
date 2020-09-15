@@ -97,7 +97,10 @@ class AddClientProduct extends Component {
         if (data.status == true) {
           setTimeout(() => {
             this.setState({ loading: false });
+
+            document.getElementById("addclientproduct").reset()
             this.setState({ successmessage: data.message });
+            
             console.log("submitting");
             this.setState({
               type: "",

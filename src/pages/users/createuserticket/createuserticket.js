@@ -44,18 +44,6 @@ class create_ticket extends Component {
         let form = new FormData(document.getElementById("createticket"));
         form.append("userid", this.state.user.userid);
         this.state.files.length < 1 && form.delete('files[]');
-        
-
-        if(this.state.user.role == 'admin'){
-            if(form.get('customerid').length < 1) console.log('no customer selected')//show error
-            else{
-                const customer = form.get('customerid');
-                const user = this.state.users.find(user=> user.firstname+' '+user.lastname  === customer);
-                if(user) form.set('customerid',user.userid);
-            }
-        }
-
-
 
        const res = await fetch(HTTPURL + 'ticket/add', {
             method: 'POST',

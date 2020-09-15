@@ -93,29 +93,7 @@ class product_details extends Component {
 
   async showdeleteInfoModule(moduleid)
   {
-    const selectedModule = this.state.packages.find(item=>item.id == moduleid);
-    await this.setState({selectedModule});
-    let modal = document.getElementById("deleteModal");
-    modal.style.display = "block";
-  }
-  
-  async deleteInfoModule()
-  {
-    const headers = new Headers();
-    headers.append("API-KEY", APIKEY);
-    const res  = await fetch(`${HTTPURL}product/deletemodule?moduleid=${this.state.selectedModule.id}&userid=${this.state.user.userid}`, {
-      method: 'GET',
-      headers: headers
-    })
-    if(res['status']) this.getModules();
-    console.log('edit module response',res);
-    //display success here
-  }
-
-
-  async showdeleteInfoModule(moduleid)
-  {
-    const selectedModule = this.state.packages.find(item=>item.id == moduleid);
+    const selectedModule = this.state.packages.find(item=>item.id === moduleid);
     await this.setState({selectedModule});
     let modal = document.getElementById("deleteModal");
     modal.style.display = "block";
@@ -137,11 +115,12 @@ class product_details extends Component {
           headers: headers
         })
         console.log('delete module response',res);
-
-        this.setState({ successmessage: "Deleted Successfully!" });
+        this.setState({ successmessage: "Deleted Successfully!" , updateData: true});
         let modal = document.getElementById("deleteModal");
         modal.style.display = "none";
-      }, 5000);
+      }, 2000);
+      
+      this.setState({ successmessage: false });
     }, 3000);
     //display success here
   }
@@ -230,7 +209,7 @@ class product_details extends Component {
     e.preventDefault();
     this.setState({loading : true});
     setTimeout(() => {
-      this.setState({ loading: true });
+      this.setState({ loading: false });
       setTimeout(() => {
 
         const headers = new Headers();
@@ -653,10 +632,10 @@ class product_details extends Component {
                           {this.state.loading ? (
                             <button
                               type="submit"
-                              className="btn btn-block btn-primary"
+                              className="btn btn-block btn-danger"
                             >
                               <div
-                                className="spinner-border text-danger"
+                                className="spinner-border "
                                 role="status"
                                 id="loader"
                               >

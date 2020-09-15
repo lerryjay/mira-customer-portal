@@ -95,7 +95,7 @@ class Profile extends Component {
             let imagePreview = null;
             if (imagePreviewUrl) {
                 this.props.user.imageurl = true
-            imagePreview = (<img src={imagePreviewUrl} className="imagePreview"/>);
+            imagePreview = (<img src={imagePreviewUrl} className="imagePreview" alt=""/>);
             } 
         return (
             <div className="container mx-auto">

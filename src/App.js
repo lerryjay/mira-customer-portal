@@ -88,7 +88,7 @@ class App extends Component {
       await this.setState({ loggedIn : true, user });
       this.getProducts();
       this.getTickets();
-      if(user.role == 'admin'){ this.getUsers(); }
+      if(user.role === 'admin'){ this.getUsers(); }
     }
   }
 

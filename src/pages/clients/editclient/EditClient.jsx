@@ -11,6 +11,7 @@ class EditClient extends Component {
 
         this.state = {
             ...this.props,
+            clients: [],
             email: '',
             telephone: '',
             firstname: '',
@@ -30,6 +31,46 @@ class EditClient extends Component {
             imageError: false,
         };
         console.log(this.state);
+    }
+
+    async componentDidMount(){
+        this.state.showLoader();
+        await this.getClients();
+        this.setState({ loading : false  });
+        this.state.hideLoader();
+        this.getClient();
+    }
+
+    
+    async getClients() {
+        const headers = new Headers();
+        headers.append('API-KEY', APIKEY );
+        const res = await fetch(HTTPURL + `clients/?userid=${this.state.user.userid}`, {
+            method: 'GET',
+            headers: headers
+        }).then(response => response.json());
+
+        if(res['status']) this.setState({ clients : res['data']})
+    }
+
+    getClient() {
+        const clientid = this.props.location.pathname.split('/')[2];
+        
+        const selectedClient = this.state.clients.find(client=>client.user_id == clientid);
+        this.setState({
+            businessname: selectedClient.businessname,
+            email: selectedClient.email,
+            telephone: selectedClient.telephone,
+            firstname: selectedClient.firstname,
+            lastname: selectedClient.lastname,
+            othername: selectedClient.othername,
+            companyemail: selectedClient.companyemail,
+            companytelephone: selectedClient.companytelephone,
+            companyaddress: selectedClient.companyaddress,
+            companycountryid: selectedClient.companycountryid,
+            companystateid: selectedClient.companystateid,
+            companylga: selectedClient.companylga
+        })
     }
 
     handleInputChange = e => {
@@ -52,6 +93,9 @@ class EditClient extends Component {
             }, 3000);
         } else {
             this.setState({ loading: true });
+            
+        const clientid = this.props.location.pathname.split('/')[2];
+
             let myHeaders = new Headers();
             myHeaders.append("api-key", APIKEY);
 
@@ -69,8 +113,9 @@ class EditClient extends Component {
             formdata.append("companystateid", this.state.companystateid);
             formdata.append("companylga", this.state.companylga);
             formdata.append("userid", this.state.user.userid);
+            formdata.append("clientid", clientid);
 
-            fetch(`${HTTPURL}clients/add`, {
+            fetch(`${HTTPURL}clients/update`, {
                 method: "POST",
                 headers: myHeaders,
                 body: formdata

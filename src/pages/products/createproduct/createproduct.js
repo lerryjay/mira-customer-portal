@@ -43,7 +43,7 @@ class CreateProduct extends Component {
         const res = await fetch(HTTPURL + 'product/add', {  method: 'POST',body: form, headers: headers }).then(response => response.json());
         if(res['status']){
             this.setState({loading : false,name: '', description: '', file: '', imagePreviewUrl: '', imageurl: ''});
-            this.state.showAlert('success','Product Saved Successfully!');
+            this.setState({successmessage:'Product Saved Successfully!'});
             this.state.getProducts();
         }
     }
@@ -95,8 +95,8 @@ class CreateProduct extends Component {
         let {imagePreviewUrl} = this.state;
             let imagePreview = null;
             if (imagePreviewUrl) {
-                this.setState({imageurl:false})
-            imagePreview = (<img src={imagePreviewUrl} className="imagePreview"/>);
+                this.state.imageurl = true
+            imagePreview = (<img src={imagePreviewUrl} className="imagePreview" alt=""/>);
             } 
         return (
 

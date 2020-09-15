@@ -85,6 +85,8 @@ class UpdateClientProduct extends Component {
         product_id
       } = res.data;
       this.getModule(product_id);
+      console.log('modules',modules)
+      const selectedModules = modules.map(item=>item.id);
       this.setState({
         productid: product_id,
         paymentstatus,
@@ -97,10 +99,9 @@ class UpdateClientProduct extends Component {
         trainingstatus,
         imageurl,
         remarks,
-        // selectedModules : modules.map(item=>item.id),
+        selectedModules,
         product_id
       });
-      modules.forEach(element => this.addModule);
     }
   }
 
@@ -126,20 +127,13 @@ class UpdateClientProduct extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     this.setState({ loading: true });
-    // let mod = "";
-    // this.state.modules.forEach((module) => {
-    //   mod += JSON.stringify(module.name) + ",";
-    // });
-
-    const modules = JSON.stringify(this.state.modules);
 
     let myHeaders = new Headers();
     myHeaders.append("api-key", APIKEY);
 
     var formdata = new FormData();
-    formdata.append("clientid", this.props.location.pathname.split("/")[2]);
-    formdata.append("productid", this.state.productid);
-    formdata.append("modules", modules);
+    formdata.append("clientproductid", this.props.location.pathname.split("/")[2]);
+    formdata.append("modules", this.state.selectedModules.toString());
     formdata.append("cost", this.state.cost);
     formdata.append("userid", this.state.user.userid);
     formdata.append("licenseduration", this.state.licenseduration);
@@ -151,64 +145,25 @@ class UpdateClientProduct extends Component {
     formdata.append("deploymentdate", this.state.deploymentdate);
     formdata.append("remarks", this.state.remarks);
 
-    fetch(HTTPURL + "clients/updateproduct", {
-      method: "POST",
-      headers: myHeaders,
-      body: formdata,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status == true) {
-          setTimeout(() => {
-            this.setState({ loading: false });
-            this.setState({ successmessage: data.message });
-            console.log("submitting");
-            this.setState({
-              type: "",
-              selectedModules: [],
-              cost: "",
-              modules: [],
-            });
-            setTimeout(() => {
-              this.setState({ successmessage: false });
-            }, 5000);
-          }, 3000);
-        } else {
-          setTimeout(() => {
-            this.setState({ loading: false });
-            this.setState({ errormessage: data.message });
-            setTimeout(() => {
-              this.setState({ errormessage: false });
-            }, 5000);
-          }, 3000);
-        }
-      });
+    const res = await fetch(HTTPURL + "clients/updateproduct", {  method: "POST",  headers: myHeaders,body: formdata, }).then((response) => response.json())
+    if (res.status) {
+      this.setState({ successmessage: res.message,loading: false });
+      setTimeout(() => {  this.setState({ successmessage: false }); window.history.back(); }, 5000);
+    } else {
+        this.setState({ loading: false,errormessage: res.message });
+        setTimeout(() => { this.setState({ errormessage: false });}, 5000);
+    }
   };
 
-  addModule = async (moduleId) => {
-    await this.setState((prevState) => ({
-      selectedModules:
-        prevState.selectedModules.length == 0
-          ? [moduleId]
-          : [...prevState.selectedModules, moduleId],
-    }));
-  };
-  removeModule = async (moduleId) => {
-    await this.setState((prevState) => ({
-      selectedModules: prevState.selectedModules.filter(
-        (mod) => mod != moduleId
-      ),
-    }));
-  };
   handleCheck = ({ target }) => {
-    if (target.checked) {
-      target.setAttribute("checked", true);
-      this.removeModule(target.id);
+    const index = this.state.selectedModules.findIndex(item=> item === target.value);
+    const { selectedModules } = this.state;
+    if (index > -1) {
+      selectedModules.splice(index,1);
     } else {
-      target.removeAttribute("checked");
-      this.addModule(target.id);
-      console.log(target.checked)
+      selectedModules.push(target.value);
     }
+    this.setState({ selectedModules });
   };
 
   onFocus(e) {
@@ -578,14 +533,13 @@ class UpdateClientProduct extends Component {
                     this.state.modules.map((module) => (
                       <div className="col-md-4">
                         <p className="list-group-item">
-                          {module.name}{" "}
+                          {module.name}
                           <label className="switch float-right">
-                            {" "}
                             <input
                               type="checkbox"
                               value={module.id}
-                              onClick={this.handleCheck}
-                              checked={ this.state.selectedModules.findIndex(item=>item === module.id)}
+                              onChange={this.handleCheck}
+                              checked={ this.state.selectedModules.findIndex(item=>item === module.id) > -1}
                             />
                             <span className="slider round"></span>
                           </label>

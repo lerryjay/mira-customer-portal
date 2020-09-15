@@ -62,6 +62,7 @@ class viewclientproduct extends Component {
         modules,
         product_id
       } = res.data;
+      console.log(modules,'modules');
       this.setState({
         productname: name,
         productdescription: description,
@@ -82,6 +83,39 @@ class viewclientproduct extends Component {
       this.getModule(product_id);
     }
   }
+
+   updateModules = async () =>{
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    var formdata = new FormData();
+    formdata.append("clientproductid", this.props.location.pathname.split("/")[2]);
+    formdata.append("modules", this.state.modules.map(item=>item.id).toString() );
+    formdata.append("cost", this.state.cost);
+    formdata.append("userid", this.state.user.userid);
+    formdata.append("licenseduration", this.state.licenseduration);
+    formdata.append("paymentstatus", this.state.paymentstatus);
+    formdata.append("deploymentstatus", this.state.deploymentstatus);
+    formdata.append("trainingstatus", this.state.trainingstatus);
+    formdata.append("paymentdate", this.state.paymentdate);
+    formdata.append("trainingdate", this.state.trainingdate);
+    formdata.append("deploymentdate", this.state.deploymentdate);
+    formdata.append("remarks", this.state.remarks);
+    const res = await fetch(`${HTTPURL}clients/updateproduct`,{ headers,method : 'POST',body : formdata });
+    if(res['status']){
+      this.closeModal('moduleModal');
+    }
+  }
+
+  handleCheck = ({ target }) => {
+    const index = this.state.modules.findIndex(item=> item.id === target.value);
+    const { modules } = this.state;
+    if (index > -1) {
+      modules.splice(index,1);
+    } else {
+      modules.push(this.state.productmodules.find(item=>item.id === target.value));
+    }
+    this.setState({ modules });
+  };
 
   async getModule(productId) {
     const headers = new Headers();
@@ -342,8 +376,8 @@ class viewclientproduct extends Component {
                           <input
                             type="checkbox"
                             value={module.id}
-                            onClick={this.handleCheck}
-                            checked={ this.state.modules.findIndex(item=>item === module.id)}
+                            onChange={this.handleCheck}
+                            checked={ this.state.modules.findIndex(item=>item.id === module.id) > -1}
                           />
                           <span className="slider round"></span>
                         </label>
@@ -354,7 +388,7 @@ class viewclientproduct extends Component {
                 </div>
                 <div className="row">
                   <div className="col-md-12 text-center">
-                    <button className="btn btn-success rounded-0 px-4">Update Modules</button>
+                    <button className="btn btn-success rounded-0 px-4" onClick={this.updateModules}>Update Modules</button>
                   </div>
                 </div>
               </div>

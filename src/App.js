@@ -46,6 +46,7 @@ import Admin from "./pages/users/Admin";
 import AdminProfile from "./pages/users/adminprofile/AdminProfile";
 import UserProfile from "./pages/users/userprofile/UserProfile";
 import CreateUserTicket from "./pages/users/createuserticket/createuserticket"
+import AdminPage from "./pages/users/adminpage/AdminPage"
 
 import Nav from "./common/components/Nav";
 import Sidebar from "./common/components/Sidebar";
@@ -387,8 +388,9 @@ class App extends Component {
                       <Route path="/adminprofile" component={AdminProfile} />
                     )}
                     {loggedIn && (
-                      <Route path="/userprofile" component={UserProfile} />
+                      <Route path="/adminpage" component={AdminPage} />
                     )}
+                      <PrivateRoute path="/userprofile" isLoggedIn={loggedIn} component={UserProfile} />
                   </div>
                   <Route component={NotFound} />
                 </Switch>
@@ -400,5 +402,9 @@ class App extends Component {
     );
   }
 }
+
+
+const PrivateRoute = ({ isLoggedIn, permissions, ...props }) => isLoggedIn  ? <Route {...props}/>  : <Redirect to="/login"/>;
+
 
 export default App;

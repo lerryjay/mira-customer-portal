@@ -265,7 +265,7 @@ class UpdateClientProduct extends Component {
               <span></span>
             )}
 
-          <form onSubmit={this.handleSubmit} id="addclientproduct">
+          <form onSubmit={this.handleSubmit} id="updateclientproduct">
             <div className="card">
               <div className="card-header bg-medium font-weight-bold text-dark">
                 UPDATE CLIENT PRODUCT
@@ -362,6 +362,7 @@ class UpdateClientProduct extends Component {
                           Payment&nbsp;Status&nbsp;
                           </option>
                         <option value="pending">Pending</option>
+                        <option value="incomplete">Incomplete</option>
                         <option value="completed">Completed</option>
                       </select>
                     </div>
@@ -389,6 +390,7 @@ class UpdateClientProduct extends Component {
                           Deployment&nbsp;Status&nbsp;
                           </option>
                         <option value="pending">Pending</option>
+                        <option value="ongoing">Ongoing</option>
                         <option value="completed">Completed</option>
                       </select>
                     </div>
@@ -434,6 +436,7 @@ class UpdateClientProduct extends Component {
                           Training&nbsp;Status&nbsp;
                           </option>
                         <option value="pending">Pending</option>
+                        <option value="ongoing">Ongoing</option>
                         <option value="completed">Completed</option>
                       </select>
                     </div>
@@ -482,6 +485,7 @@ class UpdateClientProduct extends Component {
                         <option value="quaterly">Quarterly</option>
                         <option value="biannually">Bianually</option>
                         <option value="annually">Annually</option>
+                        <option value="indefinite">Indefinite</option>
                       </select>
                     </div>
                   </div>

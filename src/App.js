@@ -13,6 +13,7 @@ import ForgotPassword from "./pages/forgot_password/forgot_password";
 import Dashboard from "./pages/dashboard/dashboard";
 import ChangePassword from "./pages/change_password/ChangePassword";
 import Profile from "./pages/profile/Profile";
+import VerifyToken from "./pages/verify_token/verify_token";
 
 import Tickets from "./pages/tickets/Tickets";
 import CreateTicket from "./pages/tickets/create_ticket/create_ticket";
@@ -235,6 +236,7 @@ class App extends Component {
                 { loggedIn && <Sidebar />}
                 <Switch>
                   {<Route path="/forgot_password" component={ForgotPassword} />}
+                  {<Route path="/verifytoken" component={VerifyToken} />}
                   {<Route path="/signup" component={SignUp} />}
                   {<Route path="/login" component={Login} />}
                   {!loggedIn && <Route path="/" component={Login} />}

@@ -68,6 +68,26 @@ class Tickets extends Component {
     }
   }
 
+  handleSearch() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[2];
+      if (td) {
+        console.log(td, td.textContent, td.innerText, "td")
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.indexOf(filter) !== '') {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }       
+    }
+  }
+
   render() {
     return (
       <div className="container">
@@ -85,12 +105,18 @@ class Tickets extends Component {
               </div>
             ) : (
             (
+              <div>
+                <div className="row mt-2">
+                  <div className="col-md-5">
+                    <input className="form-control" type="text" id="myInput" onKeyUp={this.handleSearch} placeholder="Search for ticket..." title="Type in something"/>
+                  </div>
+                </div>
                 <div
                   id="table"
                   className="card pt-2 mt-3 justify-content-center shadow px-2"
                 >
                   <div className="table-responsive">
-                    <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
+                    <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart" id="myTable">
                       {/* <caption>Hello World!</caption> */}
                       <thead>
                         <tr>
@@ -111,9 +137,9 @@ class Tickets extends Component {
                             <tr>
                             <td>{ index + 1}</td>
                               <td>
-                                {new Date(
+                                {
                                   ticket.createdat
-                                ).toLocaleDateString()}
+                                }
                               </td>
                               {this.state.user.role == "admin" && (
                                 <td onClick={this.handleRoute}>
@@ -174,6 +200,7 @@ class Tickets extends Component {
                     </table>
                   </div>
                 </div>
+              </div>
               )
             )}
           </div>

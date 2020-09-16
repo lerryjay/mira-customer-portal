@@ -41,7 +41,7 @@ class clientproductdetails extends Component {
        this.setState({ loader: false });
        this.getProduct();
        this.getModules();
-     }, 3000);
+     }, 1000);
    });
  }
 

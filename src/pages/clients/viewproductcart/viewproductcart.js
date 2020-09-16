@@ -119,7 +119,7 @@ class viewclientproduct extends Component {
       <div className="container mx-auto row">
         <div className="col-md-12 mb-3 mt-4" id="profile">
           <div className="w-100 text-center">
-            <h3>PRODUCT DETAILS </h3>
+            <h3>DEPLOYMENT DETAILS </h3>
           </div>
 
           <div className="row mt-4">

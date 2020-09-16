@@ -11,6 +11,7 @@ class ViewClient extends Component {
     this.state = {
       ...this.props,
       products: [],
+      clients: [],
       name: "",
       email: "",
       telephone: "",
@@ -83,9 +84,19 @@ class ViewClient extends Component {
   }
 
   async componentDidMount() {
-    
+    this.getClients();
   }
 
+  async getClients() {
+    const headers = new Headers();
+    headers.append('API-KEY', APIKEY );
+    const res = await fetch(HTTPURL + `clients/?userid=${this.state.user.userid}`, {
+        method: 'GET',
+        headers: headers
+    }).then(response => response.json());
+    
+    if(res['status']) this.setState({ clients : res['data']})
+}
 
   closedeleteModal() {
     let modal = document.getElementById("deleteModal");
@@ -126,6 +137,84 @@ class ViewClient extends Component {
     }, 3000);
     //display success here
   }
+
+  closesuspendModal() {
+    let modal = document.getElementById("suspendModal");
+    modal.style.display = "none";
+  }
+
+  async showsuspendModal(clientid) {
+    const selectedClient = this.state.clients.find(
+      (client) => client.user_id === clientid
+    );
+    await this.setState({ selectedClient });
+    let modal = document.getElementById("suspendModal");
+    modal.style.display = "block";
+  }
+
+  suspendClient() {
+    this.setState({ loading: true });
+    setTimeout(() => {
+      this.setState({ loading: false });
+      setTimeout(() => {
+        this.setState({ successmessage: false });
+
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+        const res = fetch(
+          `${HTTPURL}user/suspend?clientid=${this.state.selectedClient.user_id}&userid=${this.state.user.userid}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        );
+        this.setState({ successmessage: "Suspend Successfully!" });
+        let modal = document.getElementById("suspendModal");
+        modal.style.display = "none";
+      }, 2000);
+    }, 3000);
+    //display success here
+  }
+
+  closedeleteClient() {
+    let modal = document.getElementById("deleteClient");
+    modal.style.display = "none";
+  }
+
+  async showdeleteClient(clientid) {
+    const selectedClient = this.state.clients.find(
+      (client) => client.user_id === clientid
+    );
+    await this.setState({ selectedClient });
+    let modal = document.getElementById("deleteClient");
+    modal.style.display = "block";
+  }
+
+  deleteClient() {
+    this.setState({ loading: true });
+    setTimeout(() => {
+      this.setState({ loading: false });
+      setTimeout(() => {
+        this.setState({ successmessage: false });
+
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+        const res = fetch(
+          `${HTTPURL}clients/delete?clientid=${this.state.selectedClient.user_id}&userid=${this.state.user.userid}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        );
+
+        this.setState({ successmessage: "Deleted Successfully!" });
+        let modal = document.getElementById("deleteClient");
+        modal.style.display = "none";
+      }, 2000);
+    }, 3000);
+    //display success here
+  }
+
 
   render() {
     return (
@@ -204,6 +293,13 @@ class ViewClient extends Component {
                               &nbsp;Create&nbsp;Ticket&nbsp;
                             </small>
                           </Link>
+                          <Link
+                            onClick={() =>
+                              this.showsuspendModal(
+                                this.state.userid
+                              )
+                            }
+                          >
                           <button
                             type="button"
                             className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
@@ -215,6 +311,26 @@ class ViewClient extends Component {
                               &nbsp;Suspend&nbsp;Account&nbsp;
                             </small>
                           </button>
+                          </Link>
+                          <Link
+                            onClick={() =>
+                              this.showdeleteClient(
+                                this.state.userid
+                              )
+                            }
+                          >
+                          <button
+                            type="button"
+                            className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
+                          >
+                            <small
+                              className="newproduct"
+                              style={{ color: "#fff" }}
+                            >
+                              &nbsp;Delete&nbsp;
+                            </small>
+                          </button>
+                          </Link>
                         </div>
                       </div>
                     </div>
@@ -314,14 +430,14 @@ class ViewClient extends Component {
                                                   `/updateclientproduct/${product.id}`
                                                 }
                                               >
-                                                <i className="fa fa-edit m-1 px-3"></i>
+                                                <button className="btn-primary mr-3"><i className="fa fa-edit"></i> Edit</button>
                                               </Link>
                                               <Link
                                                 to={() =>
                                                   `/viewclientproduct/${product.id}`
                                                 }
                                               >
-                                                <i className="fa fa-eye m-1  px-3"></i>
+                                              <button className="btn-primary mr-3"><i className="fa fa-eye"></i> View</button>
                                               </Link>
                                               <Link
                                                 onClick={() =>
@@ -330,7 +446,7 @@ class ViewClient extends Component {
                                                   )
                                                 }
                                               >
-                                                <i className="fa fa-trash text-danger m-1  px-3"></i>
+                                              <button className="btn-danger mr-3"> <i className="fa fa-trash text-white"></i> Delete</button>
                                               </Link>
                                             </td>
                                           </tr>
@@ -403,8 +519,120 @@ class ViewClient extends Component {
               ) : (
                 <span></span>
               )}
-            </div>
-          )}
+
+              {/* Suspend Account */}
+              {this.state.showmodal ? (
+                <div id="suspendModal" class="modal2">
+                  {/* Modal content  */}
+                  <div class="modal-content modal-del text-center p-5">
+                    {/* <div className="delete-icon">
+                          &times;
+                      </div> */}
+                    <i
+                      class="fa fa-exclamation-triangle fa-3x dark-red mb-2"
+                      aria-hidden="true"
+                    ></i>
+                    <h3>Are you sure?</h3>
+                    <p> Do you really want to suspend this accouunt?</p>
+                    <div className="row">
+                      <div className="col-md-6">
+                        <button
+                          onClick={this.closesuspendModal}
+                          className="btn-block btn btn-outline-secondary mb-2"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                      <div className="col-md-6">
+                        {this.state.loading ? (
+                          <button
+                            type="submit"
+                            className="btn btn-block btn-danger"
+                          >
+                            <div
+                              className="spinner-border text-white"
+                              role="status"
+                              id="loader"
+                            >
+                              <span className="sr-only">Loading...</span>
+                            </div>
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() =>
+                              this.suspendClient(this.state.selectedClient.user_id)
+                            }
+                            className="btn btn-danger btn-block"
+                          >
+                            Suspend
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <span></span>
+              )}
+
+              {/* Delete Client */}
+              {this.state.showmodal ? (
+                <div id="deleteClient" class="modal">
+                  {/* Modal content  */}
+                  <div class="modal-content modal-del text-center p-5">
+                    {/* <div className="delete-icon">
+                          &times;
+                      </div> */}
+                    <i
+                      class="fa fa-exclamation-triangle fa-3x dark-red mb-2"
+                      aria-hidden="true"
+                    ></i>
+                    <h3>Are you sure?</h3>
+                    <p> Do you really want to delete this accouunt?</p>
+                    <div className="row">
+                      <div className="col-md-6">
+                        <button
+                          onClick={this.closedeleteClient}
+                          className="btn-block btn btn-outline-secondary mb-2"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                      <div className="col-md-6">
+                        {this.state.loading ? (
+                          <button
+                            type="submit"
+                            className="btn btn-block btn-danger"
+                          >
+                            <div
+                              className="spinner-border text-white"
+                              role="status"
+                              id="loader"
+                            >
+                              <span className="sr-only">Loading...</span>
+                            </div>
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() =>
+                              this.deleteClient(this.state.selectedClient.user_id)
+                            }
+                            className="btn btn-danger btn-block"
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <span></span>
+              )}
+
+
+              </div>
+            )}
         </div>
       </div>
     );

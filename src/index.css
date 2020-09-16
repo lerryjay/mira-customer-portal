@@ -282,6 +282,17 @@ label {
 .images{
   display: flex;
 }
+.attached_files:hover .fa-trash{
+  visibility:visible;
+}
+.attached_files .fa-trash{
+  position: absolute;
+  left: 140px;
+  top:10px;
+  cursor: pointer;
+  visibility: hidden;
+}
+
 .other_files:hover .fa-trash, .imgPreview:hover .fa-trash{
   visibility:visible;
 }
@@ -477,7 +488,7 @@ input:checked + .slider:before {
 
 /* Add an active class to the active dropdown button */
 .active {
-  background-color: #1231db;
+  background-color: #04021b;
   color: white;
 }
 
@@ -643,6 +654,7 @@ img.image_sidebar {
   padding: 0 5px;
   font-weight: 910;
   font-size: 12px;
+  font-family: "Poppins";
 }
 
 .overlay.active {
@@ -676,7 +688,7 @@ div ul a li {
   width: 100vw;
 }
 p.image_name {
-  font-family: "Noto-sans";
+  font-family: "Poppins";
   font-weight: 600;
   font-size: large;
 }
@@ -842,8 +854,8 @@ ul.components a p{
 div ul.components li:hover {
   padding: 10px 5px;
   margin: 5px 0;
-  background:#203cd6 !important;
-  border-color: #415cf0 !important;
+  background:#04021b !important;
+  border-color: #04021b !important;
   transform: scale(0.985);
   border-radius: 4px;
 }

@@ -5,14 +5,14 @@ import { HTTPURL,APIKEY } from "../../common/global_constant";
 import Validators  from "../../common/Validators";
 import {withContext} from '../../common/context';
 
-class ForgotPassword extends Component {
+class VerifyToken extends Component {
     constructor(props){
         super(props);
         this.state = { 
             ...this.props, 
-            email : '', 
+            token : '', 
             loading: false, 
-            errormessage: '',
+            errormessage: 'A token has been sent to your email. Please enter token to continue',
             successmessage: ''
         };
     }
@@ -22,53 +22,6 @@ class ForgotPassword extends Component {
         this.setState({ [name]: value,errormessage : '' });
     }
 
-    handleSubmit = async e => {
-        e.preventDefault()
-
-        const { email} = this.state
-        await this.setState({loading : true});
-        //Waste 3 seconds
-        setTimeout(() =>this.setState({loading : false}), 3000);
-        if(!Validators.validateEmail(email).status){
-            const err = Validators.validateEmail(email).message
-            this.setState({loading : true});
-            setTimeout(() => {
-                this.setState({loading : false});
-                this.setState({errormessage: err});
-                setTimeout(()=> this.setState({errormessage: ''}),5000);
-            }, 3000);
-        }else{
-            
-            this.setState({loading : true});
-            setTimeout(() => {
-                this.setState({loading : false});
-                setTimeout(() =>{
-                    this.setState({successmessage: false});
-                    
-                    const headers = new Headers();
-                    headers.append("API-KEY", APIKEY);
-                    let form = new FormData(document.getElementById("forgotpassword"));
-                    fetch(HTTPURL + "user/forgotpassword", {
-                    method: "POST",
-                    body: form,
-                    headers: headers,
-                    })
-                    .then((response) => response.json())
-                    .then((res) => {
-                    console.log(res)
-                    this.props.history.push('/verifytoken');
-                    if(!res['status'])setTimeout(() => this.setState({errormessage: res['message']}), 3000);
-                        else{
-                            this.setState({successmessage: 'A reset password link has been sent to your email!'})
-                            //find a way to redirect here 
-                                this.props.history.push('/verifytoken');
-                        }
-                    });
-                }, 2000);
-            }, 3000);
-            
-        }
-    }
 
     render() {
         return(
@@ -109,9 +62,9 @@ class ForgotPassword extends Component {
                     <i className="fas fa-envelope fa-fw"></i>
                 </span>
                 {/* <label for="email">Email</label> */}
-                <input type="text" className="form-control alt" id="email" name="email" placeholder="Email" aria-label="Email"
-                    aria-describedby="email" autoComplete="email" required
-                    value={this.state.email}
+                <input type="text" className="form-control alt" id="token" name="token" placeholder="Enter Token" aria-label="token"
+                    aria-describedby="token" autoComplete="token" required
+                    value={this.state.token}
                     onChange={this.handleInputChange}/>
             </div>
 
@@ -147,4 +100,4 @@ class ForgotPassword extends Component {
     }
 }
 
-export default withContext(ForgotPassword);
+export default withContext(VerifyToken);

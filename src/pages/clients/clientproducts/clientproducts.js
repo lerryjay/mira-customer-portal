@@ -28,7 +28,7 @@ class clientviewproduct extends Component {
           setTimeout(() => {
             this.setState({ loader: false });
             this.getProduct();
-          }, 3000);
+          }, 1000);
         });
       }
       

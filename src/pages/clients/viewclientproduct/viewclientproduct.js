@@ -170,6 +170,23 @@ class viewclientproduct extends Component {
     }
   }
 
+  deleteFiles(index, item) {
+    const clientproductid = this.props.location.pathname.split("/")[2]; 
+
+    const headers = new Headers();
+    headers.append('API-KEY', APIKEY);
+
+    fetch(HTTPURL + `clients/deletedeploymentfile?clientproductid=${clientproductid}&userid=${this.state.user.userid}&fileindex=${index}`, {
+        method: 'GET',
+        headers: headers
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data, "deleted")
+        });
+        this.getClientProduct();
+  }
+
   render() {
     return (
       <div className="container mx-auto ">
@@ -322,27 +339,37 @@ class viewclientproduct extends Component {
           </div>
           <div className="row">
             {this.state.files.length ? (
-              this.state.files.map((item) => (
+              this.state.files.map((item, index) => (
                 <div className="col-md-3 col-lg-2 text-center py-2">
                   {item.match(/\.(jpg|jpeg|png)$/) ? (
-                    <img
-                      id="img"
-                      style={{ width: "100px", height: "100px" }}
-                      className="m-2"
-                      onClick={(e) => this.showFileModal(e, item)}
-                      src={FILEURL + item}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = placeholder;
-                      }}
-                    />
-                  ) : (
+                    <div className="attached_files">
                       <img
-                        src={pdf_placeholder}
-                        onClick={(e) => this.showFileModal(e, item)}
-                        style={{ width: "100px", height: "100px" }}
+                        id="img"
+                        style={{ width: "100px", height: "100px", cursor: "pointer" }}
                         className="m-2"
+                        onClick={(e) => this.showFileModal(e, item)}
+                        src={FILEURL + item}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = placeholder;
+                        }}
                       />
+                      <Link onClick={() => this.deleteFiles(index, item)}>
+                          <i className="fa fa-trash text-danger"></i>
+                      </Link>
+                    </div>
+                  ) : (
+                      <div className="attached_files">
+                        <img
+                          src={pdf_placeholder}
+                          onClick={(e) => this.showFileModal(e, item)}
+                          style={{ width: "100px", height: "100px" }}
+                          className="m-2"
+                        />
+                        <Link onClick={() => this.deleteFiles(index, item)}>
+                            <i className="fa fa-trash text-danger"></i>
+                        </Link>
+                      </div>
                     )}
                   <br /> {item}
                 </div>

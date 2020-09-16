@@ -10,8 +10,11 @@ class Profile extends Component {
     this.state = {
       ...this.props,
       products: [],
+      showmodal: true,
+      clients:[],
       users: [],
       selectedUser: {},
+      selectedClient: '',
       fullname: "",
     };
   }
@@ -19,10 +22,20 @@ class Profile extends Component {
   async componentDidMount() {
     this.setState({ loader: true });
     await this.getUsers();
+    this.getClients();
     this.setState({ loader: false });
   }
 
-
+  async getClients() {
+    const headers = new Headers();
+    headers.append('API-KEY', APIKEY );
+    const res = await fetch(HTTPURL + `clients/?userid=${this.state.user.userid}`, {
+        method: 'GET',
+        headers: headers
+    }).then(response => response.json());
+    
+    if(res['status']) this.setState({ clients : res['data']})
+}
 
   async getUsers() {
     const headers = new Headers();
@@ -65,6 +78,46 @@ class Profile extends Component {
         }
       });
   }
+
+  closesuspendModal() {
+    let modal = document.getElementById("suspendModal");
+    modal.style.display = "none";
+  }
+
+   showsuspendModal(clientid) {
+    const selectedClient = this.state.clients.find(
+      (client) => client.user_id === clientid
+    );
+    console.log(selectedClient)
+    this.setState({ selectedClient });
+    let modal = document.getElementById("suspendModal")
+    modal.style.display = "block";
+  }
+
+  suspendClient() {
+    this.setState({ loading: true });
+    setTimeout(() => {
+      this.setState({ loading: false });
+      setTimeout(() => {
+        this.setState({ successmessage: false });
+
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+        const res = fetch(
+          `${HTTPURL}user/suspend?clientid=${this.state.selectedClient.user_id}&userid=${this.state.user.userid}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        );
+        this.setState({ successmessage: "Suspend Successfully!" });
+        let modal = document.getElementById("suspendModal");
+        modal.style.display = "none";
+      }, 2000);
+    }, 3000);
+    //display success here
+  }
+
 
   render() {
     return (
@@ -184,23 +237,94 @@ class Profile extends Component {
                         </small>
                       </button>
                     </Link>
-
-                    <button
-                      type="button"
-                      className="btn mt-3 m-2 btn-danger mb-2"
-                    >
-                      <small className="newproduct" style={{ color: "#fff" }}>
-                        &nbsp;Suspend&nbsp;Account&nbsp;
-                      </small>
-                    </button>
+                          <Link
+                            onClick={() =>
+                              this.showsuspendModal(
+                                this.state.selectedUser.userid
+                              )
+                            }
+                          >
+                          <button
+                            type="button"
+                            className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
+                          >
+                            <small
+                              className="newproduct"
+                              style={{ color: "#fff" }}
+                            >
+                              &nbsp;Suspend&nbsp;Account&nbsp;
+                            </small>
+                          </button>
+                          </Link>
                   </div>
                 </div>
               </div>
             </div>
           </div>
          </div>
-      }</div>
+
+         
+      }
+      
+      
+              {/* Suspend Account */}
+              {this.state.showmodal ? (
+                <div id="suspendModal" class="modal">
+                  {/* Modal content  */}
+                  <div class="modal-content modal-del text-center p-5">
+                    {/* <div className="delete-icon">
+                          &times;
+                      </div> */}
+                    <i
+                      class="fa fa-exclamation-triangle fa-3x dark-red mb-2"
+                      aria-hidden="true"
+                    ></i>
+                    <h3>Are you sure?</h3>
+                    <p> Do you really want to suspend this accouunt?</p>
+                    <div className="row">
+                      <div className="col-md-6">
+                        <button
+                          onClick={this.closesuspendModal}
+                          className="btn-block btn btn-outline-secondary mb-2"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                      <div className="col-md-6">
+                        {this.state.loading ? (
+                          <button
+                            type="submit"
+                            className="btn btn-block btn-danger"
+                          >
+                            <div
+                              className="spinner-border text-white"
+                              role="status"
+                              id="loader"
+                            >
+                              <span className="sr-only">Loading...</span>
+                            </div>
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() =>
+                              this.suspendClient(this.state.selectedClient.user_id)
+                            }
+                            className="btn btn-danger btn-block"
+                          >
+                            Suspend
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <span></span>
+              )}
+
+</div>
     );
+    
   }
 }
 

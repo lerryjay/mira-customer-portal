@@ -12,33 +12,80 @@ class Clients extends Component {
             ...this.props, 
             showmodal: true,
             loading : true,
-            clients: []
+            clients: [],
+            id: '',
+            user_id: ''
         }
 
     }
 
     async componentDidMount(){
         this.state.showLoader();
-        await this.getClient();
+        await this.getClients();
         this.setState({ loading : false  });
         this.state.hideLoader();
     }
 
-    
-    async getClient() {
+    getClient(businessname) {
+        const selectedClient = this.state.clients.find(client=>client.businessname === businessname);
+        if(selectedClient) {
+            this.setState({
+                user_id: selectedClient.user_id
+            })
+        }
+    }
+
+    async getClients() {
         const headers = new Headers();
         headers.append('API-KEY', APIKEY );
         const res = await fetch(HTTPURL + `clients/?userid=${this.state.user.userid}`, {
             method: 'GET',
             headers: headers
         }).then(response => response.json());
-
+        
         if(res['status']) this.setState({ clients : res['data']})
     }
 
-    deleteModal() {
+    showdeleteModal(e) {
+        // this.state.id = e
         let modal = document.getElementById("myModal")
         modal.style.display = "block";
+    }
+
+    async deleteModal(id) {
+        // let clientid = id
+
+        // const headers = new Headers();
+        // headers.append('API-KEY', APIKEY);
+
+        // fetch(HTTPURL + `clients/delete?userid=${this.state.user.userid}&clientid=${clientid}&deleteuser=true`, {
+        //     method: 'GET',
+        //     headers: headers
+        // })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log(data, "deleted")
+        //         let modal = document.getElementById("myModal")
+        //         modal.style.display = "none";
+        //     });
+
+
+        const { user } = this.state;
+        let clientid = id;
+
+        const form = new FormData(document.getElementById('deleteclient'));
+        form.append('userid', user.userid);
+        form.append('clientid', clientid);
+        form.append('deleteuser', true);
+
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+
+        const res =  await fetch(`${HTTPURL}clients/delete`, {
+        method: "POST",
+        headers: headers,
+        body: form
+        }).then(res => res.json());
     }
 
     closeModal() {
@@ -46,17 +93,71 @@ class Clients extends Component {
         modal.style.display = "none";
     }
 
+    handleInputChange = e => {
+        let { name, value } = e.target
+        if (name === 'businessid') {
+            const client = this.state.clients.find(client => client.businessname === value);
+            if (client) value = client.clientid;
+        }
+        this.setState({ [name]: value, errormessage: '' });
+    }
+
     render() {
         
         return (
             <div className="container-fluid">
-                <div className="row mt-4">
-            <div className="w-100 text-center">
+                <div className="row mt-4 form">
+            {/* <div className="w-100 text-center">
             <h3>CLIENT LIST </h3>
-            </div>
+            </div> */}
 
+                        <div className="col-md-8 offset-2 ">
+                         <div className="card mx-4 my-auto">
+                            <div className="card-body">
+                            <div className="form-group m-5">
+                                <label htmlFor="business" className="font-weight-bold text-left">
+                                    Select business name
+                                </label>
+                                <input list="business" name="businessid" id="businessid" 
+                                onChange={this.handleInputChange} name="businessid" placeholder="Enter business name" className="form-control"
+                                onChange={(e) => {
+                                    this.getClient(e.target.value);
+                                }} />
+                                <datalist id="business">
+                                    {
+                                        this.state.clients.map(client => <option value={client.businessname} />)
+                                    }
+                                </datalist>
+                                
+                                <div>
+                                {this.state.user_id === '' ?
+                                <span></span>
+                                    :
+                                    this.state.user_id && 
+                                    <div className="mt-3">
+                                        <Link to={() => `/viewClient/${this.state.user_id}`} >
+                                            <button className="btn-primary btn-block" value={this.state.id} style={{cursor:"pointer", fontSize:'16px'}}>View</button>
+                                        </Link>
+                                    </div>
+                                      }
+                                </div>
+                                
+
+                            </div>
+                            </div>
+                        </div>
+                    </div>
     
                     <div className="col-md-12" >
+    
+                            
+                            </div>
+                    </div>
+
+
+
+
+                    {/* <div className="col-md-12" >
                                 <div className="card-body">
                                 {!this.state.loading && this.state.clients.length === 0 ?
                                 <div className="card-body">
@@ -93,7 +194,7 @@ class Clients extends Component {
                                                             <Link to={() => `/viewClient/${client.user_id}`} >
                                                                 <span className="badge px-3 py-2 m-2 badge-primary" value={client.id} style={{cursor:"pointer"}}>View</span>
                                                             </Link>
-                                                            <Link onClick={this.deleteModal}>
+                                                            <Link onClick={() => this.showdeleteModal(client.user_id)}>
                                                                 <span className="badge px-3 py-2 badge-danger" id="myBtn" style={{cursor:"pointer"}}>Delete</span>
                                                             </Link>
                                                         </td>
@@ -102,7 +203,8 @@ class Clients extends Component {
 
                                                      )}
                                                 )}
-    
+
+
                                                 </tbody>
                                             </table>
                                         </div>
@@ -114,15 +216,13 @@ class Clients extends Component {
                             </div>
                     </div>
     
-              
+    
+               */}
               
                     {this.state.showmodal ?  
                     <div id="myModal" className="modal">
                         {/* Modal content  */}
                         <div className="modal-content text-center p-5">
-                            {/* <div className="delete-icon">
-                                &times;
-                            </div> */}
                             <i className="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
                             <h3>Are you sure?</h3>
                             <p> Do you really want to delete this file?</p>
@@ -131,14 +231,16 @@ class Clients extends Component {
                                     <button onClick={this.closeModal} className="btn-block btn btn-outline-secondary mb-2">Cancel</button>
                                 </div>
                                 <div className="col-md-6 col-sm-6">
-                                    <button className="btn btn-danger btn-block">Delete</button>
-                                </div>
+                            <form id="deleteclient">
+                                    <button onClick={() => this.deleteModal(this.state.id)} className="btn btn-danger btn-block">Delete</button>
+                            </form>
+                             </div>
                             </div>
                         </div>
                     </div>
                     :           
                     <span></span> 
-                }
+                    }
     
                  
 

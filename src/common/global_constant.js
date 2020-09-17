@@ -171,3 +171,78 @@ export const adminMenu = [
     isActive: false
   },
 ];
+
+export const PERMISSIONS =  [
+  {
+      name: "ADDADMIN"
+  },
+  {
+      name: "LISTADMIN"
+  },
+  {
+      name: "UPDATEADMINPERMISSIONS"
+  },
+  {
+      name: "CREATETICKET"
+  },
+  {
+      name: "LISTTICKET"
+  },
+  {
+      name: "MODIFYTICKET"
+  },
+  {
+      name: "VIEWTICKET"
+  },
+  {
+      name: "REPLYTICKET"
+  },
+  {
+      name: "CREATECLIENT"
+  },
+  {
+      name: "LISTCLIENT"
+  },
+  {
+      name: "SEARCHCLIENT"
+  },
+  {
+      name: "VIEWCLIENT"
+  },
+  {
+      name: "ADDDEPLOYMENT"
+  },
+  {
+      name: "VIEWDEPLOYMENT"
+  },
+  {
+      name: "VIEWDEPLOYMENTCOST"
+  },
+  {
+      name: "VIEWDEPLOYMENTTIME"
+  },
+  {
+      name: "UPDATEDEPLOYMENT"
+  },
+  {
+      name: "UPDATEDEPLOYMENTFILE"
+  },
+  {
+      name: "VIEWDEPLOYMENTFILE"
+  },
+  {
+      name: "ADDPRODUCT"
+  },
+  {
+      name: "LISTPRODUCT"
+  },
+  {
+      name: "SEARCHPRODUCT"
+  },
+  {
+      name: "DELETEPRODUCT"
+  },
+  {
+      name: "UPDATEPRODUCT"
+  },
+];

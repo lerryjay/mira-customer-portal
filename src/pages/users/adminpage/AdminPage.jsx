@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withContext } from "../../../common/context";
 import { Link } from "react-router-dom";
-import { HTTPURL, FILEURL, APIKEY } from "../../../common/global_constant";
+import { HTTPURL, FILEURL, APIKEY,PERMISSIONS } from "../../../common/global_constant";
 import avatar from "../../../assets/images/avatar.png";
 
 class Profile extends Component {
@@ -16,80 +16,7 @@ class Profile extends Component {
       selectedUser: {},
       selectedClient: '',
       fullname: "",
-      permissions: [
-          {
-              name: "ADDADMIN"
-          },
-          {
-              name: "LISTADMIN"
-          },
-          {
-              name: "UPDATEADMINPERMISSIONS"
-          },
-          {
-              name: "CREATETICKET"
-          },
-          {
-              name: "LISTTICKET"
-          },
-          {
-              name: "MODIFYTICKET"
-          },
-          {
-              name: "VIEWTICKET"
-          },
-          {
-              name: "REPLYTICKET"
-          },
-          {
-              name: "CREATECLIENT"
-          },
-          {
-              name: "LISTCLIENT"
-          },
-          {
-              name: "SEARCHCLIENT"
-          },
-          {
-              name: "VIEWCLIENT"
-          },
-          {
-              name: "ADDDEPLOYMENT"
-          },
-          {
-              name: "VIEWDEPLOYMENT"
-          },
-          {
-              name: "VIEWDEPLOYMENTCOST"
-          },
-          {
-              name: "VIEWDEPLOYMENTTIME"
-          },
-          {
-              name: "UPDATEDEPLOYMENT"
-          },
-          {
-              name: "UPDATEDEPLOYMENTFILE"
-          },
-          {
-              name: "VIEWDEPLOYMENTFILE"
-          },
-          {
-              name: "ADDPRODUCT"
-          },
-          {
-              name: "LISTPRODUCT"
-          },
-          {
-              name: "SEARCHPRODUCT"
-          },
-          {
-              name: "DELETEPRODUCT"
-          },
-          {
-              name: "UPDATEPRODUCT"
-          },
-      ],
+      permissions : PERMISSIONS
     };
   }
 

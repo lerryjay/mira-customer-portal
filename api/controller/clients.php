@@ -21,13 +21,18 @@ class Clients extends Controller
     User::validateUser($userId,true);
     loadModel('client');
     $this->clientModel = new ClientModel();
-    $clients  = $this->clientModel->getCompanyClients($this->companyId);
-    if($clients){
+    $clientExists  = $this->clientModel->getCompanyClients($this->companyId);
+    if($clientExists){
+      $clients = [];
+      foreach($clientExists as $client){
+        $clients[] = ['businessname'=>$client['businessname'],'user_id'=>$client['user_id']];
+      }
       $response = [ 'status'=>true,'message'=>'Company clients successfully retrieved','data'=>$clients];
     }else $response = [ 'status'=>true,'message'=>'Company has no registered clients on this platform','data'=>[]];
     $this->setOutputHeader(['Content-type:application/json']);
     $this->setOutput(json_encode($response)); 
   }
+
   /**
    * undocumented function summary
    *
@@ -237,14 +242,14 @@ class Clients extends Controller
     $this->setOutput(json_encode(['status'=>true,'message'=>'Client retrieved sucessfully!', 'data'=>$client]));
   }
 
-    /**
+  /**
    * Undocumented function long description
    *
    * @param Type $var Description
    * @return type
    * @throws conditon
-   **/
-  public function update()
+  **/
+   public function update()
   {
     extract($this->validateUpdateClient());
     $update = $this->clientModel->updateClient($clientUserId,['businessname'=>$businessName,'telephone'=>$companyTelephone,'email'=>$companyEmail,'address'=>$companyAddress,'country_id'=>$companyCountryId,'state_id'=>$companyStateId,'lga'=>$companyLga]);

@@ -105,7 +105,7 @@
       $conditions  = '';
       $conditions .= isset($filter['ticketId']) && $filter['ticketId'] != NULL ? "AND ticket_id = '".$filter['ticketId']."'" : "";
       $conditions .= isset($filter['type']) && $filter['type'] != NULL  ? "AND type = '".$filter['type']."'" : "";
-      $conditions .= isset($filter['customerId']) && $filter['customerId'] != NULL  ? "AND customer_id = '".$filter['customerId']."'" : "";
+      $conditions .= isset($filter['userId']) && $filter['userId'] != NULL  ? "AND customer_id = '".$filter['userId']."'" : "";
       $conditions .= isset($filter['companyId']) && $filter['companyId'] != NULL  ? "AND company_id = '".$filter['companyId']."'" : "";
       $conditions .= isset($filter['on'])  && $filter['on'] != NULL ? "AND dateadded = '".$filter['on']."'" : "";
       $conditions .= isset($filter['startDate'])  && $filter['startDate'] != NULL ? "AND dateadded >= '".$filter['startDate']."'" : "";

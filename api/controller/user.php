@@ -218,6 +218,7 @@
               'imageurl'=>$user['imageurl'],
               'role'=>$user['role'],
               'userid'=>$user['id'],
+              'permissions'=>explode('|',$user['permissions'])
             ]
           ];
         }else session_destroy();
@@ -260,7 +261,7 @@
       $tokenexptime = date("H:i:s", strtotime("+ 30minutes"));
       $updated =   $this->userModel->updateUser($user['id'],['token'=>$token,'tokenexpdate'=>$tokenexpdate,'tokenexptime'=>$tokenexptime]);
       if($updated){
-        Alert::sendMail($user['email'],'Password reset token',"<b>$token</b>");
+        // Alert::sendMail($user['email'],'Password reset token',"<b>$token</b>");
         $response = [
           'status'=>true,
           'message'=>'A token has been sent to your email. Please enter token to continue'
@@ -326,6 +327,8 @@
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     }
+
+    
 
     /**
      *  Verifies user token
@@ -426,7 +429,6 @@
     }
 
     /**
-     *  Reset a user's password
      *
      * @param HTTPPOSTPARAMS $_POST - userid, name,username,telephone,
      * @return JSONDATA exits application with appropriate response
@@ -535,7 +537,7 @@
     {
       extract($_POST);
       if(!isset($userid)){
-        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutputHeader(['Content-type:application/jsonerror']);
         $this->setOutput(json_encode($response));
       }
       $userId = $userid ?? '';

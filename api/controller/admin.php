@@ -166,8 +166,6 @@
       $adminid ??= '';
       $userid ??= '';
 
-
-
       loadController('user');
       $user = User::validateUser($userid,true);
 
@@ -179,6 +177,79 @@
 
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
+    }
+
+    /**
+     * undocumented function summary
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
+    public function updatePermissions()
+    {
+      extract($_GET);
+      loadModel('user');
+
+      $adminid ??= '';
+      $userid ??= '';
+      $error = false;
+      loadController('user');
+      $user  = Self::validatepermission($userid,'UPDATEADMIN');
+      $this->userModel = new UserModel();
+      $admin  = $this->userModel->getUserById($adminid);
+      if(!$admin || $admin['role'] === 'admin'){
+        $error = ['status'=>false,'message'=>'This user is not an administrator or cannot be verified within the app','data'=>['field'=>'adminid']];
+      }
+
+      $permissions  ??= '';
+      $permissions = explode('|',$permissions);
+      $invalidPermissions = [];
+      foreach($permissions as $permission){
+        if(!in_array($permission,ADMINPERMISSIONS)) array_push($invalidPermissions,$permission);
+      }
+
+      if(count($invalidPermissions) > 0 && !$error){
+        $error = ['status'=>false,'message'=>'Unknown permissions supplied','data'=>['invalid'=>$invalidPermissions]];
+      }
+
+      if(!$error){
+        $update = $this->userModel->updateUser($adminid,['permissions'=>implode('|',$permissions)]);
+        if($update) $response = ['status'=>true,'message'=>'User permissions updated successfully'];
+        else $response = ['status'=>false,'message'=>'Update failed due to an unexpected error'];
+      }else $response = $error;
+
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
+    }
+
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
+    public static function validatepermission($adminId,$permission)
+    {
+      $_this   = new Self();
+      $error   = false;
+      if(!isset($userId) || strlen($adminId) < 1){
+        $error = ['status'=> false,'message'=>"User not recognised","data"=>['field'=>"userid"]];
+      }
+
+      $user = $_this->userModel->getUserById($adminId);
+      if(!$user){
+        $response['status']  = false;
+        $response['message'] = "User not recognised";
+      }else if($user['role'] == 'user' || !in_array($permission,explode('|',$user['permissions']))){
+        $response['status']  = false;
+        $response['message'] = "You do not have the correct resource to perform this action";
+      }else  return  $user;
+      $_this->setOutputHeader(['Content-type:application/json']);
+      $_this->setOutput(json_encode($response));
     }
   }
   

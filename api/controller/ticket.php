@@ -32,11 +32,11 @@
       $pageno     = isset($pageno) ? $pageno : 1;
       $enddate    = isset($enddate) ? $enddate : '';
       $startdate  = isset($startdate) ? $startdate : '';
-      $customerId = isset($customerid) ? $customerid : null;
+      $clientid = isset($clientid) ? $clientid : null;
       $user = User::validateUser($userId);
       $filters = ($user['role'] == 'user') ? 
       [
-        "customerId"=>$userid,
+        "userId"=>$userid,
         "limit"=>$limit,
         "pageno"=>$pageno,
         "on"=>$on,
@@ -47,7 +47,7 @@
         "companyId"=>$user['company_id'],
         "limit"=>$limit,
         "pageno"=>$pageno,
-        "customerId"=>$customerId, 
+        "userId"=>$clientid, 
         "on"=>$on,
         "startdate"=>$startdate,
         "enddate"=>$enddate,

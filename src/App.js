@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { BrowserRouter as Router, Switch,Route,} from "react-router-dom";
+import { BrowserRouter as Router, Switch,Route,Redirect} from "react-router-dom";
 import { HTTPURL,APIKEY } from "./common/global_constant";
 
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
@@ -290,8 +290,6 @@ class App extends Component {
                         path="/createproduct"
                         component={() => (
                           <CreateProduct
-                            
-                            
                           ></CreateProduct>
                         )}
                       />

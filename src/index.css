@@ -654,7 +654,7 @@ img.image_sidebar {
   padding: 0 5px;
   font-weight: 910;
   font-size: 12px;
-  font-family: "Poppins";
+  font-family: 'Poppins', sans-serif;
 }
 
 .overlay.active {

@@ -176,7 +176,7 @@ async getClients() {
             <h3>TICKETS </h3>
           </div>
 
-          <div className="col-md-9 mb-3" id="profile">
+          <div className="col-md-9 col-sm-12 box1 mb-3" id="profile">
             { this.state.tickets.length === 0 ? (
                 <div className="alert alert-warning mt-5" role="alert">
                   <h6 className="text-center">No ticket records!</h6>
@@ -221,7 +221,7 @@ async getClients() {
                                   
                                 }
                               </td>
-                              <td style={{ maxWidth: "100px" }}>
+                              <td style={{ minWidth: "100px", maxWidth: "100px"}}>
                                 <select
                                   className="custom-select custom-select-sm"
                                   value={ticket.ticketstatus}
@@ -327,7 +327,7 @@ async getClients() {
       
       
       
-          <div className="col-md-3 mt-3 mb-3">
+          <div className="col-md-3 col-sm-12 box2 mt-3 mb-3">
             <div className="card p-3">
               <label htmlFor="customer" className="font-weight-bold">
                 Customer

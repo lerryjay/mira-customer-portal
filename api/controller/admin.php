@@ -186,9 +186,9 @@
      * @return type
      * @throws conditon
      **/
-    public function updatePermissions()
+    public function updatepermission()
     {
-      extract($_GET);
+      extract($_POST);
       loadModel('user');
 
       $adminid ??= '';
@@ -198,7 +198,7 @@
       $user  = Self::validatepermission($userid,'UPDATEADMIN');
       $this->userModel = new UserModel();
       $admin  = $this->userModel->getUserById($adminid);
-      if(!$admin || $admin['role'] === 'admin'){
+      if(!$admin || $admin['role'] !== 'admin'){
         $error = ['status'=>false,'message'=>'This user is not an administrator or cannot be verified within the app','data'=>['field'=>'adminid']];
       }
 
@@ -239,7 +239,7 @@
       if(!isset($userId) || strlen($adminId) < 1){
         $error = ['status'=> false,'message'=>"User not recognised","data"=>['field'=>"userid"]];
       }
-
+      $_this->userModel = new UserModel();
       $user = $_this->userModel->getUserById($adminId);
       if(!$user){
         $response['status']  = false;

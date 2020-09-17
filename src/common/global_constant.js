@@ -1,8 +1,8 @@
 
-export const HTTPURL =  "http://192.168.1.4:8080/ticketapp/api/"; 
-export const FILEURL = "http://192.168.1.4:8080/ticketapp/"; 
-// export const HTTPURL =  'http://localhost/ticketapp/api/';
-// export const FILEURL = 'http://localhost/ticketapp/';
+// export const HTTPURL =  "http://192.168.1.4:8080/ticketapp/api/"; 
+// export const FILEURL = "http://192.168.1.4:8080/ticketapp/"; 
+export const HTTPURL =  'http://localhost/ticketapp/api/';
+export const FILEURL = 'http://localhost/ticketapp/';
 export const APIKEY = "97899c-7d0420-1273f0-901d29-84e2f8";
 
 
@@ -169,5 +169,80 @@ export const adminMenu = [
     route: '/changePassword',
     icon: 'fas fa-key',
     isActive: false
+  },
+];
+
+export const PERMISSIONS =  [
+  {
+      name: "ADDADMIN"
+  },
+  {
+      name: "LISTADMIN"
+  },
+  {
+      name: "UPDATEADMINPERMISSIONS"
+  },
+  {
+      name: "CREATETICKET"
+  },
+  {
+      name: "LISTTICKET"
+  },
+  {
+      name: "MODIFYTICKET"
+  },
+  {
+      name: "VIEWTICKET"
+  },
+  {
+      name: "REPLYTICKET"
+  },
+  {
+      name: "CREATECLIENT"
+  },
+  {
+      name: "LISTCLIENT"
+  },
+  {
+      name: "SEARCHCLIENT"
+  },
+  {
+      name: "VIEWCLIENT"
+  },
+  {
+      name: "ADDDEPLOYMENT"
+  },
+  {
+      name: "VIEWDEPLOYMENT"
+  },
+  {
+      name: "VIEWDEPLOYMENTCOST"
+  },
+  {
+      name: "VIEWDEPLOYMENTTIME"
+  },
+  {
+      name: "UPDATEDEPLOYMENT"
+  },
+  {
+      name: "UPDATEDEPLOYMENTFILE"
+  },
+  {
+      name: "VIEWDEPLOYMENTFILE"
+  },
+  {
+      name: "ADDPRODUCT"
+  },
+  {
+      name: "LISTPRODUCT"
+  },
+  {
+      name: "SEARCHPRODUCT"
+  },
+  {
+      name: "DELETEPRODUCT"
+  },
+  {
+      name: "UPDATEPRODUCT"
   },
 ];

@@ -6,6 +6,7 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "./assets/css/rotating-card.css";
 
 import { Provider } from "./common/context";
+import { AdminPrivateRoute, PrivateRoute, UserPrivateRoute } from './common/protected_route';
 
 import Login from "./pages/login/login";
 import SignUp from "./pages/signup/signup";
@@ -54,6 +55,10 @@ import PageLoader from "./common/components/PageLoader";
 import Alert from "./common/components/Alert";
 import NotFound from "./common/components/NotFound";
 
+
+
+
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -67,7 +72,8 @@ class App extends Component {
       users : [],
       tickets : [],
       user : {
-        role : 'admin'
+        role : 'user',
+        permissions : []
       }
     };
     this.loginUser  = this.loginUser.bind(this);
@@ -109,6 +115,7 @@ class App extends Component {
       sessionStorage.setItem("user", JSON.stringify(data));
       this.getProducts();
       this.getTickets();
+      data.permissions = data.permissions == null ? [] : data.permissions;
       if (data.role === "admin") {
         this.setState({user : data,admin: true });
         this.getUsers();
@@ -242,154 +249,48 @@ class App extends Component {
                   {<Route path="/login" component={Login} />}
                   {!loggedIn && <Route path="/" component={Login} />}
                   <div className="content">
-                    {loggedIn && (
-                      <Route exact path="/dashboard" component={Dashboard} />
-                    )}
-                    {loggedIn && (
-                      <Route path="/createclient" component={() => (   <CreateClient ></CreateClient> )}
-                      />
-                    )}
-                    {loggedIn && (
-                      <Route
-                        path="/createclientbyid"
-                        component={() => (
-                          <CreateClientById 
-                          ></CreateClientById>
-                        )}
-                      />
-                    )}
-                    {loggedIn && (
-                      <Route path="/createuser" component={CreateUser} />
-                    )}
-                    {loggedIn && (
-                      <Route path="/addadmin" component={AddAdmin} />
-                    )}
-                    {loggedIn && (
-                      <Route path="/profile" component={Profile} />
-                    )}
-                    {!admin && loggedIn && (
-                      <Route path="/clientprofile" component={ClientProfile} />
-                    )}
-                    {loggedIn && (
-                      <Route path="/tickets" component={Tickets} />
-                    )}
-                    {loggedIn && (
-                      <Route path="/viewclient" component={ViewClient} />
-                    )}
-                    {loggedIn && (
-                      <Route path="/clients" component={ Clients } />
-                    )} 
-                    {loggedIn && (
-                      <Route
-                        path="/changepassword"
-                        component={ChangePassword}
-                      />
-                    )}
-                    {loggedIn && (
-                      <Route
-                        path="/createproduct"
-                        component={() => (
-                          <CreateProduct
-                          ></CreateProduct>
-                        )}
-                      />
-                    )}
-                    {loggedIn && (
-                      <Route path="/updateproduct" component={UpdateProduct} />
-                    )}
-                    
-                    {loggedIn && (
-                      <Route
-                        path="/addclientproduct"
-                        component={AddClientProduct}
-                      />
-                    )}
-                    {loggedIn && (
-                      <Route path="/viewticket" component={ViewTicket} />
-                    )}
-                    {loggedIn && (
-                      <Route path="/products" component={Products} />
-                    )}
-                    {!admin && loggedIn && (
-                      <Route
-                        path="/clientproducts"
-                        component={ClientProducts}
-                      />
-                    )}
-                    {!admin && loggedIn && (
-                      <Route
-                        path="/productcart"
-                        component={ProductCart}
-                      />
-                    )}
-                    {loggedIn && (
-                      <Route
-                        path="/productdetails"
-                        component={ProductDetails}
-                      />
-                    )}
-                    {loggedIn && (
-                      <Route path="/createticket" component={CreateTicket} />
-                    )}
-                    {loggedIn && (
-                      <Route path="/addclient" component={AddClient} />
-                    )}
-                    {loggedIn && (
-                      <Route
-                        path="/updateclientproduct"
-                        component={UpdateClientProduct}
-                      />
-                    )}
-                    {loggedIn && (
-                      <Route
-                        path="/viewclientproduct"
-                        component={ViewClientProduct}
-                      />
-                    )}
-                    {!admin && loggedIn && (
-                      <Route
-                        path="/viewproductcart"
-                        component={ViewProductCart}
-                      />
-                    )}
-                    {!admin && loggedIn && (
-                      <Route
-                        path="/clientproductdetails"
-                        component={ClientProductDetails}
-                      />
-                    )}
-                    {loggedIn && (
-                      <Route
-                        path="/users"
-                        component={Users}
-                      />
-                    )}
-                    {loggedIn && (
-                      <Route
-                        path="/admin"
-                        component={Admin}
-                      />
-                    )}
-                    {loggedIn && (
-                      <Route
-                        path="/editclient"
-                        component={EditClient}
-                      />
-                    )}
-                    {loggedIn && (
-                      <Route
-                        path="/createuserticket"
-                        component={CreateUserTicket}
-                      />
-                    )}
-                    {loggedIn && (
-                      <Route path="/adminprofile" component={AdminProfile} />
-                    )}
-                    {loggedIn && (
-                      <Route path="/adminpage" component={AdminPage} />
-                    )}
-                      <PrivateRoute path="/userprofile" isLoggedIn={loggedIn} component={UserProfile} />
+                      <PrivateRoute exact path="/" component={Dashboard}  />
+                      <PrivateRoute path="/dashboard" component={Dashboard} />
+                      <PrivateRoute path="/products" component={Products} />
+                      <PrivateRoute path="/tickets" component={Tickets} />
+                      <PrivateRoute path="/profile" component={Profile} />
+                      <PrivateRoute path="/changepassword" component={ChangePassword} />
+                      <PrivateRoute path="/createticket" component={CreateTicket} />
+                      <PrivateRoute path="/productdetails" component={ProductDetails} />
+                      <PrivateRoute path="/productdetails" component={ProductDetails} />
+                      
+
+                      <UserPrivateRoute path="/viewticket" component={ViewTicket} />
+                      <UserPrivateRoute path="/clientprofile" component={ClientProfile} />
+                      <UserPrivateRoute path="/clientprofile" component={ClientProfile} />
+                      <UserPrivateRoute path="/clientproductdetails" component={ProductCart} />
+                      <UserPrivateRoute path="/productcart" component={ViewProductCart} />
+                      <UserPrivateRoute path="/clientproducts" component={ClientProducts} />
+
+
+                      <AdminPrivateRoute path="/createproduct" component={CreateProduct} />
+                      <AdminPrivateRoute path="/updateproduct" component={UpdateProduct} />
+
+                      <AdminPrivateRoute path="/clients" component={Clients} permission="" />
+                      <AdminPrivateRoute path="/addclient" component={AddClient} />
+                      <AdminPrivateRoute path="/createclient" component={CreateClient} />
+                      <AdminPrivateRoute path="/createclientbyid" component={CreateClientById} />
+                      <AdminPrivateRoute path="/viewclient" component={ViewClient} />
+                      <AdminPrivateRoute path="/editclient" component={EditClient} />
+                      <AdminPrivateRoute path="/addclientproduct" component={AddClientProduct} />
+                      <AdminPrivateRoute path="/updateclientproduct" component={UpdateClientProduct} />
+                      <AdminPrivateRoute path="/viewclientproduct" component={ViewClientProduct} />
+
+                      <AdminPrivateRoute path="/addadmin" component={AddAdmin} />
+                      <AdminPrivateRoute path="/createuser" component={CreateUser} />
+                      <AdminPrivateRoute path="/users" component={Users} />
+                      <AdminPrivateRoute path="/admin" component={Admin} />
+                      <AdminPrivateRoute path="/createuserticket" component={CreateUserTicket} />
+                      <AdminPrivateRoute path="/adminprofile" component={AdminProfile} />
+                      <AdminPrivateRoute path="/adminpage" component={AdminPage} />
+                      <AdminPrivateRoute path="/userprofile" component={UserProfile} />
                   </div>
+                  <Route path="/forbidden" component={NotFound} />
                   <Route component={NotFound} />
                 </Switch>
               </div>
@@ -399,10 +300,7 @@ class App extends Component {
       </Provider>
     );
   }
+ 
 }
-
-
-const PrivateRoute = ({ isLoggedIn, permissions, ...props }) => isLoggedIn  ? <Route {...props}/>  : <Redirect to="/login"/>;
-
 
 export default App;

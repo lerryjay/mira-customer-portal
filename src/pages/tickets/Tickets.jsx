@@ -8,16 +8,60 @@ class Tickets extends Component {
     super(props);
     this.state = {
       ...this.props,
+      userid: '',
+      startdate: '',
+      enddate: '',
+      type: '',
+      on: '',
+      searchUser : '',
+      clients: [],
       currentPage: 1,
       numberPerPage: 10,
-      id: 1,
       currentList: [],
+      pageNumbers: [],
+
     };
   }
 
-  componentDidMount() {
+  handleInputChange = e => {
+    const { name, value } = e.target;
+    if (name === 'searchUser') {
+      let client = this.state.users.find(item=>item.firstname+' '+item.lastname == value);
+      if(client == null)client =  this.state.clients.find(item=>item.businessname == value);
+        if (client) this.state.userid = (client.userid || client.user_id)
+        console.log(client, value, this.state.userid)
+    } 
+    this.setState({ [name]: value});
+}
+
+componentDidMount() {
+  this.props.user.role === 'admin' && this.getClients() ;
+  this.getTickets();
+}
+
+  async getUsers() {
+    const headers = new Headers();
+    headers.append('API-KEY', APIKEY);
+    const res = await fetch(HTTPURL + `user?userid=${this.props.user.userid}`, {
+        headers: headers
+    })
+        .then(response => response.json());
+    if (res['status']) {
+        this.setState({ users: res['data'] });
+    }
+}
+
+
+async getClients() {
+  const headers = new Headers();
+  headers.append('API-KEY', APIKEY );
+  const res = await fetch(HTTPURL + `clients/?userid=${this.state.user.userid}`, {
+      method: 'GET',
+      headers: headers
+  }).then(response => response.json());
   
-  }
+  if(res['status']) this.setState({ clients : res['data']})
+}
 
   async getTickets() {
     const headers = new Headers();
@@ -68,49 +112,78 @@ class Tickets extends Component {
     }
   }
 
-  handleSearch() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("myInput");
-    filter = input.value
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td")[2];
-      if (td) {
-        console.log(td, td.textContent, td.innerText, "td")
-        txtValue = td.textContent || td.innerText;
-        if (txtValue.indexOf(filter) !== '') {
-          tr[i].style.display = "";
-        } else {
-          tr[i].style.display = "none";
-        }
-      }       
-    }
+  handleSearch = async e => {
+    e.preventDefault()
+
+    const { user, userid, type, startdate, enddate, on} = this.state
+
+    const headers = new Headers();
+    headers.append('API-KEY', APIKEY );
+    const res = await fetch(HTTPURL + `ticket/?userid=${user.userid}&clientid=${userid}&on=${on}&startdate=${startdate}&enddate=${enddate}&type=${type}`, {
+        method: 'GET',
+        headers: headers
+    }).then(response => response.json())
+    .then(data => {
+      if(data.status) this.setState({ tickets : data.data})
+    } )
+    
+  }
+ 
+  handleClick(event) {
+    const paginatedbuttons = document.querySelectorAll("a");
+    const {currentPage} = this.state;
+  
+    this.setState({
+      currentPage: event.target.id
+    });
+    // if (currentPage){
+    //   document.getElementById(event.target.id).className = 'active';
+    // } 
+
+    paginatedbuttons.forEach(btn => {
+      if(btn.id == event.target.id) {
+        btn.classList.add("active")
+      } else {
+        btn.classList.remove("active");
+      }
+    })
+  
   }
 
+
   render() {
+    const { numberPerPage,currentPage, tickets} = this.state
+
+    // Logic for displaying page numbers
+      const pageNumbers = [];
+      for (let i = 1; i <= Math.ceil(tickets.length / numberPerPage); i++) {
+        pageNumbers.push(i);
+        console.log(pageNumbers)
+        this.state.pageNumbers = pageNumbers
+      }
+
+    // Logic for displaying current tickets
+    const indexOfLastTicket = currentPage * numberPerPage;
+    const indexOfFirstTicket = indexOfLastTicket - numberPerPage;
+    const currentTickets = tickets.slice(indexOfFirstTicket, indexOfLastTicket);
+    console.log(currentTickets)
+    this.state.currentTickets = currentTickets
+
     return (
       <div className="container">
         <div className="row mt-4">
           <div className="w-100 text-center">
-            <h3>TICKET LIST </h3>
+            <h3>TICKETS </h3>
           </div>
 
-          <div className="col-md-12 mb-3" id="profile">
+          <div className="col-md-9 mb-3" id="profile">
             { this.state.tickets.length === 0 ? (
-              <div className="card-body">
-                <div className="alert alert-warning" role="alert">
+                <div className="alert alert-warning mt-5" role="alert">
                   <h6 className="text-center">No ticket records!</h6>
                 </div>
-              </div>
             ) : (
             (
               <div>
-                <div className="row mt-2">
-                  <div className="col-md-5">
-                    <input className="form-control" type="text" id="myInput" onKeyUp={this.handleSearch} placeholder="Search for ticket..." title="Type in something"/>
-                  </div>
-                </div>
                 <div
                   id="table"
                   className="card pt-2 mt-3 justify-content-center shadow px-2"
@@ -120,37 +193,35 @@ class Tickets extends Component {
                       {/* <caption>Hello World!</caption> */}
                       <thead>
                         <tr>
-                          <th>S/N</th>
-                          <th>Date&nbsp;&&nbsp;Time</th>
+                          <th>ID</th>
                           {this.state.user.role == "admin" && (
                             <th>Client&nbsp;Name</th>
                           )}
-                          {this.state.user.role == "admin" && <th>Email</th>}
-                          <th>Ticket&nbsp;Type</th>
+                          <th>Type</th>
+                          <th>Title</th>
+                          <th>Date</th>
                           <th>Status</th>
-                          <th>View&nbsp;Ticket</th>
+                          <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {this.state.tickets.map((ticket,index) => {
+                        {this.state.currentTickets.map((ticket,index) => {
                           return (
                             <tr>
-                            <td>{ index + 1}</td>
-                              <td>
-                                {
-                                  ticket.createdat
-                                }
-                              </td>
+                            <td>#{ ticket.id}</td>
                               {this.state.user.role == "admin" && (
                                 <td onClick={this.handleRoute}>
                                   {ticket.clientname}
                                 </td>
                               )}
-                              {this.state.user.role == "admin" && (
-                                <td>{ticket.email}</td>
-                              )}
                               <td>{ticket.type}</td>
-                              <td style={{ maxWidth: "150px" }}>
+                              <td>{ticket.title}</td>
+                              <td>
+                                { new Date(ticket.createdat).toLocaleDateString()
+                                  
+                                }
+                              </td>
+                              <td style={{ maxWidth: "100px" }}>
                                 <select
                                   className="custom-select custom-select-sm"
                                   value={ticket.ticketstatus}
@@ -189,7 +260,7 @@ class Tickets extends Component {
                                     value={ticket.id}
                                     style={{ cursor: "pointer" }}
                                   >
-                                    View
+                                    <i className="fas fa-eye fa-fw "></i>
                                   </span>
                                 </Link>
                               </td>
@@ -203,21 +274,173 @@ class Tickets extends Component {
               </div>
               )
             )}
-          </div>
-        </div>
 
-        {/* <div className="row justify-content-center text-center">
-                <div className="pagination">
+            
+       {(this.state.pageNumbers) && 
+       <div className="row mt-5">
+         <div className="col-md-4">
+            <div className="form-group mt-1">
+            {this.state.tickets.length > 0 &&  
+            <select 
+                onChange={(e) => {
+                  this.setState({ numberPerPage: e.target.value });
+                }}
+               style={{ maxWidth: "180px" }}
+              name="page" id="page" className=" form-control form-select form-select-sm">
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                </select>
+                }
+            </div>
+         </div>
+
+         <div className="col-md-8 ">
+            <div className="row  justify-content-center text-center">
+            {this.state.tickets.length > 0 &&  
+
+            <div className="pagination">
                         <a href="#">&laquo;</a>
-                        <a href="#">1</a>
-                        <a className="active" href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#">6</a>
-                        <a href="#">&raquo;</a>
+                {this.state.pageNumbers.map((pageNumber,index) => {
+                  if(pageNumber == 1 ) {
+                    return (
+                      <a className="active" href="#" id={index + 1}  onClick={(e) => this.handleClick(e, index + 1)}>{pageNumber}</a>
+                    )
+                  } else {
+
+                    return (
+                  <a href="#" id={index + 1}  onClick={(e) => this.handleClick(e, index + 1)}>{pageNumber}</a>
+                    )}
+                  }
+                )}
+                <a href="#">&raquo;</a>
                     </div> 
-               </div> */}
+  }
+            </div>  
+           </div> 
+         </div>
+        }
+
+          </div>
+      
+      
+      
+          <div className="col-md-3 mt-3 mb-3">
+            <div className="card p-3">
+              <label htmlFor="customer" className="font-weight-bold">
+                Customer
+              </label>
+            <input list="customers" name="searchUser" id="searchUser" 
+              onChange={this.handleInputChange} placeholder="Search..."
+             className="form-control"    
+           />
+              <datalist id="customers">
+                  {
+                      this.state.users.map(user => <option value={user.firstname + ' ' + user.lastname} />)
+                  } 
+                  {
+                      this.state.clients.map(client => <option value={client.businessname} />)
+                  }
+              </datalist>
+
+            
+            <label htmlFor="ticketid" className="mt-3 font-weight-bold">
+                Ticket ID
+              </label>
+            <input className="form-control" type="text" id="myInput" onChange={this.handleInputChange}
+             placeholder="Search..." title="Type in something" 
+             />
+            
+            
+            <form onSubmit={this.handleSearch}>
+            <div className="form-group mt-3">
+              <label htmlFor="startdate" className="font-weight-bold">
+                Start Date
+              </label>
+              <div className="input-group">
+              <input
+              type="date"
+              className="form-control alt alt_right"
+              name="startdate"
+              id="startdate"
+              placeholder="Start Date"
+              value={this.state.startdate}
+              onChange={this.handleInputChange}
+              />
+                  <span className="input-group-text bg-white alt" >
+                      <i className="fas fa-calendar fa-fw"></i>
+                  </span>
+              </div>
+            </div>
+
+            
+            <div className="form-group mt-1">
+              <label htmlFor="startdate" className="font-weight-bold">
+                End Date
+              </label>
+              <div className="input-group">
+              <input
+              type="date"
+              className="form-control alt alt_right"
+              name="enddate"
+              id="enddate"
+              placeholder="End Date"
+              value={this.state.enddate}
+              onChange={this.handleInputChange}
+              />
+                  <span className="input-group-text bg-white alt" >
+                      <i className="fas fa-calendar fa-fw"></i>
+                  </span>
+              </div>
+            </div>
+            
+            <div className="form-group mt-1">
+              <label htmlFor="exactdate" className="font-weight-bold">
+                Created On
+              </label>
+              <div className="input-group">
+              <input
+              type="date"
+              className="form-control alt alt_right"
+              name="on"
+              id="on"
+              placeholder="Exact Date"
+              value={this.state.on}
+              onChange={this.handleInputChange}
+              />
+                  <span className="input-group-text bg-white alt" >
+                      <i className="fas fa-calendar fa-fw"></i>
+                  </span>
+              </div>
+            </div>
+
+            
+            <div className="form-group mt-1">
+              <label htmlFor="type" className="font-weight-bold">
+                Ticket Type
+              </label>
+                <select onChange={this.handleInputChange} 
+              name="type" id="type" className=" form-control form-select form-select-sm">
+                    <option value="" disabled selected>-- Select --</option>
+                    <option value="complaint" >Complaint</option>
+                    <option value="enquiry">Enquiry</option>
+                    <option value="support">Support</option>
+                </select>
+            </div>
+
+            <div className="form-group mt-1 text-right">
+              <button type="submit" className="btn btn-primary btn-md" style={{cursor:"pointer", fontSize:'16px'}}>Search</button>
+            </div>
+            </form>                  
+            </div>
+
+          </div>
+
+       </div>
+
+
       </div>
     );
   }

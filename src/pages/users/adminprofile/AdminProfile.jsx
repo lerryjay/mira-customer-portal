@@ -10,7 +10,82 @@ class Profile extends Component {
         this.state = {
             ...this.props,
             users: [],
-            selectedUser: {}
+            selectedUser: {},
+            permissions: [
+                {
+                    name: "ADDADMIN"
+                },
+                {
+                    name: "LISTADMIN"
+                },
+                {
+                    name: "UPDATEADMINPERMISSIONS"
+                },
+                {
+                    name: "CREATETICKET"
+                },
+                {
+                    name: "LISTTICKET"
+                },
+                {
+                    name: "MODIFYTICKET"
+                },
+                {
+                    name: "VIEWTICKET"
+                },
+                {
+                    name: "REPLYTICKET"
+                },
+                {
+                    name: "CREATECLIENT"
+                },
+                {
+                    name: "LISTCLIENT"
+                },
+                {
+                    name: "SEARCHCLIENT"
+                },
+                {
+                    name: "VIEWCLIENT"
+                },
+                {
+                    name: "ADDDEPLOYMENT"
+                },
+                {
+                    name: "VIEWDEPLOYMENT"
+                },
+                {
+                    name: "VIEWDEPLOYMENTCOST"
+                },
+                {
+                    name: "VIEWDEPLOYMENTTIME"
+                },
+                {
+                    name: "UPDATEDEPLOYMENT"
+                },
+                {
+                    name: "UPDATEDEPLOYMENTFILE"
+                },
+                {
+                    name: "VIEWDEPLOYMENTFILE"
+                },
+                {
+                    name: "ADDPRODUCT"
+                },
+                {
+                    name: "LISTPRODUCT"
+                },
+                {
+                    name: "SEARCHPRODUCT"
+                },
+                {
+                    name: "DELETEPRODUCT"
+                },
+                {
+                    name: "UPDATEPRODUCT"
+                },
+            ],
+            selectedPermissions: []
         }
         console.log(this.props.user.lastname)
     }
@@ -117,6 +192,38 @@ class Profile extends Component {
         reader.readAsDataURL(file)
     }
 
+    handleCheck = ({ target }) => {
+        if (target.checked) {
+          target.removeAttribute("checked");
+          this.addPermission(target.value);
+        } else {
+          target.setAttribute("checked", true);
+          this.removePermission(target.value);
+        }
+      }
+      addPermission = async (value) => {
+        await this.setState((prevState) => ({
+          selectedPermissions:
+            prevState.selectedPermissions.length == 0
+              ? [value]
+              : [...prevState.selectedPermissions, value],
+        }));
+        console.log(this.state.selectedPermissions, "addPermission")
+      };
+      removePermission = async (value) => {
+        await this.setState((prevState) => ({
+            selectedPermissions: prevState.selectedPermissions.filter(
+            (perm) => perm != value
+          ),
+        }));
+        console.log(this.state.selectedPermissions, "removePermission")
+      };
+
+      
+    setPermission() {
+        
+    }
+
     render() {
         let {imagePreviewUrl} = this.state;
             let imagePreview = null;
@@ -220,6 +327,51 @@ class Profile extends Component {
                     </div>
 
 
+                </div>
+          
+                <div className="row mt-4">
+                    <div className="col-md-12">
+                    <form id="permissions" onSubmit={this.setPermission}>
+                            <div className="card">
+                                <div className="card-header bg-medium font-weight-bold text-dark">
+                                    Set and manage permissions for this user
+                                    <span className="float-right" id='edit' style={{ cursor: 'pointer' }} ><i className="fas fa-pen-square fa-2x"></i>
+                                    </span>
+                                </div>
+                                <div className="card-body">
+                                    <div className="row">
+                                    {
+                                    this.state.permissions.map((permission) => (
+                                        <div className="col-md-4">
+                                          <p className="list-group-item">
+                                            {permission.name}{" "}
+                                            <label className="switch float-right">
+                                              {" "}
+                                              <input
+                                                type="checkbox"
+                                                value={permission.name}
+                                                onClick={this.handleCheck}
+                                              />
+                                              <span className="slider round"></span>
+                                            </label>
+                                          </p>
+                                        </div>
+                                    ))
+                                    }
+                                    </div>
+                                </div>
+
+                                <div className="card-footer">
+                                    <div className="text-center">
+                                        <button type="submit" className="btn btn-sm btn-primary py-2 px-5">
+                                            Save
+                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+              
+                    </div>
                 </div>
             </div>
         )

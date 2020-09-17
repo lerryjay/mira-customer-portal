@@ -102,7 +102,7 @@ class Admin extends Component {
                           Select
                         </button>
                         <div className="dropdown-menu" id={`dropdown${index + 1}`} aria-labelledby={"dropdownMenuButton"}>
-                        <Link to={() => `/adminprofile/${user.adminid}`} className="dropdown-item"> View Profile </Link>
+                        <Link to={() => `/adminpage/${user.adminid}`} className="dropdown-item"> View Profile </Link>
                           <div className="dropdown-divider"></div>
                           <a className="dropdown-item text-danger" href="#">Suspend Account</a>
                           <a className="dropdown-item text-danger" href="#">Delete Account</a>

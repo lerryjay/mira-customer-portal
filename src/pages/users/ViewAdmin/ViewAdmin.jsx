@@ -13,7 +13,9 @@ class Profile extends Component {
       showmodal: true,
       clients:[],
       users: [],
-      selectedUser: {},
+      selectedUser: {
+        permissions : []
+      },
       selectedClient: '',
       fullname: "",
     };
@@ -306,7 +308,7 @@ class Profile extends Component {
                                 <div className="card-body">
                                     <div className="row">
                                     {
-                                    this.state.user.permissions.map((permission) => (
+                                    this.state.selectedUser.permissions.map((permission) => (
                                       <div className="col-md-3">
                                         <p className="list-group-item px-2" style={{ fontSize: "12px"}}>
                                           {permission}{" "}

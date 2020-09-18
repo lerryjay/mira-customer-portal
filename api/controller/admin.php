@@ -31,7 +31,7 @@
             'email'=>$user['email'],
             'telephone'=>$user['telephone'],
             'imageurl'=>$user['imageurl'],
-            'permissions'=>explode('',$user['permissions']),
+            'permissions'=>explode('|',$user['permissions']),
             'activation'=>$user['activation']
           ];
         }$response = ['status'=>true,'message'=>'Administrators retrieved successfully', 'data'=>$users];

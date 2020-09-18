@@ -6,7 +6,6 @@ import { withContext } from '../context';
 import { clientMenu, adminMenu } from '../global_constant';
 
 const Sidebar = (props) => {
-    console.log(props);
     const { user } =  props;
     
     const toggle2 = () => {
@@ -18,8 +17,7 @@ const Sidebar = (props) => {
     
     const [menu, setMenu] = useState(user.role === 'admin' ? adminMenu : clientMenu);
 
-    const toggleDropdown =  (toggled) =>{
-        console.log(toggled);
+    const toggleDropdown =  (toggled) =>{;
         const updated =  menu.map(item=>{
             if(toggled == item) item.isActive = !item.isActive
             return item;

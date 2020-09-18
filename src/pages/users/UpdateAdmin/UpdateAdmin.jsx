@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withContext } from '../../../common/context';
-import { HTTPURL, APIKEY } from "../../../common/global_constant";
+import { HTTPURL, APIKEY,ADMINPERMISSIONS } from "../../../common/global_constant";
 import avatar from '../../../assets/images/avatar.png'
 
 
@@ -9,83 +9,12 @@ class Profile extends Component {
         super(props);
         this.state = {
             ...this.props,
+            loading: false,
             users: [],
             selectedUser: {},
-            permissions: [
-                {
-                    name: "ADDADMIN"
-                },
-                {
-                    name: "LISTADMIN"
-                },
-                {
-                    name: "UPDATEADMINPERMISSIONS"
-                },
-                {
-                    name: "CREATETICKET"
-                },
-                {
-                    name: "LISTTICKET"
-                },
-                {
-                    name: "MODIFYTICKET"
-                },
-                {
-                    name: "VIEWTICKET"
-                },
-                {
-                    name: "REPLYTICKET"
-                },
-                {
-                    name: "CREATECLIENT"
-                },
-                {
-                    name: "LISTCLIENT"
-                },
-                {
-                    name: "SEARCHCLIENT"
-                },
-                {
-                    name: "VIEWCLIENT"
-                },
-                {
-                    name: "ADDDEPLOYMENT"
-                },
-                {
-                    name: "VIEWDEPLOYMENT"
-                },
-                {
-                    name: "VIEWDEPLOYMENTCOST"
-                },
-                {
-                    name: "VIEWDEPLOYMENTTIME"
-                },
-                {
-                    name: "UPDATEDEPLOYMENT"
-                },
-                {
-                    name: "UPDATEDEPLOYMENTFILE"
-                },
-                {
-                    name: "VIEWDEPLOYMENTFILE"
-                },
-                {
-                    name: "ADDPRODUCT"
-                },
-                {
-                    name: "LISTPRODUCT"
-                },
-                {
-                    name: "SEARCHPRODUCT"
-                },
-                {
-                    name: "DELETEPRODUCT"
-                },
-                {
-                    name: "UPDATEPRODUCT"
-                },
-            ],
-            selectedPermissions: []
+            permissions: ADMINPERMISSIONS,
+            selectedPermissions: [],
+            successmessage: ''
         }
         console.log(this.props.user.lastname)
     }
@@ -200,7 +129,18 @@ class Profile extends Component {
           target.setAttribute("checked", true);
           this.removePermission(target.value);
         }
+
+        const index = this.state.user.permissions.findIndex(item=> item === target.value);
+        const { user } = this.state;
+        if (index > -1) {
+            user.permissions.splice(index,1);
+        } else {
+            user.permissions.push(target.value);
+        }
+        this.setState({ user });
+
       }
+
       addPermission = async (value) => {
         await this.setState((prevState) => ({
           selectedPermissions:
@@ -210,6 +150,8 @@ class Profile extends Component {
         }));
         console.log(this.state.selectedPermissions, "addPermission")
       };
+
+
       removePermission = async (value) => {
         await this.setState((prevState) => ({
             selectedPermissions: prevState.selectedPermissions.filter(
@@ -220,7 +162,24 @@ class Profile extends Component {
       };
 
       
-    setPermission() {
+    setPermission = (e) =>{
+        e.preventDefault();
+        this.setState({ loading: true });
+
+        let data = this.state.selectedPermissions;
+        let adminid = this.props.location.pathname.split("/")[2]
+
+        this.state.updateAdminPermission(data, adminid )
+        
+        setTimeout(() => {
+            this.setState({ loading: false });
+            this.setState({successmessage:"Permission Updated Successfully"});
+            setTimeout(() => {
+                this.setState({successmessage: false});
+            }, 2000)
+        }, 2000)
+        
+        
         
     }
 
@@ -233,6 +192,13 @@ class Profile extends Component {
             } 
         return (
             <div className="container mx-auto">
+            {/* Success Message */}
+            { this.state.successmessage ? 
+                <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
+                    <span className="mt-3">{this.state.successmessage}</span>
+                </div>
+                :   <span></span>
+            }
                 <div className="row mt-4">
 
                     <div className="col-md-8 box1 mb-3" id="profile">
@@ -330,7 +296,7 @@ class Profile extends Component {
                 </div>
           
                 <div className="row mt-4">
-                    <div className="col-md-12">
+                    <div className="col-md-12 mb-4">
                     <form id="permissions" onSubmit={this.setPermission}>
                             <div className="card">
                                 <div className="card-header bg-medium font-weight-bold text-dark">
@@ -342,8 +308,8 @@ class Profile extends Component {
                                     <div className="row">
                                     {
                                     this.state.permissions.map((permission) => (
-                                        <div className="col-md-4">
-                                          <p className="list-group-item">
+                                        <div className="col-md-3">
+                                          <p className="list-group-item px-2" style={{ fontSize: "12px"}}>
                                             {permission.name}{" "}
                                             <label className="switch float-right">
                                               {" "}
@@ -351,6 +317,7 @@ class Profile extends Component {
                                                 type="checkbox"
                                                 value={permission.name}
                                                 onClick={this.handleCheck}
+                                                checked={ this.state.user.permissions.findIndex(item=>item === permission.name) > -1}
                                               />
                                               <span className="slider round"></span>
                                             </label>
@@ -361,13 +328,23 @@ class Profile extends Component {
                                     </div>
                                 </div>
 
-                                <div className="card-footer">
+                                  <div className="card-footer">
                                     <div className="text-center">
+                                    {this.state.loading ? (
+                                    <button type="submit" className="btn btn-sm btn-primary px-4">
+                                        <div className="spinner-border text-secondary " role="status" id="loader">
+                                            <span className="sr-only">Loading...</span>
+                                        </div>
+                                    </button>
+                                     
+                                    ) : (
                                         <button type="submit" className="btn btn-sm btn-primary py-2 px-5">
                                             Save
                                          </button>
+                                        )}
                                     </div>
                                 </div>
+       
                             </div>
                         </form>
               

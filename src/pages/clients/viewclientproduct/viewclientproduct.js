@@ -270,14 +270,17 @@ class viewclientproduct extends Component {
                   <td></td>
                 </tr>
               </tbody>
-              <tfoot>
-                <tr>
-                  <th className="text-left bg-light py-2">Total</th>
-                  <td></td>
-                  <td></td>
-                  <td className="bg-light py-2">{this.state.cost}</td>
-                </tr>
-              </tfoot>
+              {this.state.user.permissions.findIndex(permission => permission === "VIEWDEPLOYMENTCOST")
+                ? <tfoot>
+                    <tr>
+                      <th className="text-left bg-light py-2">Total</th>
+                      <td></td>
+                      <td></td>
+                      <td className="bg-light py-2">{this.state.cost}</td>
+                    </tr>
+                  </tfoot>
+                : <span></span>
+              }
             </table>
           </div>
 
@@ -322,67 +325,80 @@ class viewclientproduct extends Component {
           </div>
           {/* </div> */}
 
-          <div className="row mt-4">
+          {this.state.user.permissions.findIndex(permission => permission === "VIEWDEPLOYMENTFILE")
+          ?
+          <div>
+            <div className="row mt-4">
             <div className="col-md-8">
               <h5 className="text-dark font-weight-bold mt-2">
                 Attached Licenses & Files
               </h5>
             </div>
-            <div className="col-md-4 text-right">
-              <form id="fileForm">
-                <label htmlFor="file" className="btn btn-sm btn-primary py-1 px-3">Attach Files</label>
-                <input style={{ display: 'none' }} type={"file"} id="file"
-                  className="form-file form-file-sm" name="files[]" multiple placeholder=""
-                  onChange={(e) => this.handleFileAttachment(e)} />
-              </form>
-            </div>
+            {this.state.user.permissions.findIndex(permission => permission === "UPDATEDEPLOYMENTFILE")
+            ? <div className="col-md-4 text-right">
+                <form id="fileForm">
+                  <label htmlFor="file" className="btn btn-sm btn-primary py-1 px-3">Attach Files</label>
+                  <input style={{ display: 'none' }} type={"file"} id="file"
+                    className="form-file form-file-sm" name="files[]" multiple placeholder=""
+                    onChange={(e) => this.handleFileAttachment(e)} />
+                </form>
+              </div>
+              : <span></span>
+            }     
           </div>
-          <div className="row">
-            {this.state.files.length ? (
-              this.state.files.map((item, index) => (
-                <div className="col-md-3 col-lg-2 text-center py-2">
-                  {item.match(/\.(jpg|jpeg|png)$/) ? (
-                    <div className="attached_files">
-                      <img
-                        id="img"
-                        style={{ width: "100px", height: "100px", cursor: "pointer" }}
-                        className="m-2"
-                        onClick={(e) => this.showFileModal(e, item)}
-                        src={FILEURL + item}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = placeholder;
-                        }}
-                      />
-                      <Link onClick={() => this.deleteFiles(index, item)}>
-                          <i className="fa fa-trash text-danger"></i>
-                      </Link>
+            {this.state.user.permissions.findIndex(permission => permission === "VIEWDEPLOYMENTFILE")
+            ? <div className="row">
+                {this.state.files.length ? (
+                  this.state.files.map((item, index) => (
+                    <div className="col-md-3 col-lg-2 text-center py-2">
+                      {item.match(/\.(jpg|jpeg|png)$/) ? (
+                        <div className="attached_files">
+                          <img
+                            id="img"
+                            style={{ width: "100px", height: "100px", cursor: "pointer" }}
+                            className="m-2"
+                            onClick={(e) => this.showFileModal(e, item)}
+                            src={FILEURL + item}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = placeholder;
+                            }}
+                          />
+                          <Link onClick={() => this.deleteFiles(index, item)}>
+                              <i className="fa fa-trash text-danger"></i>
+                          </Link>
+                        </div>
+                      ) : (
+                          <div className="attached_files">
+                            <img
+                              src={pdf_placeholder}
+                              onClick={(e) => this.showFileModal(e, item)}
+                              style={{ width: "100px", height: "100px" }}
+                              className="m-2"
+                            />
+                            <Link onClick={() => this.deleteFiles(index, item)}>
+                                <i className="fa fa-trash text-danger"></i>
+                            </Link>
+                          </div>
+                        )}
+                      <br /> {item}
                     </div>
-                  ) : (
-                      <div className="attached_files">
-                        <img
-                          src={pdf_placeholder}
-                          onClick={(e) => this.showFileModal(e, item)}
-                          style={{ width: "100px", height: "100px" }}
-                          className="m-2"
-                        />
-                        <Link onClick={() => this.deleteFiles(index, item)}>
-                            <i className="fa fa-trash text-danger"></i>
-                        </Link>
-                      </div>
-                    )}
-                  <br /> {item}
-                </div>
-              ))
-            ) : (
-                <div className="col-md-12 alert alert-warning" role="alert">
-                  <h6 className="text-center">
-                    No files were attached corresponding to this deployment!
-                  </h6>
-                </div>
-              )}
-          </div>
+                  ))
+                ) : (
+                    <div className="col-md-12 alert alert-warning" role="alert">
+                      <h6 className="text-center">
+                        No files were attached corresponding to this deployment!
+                      </h6>
+                    </div>
+                  )}
+              </div>
+            : <span></span>
+            }
+        
         </div>
+          : <span></span>
+            }
+          </div>
 
           <div id="moduleModal" className="modal2">
             <div className="px-2 d-flex">

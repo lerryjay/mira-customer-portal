@@ -40,6 +40,7 @@ class Admin extends Component {
   }
 
   render() {
+    const { user } = this.state;
     return (
       <div className="container mt-4">
         <div className="w-100 text-center">
@@ -58,7 +59,8 @@ class Admin extends Component {
             </div>
           )}
         
-        <div className="row mt-4 d-flex justify-content-end mb-3 mr-2" >
+         {user.role === "admin"
+         ? <div className="row mt-4 d-flex justify-content-end mb-3 mr-2" >
               <Link to="/addadmin">
                 <button type="button" className="btn btn-sm btn-primary new_product">
                     <i className="fas fa-plus" aria-hidden="true">
@@ -67,6 +69,9 @@ class Admin extends Component {
                 </button>
               </Link>
           </div> 
+          : <span></span>
+        }
+
           {!this.state.loader && this.state.users.length === 0 ?
             <div className="card-body">
                 <div className="alert alert-warning" role="alert">
@@ -102,7 +107,7 @@ class Admin extends Component {
                           Select
                         </button>
                         <div className="dropdown-menu" id={`dropdown${index + 1}`} aria-labelledby={"dropdownMenuButton"}>
-                        <Link to={() => `/adminpage/${user.adminid}`} className="dropdown-item"> View Profile </Link>
+                        <Link to={() => `/viewadmin/${user.adminid}`} className="dropdown-item"> View Profile </Link>
                           <div className="dropdown-divider"></div>
                           <a className="dropdown-item text-danger" href="#">Suspend Account</a>
                           <a className="dropdown-item text-danger" href="#">Delete Account</a>

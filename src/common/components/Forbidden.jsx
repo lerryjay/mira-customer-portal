@@ -1,20 +1,19 @@
 import React from 'react'
-import notfound from "../../assets/images/404_not_found.png";
+import forbidden from "../../assets/images/forbidden2.png";
 
-const NotFound = () => {
+const Forbidden = () => {
   return (
-    <div  className="content">
       <div className="container">
         <div className="row">
           <div className="col-md-8 offset-2">
             <div style={{ marginTop: "calc((90vh - 400px)/ 2)" }} className="text-center mt-5">
-              <img src={notfound} alt="Not Found" width="600px" height="300px" />
+              <img src={forbidden} alt="Forbidden Error" width="600px" height="inherit" />
+              {/* <h5 className="text-danger">Oops! You do not have the permission to access this page.</h5> */}
             </div>
           </div>
       </div>
       </div>
-    </div>
   );
 };
 
-export default NotFound;
+export default Forbidden;

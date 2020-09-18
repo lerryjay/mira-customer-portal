@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from "react";
-import { BrowserRouter as Router, Switch,Route,Redirect} from "react-router-dom";
+import { BrowserRouter as Router, Switch,Route} from "react-router-dom";
 import { HTTPURL,APIKEY } from "./common/global_constant";
 
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "./assets/css/rotating-card.css";
 
 import { Provider } from "./common/context";
-import { AdminPrivateRoute, PrivateRoute, UserPrivateRoute } from './common/protected_route';
+import { AdminPrivateRoute, PrivateRoute, UserPrivateRoute,NotLoggedInRoute } from './common/protected_route';
 
 import Login from "./pages/login/login";
 import SignUp from "./pages/signup/signup";
@@ -44,16 +44,17 @@ import CreateUser from "./pages/users/create_user/CreateUser";
 import AddAdmin from "./pages/users/addadministrator/addadministrator";
 import Users from "./pages/users/Users";
 import Admin from "./pages/users/Admin";
-import AdminProfile from "./pages/users/adminprofile/AdminProfile";
+import UpdateAdmin from "./pages/users/UpdateAdmin/UpdateAdmin";
 import UserProfile from "./pages/users/userprofile/UserProfile";
 import CreateUserTicket from "./pages/users/createuserticket/createuserticket"
-import AdminPage from "./pages/users/adminpage/AdminPage"
+import ViewAdmin from "./pages/users/ViewAdmin/ViewAdmin"
 
 import Nav from "./common/components/Nav";
 import Sidebar from "./common/components/Sidebar";
 import PageLoader from "./common/components/PageLoader";
 import Alert from "./common/components/Alert";
 import NotFound from "./common/components/NotFound";
+import Forbidden from "./common/components/Forbidden";
 
 
 
@@ -190,6 +191,31 @@ class App extends Component {
     setTimeout(()=>this.setState({ alertActive : false },3500));
   }
 
+  updateAdminPermission = async (data, adminid) =>{
+    const headers = new Headers();
+    headers.append('API-KEY', APIKEY);
+
+    let form = new FormData();
+    form.append("userid", this.state.user.userid);
+    form.append("adminid", adminid);
+    form.append("permissions", data.join('|'));
+
+    const res = await fetch(HTTPURL + "admin/updatepermission", {
+      method: "POST",
+      body: form,
+      headers: headers,
+    }).then((response) => response.json());
+
+    if(res['status']){
+      if(adminid == this.state.user.userid){
+        const { user } = this.state;
+        user['permissions'] = data;
+        this.setState({ user, admin: true });
+        sessionStorage.setItem('user',JSON.stringify(user));
+      }
+    }
+  }
+
   getContext = () => {
     return {
       ...this.state,
@@ -203,7 +229,8 @@ class App extends Component {
       showAlert : this.showAlert,
       getProducts : this.getProducts,
       getTickets : this.getTickets,
-      getUsers : this.getUsers
+      getUsers : this.getUsers,
+      updateAdminPermission : this.updateAdminPermission.bind(this),
     };
   };
 
@@ -231,7 +258,7 @@ class App extends Component {
   }
 
   render() {
-    const { loggedIn, admin } = this.state;
+    const { loggedIn, admin, user } = this.state;
     return (
       <Provider value={this.getContext()}>
         <div className="home">
@@ -242,57 +269,56 @@ class App extends Component {
               <Nav />
               <div className="App" id="wrapper">
                 { loggedIn && <Sidebar />}
+                <div className={ loggedIn ? "content" : '' }>
                 <Switch>
-                  {<Route path="/forgot_password" component={ForgotPassword} />}
-                  {<Route path="/verifytoken" component={VerifyToken} />}
-                  {<Route path="/signup" component={SignUp} />}
-                  {<Route path="/login" component={Login} />}
-                  {!loggedIn && <Route path="/" component={Login} />}
-                  <div className="content">
+                 
                       <PrivateRoute exact path="/" component={Dashboard}  />
                       <PrivateRoute path="/dashboard" component={Dashboard} />
-                      <PrivateRoute path="/products" component={Products} />
-                      <PrivateRoute path="/tickets" component={Tickets} />
+                      <PrivateRoute path="/products" permission="LISTPRODUCT" component={Products} />
+                      <PrivateRoute path="/tickets" permission="LISTTICKET" component={Tickets} />
                       <PrivateRoute path="/profile" component={Profile} />
                       <PrivateRoute path="/changepassword" component={ChangePassword} />
-                      <PrivateRoute path="/createticket" component={CreateTicket} />
-                      <PrivateRoute path="/productdetails" component={ProductDetails} />
-                      <PrivateRoute path="/productdetails" component={ProductDetails} />
+                      <PrivateRoute path="/createticket" permission="CREATETICKET" component={CreateTicket} />
+                      <PrivateRoute path="/productdetails" permission="LISTPRODUCT" component={ProductDetails} />
                       
 
-                      <UserPrivateRoute path="/viewticket" component={ViewTicket} />
-                      <UserPrivateRoute path="/clientprofile" component={ClientProfile} />
+                      <UserPrivateRoute path="/viewticket" permission="VIEWTICKET" component={ViewTicket} />
                       <UserPrivateRoute path="/clientprofile" component={ClientProfile} />
                       <UserPrivateRoute path="/clientproductdetails" component={ProductCart} />
                       <UserPrivateRoute path="/productcart" component={ViewProductCart} />
                       <UserPrivateRoute path="/clientproducts" component={ClientProducts} />
 
 
-                      <AdminPrivateRoute path="/createproduct" component={CreateProduct} />
-                      <AdminPrivateRoute path="/updateproduct" component={UpdateProduct} />
+                      <AdminPrivateRoute path="/createproduct" permission="ADDPRODUCT"  component={CreateProduct} />
+                      <AdminPrivateRoute path="/updateproduct" permission="UPDATEPRODUCT" component={UpdateProduct} />
 
-                      <AdminPrivateRoute path="/clients" component={Clients} permission="" />
-                      <AdminPrivateRoute path="/addclient" component={AddClient} />
-                      <AdminPrivateRoute path="/createclient" component={CreateClient} />
-                      <AdminPrivateRoute path="/createclientbyid" component={CreateClientById} />
-                      <AdminPrivateRoute path="/viewclient" component={ViewClient} />
-                      <AdminPrivateRoute path="/editclient" component={EditClient} />
-                      <AdminPrivateRoute path="/addclientproduct" component={AddClientProduct} />
-                      <AdminPrivateRoute path="/updateclientproduct" component={UpdateClientProduct} />
-                      <AdminPrivateRoute path="/viewclientproduct" component={ViewClientProduct} />
+                      <AdminPrivateRoute path="/clients" permission="SEARCHCLIENT" component={Clients} />
+                      <AdminPrivateRoute path="/addclient" permission="CREATECLIENT" component={AddClient} />
+                      <AdminPrivateRoute path="/createclient" permission="CREATECLIENT" component={CreateClient} />
+                      <AdminPrivateRoute path="/createclientbyid"  permission="CREATECLIENT" component={CreateClientById} />
+                      <AdminPrivateRoute path="/viewclient" permission="VIEWCLIENT" component={ViewClient} />
+                      <AdminPrivateRoute path="/editclient" permission="UPDATECLIENT" component={EditClient} />
+                      <AdminPrivateRoute path="/addclientproduct"  permission="ADDDEPLOYMENT" component={AddClientProduct} />
+                      <AdminPrivateRoute path="/updateclientproduct" permission="UPDATEDEPLOYMENT" component={UpdateClientProduct} />
+                      <AdminPrivateRoute path="/viewclientproduct" permission="VIEWDEPLOYMENT" component={ViewClientProduct} />
 
-                      <AdminPrivateRoute path="/addadmin" component={AddAdmin} />
-                      <AdminPrivateRoute path="/createuser" component={CreateUser} />
-                      <AdminPrivateRoute path="/users" component={Users} />
-                      <AdminPrivateRoute path="/admin" component={Admin} />
-                      <AdminPrivateRoute path="/createuserticket" component={CreateUserTicket} />
-                      <AdminPrivateRoute path="/adminprofile" component={AdminProfile} />
-                      <AdminPrivateRoute path="/adminpage" component={AdminPage} />
-                      <AdminPrivateRoute path="/userprofile" component={UserProfile} />
-                  </div>
-                  <Route path="/forbidden" component={NotFound} />
+                      <AdminPrivateRoute path="/addadmin" permission="ADDADMIN" component={AddAdmin} />
+                      <AdminPrivateRoute path="/createuser" permission="CREATEUSER" component={CreateUser} />
+                      <AdminPrivateRoute path="/users" permission="LISTUSER" component={Users} />
+                      <AdminPrivateRoute path="/admin" permission="LISTADMIN" component={Admin} />
+                      <AdminPrivateRoute path="/createuserticket" permission="CREATETICKET" component={CreateUserTicket} />
+                      <AdminPrivateRoute path="/updateadmin" permission="UPDATEADMIN" component={UpdateAdmin} />
+                      <AdminPrivateRoute path="/viewadmin" permission="VIEWADMIN" component={ViewAdmin} />
+                      <AdminPrivateRoute path="/userprofile" permission="VIEWUSER" component={UserProfile} />
+                  
+                  {<Route path="/forgot_password" component={ForgotPassword} />}
+                  {<Route path="/verifytoken" component={VerifyToken} />}
+                  {<Route path="/signup" component={SignUp} />}
+                  {<NotLoggedInRoute path="/login" component={Login} />}
+                  {<Route path="/forbidden" component={Forbidden} />}
                   <Route component={NotFound} />
                 </Switch>
+                </div>
               </div>
             </Router>
           </Fragment>

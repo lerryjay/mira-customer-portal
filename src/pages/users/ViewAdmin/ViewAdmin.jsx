@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withContext } from "../../../common/context";
 import { Link } from "react-router-dom";
-import { HTTPURL, FILEURL, APIKEY,PERMISSIONS } from "../../../common/global_constant";
+import { HTTPURL, FILEURL, APIKEY } from "../../../common/global_constant";
 import avatar from "../../../assets/images/avatar.png";
 
 class Profile extends Component {
@@ -16,7 +16,6 @@ class Profile extends Component {
       selectedUser: {},
       selectedClient: '',
       fullname: "",
-      permissions : PERMISSIONS
     };
   }
 
@@ -171,7 +170,7 @@ class Profile extends Component {
                   </h6>
                   <div className="row">
 
-                    <Link to={() => `/adminprofile/${this.state.selectedUser.adminid}`}>
+                    <Link to={() => `/updateadmin/${this.state.selectedUser.adminid}`}>
                       <button
                         type="button"
                         className="btn mt-3 m-2 btn-primary mb-2"
@@ -182,7 +181,7 @@ class Profile extends Component {
                       </button>
                     </Link>
 
-                    <Link to={() => `/adminprofile/${this.state.selectedUser.adminid}`}>
+                    <Link to={() => `/updateadmin/${this.state.selectedUser.adminid}`}>
                       <button
                         type="button"
                         className="btn mt-3 m-2 btn-primary mb-2"
@@ -297,9 +296,7 @@ class Profile extends Component {
               )}
 
               
-<div className="row mt-4">
-                    <div className="col-md-12">
-                    <form id="permissions">
+                    <div className="col-md-12 mb-4">
                             <div className="card">
                                 <div className="card-header bg-medium font-weight-bold text-dark">
                                     PERMISSIONS
@@ -309,20 +306,17 @@ class Profile extends Component {
                                 <div className="card-body">
                                     <div className="row">
                                     {
-                                    this.state.permissions.map((permission) => (
-                                        <div className="col-md-3">
-                                          <p className="list-group-item">
-                                            {permission.name}{" "}
-                                            
-                                          </p>
-                                        </div>
+                                    this.state.user.permissions.map((permission) => (
+                                      <div className="col-md-3">
+                                        <p className="list-group-item px-2" style={{ fontSize: "12px"}}>
+                                          {permission}{" "}
+                                        </p>
+                                      </div>
                                     ))
                                     }
                                     </div>
                                 </div>
 
-                            </div>
-                        </form>
               
                     </div>
                 </div>

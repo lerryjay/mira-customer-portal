@@ -11,19 +11,24 @@ const Private = ({loggedIn,user,permission,...props})=>   loggedIn  ?
 export const PrivateRoute = withContext(Private);
 
 // ADMIN ONLY ACCESS ROUTE
-const  Admin = (props) => 
-  props.loggedIn  ? 
-    props.user.role == 'admin' && ( props.permission === '*' || props.permission == null || props.permission.length < 1) ?  
+const  Admin = (props) => {
+  console.log(props);
+ return( props.loggedIn  ? 
+    props.user.role === 'admin' && ( props.permission === '*' || props.permission == null || props.permission.length < 1) ?  
     <Route {...props}/>  : 
     props.user.permissions.findIndex(item=>item == props.permission) > -1 ? <Route {...props}/> : <Redirect to="/forbidden"/>
-  : <Redirect to="/login"/>;
+  : <Redirect to="/login"/>)
+};
 export const AdminPrivateRoute =  withContext(Admin);
 
 // USER ONLY ACCESS ROUTE
 const UserRoute = ({ user,loggedIn,permission,...props })=>
   loggedIn  ? 
-    user.role == 'user' && ( permission === '*' || permission == null || permission.length < 1) ?  
+    user.role === 'user' && ( permission === '*' || permission == null || permission.length < 1) ?  
       <Route {...props}/>  : 
       user.permissions.findIndex(item=>item == props.permission) > -1 ? <Route {...props}/> : <Redirect to="/forbidden"/>
   : <Redirect to="/login"/>;
 export const UserPrivateRoute = withContext(UserRoute);
+
+const LoginRoute = ({ loggedIn,...props })=> loggedIn ? <Redirect to="/dashboard" /> : <Route {...props}/>;
+export const NotLoggedInRoute = withContext(LoginRoute);

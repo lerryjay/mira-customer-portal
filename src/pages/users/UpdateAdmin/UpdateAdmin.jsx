@@ -11,7 +11,9 @@ class Profile extends Component {
             ...this.props,
             loading: false,
             users: [],
-            selectedUser: {},
+            selectedUser: {
+                permissions : []
+            },
             permissions: ADMINPERMISSIONS,
             selectedPermissions: [],
             successmessage: ''
@@ -26,6 +28,7 @@ class Profile extends Component {
 
     async getAdmins()
     {
+      const adminid = this.props.location.pathname.split("/")[2];
       const headers = new Headers();
       headers.append('API-KEY',APIKEY);
       const res = await fetch(HTTPURL + `admin?userid=${ this.props.user.userid }`, {
@@ -37,7 +40,6 @@ class Profile extends Component {
           this.setState({ users : res['data']});
 
         // Admin's Profile info
-        const adminid = this.props.location.pathname.split("/")[2];
         const selectedUser = this.state.users.find(
             (item) => item.adminid === adminid
         );
@@ -317,7 +319,7 @@ class Profile extends Component {
                                                 type="checkbox"
                                                 value={permission.name}
                                                 onClick={this.handleCheck}
-                                                checked={ this.state.user.permissions.findIndex(item=>item === permission.name) > -1}
+                                                checked={ this.state.selectedUser.permissions.findIndex(item=>item === permission.name) > -1}
                                               />
                                               <span className="slider round"></span>
                                             </label>

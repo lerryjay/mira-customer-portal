@@ -75,7 +75,8 @@ class App extends Component {
       user : {
         role : 'user',
         permissions : []
-      }
+      },
+      permissionstatus: ''
     };
     this.loginUser  = this.loginUser.bind(this);
     this.showAlert  = this.showAlert.bind(this);
@@ -186,9 +187,12 @@ class App extends Component {
     this.setState({ loaderActive : false });
   }
 
-  showAlert = async (type, messsage)=>{
-    await this.setState({ alertActive : true });
-    setTimeout(()=>this.setState({ alertActive : false },3500));
+  showAlert = (type, messsage)=>{  
+    this.setState({ alertType : type, alertMessage: messsage });
+     this.setState({ alertActive : true });
+     setTimeout(() => {
+              this.setState({ alertActive : false});
+    }, 2000)
   }
 
   updateAdminPermission = async (data, adminid) =>{
@@ -205,6 +209,8 @@ class App extends Component {
       body: form,
       headers: headers,
     }).then((response) => response.json());
+
+    this.setState({ permissionstatus: res['status'] });
 
     if(res['status']){
       if(adminid == this.state.user.userid){

@@ -329,7 +329,7 @@ async getClients() {
       
           <div className="col-md-3 col-sm-12 box2 mt-3 mb-3">
             <div className="card p-3">
-              <label htmlFor="customer" className="font-weight-bold">
+              <label htmlFor="customer" style={{display: 'block'}} className="font-weight-bold">
                 Customer
               </label>
             <input list="customers" name="searchUser" id="searchUser" 
@@ -346,7 +346,7 @@ async getClients() {
               </datalist>
 
             
-            <label htmlFor="ticketid" className="mt-3 font-weight-bold">
+            <label htmlFor="ticketid" style={{display: 'block'}} className="mt-3 font-weight-bold">
                 Ticket ID
               </label>
             <input className="form-control" type="text" id="myInput" onChange={this.handleInputChange}
@@ -356,7 +356,7 @@ async getClients() {
             
             <form onSubmit={this.handleSearch}>
             <div className="form-group mt-3">
-              <label htmlFor="startdate" className="font-weight-bold">
+              <label htmlFor="startdate" style={{display: 'block'}} className="font-weight-bold">
                 Start Date
               </label>
               <div className="input-group">
@@ -377,7 +377,7 @@ async getClients() {
 
             
             <div className="form-group mt-1">
-              <label htmlFor="startdate" className="font-weight-bold">
+              <label htmlFor="startdate" style={{display: 'block'}} className="font-weight-bold">
                 End Date
               </label>
               <div className="input-group">
@@ -397,7 +397,7 @@ async getClients() {
             </div>
             
             <div className="form-group mt-1">
-              <label htmlFor="exactdate" className="font-weight-bold">
+              <label htmlFor="exactdate" style={{display: 'block'}} className="font-weight-bold">
                 Created On
               </label>
               <div className="input-group">
@@ -418,7 +418,7 @@ async getClients() {
 
             
             <div className="form-group mt-1">
-              <label htmlFor="type" className="font-weight-bold">
+              <label htmlFor="type" style={{display: 'block'}} className="font-weight-bold">
                 Ticket Type
               </label>
                 <select onChange={this.handleInputChange} 

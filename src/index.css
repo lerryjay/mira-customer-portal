@@ -303,6 +303,13 @@ label {
   cursor: pointer;
   visibility: hidden;
 }
+.imgPreview2 .fa-trash{
+  position: relative;
+  left: 200px !important;
+  top:-80px !important;
+  cursor: pointer;
+  visibility: hidden;
+}
 .other_files .fa-trash{
   position: absolute;
   left: 195px;
@@ -310,6 +317,15 @@ label {
   cursor: pointer;
   visibility: hidden;
 }
+
+.other_files2 .fa-trash{
+  position: relative;
+  left: 200px !important;
+  top:-80px !important;
+  cursor: pointer;
+  visibility: hidden;
+}
+
 .image_product{
   width: 100%;
   height: 200px;

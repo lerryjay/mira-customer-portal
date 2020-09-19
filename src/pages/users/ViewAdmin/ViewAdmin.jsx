@@ -304,17 +304,25 @@ class Profile extends Component {
                                     </span>
                                 </div>
                                 <div className="card-body">
-                                    <div className="row">
-                                    {
-                                    this.state.user.permissions.map((permission) => (
-                                      <div className="col-md-3">
-                                        <p className="list-group-item px-2" style={{ fontSize: "12px"}}>
-                                          {permission}{" "}
-                                        </p>
-                                      </div>
-                                    ))
-                                    }
+                                  {this.state.user.permissions.length === 0 
+                                  ? <div className="alert alert-warning mt-5" role="alert">
+                                      <h6 className="text-center">No permissions have been added for this user</h6>
+                                  </div>
+                                
+                                 : <div className="row">
+                                  {
+                                  this.state.user.permissions.map((permission) => (
+                                    <div className="col-md-3">
+                                      <p className="list-group-item px-2" style={{ fontSize: "12px"}}>
+                                        {permission}{" "}
+                                      </p>
                                     </div>
+                                  ))
+                                  }
+                                  </div>
+                                
+                                }
+                                    
                                 </div>
 
               

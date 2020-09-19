@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withContext } from '../../common/context';
-import { HTTPURL } from '../../common/global_constant';
+import { HTTPURL, APIKEY } from '../../common/global_constant';
 import avatar from '../../assets/images/avatar.png'
 
 
@@ -9,11 +9,26 @@ class Profile extends Component {
         super(props);
         this.state = {
             ...this.props,
-            fullname: ''
+            firstname: '',
+            lastname: '',
+            email: '',
+            telephone: '',
+            country: '',
+            state:'',
         }
         console.log(this.props.user.lastname)
     }
 
+    componentDidMount() {
+        this.setState({
+            firstname: this.props.user.firstname,
+            lastname: this.props.user.lastname,
+            email: this.props.user.email,
+            telephone: this.props.user.telephone,
+            country: this.props.user.country,
+            state: this.props.user.state,
+        })
+    }
     editp() {
         // Make Form Editable
         const edit = document.querySelector('#edit');
@@ -33,10 +48,12 @@ class Profile extends Component {
 
     handleSubmit = async e => {
         e.preventDefault()
+        this.setState({ loading: true });
 
         const headers = new Headers();
-        headers.append('API-KEY', '97899c-7d0420-1273f0-901d29-84e2f8');
+        headers.append('API-KEY', APIKEY);
         let form = new FormData(document.getElementById("profileform"));
+        form.append("userid", this.state.user.userid);;
 
 
         fetch(HTTPURL + 'user/updateprofile', {
@@ -45,12 +62,19 @@ class Profile extends Component {
             headers: headers
         })
             .then(response => response.json())
-            .then(json => {
-                console.log(json);
-                return json;
+            .then(res => {
+                setTimeout(() => {
+                    this.setState({ loading: false });
+                    if(res.status === true) {
+                        this.state.showAlert("success", res.message)
+                    } else{
+                        this.state.showAlert("danger",  res.message)
+                    }
+                    setTimeout(() => {
+                        this.setState({ alertActive : false});
+                    }, 3000)
+                }, 2000)
             });
-
-        console.log('Profile Updated!')
     }
     handleImageChange(e) {
         e.preventDefault();
@@ -130,13 +154,13 @@ class Profile extends Component {
                                     <div className="row">
                                         <div className="form-group col-md-6 mb-3">
                                             <label htmlFor="" className="sr-only">Lastname</label>
-                                            <input type="text" className="form-control form-control-sm" name="fullname"
-                                                id="fullname" value={this.props.user.lastname}  placeholder="Name" autoComplete="fullname" onChange={this.handleInputChange} />
+                                            <input type="text" className="form-control form-control-sm" name="lastname" disabled
+                                                id="lastname" value={this.state.lastname}  placeholder="Name" autoComplete="lastname" onChange={this.handleInputChange} />
                                         </div>
                                         <div className="form-group col-md-6 mb-3">
                                             <label htmlFor="" className="sr-only">Firstname</label>
-                                            <input type="text" className="form-control form-control-sm" name="fullname"
-                                                id="fullname" value={this.props.user.firstname} placeholder="Name" autoComplete="fullname" onChange={this.handleInputChange} />
+                                            <input type="text" className="form-control form-control-sm" name="firstname" disabled
+                                                id="firstname" value={this.state.firstname} placeholder="Name" autoComplete="firstname" onChange={this.handleInputChange} />
                                         </div>
                                     </div>
 
@@ -144,12 +168,12 @@ class Profile extends Component {
                                             <div className="form-group col-md-6 mb-3">
                                                 <label htmlFor="" className="sr-only">Email</label>
                                                 <input type="text" className="form-control form-control-sm" name="email"
-                                                    id="email" value={this.props.user.email} placeholder="johndoe@mail.com" disabled autoComplete="email" onChange={this.handleInputChange} />
+                                                    id="email" value={this.state.email} placeholder="johndoe@mail.com" disabled autoComplete="email" onChange={this.handleInputChange} />
                                             </div>
                                             <div className="form-group col-md-6 mb-3">
                                                 <label htmlFor="" className="sr-only">Phone-number</label>
                                                 <input type="text" className="form-control form-control-sm" name="telephone"
-                                                    id="telephone" value={this.props.user.telephone} placeholder="090 ......." disabled autoComplete="tel" onChange={this.handleInputChange} />
+                                                    id="telephone" value={this.state.telephone} placeholder="090 ......." disabled autoComplete="tel" onChange={this.handleInputChange} />
                                             </div>
                                         
 
@@ -159,14 +183,14 @@ class Profile extends Component {
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Country</label>
                                                 <input type="text" className="form-control form-control-sm" name="country"
-                                                    id="country" value="" placeholder="Country" disabled autoComplete="country" onChange={this.handleInputChange} />
+                                                    id="country" value={this.state.country} placeholder="Country" disabled autoComplete="country" onChange={this.handleInputChange} />
                                             </div>
                                         </div>
                                         <div className="col-md-6 mb-3">
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">State</label>
                                                 <input type="text" className="form-control form-control-sm" name="state"
-                                                    id="state" value="" placeholder="State" disabled autoComplete="state" onChange={this.handleInputChange} />
+                                                    id="state" value={this.state.state} placeholder="State" disabled autoComplete="state" onChange={this.handleInputChange} />
                                             </div>
                                         </div>
                                     </div>
@@ -176,9 +200,17 @@ class Profile extends Component {
 
                                 <div className="card-footer">
                                     <div className="text-center">
-                                        <button type="submit" className="btn btn-sm btn-primary py-2 px-5">
-                                            Save
-                                         </button>
+                                        {this.state.loading ?
+                                            <button type="submit" className="btn btn-sm bg-btn btn-primary">
+                                                <div className="spinner-border text-secondary" role="status" id="loader">
+                                                    <span className="sr-only">Loading...</span>
+                                                </div>
+                                            </button>
+                                            :
+                                            <button type="submit" className="btn btn-sm btn-primary py-2 px-5">
+                                                Save
+                                             </button>
+                                        }
                                     </div>
                                 </div>
                             </div>

@@ -11,16 +11,20 @@ class Profile extends Component {
             ...this.props,
             loading: false,
             users: [],
-            selectedUser: {
-                permissions : []
-            },
+            selectedUser: { },
+            firstname: '',
+            lastname: '',
+            email: '',
+            telephone: '',
+            country: '',
+            state:'',
             permissions: ADMINPERMISSIONS,
-            selectedPermissions: [],
+            selectedPermissions: [...this.props.user.permissions],
             successmessage: ''
         }
         console.log(this.props.user.lastname)
     }
-
+    
     componentDidMount()
     {
       this.getAdmins();
@@ -43,7 +47,15 @@ class Profile extends Component {
         const selectedUser = this.state.users.find(
             (item) => item.adminid === adminid
         );
-        await this.setState({ selectedUser });
+        console.log(selectedUser)
+        await this.setState({ 
+            firstname: selectedUser.firstname,
+            lastname: selectedUser.lastname,
+            email: selectedUser.email,
+            telephone: selectedUser.telephone,
+            country: selectedUser.country,
+            state: selectedUser.state,
+         });
       }
     }
   
@@ -65,11 +77,13 @@ class Profile extends Component {
     }
 
     handleSubmit = async e => {
-        e.preventDefault()
+        e.preventDefault();
+        this.setState({ loading: true });
 
         const headers = new Headers();
-        headers.append('API-KEY', '97899c-7d0420-1273f0-901d29-84e2f8');
+        headers.append('API-KEY', APIKEY);
         let form = new FormData(document.getElementById("profileform"));
+        form.append("userid", this.state.user.userid);
 
 
         fetch(HTTPURL + 'user/updateprofile', {
@@ -78,12 +92,21 @@ class Profile extends Component {
             headers: headers
         })
             .then(response => response.json())
-            .then(json => {
-                console.log(json);
-                return json;
+            .then(res => {
+                setTimeout(() => {
+                    this.setState({ loading: false });
+                    if(res.status === true) {
+                        this.state.showAlert("success", res.message)
+                    } else{
+                        this.state.showAlert("danger",  res.message)
+                    }
+                    setTimeout(() => {
+                        this.setState({ alertActive : false});
+                    }, 3000)
+                }, 2000)
             });
 
-        console.log('Profile Updated!')
+
     }
     handleImageChange(e) {
         e.preventDefault();
@@ -171,13 +194,17 @@ class Profile extends Component {
         let data = this.state.selectedPermissions;
         let adminid = this.props.location.pathname.split("/")[2]
 
-        this.state.updateAdminPermission(data, adminid )
+        const res = this.props.updateAdminPermission(data, adminid )
         
         setTimeout(() => {
             this.setState({ loading: false });
-            this.setState({successmessage:"Permission Updated Successfully"});
+            if(this.props.permissionstatus === true) {
+                this.state.showAlert("success", "Permission Updated Successfully")
+            } else{
+                this.state.showAlert("danger", "Unknown permissions supplied")
+            }
             setTimeout(() => {
-                this.setState({successmessage: false});
+                this.setState({ alertActive : false});
             }, 2000)
         }, 2000)
         
@@ -216,13 +243,13 @@ class Profile extends Component {
                                     <div className="row">
                                         <div className="form-group col-md-6 mb-3">
                                             <label htmlFor="" className="sr-only">Lastname</label>
-                                            <input type="text" className="form-control form-control-sm" name="fullname"
-                                                id="fullname" value={this.state.selectedUser.lastname}  placeholder="Name" autoComplete="fullname" onChange={this.handleInputChange} />
+                                            <input type="text" className="form-control form-control-sm" name="lastname" disabled
+                                                id="lastname" value={this.state.lastname}  placeholder="Name" autoComplete="lastname" onChange={this.handleInputChange} />
                                         </div>
                                         <div className="form-group col-md-6 mb-3">
                                             <label htmlFor="" className="sr-only">Firstname</label>
-                                            <input type="text" className="form-control form-control-sm" name="fullname"
-                                                id="fullname" value={this.state.selectedUser.firstname} placeholder="Name" autoComplete="fullname" onChange={this.handleInputChange} />
+                                            <input type="text" className="form-control form-control-sm" name="firstname" disabled
+                                                id="firstname" value={this.state.firstname} placeholder="Name" autoComplete="firstname" onChange={this.handleInputChange} />
                                         </div>
                                     </div>
 
@@ -230,12 +257,12 @@ class Profile extends Component {
                                             <div className="form-group col-md-6 mb-3">
                                                 <label htmlFor="" className="sr-only">Email</label>
                                                 <input type="text" className="form-control form-control-sm" name="email"
-                                                    id="email" value={this.state.selectedUser.email} placeholder="johndoe@mail.com" disabled autoComplete="email" onChange={this.handleInputChange} />
+                                                    id="email" value={this.state.email} placeholder="email" disabled autoComplete="email" onChange={this.handleInputChange} />
                                             </div>
                                             <div className="form-group col-md-6 mb-3">
                                                 <label htmlFor="" className="sr-only">Phone-number</label>
                                                 <input type="text" className="form-control form-control-sm" name="telephone"
-                                                    id="telephone" value={this.state.selectedUser.telephone} placeholder="090 ......." disabled autoComplete="tel" onChange={this.handleInputChange} />
+                                                    id="telephone" value={this.state.telephone} placeholder="090 ......." disabled autoComplete="tel" onChange={this.handleInputChange} />
                                             </div>
                                         
 
@@ -245,14 +272,14 @@ class Profile extends Component {
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Country</label>
                                                 <input type="text" className="form-control form-control-sm" name="country"
-                                                    id="country" value="" placeholder="Country" disabled autoComplete="country" onChange={this.handleInputChange} />
+                                                    id="country" value={this.state.country} placeholder="Country" disabled autoComplete="country" onChange={this.handleInputChange} />
                                             </div>
                                         </div>
                                         <div className="col-md-6 mb-3">
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">State</label>
                                                 <input type="text" className="form-control form-control-sm" name="state"
-                                                    id="state" value="" placeholder="State" disabled autoComplete="state" onChange={this.handleInputChange} />
+                                                    id="state" value={this.state.state} placeholder="State" disabled autoComplete="state" onChange={this.handleInputChange} />
                                             </div>
                                         </div>
                                     </div>
@@ -262,9 +289,17 @@ class Profile extends Component {
 
                                 <div className="card-footer">
                                     <div className="text-center">
-                                        <button type="submit" className="btn btn-sm btn-primary py-2 px-5">
-                                            Save
-                                         </button>
+                                        {this.state.loading ?
+                                            <button type="submit" className="btn btn-sm bg-btn btn-primary">
+                                                <div className="spinner-border text-secondary" role="status" id="loader">
+                                                    <span className="sr-only">Loading...</span>
+                                                </div>
+                                            </button>
+                                            :
+                                            <button type="submit" className="btn btn-sm btn-primary py-2 px-3">
+                                    Save
+                                </button>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -319,7 +354,7 @@ class Profile extends Component {
                                                 type="checkbox"
                                                 value={permission.name}
                                                 onClick={this.handleCheck}
-                                                checked={ this.state.selectedUser.permissions.findIndex(item=>item === permission.name) > -1}
+                                                checked={ this.state.user.permissions.findIndex(item=>item === permission.name) > -1}
                                               />
                                               <span className="slider round"></span>
                                             </label>

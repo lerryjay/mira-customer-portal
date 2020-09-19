@@ -66,14 +66,15 @@ class create_ticket extends Component {
         }
     }
 
-    removeImage(e) {
+    removeImage = (e) => {
+        e.preventDefault();
         console.log(e, "Image removed")
-        this.setState({ imagePreviewUrl: '' })
+        this.setState({imagePreviewUrl: '', imageurl: '', files: []})
     }
 
     removeOtherImage(e) {
         console.log(e, "Image removed")
-        this.setState({ file: '', imageError: false })
+        this.setState({ file: '', imageError: false, imagePreviewUrl: ''  })
         setTimeout(() => this.setState({ imageError: '' }), 5000);
     }
 
@@ -107,17 +108,17 @@ class create_ticket extends Component {
     }
 
     render() {
-        let files = this.state.files.map(file => {
+        let files = this.state.files.map((file, index) => {
             this.state.imagePreviewUrl = URL.createObjectURL(file)
             // this.setState({imagePreviewUrl: URL.createObjectURL(file) })
             return (
                 file.name.match(/\.(jpg|jpeg|png)$/)
-                    ? < div className="imgPreview m-2" id="files">
-                        <i className="fa fa-trash" onClick={(e) => this.removeImage(e)}></i>
+                    ? < div className="imgPreview imgPreview2 m-2" id="files">
+                        <i className="fa fa-trash" onClick={(e) => this.removeImage(e,file,index)}></i>
                         <img src={this.state.imagePreviewUrl} className="imagePreview" />
                     </div>
                     :
-                    <div className="other_files m-2" id="otherfiles" >
+                    <div className="other_files other_files2  m-2" id="otherfiles" >
                         <i className="fa fa-trash" onClick={(e) => this.removeOtherImage(e)}></i>
                         {file.name}
                     </div>

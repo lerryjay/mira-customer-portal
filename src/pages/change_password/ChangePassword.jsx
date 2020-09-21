@@ -61,6 +61,7 @@ class ChangePassword extends Component {
             const headers = new Headers();
             headers.append('API-KEY',APIKEY);
             let form = new FormData(data);
+            form.append('userid',this.state.user.userid);
             const res = await fetch(HTTPURL + 'user/updatepassword', {
                 method: 'POST',
                 body: form,

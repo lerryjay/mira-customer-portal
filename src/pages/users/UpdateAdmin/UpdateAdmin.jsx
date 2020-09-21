@@ -4,7 +4,7 @@ import { HTTPURL, APIKEY,ADMINPERMISSIONS } from "../../../common/global_constan
 import avatar from '../../../assets/images/avatar.png'
 
 
-class Profile extends Component {
+class UpdateAdmin extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -151,19 +151,9 @@ class Profile extends Component {
           target.removeAttribute("checked");
           this.addPermission(target.value);
         } else {
-          target.setAttribute("checked", true);
+          target.setAttribute("checked", false);
           this.removePermission(target.value);
         }
-
-        const index = this.state.user.permissions.findIndex(item=> item === target.value);
-        const { user } = this.state;
-        if (index > -1) {
-            user.permissions.splice(index,1);
-        } else {
-            user.permissions.push(target.value);
-        }
-        this.setState({ user });
-
       }
 
       addPermission = async (value) => {
@@ -173,7 +163,6 @@ class Profile extends Component {
               ? [value]
               : [...prevState.selectedPermissions, value],
         }));
-        console.log(this.state.selectedPermissions, "addPermission")
       };
 
 
@@ -183,33 +172,23 @@ class Profile extends Component {
             (perm) => perm != value
           ),
         }));
-        console.log(this.state.selectedPermissions, "removePermission")
       };
 
       
-    setPermission = (e) =>{
+    setPermission = async (e) =>{
         e.preventDefault();
         this.setState({ loading: true });
 
         let data = this.state.selectedPermissions;
         let adminid = this.props.location.pathname.split("/")[2]
 
-        const res = this.props.updateAdminPermission(data, adminid )
-        
-        setTimeout(() => {
+        const res = await this.props.updateAdminPermission(data, adminid )
+        if(res['status']){
             this.setState({ loading: false });
-            if(this.props.permissionstatus === true) {
-                this.state.showAlert("success", "Permission Updated Successfully")
-            } else{
-                this.state.showAlert("danger", "Unknown permissions supplied")
-            }
-            setTimeout(() => {
-                this.setState({ alertActive : false});
-            }, 2000)
-        }, 2000)
-        
-        
-        
+            this.state.showAlert("success", "Permission Updated Successfully")
+        } else{
+            this.state.showAlert("danger", res.message)
+        }
     }
 
     render() {
@@ -353,8 +332,8 @@ class Profile extends Component {
                                               <input
                                                 type="checkbox"
                                                 value={permission.name}
-                                                onClick={this.handleCheck}
-                                                checked={ this.state.user.permissions.findIndex(item=>item === permission.name) > -1}
+                                                onChange={this.handleCheck}
+                                                checked={ this.state.selectedUser.permissions.findIndex(item=>item === permission.name) > -1}
                                               />
                                               <span className="slider round"></span>
                                             </label>
@@ -393,4 +372,4 @@ class Profile extends Component {
 
 }
 
-export default withContext(Profile);
+export default withContext(UpdateAdmin);

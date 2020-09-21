@@ -36,8 +36,7 @@ class UpdateProduct extends Component {
             headers: headers,
         }).then(res => res.json())
         .then(result => {
-            console.log(result, "result")
-            if (result.status == true) {
+            if (result.status) {
                 this.setState({ name: result.data.name, description: result.data.description, id: result.data.id})       
             }
          

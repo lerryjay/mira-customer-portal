@@ -58,12 +58,10 @@ class create_ticket extends Component {
     }
     
     removeImage(e) {
-        console.log(e, "Image removed")
         this.setState({imagePreviewUrl: ''})
     }
 
     removeOtherImage(e) {
-        console.log(e, "Image removed")
         this.setState({ file: '',imageError : false})
         setTimeout(()=> this.setState({imageError: ''}),5000);
     }
@@ -90,11 +88,9 @@ class create_ticket extends Component {
         .then(response => response.json());
         if(res['status']){
             this.setState({ users : res['data']});
-            
-        const clientid = this.props.location.pathname.split("/")[2];
-        const selectedUser = this.state.users.find(item=>item.userid == clientid);
-        console.log(selectedUser,clientid, "sel")
-        this.setState({selectedUser})
+            const clientid = this.props.location.pathname.split("/")[2];
+            const selectedUser = this.state.users.find(item=>item.userid == clientid);
+            this.setState({selectedUser})
         }
     }
 

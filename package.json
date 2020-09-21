@@ -2,7 +2,7 @@
   "name": "mtcrm",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://www.miratechnologies.com.ng",
+  "homepage": "https://www.miratechnologies.com.ng/ticketapp",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",

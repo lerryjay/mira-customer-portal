@@ -11,62 +11,60 @@ class Profile extends Component {
       ...this.props,
       products: [],
       showmodal: true,
-      clients:[],
+      clients: [],
       users: [],
       selectedUser: {
-        permissions : []
+        permissions: []
       },
       selectedClient: '',
       fullname: "",
     };
   }
 
-  componentDidMount()
-  {
+  componentDidMount() {
     this.setState({ loader: true });
     this.getAdmins();
     this.getClients();
     this.setState({ loader: false });
   }
 
-  async getAdmins()
-  {
+  async getAdmins() {
     const headers = new Headers();
-    headers.append('API-KEY',APIKEY);
-    const res = await fetch(HTTPURL + `admin?userid=${ this.props.user.userid }`, {
-        headers: headers
+    headers.append('API-KEY', APIKEY);
+    const res = await fetch(HTTPURL + `admin?userid=${this.props.user.userid}`, {
+      headers: headers
     })
-    .then(response => response.json());
+      .then(response => response.json());
     console.log(res['data'])
-    if(res['status']){
-        this.setState({ users : res['data']});
+    if (res['status']) {
+      this.setState({ users: res['data'] });
 
       // Admin's Profile info
       const adminid = this.props.location.pathname.split("/")[2];
       const selectedUser = this.state.users.find(
-          (item) => item.adminid === adminid
+        (item) => item.adminid === adminid
       );
       await this.setState({ selectedUser });
     }
   }
-  
-    async getClients() {
+
+  async getClients() {
     const headers = new Headers();
-    headers.append('API-KEY', APIKEY );
+    headers.append('API-KEY', APIKEY);
     const res = await fetch(HTTPURL + `clients/?userid=${this.state.user.userid}`, {
-        method: 'GET',
-        headers: headers
+      method: 'GET',
+      headers: headers
     }).then(response => response.json());
-    
-    if(res['status']) this.setState({ clients : res['data']})
-}
- 
+
+    if (res['status']) this.setState({ clients: res['data'] })
+  }
+
   closesuspendModal() {
     let modal = document.getElementById("suspendModal");
     modal.style.display = "none";
   }
 
-   showsuspendModal(clientid) {
+  showsuspendModal(clientid) {
     const selectedClient = this.state.clients.find(
       (client) => client.user_id === clientid
     );
@@ -104,20 +102,20 @@ class Profile extends Component {
   render() {
     return (
       <div className="container mx-auto row">
-          {this.state.loader && (
-            <div className="spin-center">
-              <span class="text-primary ">
-                <span
-                  class="spinner-grow spinner-grow-sm mr-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                <span style={{ fontSize: "14px" }}>Loading...</span>
-              </span>
-            </div>
-          )}
-          
-          {!this.state.loader &&  <div className="col-md-12 mb-3 mt-4" id="profile">
+        {this.state.loader && (
+          <div className="spin-center">
+            <span class="text-primary ">
+              <span
+                class="spinner-grow spinner-grow-sm mr-2"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span style={{ fontSize: "14px" }}>Loading...</span>
+            </span>
+          </div>
+        )}
+
+        {!this.state.loader && <div className="col-md-12 mb-3 mt-4" id="profile">
           <div className="w-100 text-center">
             <h3>PROFILE INFORMATION </h3>
           </div>
@@ -175,179 +173,149 @@ class Profile extends Component {
                     <Link to={() => `/updateadmin/${this.state.selectedUser.adminid}`}>
                       <button
                         type="button"
-                        className="btn mt-3 m-2 btn-primary mb-2"
+                        className="btn mt-3 m-2 btn-primary rounded-0 mb-2"
                       >
-                        <small className="newproduct" style={{ color: "#fff" }}>
+                        <small className="newproduct text-light">
                           &nbsp;Edit&nbsp;Account&nbsp;
                         </small>
                       </button>
                     </Link>
-
-                    <Link to={() => `/updateadmin/${this.state.selectedUser.adminid}`}>
+                    <Link
+                      onClick={() =>
+                        this.showsuspendModal(
+                          this.state.selectedUser.adminid
+                        )
+                      }
+                    >
                       <button
                         type="button"
-                        className="btn mt-3 m-2 btn-primary mb-2"
+                        className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
                       >
-                        <small className="newproduct" style={{ color: "#fff" }}>
-                          &nbsp;View&nbsp;Profile&nbsp;
-                        </small>
+                        <small
+                          className="newproduct"
+                          style={{ color: "#fff" }}
+                        >
+                          &nbsp;Suspend&nbsp;Account&nbsp;
+                            </small>
                       </button>
                     </Link>
-                          <Link
-                            onClick={() =>
-                              this.showsuspendModal(
-                                this.state.selectedUser.adminid
-                              )
-                            }
-                          >
-                          <button
-                            type="button"
-                            className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
-                          >
-                            <small
-                              className="newproduct"
-                              style={{ color: "#fff" }}
-                            >
-                              &nbsp;Suspend&nbsp;Account&nbsp;
+                    <Link
+                      onClick={() =>
+                        this.showsuspendModal(
+                          this.state.selectedUser.adminid
+                        )
+                      }
+                    >
+                      <button
+                        type="button"
+                        className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
+                      >
+                        <small
+                          className="newproduct"
+                          style={{ color: "#fff" }}
+                        >
+                          &nbsp;Delete&nbsp;Account&nbsp;
                             </small>
-                          </button>
-                          </Link>
-                          <Link
-                            onClick={() =>
-                              this.showsuspendModal(
-                                this.state.selectedUser.adminid
-                              )
-                            }
-                          >
-                          <button
-                            type="button"
-                            className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
-                          >
-                            <small
-                              className="newproduct"
-                              style={{ color: "#fff" }}
-                            >
-                              &nbsp;Delete&nbsp;Account&nbsp;
-                            </small>
-                          </button>
-                          </Link>
+                      </button>
+                    </Link>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-         </div>
+        </div>
 
-         
-      }
-      
-      
-              {/* Suspend Account */}
-              {this.state.showmodal ? (
-                <div id="suspendModal" class="modal">
-                  {/* Modal content  */}
-                  <div class="modal-content modal-del text-center p-5">
-                    {/* <div className="delete-icon">
+
+        }
+
+
+        {/* Suspend Account */}
+        {this.state.showmodal ? (
+          <div id="suspendModal" class="modal">
+            {/* Modal content  */}
+            <div class="modal-content modal-del text-center p-5">
+              {/* <div className="delete-icon">
                           &times;
                       </div> */}
-                    <i
-                      class="fa fa-exclamation-triangle fa-3x dark-red mb-2"
-                      aria-hidden="true"
-                    ></i>
-                    <h3>Are you sure?</h3>
-                    <p> Do you really want to suspend this accouunt?</p>
-                    <div className="row">
-                      <div className="col-md-6">
-                        <button
-                          onClick={this.closesuspendModal}
-                          className="btn-block btn btn-outline-secondary mb-2"
-                        >
-                          Cancel
+              <i
+                class="fa fa-exclamation-triangle fa-3x dark-red mb-2"
+                aria-hidden="true"
+              ></i>
+              <h3>Are you sure?</h3>
+              <p> Do you really want to suspend this accouunt?</p>
+              <div className="row">
+                <div className="col-md-6">
+                  <button
+                    onClick={this.closesuspendModal}
+                    className="btn-block btn btn-outline-secondary mb-2"
+                  >
+                    Cancel
                         </button>
+                </div>
+                <div className="col-md-6">
+                  {this.state.loading ? (
+                    <button
+                      type="submit"
+                      className="btn btn-block btn-danger"
+                    >
+                      <div
+                        className="spinner-border text-white"
+                        role="status"
+                        id="loader"
+                      >
+                        <span className="sr-only">Loading...</span>
                       </div>
-                      <div className="col-md-6">
-                        {this.state.loading ? (
-                          <button
-                            type="submit"
-                            className="btn btn-block btn-danger"
-                          >
-                            <div
-                              className="spinner-border text-white"
-                              role="status"
-                              id="loader"
-                            >
-                              <span className="sr-only">Loading...</span>
-                            </div>
-                          </button>
-                        ) : (
-                          <button
-                            // onClick={() =>
-                            //   this.suspendClient(this.state.selectedClient.adminid)
-                            // }
-                            className="btn btn-danger btn-block"
-                          >
-                            Suspend
-                          </button>
-                        )}
-                      </div>
+                    </button>
+                  ) : (
+                      <button
+                        // onClick={() =>
+                        //   this.suspendClient(this.state.selectedClient.adminid)
+                        // }
+                        className="btn btn-danger btn-block"
+                      >
+                        Suspend
+                      </button>
+                    )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+            <span></span>
+          )}
+
+
+        <div className="col-md-12 mb-4">
+          <div className="card">
+            <div className="card-header bg-medium font-weight-bold text-dark">
+              PERMISSIONS
+                 <span className="float-right" id='edit' style={{ cursor: 'pointer' }} ><i className="fas fa-pen-square fa-2x"></i>
+              </span>
+            </div>
+            <div className="card-body">
+              <div className="row">
+                {
+                  this.state.selectedUser.permissions.length == 0 &&  <div className="col-md-12">
+                    <div className="alert alert-warning my-3" role="alert">
+                      <h6 className="text-center">No permissions has been granted to this user!</h6>
                     </div>
                   </div>
-                </div>
-              ) : (
-                <span></span>
-              )}
-
-              
-                    <div className="col-md-12 mb-4">
-                            <div className="card">
-                                <div className="card-header bg-medium font-weight-bold text-dark">
-                                    PERMISSIONS
-                                    <span className="float-right" id='edit' style={{ cursor: 'pointer' }} ><i className="fas fa-pen-square fa-2x"></i>
-                                    </span>
-                                </div>
-                                <div className="card-body">
-<<<<<<< HEAD
-                                    <div className="row">
-                                    {
-                                    this.state.selectedUser.permissions.map((permission) => (
-                                      <div className="col-md-3">
-                                        <p className="list-group-item px-2" style={{ fontSize: "12px"}}>
-                                          {permission}{" "}
-                                        </p>
-                                      </div>
-                                    ))
-                                    }
-=======
-                                  {this.state.user.permissions.length === 0 
-                                  ? <div className="alert alert-warning mt-5" role="alert">
-                                      <h6 className="text-center">No permissions have been added for this user</h6>
-                                  </div>
-                                
-                                 : <div className="row">
-                                  {
-                                  this.state.user.permissions.map((permission) => (
-                                    <div className="col-md-3">
-                                      <p className="list-group-item px-2" style={{ fontSize: "12px"}}>
-                                        {permission}{" "}
-                                      </p>
->>>>>>> 38deb5e2fff3d403053f03281942c2f16a5ff8e9
-                                    </div>
-                                  ))
-                                  }
-                                  </div>
-                                
-                                }
-                                    
-                                </div>
-
-              
-                    </div>
-                </div>
-           
-
-</div>
+                }
+                {this.state.selectedUser.permissions !== null && this.state.selectedUser.permissions.map((permission) => (
+                  <div className="col-md-3">
+                    <p className="list-group-item px-2" style={{ fontSize: "12px" }}>
+                      {permission}
+                    </p>
+                  </div>
+                ))
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     );
-    
+
   }
 }
 

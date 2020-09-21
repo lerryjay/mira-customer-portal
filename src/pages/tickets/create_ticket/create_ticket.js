@@ -42,7 +42,7 @@ class create_ticket extends Component {
         form.append("userid", this.state.user.userid);
         this.state.files.length < 1 && form.delete('files[]');
         if (this.state.user.role == 'admin') {
-            if (form.get('customerid').length < 1) console.log('no customer selected')//show error
+            if (form.get('customerid').length < 1) this.state.showAlert('danger','Please select a client to creaate a ticket');
             else {
                 const customer = form.get('customerid');
                 const user = this.state.users.find(user => user.firstname + ' ' + user.lastname === customer);

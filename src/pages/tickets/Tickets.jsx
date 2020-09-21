@@ -170,7 +170,7 @@ async getClients() {
     this.state.currentTickets = currentTickets
 
     return (
-      <div className="container">
+      <div className="container-fluid px-5">
         <div className="row mt-4">
           <div className="w-100 text-center">
             <h3>TICKETS </h3>

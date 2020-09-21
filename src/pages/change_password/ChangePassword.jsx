@@ -33,63 +33,40 @@ class ChangePassword extends Component {
         //Waste 3 seconds
         if(!Validators.validatePassword(oldpassword,1).status){
             const err = Validators.validatePassword(oldpassword,1).message;
-            this.setState({loading : true});
-            setTimeout(() => {
-                this.setState({loading : false});
-                this.setState({errormessage: err});
-                setTimeout(()=> this.setState({errormessage: ''}),5000);
-            }, 3000);
+            this.setState({errormessage: err});
+            setTimeout(()=> this.setState({errormessage: '',loading : false}),2000);
         } else if(!Validators.validatePassword(newpassword,1).status){
             const err = Validators.validatePassword(newpassword,1).message;
-            this.setState({loading : true});
-            setTimeout(() => {
-                this.setState({loading : false});
-                this.setState({errormessage: err});
-                setTimeout(()=> this.setState({errormessage: ''}),5000);
-            }, 3000);
+            this.setState({errormessage: err});
+            setTimeout(()=> this.setState({errormessage: '',loading : false}),2000);
         } else if(!Validators.validatePassword(confirmnewpwd,1).status){
             const err = Validators.validatePassword(confirmnewpwd,1).message;
             this.setState({loading : true});
-            setTimeout(() => {
-                this.setState({loading : false});
-                this.setState({errormessage: err});
-                setTimeout(()=> this.setState({errormessage: ''}),5000);
-            }, 3000);
+            this.setState({errormessage: err});
+            setTimeout(()=> this.setState({errormessage: '',loading : false}),2000);
         }else if(newpassword !== confirmnewpwd) {
             const err = "Password does not match!"
-            this.setState({loading : true});
-            setTimeout(() => {
-                this.setState({loading : false});
-                this.setState({errormessage: err});
-                setTimeout(()=> this.setState({errormessage: ''}),5000);
-            }, 3000);
+            setTimeout(()=> this.setState({errormessage: '',loading : false}),2000);
         } else {
             this.setState({loading : true});
-            setTimeout(() => {
-                this.setState({loading : false});
-                this.setState({successmessage: 'Password Changed Successfully!'});
-                setTimeout(() => this.setState({successmessage: false}), 5000);
-            }, 3000);
-        
             let data = document.getElementById("changepassword")
-
             const headers = new Headers();
             headers.append('API-KEY',this.state.apiKey);
             let form = new FormData(data);
-            fetch(HTTPURL + 'user/updatepassword', {
+            const res = await fetch(HTTPURL + 'user/updatepassword', {
                 method: 'POST',
                 body: form,
                 headers: headers
             })
             .then(response => response.json())
-            .then(json => {
-            console.log(json);
-            return json;
-            });
-
-            this.setState({oldpassword: '', newpassword: '', confirmnewpwd: ''})
+            this.setState({loading : false});
+            if(res.status){
+                this.state.showAlert('success','Password Changed Successfully!');
+                this.setState({oldpassword: '', newpassword: '', confirmnewpwd: ''})
+            }else {
+                this.state.showAlert('success','Password Uodate failed!');
+            }
         }
-        console.log('changed successfully!')
     }
 
     render() {

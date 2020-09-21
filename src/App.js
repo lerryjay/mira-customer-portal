@@ -76,7 +76,6 @@ class App extends Component {
         role : 'user',
         permissions : []
       },
-      permissionstatus: ''
     };
     this.loginUser  = this.loginUser.bind(this);
     this.showAlert  = this.showAlert.bind(this);
@@ -142,36 +141,27 @@ class App extends Component {
       .then((json) => json);
   };
 
-  forgotPassword = (data) => {
+  forgotPassword =  (data) => {
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
     let form = new FormData(data);
-    return fetch(HTTPURL + "user/forgotpassword", {
+    return  fetch(HTTPURL + "user/forgotpassword", {
       method: "POST",
       body: form,
       headers: headers,
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        console.log(json);
-        return json;
-      });
+    }).then((response) => response.json())
+
   };
 
-  changePassword = (data) => {
+  changePassword =  (data) => {
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
-    let form = new FormData(data);
-    return fetch(HTTPURL + "user/updatepassword", {
+    let form =  FormData(data);
+    return  fetch(HTTPURL + "user/updatepassword", {
       method: "POST",
       body: form,
       headers: headers,
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        console.log(json);
-        return json;
-      });
+    }) .then((response) => response.json())
   };
 
   logoutUser = () =>{
@@ -209,17 +199,15 @@ class App extends Component {
       body: form,
       headers: headers,
     }).then((response) => response.json());
-
-    this.setState({ permissionstatus: res['status'] });
-
     if(res['status']){
       if(adminid == this.state.user.userid){
         const { user } = this.state;
         user['permissions'] = data;
-        this.setState({ user, admin: true });
+        this.setState({ user });
         sessionStorage.setItem('user',JSON.stringify(user));
       }
     }
+    return res;
   }
 
   getContext = () => {
@@ -271,7 +259,7 @@ class App extends Component {
           { this.state.alertActive  && <Alert type={ this.state.alertType } message={ this.state.alertMessage } />}
           { this.state.loaderActive && <PageLoader />}
           <Fragment>
-            <Router>
+            <Router basename="/ticketapp">
               <Nav />
               <div className="App" id="wrapper">
                 { loggedIn && <Sidebar />}

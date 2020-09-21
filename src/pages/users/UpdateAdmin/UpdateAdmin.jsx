@@ -11,18 +11,19 @@ class UpdateAdmin extends Component {
             ...this.props,
             loading: false,
             users: [],
-            selectedUser: { },
+            selectedUser: { 
+                permissions : []
+            },
             firstname: '',
             lastname: '',
             email: '',
             telephone: '',
             country: '',
             state:'',
-            permissions: ADMINPERMISSIONS,
-            selectedPermissions: [...this.props.user.permissions],
+            permissions: [],
             successmessage: ''
         }
-        console.log(this.props.user.lastname)
+        this.permissions = ADMINPERMISSIONS;
     }
     
     componentDidMount()
@@ -39,7 +40,6 @@ class UpdateAdmin extends Component {
           headers: headers
       })
       .then(response => response.json());
-      console.log(res['data'])
       if(res['status']){
           this.setState({ users : res['data']});
 
@@ -47,7 +47,6 @@ class UpdateAdmin extends Component {
         const selectedUser = this.state.users.find(
             (item) => item.adminid === adminid
         );
-        console.log(selectedUser)
         await this.setState({ 
             firstname: selectedUser.firstname,
             lastname: selectedUser.lastname,
@@ -55,6 +54,7 @@ class UpdateAdmin extends Component {
             telephone: selectedUser.telephone,
             country: selectedUser.country,
             state: selectedUser.state,
+            permissions : selectedUser.permissions
          });
       }
     }
@@ -85,29 +85,19 @@ class UpdateAdmin extends Component {
         let form = new FormData(document.getElementById("profileform"));
         form.append("userid", this.state.user.userid);
 
-
-        fetch(HTTPURL + 'user/updateprofile', {
+        const res = await fetch(HTTPURL + 'user/updateprofile', {
             method: 'POST',
             body: form,
             headers: headers
-        })
-            .then(response => response.json())
-            .then(res => {
-                setTimeout(() => {
-                    this.setState({ loading: false });
-                    if(res.status === true) {
-                        this.state.showAlert("success", res.message)
-                    } else{
-                        this.state.showAlert("danger",  res.message)
-                    }
-                    setTimeout(() => {
-                        this.setState({ alertActive : false});
-                    }, 3000)
-                }, 2000)
-            });
-
-
+        }).then(response => response.json())
+        this.setState({ loading: false });
+        if(res.status === true) {
+            this.state.showAlert("success", res.message)
+        } else{
+            this.state.showAlert("danger",  res.message)
+        }
     }
+
     handleImageChange(e) {
         e.preventDefault();
 
@@ -128,11 +118,7 @@ class UpdateAdmin extends Component {
                     imagePreviewUrl: '',
                     imageError: "Upload a valid Image"
                 });
-                
-                
             }
-            
-            
         } else {
             this.setState({imageError: false})
                 reader.onloadend = () => {
@@ -146,40 +132,24 @@ class UpdateAdmin extends Component {
         reader.readAsDataURL(file)
     }
 
-    handleCheck = ({ target }) => {
-        if (target.checked) {
-          target.removeAttribute("checked");
-          this.addPermission(target.value);
+    handleCheck =  ({ target }) => {
+        const { permissions } = this.state;
+        console.log('clicked me ', permissions);
+        const index = permissions.findIndex(item=>item === target.value);
+        if (index > -1) {
+            permissions.splice(index,1);
         } else {
-          target.setAttribute("checked", false);
-          this.removePermission(target.value);
+            permissions.push(target.value);
         }
-      }
-
-      addPermission = async (value) => {
-        await this.setState((prevState) => ({
-          selectedPermissions:
-            prevState.selectedPermissions.length == 0
-              ? [value]
-              : [...prevState.selectedPermissions, value],
-        }));
-      };
-
-
-      removePermission = async (value) => {
-        await this.setState((prevState) => ({
-            selectedPermissions: prevState.selectedPermissions.filter(
-            (perm) => perm != value
-          ),
-        }));
-      };
+        this.setState({ permissions });
+    }
 
       
     setPermission = async (e) =>{
         e.preventDefault();
         this.setState({ loading: true });
 
-        let data = this.state.selectedPermissions;
+        let data = this.state.permissions;
         let adminid = this.props.location.pathname.split("/")[2]
 
         const res = await this.props.updateAdminPermission(data, adminid )
@@ -323,17 +293,16 @@ class UpdateAdmin extends Component {
                                 <div className="card-body">
                                     <div className="row">
                                     {
-                                    this.state.permissions.map((permission) => (
+                                    this.permissions.map((permission) => (
                                         <div className="col-md-3">
                                           <p className="list-group-item px-2" style={{ fontSize: "12px"}}>
-                                            {permission.name}{" "}
+                                            {permission.name}
                                             <label className="switch float-right">
-                                              {" "}
                                               <input
                                                 type="checkbox"
                                                 value={permission.name}
                                                 onChange={this.handleCheck}
-                                                checked={ this.state.selectedUser.permissions.findIndex(item=>item === permission.name) > -1}
+                                                checked={ this.state.permissions.findIndex(item=>item === permission.name) > -1}
                                               />
                                               <span className="slider round"></span>
                                             </label>

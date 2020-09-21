@@ -11,7 +11,6 @@ class Profile extends Component {
       ...this.props,
       products: [],
       showmodal: true,
-      clients: [],
       users: [],
       selectedUser: {
         permissions: []
@@ -24,7 +23,6 @@ class Profile extends Component {
   componentDidMount() {
     this.setState({ loader: true });
     this.getAdmins();
-    this.getClients();
     this.setState({ loader: false });
   }
 
@@ -33,80 +31,30 @@ class Profile extends Component {
     headers.append('API-KEY', APIKEY);
     const res = await fetch(HTTPURL + `admin?userid=${this.props.user.userid}`, {
       headers: headers
-    })
-      .then(response => response.json());
-    console.log(res['data'])
+    }).then(response => response.json());
     if (res['status']) {
       this.setState({ users: res['data'] });
-
       // Admin's Profile info
       const adminid = this.props.location.pathname.split("/")[2];
-      const selectedUser = this.state.users.find(
-        (item) => item.adminid === adminid
-      );
-      await this.setState({ selectedUser });
+      const selectedUser = this.state.users.find(  (item) => item.adminid === adminid );
+      this.setState({ selectedUser });
     }
   }
 
-  async getClients() {
-    const headers = new Headers();
-    headers.append('API-KEY', APIKEY);
-    const res = await fetch(HTTPURL + `clients/?userid=${this.state.user.userid}`, {
-      method: 'GET',
-      headers: headers
-    }).then(response => response.json());
-
-    if (res['status']) this.setState({ clients: res['data'] })
-  }
 
   closesuspendModal() {
     let modal = document.getElementById("suspendModal");
     modal.style.display = "none";
   }
 
-  showsuspendModal(clientid) {
-    const selectedClient = this.state.clients.find(
-      (client) => client.user_id === clientid
-    );
-    console.log(selectedClient)
-    this.setState({ selectedClient });
-    let modal = document.getElementById("suspendModal")
-    modal.style.display = "block";
-  }
-
-  suspendClient() {
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false });
-      setTimeout(() => {
-        this.setState({ successmessage: false });
-
-        const headers = new Headers();
-        headers.append("API-KEY", APIKEY);
-        const res = fetch(
-          `${HTTPURL}user/suspend?clientid=${this.state.selectedClient.user_id}&userid=${this.state.user.userid}`,
-          {
-            method: "GET",
-            headers: headers,
-          }
-        );
-        this.setState({ successmessage: "Suspend Successfully!" });
-        let modal = document.getElementById("suspendModal");
-        modal.style.display = "none";
-      }, 2000);
-    }, 3000);
-    //display success here
-  }
-
-
   render() {
     return (
       <div className="container mx-auto row">
         {this.state.loader && (
           <div className="spin-center">
-            <span class="text-primary ">
+            <span className="text-primary ">
               <span
-                class="spinner-grow spinner-grow-sm mr-2"
+                className="spinner-grow spinner-grow-sm mr-2"
                 role="status"
                 aria-hidden="true"
               ></span>
@@ -180,65 +128,50 @@ class Profile extends Component {
                         </small>
                       </button>
                     </Link>
-                    <Link
+                    <button
+                      type="button"
+                      className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
                       onClick={() =>
                         this.showsuspendModal(
                           this.state.selectedUser.adminid
                         )
                       }
                     >
-                      <button
-                        type="button"
-                        className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
-                      >
-                        <small
-                          className="newproduct"
-                          style={{ color: "#fff" }}
-                        >
-                          &nbsp;Suspend&nbsp;Account&nbsp;
-                            </small>
-                      </button>
-                    </Link>
-                    <Link
-                      onClick={() =>
-                        this.showsuspendModal(
-                          this.state.selectedUser.adminid
-                        )
-                      }
+                      <small className="newproduct text-white"  >
+                        &nbsp;Suspend&nbsp;Account&nbsp;
+                       </small>
+                    </button>
+                    <button onClick={() =>
+                      this.showsuspendModal(
+                        this.state.selectedUser.adminid
+                      )
+                    }
+                      type="button"
+                      className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
                     >
-                      <button
-                        type="button"
-                        className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
-                      >
-                        <small
-                          className="newproduct"
-                          style={{ color: "#fff" }}
-                        >
-                          &nbsp;Delete&nbsp;Account&nbsp;
+                      <small className="newproduct text-white" >
+                        &nbsp;Delete&nbsp;Account&nbsp;
                             </small>
-                      </button>
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-
         }
 
 
         {/* Suspend Account */}
         {this.state.showmodal ? (
-          <div id="suspendModal" class="modal">
+          <div id="suspendModal" className="modal">
             {/* Modal content  */}
-            <div class="modal-content modal-del text-center p-5">
+            <div className="modal-content modal-del text-center p-5">
               {/* <div className="delete-icon">
                           &times;
                       </div> */}
               <i
-                class="fa fa-exclamation-triangle fa-3x dark-red mb-2"
+                className="fa fa-exclamation-triangle fa-3x dark-red mb-2"
                 aria-hidden="true"
               ></i>
               <h3>Are you sure?</h3>
@@ -295,7 +228,7 @@ class Profile extends Component {
             <div className="card-body">
               <div className="row">
                 {
-                  this.state.selectedUser.permissions.length == 0 &&  <div className="col-md-12">
+                  this.state.selectedUser.permissions.length == 0 && <div className="col-md-12">
                     <div className="alert alert-warning my-3" role="alert">
                       <h6 className="text-center">No permissions has been granted to this user!</h6>
                     </div>

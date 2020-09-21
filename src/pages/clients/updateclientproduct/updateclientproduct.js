@@ -54,7 +54,6 @@ class UpdateClientProduct extends Component {
         }
       });
 
-    console.log(this.state.modules);
   }
 
   async getClientProduct() {

@@ -124,7 +124,7 @@ class Products extends Component {
    
                     <div className="row mx-5 my-2">
                         {this.state.products.length === 0 
-                        ? <div className="alert alert-warning mt-5" role="alert">
+                        ? <div className="col-md-12 alert alert-warning mt-5" role="alert">
                             <h6 className="text-center">No product has been added yet</h6>
                         </div>
                         : <div className="row mx-5 my-2">

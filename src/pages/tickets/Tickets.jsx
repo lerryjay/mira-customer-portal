@@ -29,7 +29,6 @@ class Tickets extends Component {
       let client = this.state.users.find(item=>item.firstname+' '+item.lastname == value);
       if(client == null)client =  this.state.clients.find(item=>item.businessname == value);
         if (client) this.state.userid = (client.userid || client.user_id)
-        console.log(client, value, this.state.userid)
     } 
     this.setState({ [name]: value});
 }
@@ -84,7 +83,6 @@ async getClients() {
 
   ticketStatusUpdated(e, ticket) {
     const tickets = this.state.tickets.map((item) => {
-      console.log(e.target.value);
       if (item.id == ticket.id) {
         item.ticketstatus = e.target.value;
         this.updateTicketStatus(ticket.id, e.target.value);
@@ -158,7 +156,6 @@ async getClients() {
       const pageNumbers = [];
       for (let i = 1; i <= Math.ceil(tickets.length / numberPerPage); i++) {
         pageNumbers.push(i);
-        console.log(pageNumbers)
         this.state.pageNumbers = pageNumbers
       }
 
@@ -166,7 +163,6 @@ async getClients() {
     const indexOfLastTicket = currentPage * numberPerPage;
     const indexOfFirstTicket = indexOfLastTicket - numberPerPage;
     const currentTickets = tickets.slice(indexOfFirstTicket, indexOfLastTicket);
-    console.log(currentTickets)
     this.state.currentTickets = currentTickets
 
     return (
@@ -184,10 +180,7 @@ async getClients() {
             ) : (
             (
               <div>
-                <div
-                  id="table"
-                  className="card pt-2 mt-3 justify-content-center shadow px-2"
-                >
+                <div id="table" className="card pt-2 mt-3 justify-content-center shadow px-2">
                   <div className="table-responsive">
                     <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart" id="myTable">
                       {/* <caption>Hello World!</caption> */}
@@ -324,9 +317,6 @@ async getClients() {
         }
 
           </div>
-      
-      
-      
           <div className="col-md-3 col-sm-12 box2 mt-3 mb-3">
             <div className="card p-3">
               <label htmlFor="customer" style={{display: 'block'}} className="font-weight-bold">
@@ -431,7 +421,7 @@ async getClients() {
             </div>
 
             <div className="form-group mt-1 text-right">
-              <button type="submit" className="btn btn-primary btn-md" style={{cursor:"pointer", fontSize:'16px'}}>Search</button>
+              <button type="submit" className="btn btn-outline-dark btn-sm rounded-0 btn-md" style={{cursor:"pointer", fontSize:'16px'}}>Search</button>
             </div>
             </form>                  
             </div>

@@ -259,7 +259,8 @@ class App extends Component {
           { this.state.alertActive  && <Alert type={ this.state.alertType } message={ this.state.alertMessage } />}
           { this.state.loaderActive && <PageLoader />}
           <Fragment>
-            <Router basename="/ticketapp">
+          {/* // basename="/ticketapp" */}
+            <Router > 
               <Nav />
               <div className="App" id="wrapper">
                 { loggedIn && <Sidebar />}

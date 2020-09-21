@@ -51,10 +51,16 @@ class create_ticket extends Component {
             headers: headers
         })
         .then(response => response.json());
-        if(res['status']){
-            this.setState({successmessage: 'Ticket Created Successfully',loading : false,title : '', type: '', message: ''})
-            setTimeout(() => this.setState({successmessage: false}), 5000);
-        }
+        
+        if (res.status) {
+            document.getElementById("createticket").reset()
+            this.setState({loading : false,title : '', type: '', message: ''})
+            this.state.showAlert("success", res['message'])
+          }
+          else{
+            this.setState({loading : false})
+            this.state.showAlert("danger",  res['message'])
+          }
     }
     
     removeImage(e) {
@@ -63,7 +69,6 @@ class create_ticket extends Component {
 
     removeOtherImage(e) {
         this.setState({ file: '',imageError : false})
-        setTimeout(()=> this.setState({imageError: ''}),5000);
     }
 
     handleImageChange(e) {
@@ -175,7 +180,7 @@ class create_ticket extends Component {
                                     <div className="form-group">
                                         <input type="text" className="form-control form-control-sm" name="title"
                                             id="title" placeholder="Title" 
-                                            value={this.state.title} required
+                                            value={this.state.title} 
                                             onChange={this.handleInputChange} />
                                     </div>
                                 </div>
@@ -184,7 +189,7 @@ class create_ticket extends Component {
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
                                             <textarea id="message" name="message" rows="5" cols="50" className="form-control text-left" 
-                                            value={this.state.message} required placeholder="Message"
+                                            value={this.state.message}  placeholder="Message"
                                             onChange={this.handleInputChange} />
                                         </div>
                                     </div>

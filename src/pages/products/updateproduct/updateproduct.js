@@ -68,31 +68,25 @@ class UpdateProduct extends Component {
             headers: headers
         })
         .then(response => response.json())
-        .then(json => {
-          this.props.history.goBack();
-          return json;
+        .then(data => {
+          
+            this.setState({ loading: false });
+            if(data.status === true) {
+                this.state.showAlert("success", data.message)
+                this.props.history.goBack();
+            } else{
+                this.state.showAlert("danger",  data.message)
+            }
         });
-
-        setTimeout(() => {
-            this.setState({loading : false});
-            // this.setState({successmessage: 'Added Successfully!'})
-            setTimeout(() =>{
-                this.setState({successmessage: false});
-                 this.setState({name: '', description: '', file: ''})
-            }, 5000);
-        }, 3000);
     
     }
 
     removeImage(e) {
-        console.log(e, "Image removed")
         this.setState({imagePreviewUrl: ''})
     }
 
     removeOtherImage(e) {
-        console.log(e, "Image removed")
         this.setState({ file: '',imageError : false})
-        setTimeout(()=> this.setState({imageError: ''}),5000);
         // let myElement = document.querySelector(".other_files");
         // myElement.style.display = "none";
     }
@@ -145,28 +139,7 @@ class UpdateProduct extends Component {
         return (
 
             <div className="container mx-auto row">
-            {/* Success Message */}
-            { this.state.successmessage ? 
-                <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
-                    <span className="mt-3">{this.state.successmessage}</span>
-                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                :   <span></span>
-            }
-
                 <div className="col-md-8 mb-3 mt-4 box1" id="profile">
-                 {/* Error Message */}
-                { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                    <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
-                        {this.state.errormessage}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    </div>
-                    :   <span></span>
-                }
 
                     <form onSubmit={this.handleSubmit} id="createproduct"> 
                     
@@ -179,16 +152,6 @@ class UpdateProduct extends Component {
 
                             <div className="row">
                                 <div className="col-md-12">
-                                    { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                                        <div className="alert alert-warning" role="alert">{this.state.errormessage}
-                                        <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        </div>
-                                        : 
-                                        <span></span>
-                                        }
-
                                     {this.state.imageError !== false ?
                                         <div className="alert alert-warning"> { this.state.imageError } </div>
                                         : <span></span> }

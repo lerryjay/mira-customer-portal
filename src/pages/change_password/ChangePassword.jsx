@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Validators  from "../../common/Validators";
 import {withContext} from '../../common/context';
-import { HTTPURL } from '../../common/global_constant';
+import { APIKEY, HTTPURL } from '../../common/global_constant';
 
 class ChangePassword extends Component {
     constructor(props){
@@ -27,31 +27,39 @@ class ChangePassword extends Component {
 
     handleSubmit = async e => {
         e.preventDefault()
+        this.setState({ loading: true });
 
         const {oldpassword, newpassword, confirmnewpwd} = this.state
        
         //Waste 3 seconds
         if(!Validators.validatePassword(oldpassword,1).status){
             const err = Validators.validatePassword(oldpassword,1).message;
-            this.setState({errormessage: err});
-            setTimeout(()=> this.setState({errormessage: '',loading : false}),2000);
+            if(err){
+                this.setState({ loading: false });
+                this.state.showAlert("danger", err)
+            }
         } else if(!Validators.validatePassword(newpassword,1).status){
             const err = Validators.validatePassword(newpassword,1).message;
-            this.setState({errormessage: err});
-            setTimeout(()=> this.setState({errormessage: '',loading : false}),2000);
+            if(err){
+                this.setState({ loading: false });
+                this.state.showAlert("danger", err)
+            }
         } else if(!Validators.validatePassword(confirmnewpwd,1).status){
             const err = Validators.validatePassword(confirmnewpwd,1).message;
-            this.setState({loading : true});
-            this.setState({errormessage: err});
-            setTimeout(()=> this.setState({errormessage: '',loading : false}),2000);
+            if(err){
+                this.setState({ loading: false });
+                this.state.showAlert("danger", err)
+            }
         }else if(newpassword !== confirmnewpwd) {
             const err = "Password does not match!"
-            setTimeout(()=> this.setState({errormessage: '',loading : false}),2000);
+            if(err){
+                this.setState({ loading: false });
+                this.state.showAlert("danger", err)
+            }
         } else {
-            this.setState({loading : true});
             let data = document.getElementById("changepassword")
             const headers = new Headers();
-            headers.append('API-KEY',this.state.apiKey);
+            headers.append('API-KEY',APIKEY);
             let form = new FormData(data);
             const res = await fetch(HTTPURL + 'user/updatepassword', {
                 method: 'POST',

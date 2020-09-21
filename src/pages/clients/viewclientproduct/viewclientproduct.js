@@ -30,7 +30,6 @@ class viewclientproduct extends Component {
       product_id: '',
       files: [],
     };
-    console.log(this.props);
   }
 
   
@@ -62,7 +61,6 @@ class viewclientproduct extends Component {
         modules,
         product_id
       } = res.data;
-      console.log(modules,'modules');
       this.setState({
         productname: name,
         productdescription: description,
@@ -182,7 +180,6 @@ class viewclientproduct extends Component {
     })
         .then(response => response.json())
         .then(data => {
-            console.log(data, "deleted")
         });
         this.getClientProduct();
   }

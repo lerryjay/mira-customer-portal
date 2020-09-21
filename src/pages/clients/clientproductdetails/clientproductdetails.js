@@ -27,23 +27,16 @@ class clientproductdetails extends Component {
       showdeletemodal: true,
       selectedModule: {}
     };
-    console.log(this.props);
   }
 
   componentDidMount() {
-   this.getLoader();
+    this.state.showLoader();
+     this.getProduct();
+     this.getModules();
+    this.setState({ loading: false });
+    this.state.hideLoader();
  }
  
- getLoader() {
-   setTimeout(() => {
-     this.setState({ loader: true });
-     setTimeout(() => {
-       this.setState({ loader: false });
-       this.getProduct();
-       this.getModules();
-     }, 1000);
-   });
- }
 
   getProduct() {
     const productid = this.props.location.pathname.split("/")[2];
@@ -88,13 +81,10 @@ class clientproductdetails extends Component {
       .then((data) => {
         if (data.data.length === 0) {
           this.setState({ packages: '' });
-          console.log("Oops, packages is empty")
         } else {
           this.setState({ packages: data.data });
-          console.log(data, "packages")
         }
 
-        // console.log(this.state.packages, "packages");
       });
   }
 

@@ -182,7 +182,7 @@ class App extends Component {
      this.setState({ alertActive : true });
      setTimeout(() => {
               this.setState({ alertActive : false});
-    }, 2000)
+    }, 5000)
   }
 
   updateAdminPermission = async (data, adminid) =>{

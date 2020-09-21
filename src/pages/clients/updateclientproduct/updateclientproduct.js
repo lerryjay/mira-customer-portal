@@ -66,7 +66,6 @@ class UpdateClientProduct extends Component {
         headers: headers,
       }
     ).then((res) => res.json());
-    console.log(res)
     if (res["status"]) {
       const {
         paymentstatus,
@@ -84,7 +83,6 @@ class UpdateClientProduct extends Component {
         product_id
       } = res.data;
       this.getModule(product_id);
-      console.log('modules',modules)
       const selectedModules = modules.map(item=>item.id);
       this.setState({
         productid: product_id,
@@ -112,7 +110,6 @@ class UpdateClientProduct extends Component {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data)
         this.setState({ products: data.data });
 
       })
@@ -145,13 +142,14 @@ class UpdateClientProduct extends Component {
     formdata.append("remarks", this.state.remarks);
 
     const res = await fetch(HTTPURL + "clients/updateproduct", {  method: "POST",  headers: myHeaders,body: formdata, }).then((response) => response.json())
-    if (res.status) {
-      this.setState({ successmessage: res.message,loading: false });
-      setTimeout(() => {  this.setState({ successmessage: false }); window.history.back(); }, 5000);
-    } else {
-        this.setState({ loading: false,errormessage: res.message });
-        setTimeout(() => { this.setState({ errormessage: false });}, 5000);
-    }
+
+      this.setState({ loading: false });
+      if(res.status === true) {
+          this.state.showAlert("success", res.message)
+          window.history.back();
+      } else{
+          this.state.showAlert("danger",  res.message)
+      }
   };
 
   handleCheck = ({ target }) => {
@@ -184,14 +182,11 @@ class UpdateClientProduct extends Component {
     e.currentTarget.placeholder = "Payment Date";
   }
   removeImage(e) {
-    console.log(e, "Image removed");
     this.setState({ imagePreviewUrl: "" });
   }
 
   removeOtherImage(e) {
-    console.log(e, "Image removed");
     this.setState({ file: "", imageError: false });
-    setTimeout(() => this.setState({ imageError: "" }), 5000);
   }
 
   handleImageChange(e) {
@@ -212,57 +207,13 @@ class UpdateClientProduct extends Component {
       date = new Date()
       let expiration = `${date.getUTCMonth() + 1}/${date.getUTCDay()}/${date.getUTCFullYear() + 1}`
       this.setState({ expirationdate: expiration });
-      console.log(this.state.expirationdate)
     }
   }
 
   render() {
     return (
       <div className="container mx-auto row">
-        {/* Success Message */}
-        {this.state.successmessage ? (
-          <div
-            className="alert alert-success"
-            role="alert"
-            style={{
-              position: "fixed",
-              top: "70px",
-              right: "10px",
-              zIndex: "4",
-            }}
-          >
-            <span className="mt-3">{this.state.successmessage}</span>
-            <button
-              type="button"
-              className="close ml-4"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-        ) : (
-            <span></span>
-          )}
-
         <div className="col-md-12 mb-3 mt-4" id="profile">
-          {/* Error Message */}
-          {this.state.errormessage != null &&
-            this.state.errormessage.length > 0 ? (
-              <div className="alert alert-warning" role="alert">
-                {this.state.errormessage}
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="alert"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-            ) : (
-              <span></span>
-            )}
 
           <form onSubmit={this.handleSubmit} id="updateclientproduct">
             <div className="card">
@@ -576,7 +527,7 @@ class UpdateClientProduct extends Component {
                         role="status"
                         id="loader"
                       >
-                        <span className="">Loading...</span>
+                        <span className="sr-only">Loading...</span>
                       </div>
                     </button>
                   ) : (

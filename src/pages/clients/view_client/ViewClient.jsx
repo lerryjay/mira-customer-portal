@@ -7,7 +7,6 @@ import { HTTPURL, APIKEY } from "../../../common/global_constant";
 class ViewClient extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
     this.state = {
       ...this.props,
       products: [],
@@ -43,7 +42,6 @@ class ViewClient extends Component {
           this.setState({ products: [] });
         } else {
           this.setState({ products: res.data });
-          console.log(res.data, "products");
         }
       });
   }
@@ -113,11 +111,7 @@ class ViewClient extends Component {
   }
 
   deleteProduct() {
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false });
-      setTimeout(() => {
-        this.setState({ successmessage: false });
+    this.setState({ loading: true });;
 
         const headers = new Headers();
         headers.append("API-KEY", APIKEY);
@@ -128,14 +122,19 @@ class ViewClient extends Component {
             headers: headers,
           }
         );
-        console.log("delete module response", res);
-
-        this.setState({ successmessage: "Deleted Successfully!" });
-        let modal = document.getElementById("deleteModal");
-        modal.style.display = "none";
-      }, 5000);
-    }, 3000);
-    //display success here
+          if(res.status){
+            this.setState({ loading: false });
+            this.state.showAlert("success", res.message)
+            let modal = document.getElementById("deleteModal");
+            modal.style.display = "none";
+          }
+          else{
+            this.setState({ loading: false });
+            this.state.showAlert("danger", res.message)
+            let modal = document.getElementById("deleteModal");
+            modal.style.display = "none";
+          }
+          
   }
 
   closesuspendModal() {
@@ -152,28 +151,30 @@ class ViewClient extends Component {
     modal.style.display = "block";
   }
 
-  suspendClient() {
+   suspendClient = async () => {
     this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false });
-      setTimeout(() => {
-        this.setState({ successmessage: false });
 
         const headers = new Headers();
         headers.append("API-KEY", APIKEY);
-        const res = fetch(
+        const res = await fetch(
           `${HTTPURL}user/suspend?clientid=${this.state.selectedClient.user_id}&userid=${this.state.user.userid}`,
           {
             method: "GET",
             headers: headers,
           }
         );
-        this.setState({ successmessage: "Suspend Successfully!" });
-        let modal = document.getElementById("suspendModal");
-        modal.style.display = "none";
-      }, 2000);
-    }, 3000);
-    //display success here
+        if (res.status) {
+          this.setState({ loading: false });
+          this.state.showAlert("success", 'Suspend Successfully!')
+          let modal = document.getElementById("suspendModal");
+          modal.style.display = "none";
+        } 
+        else{
+          this.setState({ loading: false });
+          let modal = document.getElementById("suspendModal");
+          modal.style.display = "none";
+        }
+        
   }
 
   closedeleteClient() {
@@ -190,29 +191,30 @@ class ViewClient extends Component {
     modal.style.display = "block";
   }
 
-  deleteClient() {
+  deleteClient = async() => {
     this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false });
-      setTimeout(() => {
-        this.setState({ successmessage: false });
-
         const headers = new Headers();
         headers.append("API-KEY", APIKEY);
-        const res = fetch(
+        const res = await fetch(
           `${HTTPURL}clients/delete?clientid=${this.state.selectedClient.user_id}&userid=${this.state.user.userid}`,
           {
             method: "GET",
             headers: headers,
           }
         );
+        
+        if (res.status) {
+          this.setState({ loading: false });
+          this.state.showAlert("success", 'Deleted Successfully!')
+          let modal = document.getElementById("deleteClient");
+          modal.style.display = "none";
+        }
+        else{
+          this.setState({ loading: false });
+          let modal = document.getElementById("deleteClient");
+          modal.style.display = "none";
+        }
 
-        this.setState({ successmessage: "Deleted Successfully!" });
-        let modal = document.getElementById("deleteClient");
-        modal.style.display = "none";
-      }, 2000);
-    }, 3000);
-    //display success here
   }
 
 

@@ -21,7 +21,6 @@ class Users extends Component {
     })
     .then(response => response.json());
     if(res['status']){
-      console.log(res['data'])
         this.setState({ users : res['data']});
     }
   }

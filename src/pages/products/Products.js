@@ -57,42 +57,6 @@ class Products extends Component {
         this.setState({ [name]: value, errormessage: '' });
     }
 
-    handleSubmit = async e => {
-        e.preventDefault()
-        this.setState({ loading: true });
-        setTimeout(() => {
-            this.setState({ loading: false });
-            this.setState({ successmessage: 'Added Successfully!' })
-            setTimeout(() => {
-                this.setState({ successmessage: false });
-
-                const headers = new Headers();
-                headers.append('API-KEY', APIKEY);
-
-                let form = new FormData();
-                form.append("userid", this.state.user.userid);
-                form.append("productid", this.state.id);
-                form.append("name", this.state.prdname);
-                form.append("description", this.state.prddescription);
-
-                fetch(HTTPURL + 'product/addmodule', {
-                    method: 'POST',
-                    body: form,
-                    headers: headers
-                })
-                    .then(response => response.json())
-                    .then(json => {
-                        console.log(json);
-                        return json;
-                    });
-                // const res = this.state.addpackage(document.getElementById("addpackage"));
-                console.log('submitting')
-
-            }, 5000);
-        }, 3000);
-
-    }
-
 
 
     render() {
@@ -145,13 +109,10 @@ class Products extends Component {
                                             <i className="fa fa-edit mr-1"></i>
                                         </Link>
 
-                                        <Link onClick={() => this.showDeleteModal(product.id)}>
+                                        <button className="btn btn-link" onClick={() => this.showDeleteModal(product.id)}>
                                             <i className="fa fa-trash text-danger"></i>
-                                        </Link>
-
-
+                                        </button>
                                     </div>
-
                                 </div>
 
 

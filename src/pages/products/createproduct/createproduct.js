@@ -41,22 +41,23 @@ class CreateProduct extends Component {
         form.append('file', this.state.file);
 
         const res = await fetch(HTTPURL + 'product/add', {  method: 'POST',body: form, headers: headers }).then(response => response.json());
-        if(res['status']){
-            this.setState({loading : false,name: '', description: '', file: '', imagePreviewUrl: '', imageurl: ''});
-            this.setState({successmessage:'Product Saved Successfully!'});
-            this.state.getProducts();
-        }
+        
+            this.setState({ loading: false });
+            if(res.status === true) {
+                this.state.showAlert("success",  res.message)
+                this.setState({loading : false,name: '', description: '', file: '', imagePreviewUrl: '', imageurl: ''});
+                this.state.getProducts();
+            } else{
+                this.state.showAlert("danger",  res.message)
+            }
     }
 
     removeImage(e) {
-        console.log(e, "Image removed")
         this.setState({imagePreviewUrl: '', imageurl: ''})
     }
 
     removeOtherImage(e) {
-        console.log(e, "Image removed")
         this.setState({ file: '',imageError : false})
-        setTimeout(()=> this.setState({imageError: ''}),5000);
     }
     handleImageChange(e) {
         e.preventDefault();
@@ -101,23 +102,7 @@ class CreateProduct extends Component {
         return (
 
             <div className="container mx-auto row">
-            {/* Success Message */}
-            { this.state.successmessage ? 
-                <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
-                    <span className="mt-3">{this.state.successmessage}</span>
-                </div>
-                :   <span></span>
-            }
-
                 <div className="col-md-8 mb-3 mt-4 box1" id="profile">
-                 {/* Error Message */}
-                { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                    <div className="alert alert-warning" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
-                        {this.state.errormessage}
-                    </div>
-                    :   <span></span>
-                }
-
                     <form onSubmit={this.handleSubmit} id="createproduct"> 
                     
                             <div className="card">

@@ -27,39 +27,25 @@ class CreateUser extends Component {
         e.preventDefault()
         const { name, email, password, telephone } = this.state
         await this.setState({loading : true});
-        setTimeout(() =>this.setState({loading : false}), 3000);
-        //Waste 3 seconds
-        setTimeout(() =>this.setState({loading : false}), 5000);
         if(!Validators.validateEmail(email).status){
-            console.log('Failed email validation');
             const err = Validators.validateEmail(email).message
-            this.setState({loading : true});
-            setTimeout(() => {
-                this.setState({loading : false});
-                this.setState({errormessage: err});
-                setTimeout(()=> this.setState({errormessage: ''}),5000);
-            }, 3000);
+            if(err){
+                this.setState({ loading: false });
+                this.state.showAlert("danger", err)
+            }
         }else if(!Validators.validatePassword(password,1).status){
-            console.log('Failed password validation');
             const err = Validators.validatePassword(password,1).message;
             this.setState({loading : true});
-            setTimeout(() => {
-                this.setState({loading : false});
-                this.setState({errormessage: err});
-                setTimeout(()=> this.setState({errormessage: ''}),5000);
-            }, 3000);
+            if(err){
+                this.setState({ loading: false });
+                this.state.showAlert("danger", err)
+            }
         }else{
-            await this.setState({loading : true});
-            setTimeout(() => {
                 this.setState({loading : false});
-                this.setState({successmessage: 'Registered Successfully!'})
-                setTimeout(() =>{
-                    this.setState({successmessage: false});
-                    const res =  this.state.signup(document.getElementById("signupform"));
+                    const res =  await this.state.signup(document.getElementById("signupform"));
                     this.setState({title : '', package: '', type: '', message: '', product: ''});
+                    this.state.showAlert("success", res.message)
                     this.props.history.push('/createUser')
-                }, 5000);
-            }, 3000)
         }
     }
 

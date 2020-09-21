@@ -53,21 +53,6 @@ class Clients extends Component {
     }
 
     async deleteModal(id) {
-        // let clientid = id
-
-        // const headers = new Headers();
-        // headers.append('API-KEY', APIKEY);
-
-        // fetch(HTTPURL + `clients/delete?userid=${this.state.user.userid}&clientid=${clientid}&deleteuser=true`, {
-        //     method: 'GET',
-        //     headers: headers
-        // })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log(data, "deleted")
-        //         let modal = document.getElementById("myModal")
-        //         modal.style.display = "none";
-        //     });
 
 
         const { user } = this.state;

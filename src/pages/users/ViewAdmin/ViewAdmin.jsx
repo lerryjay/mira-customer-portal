@@ -31,7 +31,12 @@ class Profile extends Component {
     headers.append('API-KEY', APIKEY);
     const res = await fetch(HTTPURL + `admin?userid=${this.props.user.userid}`, {
       headers: headers
+<<<<<<< HEAD
     }).then(response => response.json());
+=======
+    })
+      .then(response => response.json());
+>>>>>>> 49af5d80bb0fb0ca2e8a3b898334be201c2b3bd2
     if (res['status']) {
       this.setState({ users: res['data'] });
       // Admin's Profile info
@@ -47,6 +52,46 @@ class Profile extends Component {
     modal.style.display = "none";
   }
 
+<<<<<<< HEAD
+=======
+  showsuspendModal(clientid) {
+    const selectedClient = this.state.clients.find(
+      (client) => client.user_id === clientid
+    );
+    this.setState({ selectedClient });
+    let modal = document.getElementById("suspendModal")
+    modal.style.display = "block";
+  }
+
+  
+  suspendClient = async() => {
+    this.setState({ loading: true });
+
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+        const res = await fetch(
+          `${HTTPURL}user/suspend?clientid=${this.state.selectedClient.user_id}&userid=${this.state.user.userid}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        );
+        if(res.status){
+          this.setState({ loading: false });
+          this.state.showAlert("success", 'Suspend Successfully!')
+          let modal = document.getElementById("suspendModal");
+          modal.style.display = "none";
+        }
+        else{
+          this.setState({ loading: false });
+          let modal = document.getElementById("suspendModal");
+          modal.style.display = "none";
+        }
+    //display success here
+  }
+
+
+>>>>>>> 49af5d80bb0fb0ca2e8a3b898334be201c2b3bd2
   render() {
     return (
       <div className="container mx-auto row">

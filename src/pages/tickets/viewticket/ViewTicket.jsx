@@ -108,7 +108,6 @@ class ViewTicket extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.log(json);
         return json;
       });
 
@@ -121,7 +120,6 @@ class ViewTicket extends Component {
     let inputfiles = [];
     for (let index = 0; index < input.files.length; index++) {
       inputfiles.push(input.files[index]);
-      console.log(input.files[index].name);
     }
 
     this.setState({ inputfiles });

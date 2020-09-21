@@ -23,7 +23,10 @@ class UpdateAdmin extends Component {
             permissions: [],
             successmessage: ''
         }
+<<<<<<< HEAD
         this.permissions = ADMINPERMISSIONS;
+=======
+>>>>>>> 49af5d80bb0fb0ca2e8a3b898334be201c2b3bd2
     }
     
     componentDidMount()
@@ -89,6 +92,7 @@ class UpdateAdmin extends Component {
             method: 'POST',
             body: form,
             headers: headers
+<<<<<<< HEAD
         }).then(response => response.json())
         this.setState({ loading: false });
         if(res.status === true) {
@@ -96,6 +100,20 @@ class UpdateAdmin extends Component {
         } else{
             this.state.showAlert("danger",  res.message)
         }
+=======
+        })
+            .then(response => response.json())
+            .then(res => {
+                    this.setState({ loading: false });
+                    if(res.status === true) {
+                        this.state.showAlert("success", res.message)
+                    } else{
+                        this.state.showAlert("danger",  res.message)
+                    }
+            });
+
+
+>>>>>>> 49af5d80bb0fb0ca2e8a3b898334be201c2b3bd2
     }
 
     handleImageChange(e) {
@@ -170,13 +188,6 @@ class UpdateAdmin extends Component {
             } 
         return (
             <div className="container mx-auto">
-            {/* Success Message */}
-            { this.state.successmessage ? 
-                <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
-                    <span className="mt-3">{this.state.successmessage}</span>
-                </div>
-                :   <span></span>
-            }
                 <div className="row mt-4">
 
                     <div className="col-md-8 box1 mb-3" id="profile">

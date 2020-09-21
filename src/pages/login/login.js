@@ -25,46 +25,41 @@ class Login extends Component {
 
     handleSubmit = async e => {
         e.preventDefault()
+        await this.setState({loading : true});
 
         const { loginid, password} = this.state
     
         if(!Validators.validateEmail(loginid).status){
             const err = Validators.validateEmail(loginid).message
-            this.setState({loading : true});
-            setTimeout(() => {
-                this.setState({loading : false});
-                this.setState({errormessage: err});
-                setTimeout(()=> this.setState({errormessage: ''}),5000);
-            }, 3000);
+            if(err){
+                this.setState({ loading: false });
+                this.state.showAlert("danger", err)
+            }
         }else if(password == ''){
             const err = Validators.validatePassword(password,1).message;
-           await this.setState({loading : true});
-           setTimeout(() => {
-               this.setState({loading : false});
-               this.setState({errormessage: err});
-               setTimeout(()=> this.setState({errormessage: ''}),5000);
-           }, 3000);
+           if(err){
+               this.setState({ loading: false });
+               this.state.showAlert("danger", err)
+           }
         }else{
-            setTimeout(()=> this.setState({loading : true}),3000);
+
             let form = new FormData(document.getElementById("loginform"));
             const res = await this.props.login(form);
-            if(res.status){ 
-                await this.setState({successmessage: 'Login Successful',loading : false});
+
+                this.setState({ loading: false });
+                if(res['status']) {
+                    this.state.showAlert("success", res['message'])
+                    //find a way to redirect here 
                 this.props.history.push('/dashboard');
-            }
-            else{
-                this.setState({});
-                this.setState({loading : false});
-                this.setState({errormessage: 'Invalid username or password',loading : false});
-                setTimeout(()=> this.setState({errormessage: ''}),5000);
-            }
+                } else{
+                    this.state.showAlert("danger",   res['message'])
+                }
+
         }
-        console.log('submitting')
     }
 
     showPassword() {
         var input = document.getElementById("password");
-        console.log(input, "password type")
         if (input.type === "password") {
             input.type = "text";
           } else {
@@ -77,16 +72,6 @@ class Login extends Component {
         return(
             <div>
                 <div className="container">
-                    {/* Success Message */}
-                    { this.state.successmessage ? 
-                        <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
-                            <span className="mt-3">{this.state.successmessage}</span>
-                            <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                        :   <span></span>
-                    }
                     <div className="row form ">
                     <div className="col-md-6 mx-auto" >
                     <div className="card bg-light shadow border-0 py-3">
@@ -95,16 +80,6 @@ class Login extends Component {
                         </div>
                         <div className="card-body py-lg-5 text-muted text-center">
                             <form onSubmit={this.handleSubmit} id="loginform">
-                    {/* Error Message */}
-                    { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                        <div className="alert alert-warning" role="alert">
-                            {this.state.errormessage}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                        :   <span></span>
-                    }
                                 <div className="input-group mb-3">
                                     <span className="input-group-text bg-white alt" id="loginid">
                                         <i className="fas fa-envelope fa-fw"></i>

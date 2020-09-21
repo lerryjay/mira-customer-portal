@@ -19,7 +19,6 @@ class CreateClient extends Component {
             loading: false, 
             successmessage: '',
         };
-        console.log(this.state);
     }
     
     handleInputChange = e => {
@@ -33,14 +32,12 @@ class CreateClient extends Component {
         const { email} = this.state
 
         if(!Validators.validateEmail(email).status){
-            console.log('Failed email validation');
             const err = Validators.validateEmail(email).message
             this.setState({loading : true});
-            setTimeout(() => {
-                this.setState({loading : false});
-                this.setState({errormessage: err});
-                setTimeout(()=> this.setState({errormessage: ''}),5000);
-            }, 3000);
+            if(err){
+                this.setState({ loading: false });
+                this.state.showAlert("danger", err)
+            }
         }else{
                 this.setState({ loading: false })
 
@@ -60,27 +57,15 @@ class CreateClient extends Component {
                 body:formdata
             }).then(response => response.json())
                 .then(result => {
+                    this.setState({loading : false});
                     if(result.status === false) {
-                        setTimeout(() => {
-                            this.setState({loading : false});
-                            this.setState({errormessage: result.message});
-                            setTimeout(() =>{
-                                this.setState({errormessage: false});
-                            }, 2000);
-                        }, 3000);
+                        this.state.showAlert("danger",  result.message)
                     }
                     else{
-                        setTimeout(() => {
-                            this.setState({loading : false});
-                            this.setState({successmessage: result.message})
-                            console.log('submitting')
+                        this.state.showAlert("success", result.message)
                             this.setState({ 
                                 email: '', telephone: '', firstname: '', lastname: ''
                              })
-                            setTimeout(() =>{
-                                this.setState({successmessage: false});
-                            }, 2000);
-                        }, 3000);
                     }
                 })
 
@@ -135,7 +120,7 @@ class CreateClient extends Component {
                                             <label htmlFor="" className="sr-only">Lastname</label>
                                             <input type="text" className="form-control form-control-sm" name="lastname"
                                                 id="lastname" placeholder="Lastname"
-                                                value={this.state.lastname} required
+                                                value={this.state.lastname} 
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
@@ -145,7 +130,7 @@ class CreateClient extends Component {
                                             <label htmlFor="" className="sr-only">Firstname</label>
                                             <input type="text" className="form-control form-control-sm" name="firstname"
                                                 id="firstname" placeholder="Firstname"
-                                                value={this.state.firstname} required
+                                                value={this.state.firstname} 
                                                 onChange={this.handleInputChange} />
                                         </div>
                                     </div>
@@ -155,7 +140,7 @@ class CreateClient extends Component {
                                             <label htmlFor="" className="sr-only">Email</label>
                                             <input type="text" className="form-control form-control-sm" name="email"
                                                 id="email" placeholder="Email" 
-                                                value={this.state.email} required
+                                                value={this.state.email} 
                                                 onChange={this.handleInputChange}/>
                                         </div>
                                     </div>
@@ -164,7 +149,7 @@ class CreateClient extends Component {
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Telephone</label>
                                             <input type="text" className="form-control form-control-sm" name="telephone"
-                                                id="telephone" placeholder="Phone no." required
+                                                id="telephone" placeholder="Phone no." 
                                                 value={this.state.telephone}
                                                 onChange={this.handleInputChange} />
                                         </div>

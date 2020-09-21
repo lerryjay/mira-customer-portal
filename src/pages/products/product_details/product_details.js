@@ -105,12 +105,16 @@ class product_details extends Component {
     const res = await fetch(`${HTTPURL}product/deletemodule?moduleid=${this.state.selectedModule.id}&userid=${this.state.user.userid}`, {
       method: 'GET',
       headers: headers
-    })
+    }).then((response) => response.json())
     this.setState({ loading: false });
     if (res.status) {
+      this.getModules();
       this.state.showAlert('success', "Deleted Successfully!");
       let modal = document.getElementById("deleteModal");
       modal.style.display = "none";
+    }
+    else{
+      this.state.showAlert('danger', res.message);
     }
   }
 
@@ -165,10 +169,6 @@ class product_details extends Component {
   saveModule = async (e) => {
     e.preventDefault();
     this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false });
-      setTimeout(() => {
-        this.setState({ successmessage: false });
 
         const headers = new Headers();
         headers.append("API-KEY", APIKEY);
@@ -179,18 +179,25 @@ class product_details extends Component {
         form.append("name", this.state.pkgname);
         form.append("description", this.state.pkgdescription);
 
-        fetch(HTTPURL + "product/addmodule", {
+         fetch(HTTPURL + "product/addmodule", {
           method: "POST",
           body: form,
           headers: headers,
         }).then((response) => response.json())
-          .then((res) => { if (res['status']) this.getModules(); });
-        this.setState({ successmessage: "Added Successfully!" });
-        let modal = document.getElementById("myModal");
-        modal.style.display = "none";
-        this.setState({ pkgname: "", pkgdescription: "" });
-      }, 2000);
-    }, 3000);
+          .then((res) => { 
+            if (res['status']) {
+              this.setState({ loading: false }); 
+              this.getModules();
+              this.state.showAlert("success",  res['message'])
+              let modal = document.getElementById("myModal");
+              modal.style.display = "none";
+              this.setState({ pkgname: "", pkgdescription: "" });
+            }
+            else{
+              this.setState({ loading: false }); 
+              this.state.showAlert("danger",  res['message'])
+            }
+      });
   };
 
   handleUpdate = async (e) => {
@@ -214,9 +221,12 @@ class product_details extends Component {
     this.setState({ loading: false });
     if (res.status) {
       this.getModules();
-      this.state.showAlert('success', 'Update Successful');
+      this.state.showAlert('success', res.message);
       let modal = document.getElementById("updateModal");
       modal.style.display = "none";
+    }
+    else{
+      this.state.showAlert('danger', res.message);
     }
     this.setState({ updateData: true });
     return res;

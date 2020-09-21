@@ -40,6 +40,7 @@ class create_ticket extends Component {
         headers.append('API-KEY', APIKEY);
         let form = new FormData(document.getElementById("createticket"));
         form.append("userid", this.state.user.userid);
+
         this.state.files.length < 1 && form.delete('files[]');
         if (this.state.user.role == 'admin') {
             if (form.get('customerid').length < 1) this.state.showAlert('danger','Please select a client to creaate a ticket');
@@ -49,33 +50,30 @@ class create_ticket extends Component {
                 if (user) form.set('customerid', user.userid);
             }
         }
-
-
-
-        const res = await fetch(HTTPURL + 'ticket/add', {
+        
+        fetch(HTTPURL + 'ticket/add', {
             method: 'POST',
             body: form,
             headers: headers
+        }).then(response => response.json())
+        .then(result => { 
+                this.setState({ loading: false });
+                if(result.status === true) {
+                    this.state.showAlert("success", result.message)
+                    this.setState({ imagePreviewUrl: '', title: '', type: '', message: '', customerid: '', file: []})
+                } else{
+                    this.state.showAlert("danger",  result.message)
+                }
         })
-            .then(response => response.json());
-        if (res['status']) {
-            this.setState({ loading: false });
-            document.getElementById("createticket").reset()
-            this.setState({ successmessage: 'Ticket Created Successfully', loading: false, imagePreviewUrl: '', title: '', type: '', message: '', customerid: '', file: ''})
-            setTimeout(() => this.setState({ successmessage: false }), 5000);
-        }
     }
 
     removeImage = (e) => {
         e.preventDefault();
-        console.log(e, "Image removed")
         this.setState({imagePreviewUrl: '', imageurl: '', files: []})
     }
 
     removeOtherImage(e) {
-        console.log(e, "Image removed")
         this.setState({ file: '', imageError: false, imagePreviewUrl: ''  })
-        setTimeout(() => this.setState({ imageError: '' }), 5000);
     }
 
     handleImageChange(e) {
@@ -126,16 +124,6 @@ class create_ticket extends Component {
         })
         return (
             <div className="container text-white mt-4">
-                {/* Success Message */}
-                { this.state.successmessage ?
-                    <div className="alert alert-success" role="alert" style={{ position: 'fixed', top: '70px', right: '10px', zIndex: '4' }}>
-                        <span className="mt-3">{this.state.successmessage}</span>
-                        <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    : <span></span>
-                }
                 <div className="row justify-content-center">
                     <div className="col-md-10 " id="profile">
                         <form onSubmit={this.handleSubmit} id="createticket" encType="multipart/form-data">
@@ -144,20 +132,6 @@ class create_ticket extends Component {
                                     CREATE TICKET
                             </div>
                                 <div className="card-body">
-                                    <div className="row">
-                                        <div className="col-md-12">
-                                            {/* Error Message */}
-                                            {this.state.errormessage != null && this.state.errormessage.length > 0 ?
-                                                <div className="alert alert-warning" role="alert">{this.state.errormessage}
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                :
-                                                <span></span>
-                                            }
-                                        </div>
-                                    </div>
                                     <div className="row">
 
 
@@ -191,7 +165,7 @@ class create_ticket extends Component {
                                             <div className="form-group">
                                                 <input type="text" className="form-control form-control-sm" name="title"
                                                     id="title" placeholder="Title"
-                                                    value={this.state.title} required
+                                                    value={this.state.title} 
                                                     onChange={this.handleInputChange} />
                                             </div>
                                         </div>
@@ -200,7 +174,7 @@ class create_ticket extends Component {
                                         <div className="col-md-12 mb-3">
                                             <div className="form-group">
                                                 <textarea id="message" name="message" rows="5" cols="50" className="form-control text-left"
-                                                    value={this.state.message} required placeholder="Message"
+                                                    value={this.state.message}  placeholder="Message"
                                                     onChange={this.handleInputChange} />
                                             </div>
                                         </div>

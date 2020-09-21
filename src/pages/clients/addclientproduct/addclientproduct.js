@@ -47,12 +47,10 @@ class AddClientProduct extends Component {
       .then((response) => response.json())
       .then((result) => {
         if (result.status == true) {
-          console.log(result.data);
           this.setState({ modules: result.data });
         }
       });
 
-    console.log(this.state.modules);
   }
   handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -63,7 +61,6 @@ class AddClientProduct extends Component {
     e.preventDefault();
     this.setState({ loading: true });
     const mod = this.state.selectedModules.toString();
-    console.log('modules shey dami can see',mod);
     // this.state.selectedModules.forEach((module) => {
     //   mod += module + ",";
     // });
@@ -95,33 +92,31 @@ class AddClientProduct extends Component {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.status == true) {
-          setTimeout(() => {
-            this.setState({ loading: false });
-
-            document.getElementById("addclientproduct").reset()
-            this.setState({ successmessage: data.message });
-            
-            console.log("submitting");
-            this.setState({
-              type: "",
-              selectedModules: [],
-              cost: "",
-              modules: [],
-            });
-            setTimeout(() => {
-              this.setState({ successmessage: false });
-            }, 5000);
-          }, 3000);
-        } else {
-          setTimeout(() => {
-            this.setState({ loading: false });
-            this.setState({ errormessage: data.message });
-            setTimeout(() => {
-              this.setState({ errormessage: false });
-            }, 5000);
-          }, 3000);
-        }
+          this.setState({ loading: false });
+          if(data.status === true) {
+              document.getElementById("addclientproduct").reset()
+              this.state.showAlert("success", data.message)
+              this.setState({
+                type: "",
+                liscenseduration: '',
+                paymentstatus: '',
+                deploymentstatus: '',
+                trainingstatus: '',
+                selectedModules: [],
+                cost: "",
+                paymentdate: '',
+                modules: [],
+                files: [],
+                deploymentdate: '',
+                trainingdate: '',
+                paymentdate: '',
+                remarks: '',
+                expirationstatus: '',
+                expirationdate: ''
+              });
+          } else{
+              this.state.showAlert("danger",  data.message)
+          }
       });
   };
 
@@ -167,14 +162,11 @@ class AddClientProduct extends Component {
     e.currentTarget.placeholder = "Payment Date";
   }
   removeImage(e) {
-    console.log(e, "Image removed");
     this.setState({ imagePreviewUrl: "" });
   }
 
   removeOtherImage(e) {
-    console.log(e, "Image removed");
     this.setState({ file: "", imageError: false });
-    setTimeout(() => this.setState({ imageError: "" }), 5000);
   }
 
   handleImageChange(e) {
@@ -195,7 +187,6 @@ class AddClientProduct extends Component {
          date = new Date()
         let expiration = `${date.getUTCMonth() + 1}/${date.getUTCDay()}/${date.getUTCFullYear() + 1 }`
         this.setState({ expirationdate : expiration });
-        console.log(this.state.expirationdate)
       } 
   }
 
@@ -220,51 +211,9 @@ class AddClientProduct extends Component {
     });
     return (
       <div className="container mx-auto row">
-        {/* Success Message */}
-        {this.state.successmessage ? (
-          <div
-            className="alert alert-success"
-            role="alert"
-            style={{
-              position: "fixed",
-              top: "70px",
-              right: "10px",
-              zIndex: "4",
-            }}
-          >
-            <span className="mt-3">{this.state.successmessage}</span>
-            <button
-              type="button"
-              className="close ml-4"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-        ) : (
-          <span></span>
-        )}
+        
 
         <div className="col-md-12 mb-3 mt-4" id="profile">
-          {/* Error Message */}
-          {this.state.errormessage != null &&
-          this.state.errormessage.length > 0 ? (
-            <div className="alert alert-warning" role="alert">
-              {this.state.errormessage}
-              <button
-                type="button"
-                className="close"
-                data-dismiss="alert"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-          ) : (
-            <span></span>
-          )}
-
 
           <form onSubmit={this.handleSubmit} id="addclientproduct">
             <div className="card">

@@ -22,7 +22,6 @@ class UpdateAdmin extends Component {
             selectedPermissions: [...this.props.user.permissions],
             successmessage: ''
         }
-        console.log(this.props.user.lastname)
     }
     
     componentDidMount()
@@ -39,7 +38,6 @@ class UpdateAdmin extends Component {
           headers: headers
       })
       .then(response => response.json());
-      console.log(res['data'])
       if(res['status']){
           this.setState({ users : res['data']});
 
@@ -47,7 +45,6 @@ class UpdateAdmin extends Component {
         const selectedUser = this.state.users.find(
             (item) => item.adminid === adminid
         );
-        console.log(selectedUser)
         await this.setState({ 
             firstname: selectedUser.firstname,
             lastname: selectedUser.lastname,
@@ -93,17 +90,12 @@ class UpdateAdmin extends Component {
         })
             .then(response => response.json())
             .then(res => {
-                setTimeout(() => {
                     this.setState({ loading: false });
                     if(res.status === true) {
                         this.state.showAlert("success", res.message)
                     } else{
                         this.state.showAlert("danger",  res.message)
                     }
-                    setTimeout(() => {
-                        this.setState({ alertActive : false});
-                    }, 3000)
-                }, 2000)
             });
 
 
@@ -200,13 +192,6 @@ class UpdateAdmin extends Component {
             } 
         return (
             <div className="container mx-auto">
-            {/* Success Message */}
-            { this.state.successmessage ? 
-                <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
-                    <span className="mt-3">{this.state.successmessage}</span>
-                </div>
-                :   <span></span>
-            }
                 <div className="row mt-4">
 
                     <div className="col-md-8 box1 mb-3" id="profile">

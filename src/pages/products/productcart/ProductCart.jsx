@@ -31,23 +31,19 @@ class ProductCart extends Component {
         this.setState({ products: [] });
       } else {
         this.setState({ products: res.data });
-        console.log(res.data, "products");
       }
     });
   }
 
   componentDidMount() {
+    this.state.showLoader();
+     this.getProduct();
+    this.setState({ loading: false });
+    this.state.hideLoader();
+ }
+ 
+  componentDidMount() {
     this.getProduct();
-  }
-
-  getLoader() {
-    setTimeout(() => {
-      this.setState({ loader: true });
-      setTimeout(() => {
-        this.setState({ loader: false });
-        this.getProduct();
-      }, 3000);
-    });
   }
 
   render() {

@@ -16,7 +16,6 @@ class Profile extends Component {
             country: '',
             state:'',
         }
-        console.log(this.props.user.lastname)
     }
 
     componentDidMount() {
@@ -63,17 +62,12 @@ class Profile extends Component {
         })
             .then(response => response.json())
             .then(res => {
-                setTimeout(() => {
                     this.setState({ loading: false });
                     if(res.status === true) {
                         this.state.showAlert("success", res.message)
                     } else{
                         this.state.showAlert("danger",  res.message)
                     }
-                    setTimeout(() => {
-                        this.setState({ alertActive : false});
-                    }, 3000)
-                }, 2000)
             });
     }
     handleImageChange(e) {

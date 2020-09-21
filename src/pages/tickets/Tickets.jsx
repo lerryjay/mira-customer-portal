@@ -29,7 +29,6 @@ class Tickets extends Component {
       let client = this.state.users.find(item=>item.firstname+' '+item.lastname == value);
       if(client == null)client =  this.state.clients.find(item=>item.businessname == value);
         if (client) this.state.userid = (client.userid || client.user_id)
-        console.log(client, value, this.state.userid)
     } 
     this.setState({ [name]: value});
 }
@@ -84,7 +83,6 @@ async getClients() {
 
   ticketStatusUpdated(e, ticket) {
     const tickets = this.state.tickets.map((item) => {
-      console.log(e.target.value);
       if (item.id == ticket.id) {
         item.ticketstatus = e.target.value;
         this.updateTicketStatus(ticket.id, e.target.value);
@@ -158,7 +156,6 @@ async getClients() {
       const pageNumbers = [];
       for (let i = 1; i <= Math.ceil(tickets.length / numberPerPage); i++) {
         pageNumbers.push(i);
-        console.log(pageNumbers)
         this.state.pageNumbers = pageNumbers
       }
 
@@ -166,7 +163,6 @@ async getClients() {
     const indexOfLastTicket = currentPage * numberPerPage;
     const indexOfFirstTicket = indexOfLastTicket - numberPerPage;
     const currentTickets = tickets.slice(indexOfFirstTicket, indexOfLastTicket);
-    console.log(currentTickets)
     this.state.currentTickets = currentTickets
 
     return (

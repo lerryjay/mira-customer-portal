@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { withContext } from '../../../common/context';
-import { HTTPURL } from '../../../common/global_constant';
+import { APIKEY, HTTPURL } from '../../../common/global_constant';
 import avatar from '../../../assets/images/avatar.png'
 
 class ClientProfile extends Component {
@@ -15,9 +15,7 @@ class ClientProfile extends Component {
     componentDidMount() {
 
         let product = []
-        console.log('changed successfully!', product)
         for (let i = 0; i < this.state.products.length; i++) {
-            console.log(this.state.products[i])
             product.push(this.state.products[i])
             this.setState({ product: product });
         }
@@ -44,7 +42,7 @@ class ClientProfile extends Component {
         e.preventDefault()
 
         const headers = new Headers();
-        headers.append('API-KEY', '97899c-7d0420-1273f0-901d29-84e2f8');
+        headers.append('API-KEY', APIKEY);
         let form = new FormData(document.getElementById("profileform"));
 
 
@@ -55,11 +53,8 @@ class ClientProfile extends Component {
         })
             .then(response => response.json())
             .then(json => {
-                console.log(json);
                 return json;
             });
-
-        console.log('Profile Updated!')
     }
 
     render() {

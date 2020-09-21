@@ -33,7 +33,6 @@ class EditClient extends Component {
             successmessage: '',
             imageError: false,
         };
-        console.log(this.state);
     }
 
     async componentDidMount(){
@@ -67,7 +66,6 @@ class EditClient extends Component {
         }).then(response => response.json())
         .then(data => {
             this.setState({states: data.data})
-            console.log(this.state.states)
         })
     }
 
@@ -112,19 +110,27 @@ class EditClient extends Component {
 
     handleSubmit = async e => {
         e.preventDefault()
+        this.setState({ loading: true });
 
-        const { email } = this.state
+        const { email, companyemail} = this.state
 
         if (!Validators.validateEmail(email).status) {
             const err = Validators.validateEmail(email).message
             this.setState({ loading: true });
-            setTimeout(() => {
+            if(err){
                 this.setState({ loading: false });
-                this.setState({ errormessage: err });
-                setTimeout(() => this.setState({ errormessage: '' }), 5000);
-            }, 3000);
-        } else {
+                this.state.showAlert("danger", err)
+            }
+        }
+        else if (!Validators.validateEmail(companyemail).status) {
+            const err = Validators.validateEmail(companyemail).message
             this.setState({ loading: true });
+            if(err){
+                this.setState({ loading: false });
+                this.state.showAlert("danger", err)
+            }
+        } 
+         else {
             
         const clientid = this.props.location.pathname.split('/')[2];
 
@@ -152,25 +158,13 @@ class EditClient extends Component {
                 headers: myHeaders,
                 body: formdata
             }).then(response => response.json()).
-                then(result => {
-                    if (result.status === false) {
-                        setTimeout(() => {
-                            this.setState({ loading: false });
-                            this.setState({ errormessage: result.message });
-                            setTimeout(() => {
-                                this.setState({ errormessage: false });
-                            }, 5000);
-                        }, 3000);
-                    }
-                    else {
-                        setTimeout(() => {
-                            this.setState({ loading: false });
-                            this.setState({ successmessage: result.message })
-                            setTimeout(() => {
-                                this.setState({ successmessage: false });
-                            }, 5000);
-                        }, 3000);
-                    }
+                then(data => {
+                        this.setState({ loading: false });
+                        if(data.status === true) {
+                            this.state.showAlert("success", data.message)
+                        } else{
+                            this.state.showAlert("danger",  data.message)
+                        }
                 })
 
 
@@ -184,39 +178,6 @@ class EditClient extends Component {
             <div className="container mx-auto row mt-4">
 
                 <div className="col-md-12">
-                    {/* Success Message */}
-                    {this.state.successmessage ?
-                        <div className="alert alert-success" role="alert" style={{ position: 'fixed', top: '70px', right: '10px', zIndex: '4' }}>
-                            <span className="mt-3">{this.state.successmessage}</span>
-                            <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        : <span></span>
-                    }
-
-                    <div className="mb-3 mt-4" id="profile">
-                        {/* Error Message */}
-                        {this.state.errormessage != null && this.state.errormessage.length > 0 ?
-                            <div className="alert alert-warning" role="alert">
-                                {this.state.errormessage}
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            : <span></span>
-                        }
-
-                        {/* Image Error */}
-                        {this.state.imageError !== false ?
-                            <div className="alert alert-warning" role="alert">
-                                <span className="mt-3">{this.state.imageError}</span>
-                                <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            : <span></span>
-                        }
 
                         <form onSubmit={this.handleSubmit} id="createclient">
 
@@ -235,7 +196,7 @@ class EditClient extends Component {
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Business Name</label>
                                                 <input type="text" className="form-control form-control-sm" name="businessname"
-                                                    id="businesname" placeholder="Business Name" required
+                                                    id="businesname" placeholder="Business Name" 
                                                     value={this.state.businessname}
                                                     onChange={this.handleInputChange} />
                                             </div>
@@ -245,7 +206,7 @@ class EditClient extends Component {
                                                 <label htmlFor="" className="sr-only">companyEmail</label>
                                                 <input type="text" className="form-control form-control-sm" name="companyemail"
                                                     id="companyemail" placeholder="Company Email"
-                                                    value={this.state.companyemail} required
+                                                    value={this.state.companyemail} 
                                                     onChange={this.handleInputChange} />
                                             </div>
                                         </div>
@@ -253,7 +214,7 @@ class EditClient extends Component {
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Company Telephone</label>
                                                 <input type="text" className="form-control form-control-sm" name="companytelephone"
-                                                    id="companytelephone" placeholder="Company Telephone" required
+                                                    id="companytelephone" placeholder="Company Telephone" 
                                                     value={this.state.companytelephone}
                                                     onChange={this.handleInputChange} />
                                             </div>
@@ -267,7 +228,7 @@ class EditClient extends Component {
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Company Address</label>
                                                 <input type="text" className="form-control form-control-sm" name="companyaddress"
-                                                    id="companyaddress" placeholder="Company Address" required
+                                                    id="companyaddress" placeholder="Company Address" 
                                                     value={this.state.companyaddress}
                                                     onChange={this.handleInputChange} />
                                             </div>
@@ -322,7 +283,7 @@ class EditClient extends Component {
                                                 <label htmlFor="" className="sr-only">Local&nbsp;Government&nbsp;Area</label>
                                                 <input type="text" className="form-control form-control-sm" name="companylga"
                                                     id="companylga" placeholder="Local Government Area"
-                                                    value={this.state.companylga} required 
+                                                    value={this.state.companylga}  
                                                     style={{ height: '35px' }}
                                                     onChange={this.handleInputChange} />
                                             </div>
@@ -335,7 +296,7 @@ class EditClient extends Component {
                                                 <label htmlFor="" className="sr-only">First&nbsp;Name</label>
                                                 <input type="text" className="form-control form-control-sm" name="firstname"
                                                     id="firstname" placeholder="Firstname"
-                                                    value={this.state.firstname} required
+                                                    value={this.state.firstname} 
                                                     onChange={this.handleInputChange} />
                                             </div>
                                         </div>
@@ -344,7 +305,7 @@ class EditClient extends Component {
                                                 <label htmlFor="" className="sr-only">Last&nbsp;Name</label>
                                                 <input type="text" className="form-control form-control-sm" name="lastname"
                                                     id="lastname" placeholder="Lastname"
-                                                    value={this.state.lastname} required
+                                                    value={this.state.lastname} 
                                                     onChange={this.handleInputChange} />
                                             </div>
                                         </div>
@@ -354,7 +315,7 @@ class EditClient extends Component {
                                                 <label htmlFor="" className="sr-only">Other&nbsp;Name</label>
                                                 <input type="text" className="form-control form-control-sm" name="othername"
                                                     id="othername" placeholder="Othername"
-                                                    value={this.state.othername} required
+                                                    value={this.state.othername} 
                                                     onChange={this.handleInputChange} />
                                             </div>
                                         </div>
@@ -364,7 +325,7 @@ class EditClient extends Component {
                                                 <label htmlFor="" className="sr-only">Email</label>
                                                 <input type="text" className="form-control form-control-sm" name="email"
                                                     id="email" placeholder="Enter Email"
-                                                    value={this.state.email} required
+                                                    value={this.state.email} 
                                                     onChange={this.handleInputChange} />
                                             </div>
                                         </div>
@@ -372,7 +333,7 @@ class EditClient extends Component {
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Telephone</label>
                                                 <input type="text" className="form-control form-control-sm" name="telephone"
-                                                    id="telephone" placeholder="Phone no." required
+                                                    id="telephone" placeholder="Phone no." 
                                                     value={this.state.telephone}
                                                     onChange={this.handleInputChange} />
                                             </div>
@@ -402,7 +363,6 @@ class EditClient extends Component {
                     </div>
 
                 </div>
-            </div>
 
         )
     }

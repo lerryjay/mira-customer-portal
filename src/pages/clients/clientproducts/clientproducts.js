@@ -18,20 +18,14 @@ class clientviewproduct extends Component {
     }
 
     
-    componentDidMount() {
-        this.getLoader();
-    }
-
-    getLoader() {
-        setTimeout(() => {
-          this.setState({ loader: true });
-          setTimeout(() => {
-            this.setState({ loader: false });
-            this.getProduct();
-          }, 1000);
-        });
-      }
-      
+   
+   componentDidMount() {
+    this.state.showLoader();
+     this.getProduct();
+    this.setState({ loading: false });
+    this.state.hideLoader();
+ }
+ 
     getProduct() {
         const headers = new Headers();
         headers.append('API-KEY', APIKEY);
@@ -42,7 +36,6 @@ class clientviewproduct extends Component {
             .then(response => response.json())
             .then(data => {
                 this.setState({ products: data.data })
-                console.log(this.state.products)
             });
     }
 

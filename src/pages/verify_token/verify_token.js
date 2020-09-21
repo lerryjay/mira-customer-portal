@@ -13,7 +13,6 @@ class VerifyToken extends Component {
             token : '', 
             loading: false, 
             errormessage: 'A token has been sent to your email. Please enter token to continue',
-            successmessage: ''
         };
     }
 
@@ -27,16 +26,6 @@ class VerifyToken extends Component {
         return(
             <div>
                 <div className="container">
-                    {/* Success Message */}
-                    { this.state.successmessage ? 
-                        <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
-                            <span className="mt-3">{this.state.successmessage}</span>
-                            <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                        :   <span></span>
-                    }
                 <div className="row form">
                 <div className=" col-lg-5 col-md-8 col-sm-10 col-xs-12 mx-auto">
 
@@ -48,11 +37,8 @@ class VerifyToken extends Component {
         <form onSubmit={this.handleSubmit} id="forgotpassword">
 {/* Error Message */}
 { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-    <div className="alert alert-warning" role="alert">
+    <div className="alert alert-success" role="alert">
         {this.state.errormessage}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
     </div>
     :   <span></span>
 }

@@ -12,7 +12,6 @@ export const PrivateRoute = withContext(Private);
 
 // ADMIN ONLY ACCESS ROUTE
 const  Admin = (props) => {
-  console.log(props);
  return( props.loggedIn  ? 
     props.user.role === 'admin' && ( props.permission === '*' || props.permission == null || props.permission.length < 1) ?  
     <Route {...props}/>  : 

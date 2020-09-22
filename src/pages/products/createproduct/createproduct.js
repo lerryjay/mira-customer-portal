@@ -101,9 +101,10 @@ class CreateProduct extends Component {
             } 
         return (
 
-            <div className="container mx-auto row">
-            <form onSubmit={this.handleSubmit} id="createproduct"> 
+            <div className="container mx-auto ">
+                <div className="row">
                 <div className="col-md-8 mb-3 mt-4 box1" id="profile">
+            <form onSubmit={this.handleSubmit} id="createproduct"> 
                     
                             <div className="card">
                                 <div className="card-header bg-medium font-weight-bold text-dark">
@@ -192,6 +193,7 @@ class CreateProduct extends Component {
                                 </div>
                             </div>
                         </div>
+                    </form>
                 </div>
             
                 <div className="col-md-4 text-center mt-4 box2" id='img-avatar'>
@@ -217,7 +219,8 @@ class CreateProduct extends Component {
                                 
                         </div>
                 </div>
-                    </form>
+            
+                    </div>
             </div>
 
         )

@@ -111,12 +111,12 @@ class create_ticket extends Component {
             // this.setState({imagePreviewUrl: URL.createObjectURL(file) })
             return (
                 file.name.match(/\.(jpg|jpeg|png)$/)
-                    ? < div className="imgPreview imgPreview2 m-2" id="files">
+                    ? < div className="imgPreview  m-2" id="files">
                         <i className="fa fa-trash" onClick={(e) => this.removeImage(e,file,index)}></i>
-                        <img src={this.state.imagePreviewUrl} className="imagePreview" />
+                        <img src={this.state.imagePreviewUrl} className="imagePreview " />
                     </div>
                     :
-                    <div className="other_files other_files2  m-2" id="otherfiles" >
+                    <div className="other_files   m-2" id="otherfiles" >
                         <i className="fa fa-trash" onClick={(e) => this.removeOtherImage(e)}></i>
                         {file.name}
                     </div>
@@ -178,7 +178,7 @@ class create_ticket extends Component {
                                                     onChange={this.handleInputChange} />
                                             </div>
                                         </div>
-                                        <div className="row justify-content-center" id="preview">
+                                        <div className="row justify-content-center position-relative" id="preview">
                                             {files}
                                         </div>
                                     </div>

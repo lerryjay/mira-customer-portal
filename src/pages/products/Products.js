@@ -102,7 +102,7 @@ class Products extends Component {
                                             <h5 className="card-title">{product.name}</h5>
                                             {/* <Link  to={{ pathname:"", search}} onClick={this.handleViewMore}> */}
                                             <Link to={() => `/productdetails/${product.id}`}>
-                                                <span className="badge px-3 py-2 badge-primary" value={product.id} style={{ cursor: "pointer", fontSize: 'medium' }}>View</span>
+                                                <span className="btn px-3 py-2 btn-primary" value={product.id} style={{ cursor: "pointer", fontSize: 'medium' }}>View</span>
                                             </Link>
                                         </div>
                                         <Link to={() => `/updateproduct/${product.id}`}>

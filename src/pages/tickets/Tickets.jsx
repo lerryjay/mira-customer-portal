@@ -249,7 +249,7 @@ async getClients() {
                               >
                                 <Link to={() => `/viewticket/${ticket.id}`}>
                                   <span
-                                    className="badge px-3 py-2 badge-primary"
+                                    className="btn btn-sm btn-primary"
                                     value={ticket.id}
                                     style={{ cursor: "pointer" }}
                                   >

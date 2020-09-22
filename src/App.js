@@ -275,9 +275,9 @@ class App extends Component {
                       <PrivateRoute path="/changepassword" component={ChangePassword} />
                       <PrivateRoute path="/createticket" permission="CREATETICKET" component={CreateTicket} />
                       <PrivateRoute path="/productdetails" permission="LISTPRODUCT" component={ProductDetails} />
+                      <PrivateRoute path="/viewticket" permission="VIEWTICKET" component={ViewTicket} />
                       
 
-                      <UserPrivateRoute path="/viewticket" permission="VIEWTICKET" component={ViewTicket} />
                       <UserPrivateRoute path="/clientprofile" component={ClientProfile} />
                       <UserPrivateRoute path="/clientproductdetails" component={ProductCart} />
                       <UserPrivateRoute path="/productcart" component={ViewProductCart} />

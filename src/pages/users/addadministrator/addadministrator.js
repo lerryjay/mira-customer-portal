@@ -29,6 +29,8 @@ class CreateClient extends Component {
     handleSubmit = async e => {
         e.preventDefault()
 
+        this.setState({loading : true});
+
         const { email} = this.state
 
         if(!Validators.validateEmail(email).status){
@@ -49,7 +51,7 @@ class CreateClient extends Component {
             formdata.append("firstname", this.state.firstname);
             formdata.append("lastname", this.state.lastname);
             formdata.append("telephone", this.state.telephone);
-            formdata.append("userid",sessionStorage.getItem('userId') );
+            formdata.append("userid", this.state.user.userid);
             
             fetch(`${HTTPURL}admin/add`, {
                 method: "POST",
@@ -69,7 +71,6 @@ class CreateClient extends Component {
                     }
                 })
 
-           
         }
     }
 

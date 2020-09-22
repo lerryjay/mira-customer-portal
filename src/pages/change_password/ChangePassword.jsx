@@ -61,7 +61,11 @@ class ChangePassword extends Component {
             const headers = new Headers();
             headers.append('API-KEY',APIKEY);
             let form = new FormData(data);
+<<<<<<< HEAD
             form.append('userid',this.state.user.userid);
+=======
+            form.append("userid", this.state.user.userid);
+>>>>>>> db3bd006fa67bc688068ae590b8e06c2348823ad
             const res = await fetch(HTTPURL + 'user/updatepassword', {
                 method: 'POST',
                 body: form,
@@ -70,10 +74,12 @@ class ChangePassword extends Component {
             .then(response => response.json())
             this.setState({loading : false});
             if(res.status){
-                this.state.showAlert('success','Password Changed Successfully!');
+                this.setState({loading : false});
+                this.state.showAlert('success',res.message);
                 this.setState({oldpassword: '', newpassword: '', confirmnewpwd: ''})
             }else {
-                this.state.showAlert('success','Password Uodate failed!');
+                this.setState({loading : false});
+                this.state.showAlert('danger',res.message);
             }
         }
     }
@@ -81,16 +87,6 @@ class ChangePassword extends Component {
     render() {
         return (
             <div className="container">
-            {/* Success Message */}
-            { this.state.successmessage ? 
-                <div className="alert alert-success" role="alert" style={{position:'fixed', top: '70px' , right: '10px', zIndex:'4'}}>
-                    <span className="mt-3">{this.state.successmessage}</span>
-                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                :   <span></span>
-            }
                 <div className="row col-lg-6 col-md-8 col-sm-10 col-xs-12 mx-auto cent">
 
                     <div className="card bg-light shadow border-0 py-3">
@@ -99,17 +95,6 @@ class ChangePassword extends Component {
                         </div>
                         <div className="card-body py-lg-5 text-muted text-center">
                             <form onSubmit={this.handleSubmit} id="changepassword">
-                            {/* Error Message */}
-                            { this.state.errormessage != null && this.state.errormessage.length > 0 ? 
-                                <div className="alert alert-warning" role="alert">
-                                    <span className="mt-3">{this.state.errormessage}</span>
-                                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                </div>
-                                :   <span></span>
-                            }
-
                                 <div className="input-group mb-3">
                                     <span className="input-group-text bg-white alt" id="email">
                                         <i className="fas fa-lock-open fa-fw"></i>
@@ -118,7 +103,7 @@ class ChangePassword extends Component {
                                     <input type="password" className="form-control form-control-sm alt" id="oldpassword"
                                         name="oldpassword" placeholder="Current Password" aria-label="Current password"
                                         aria-describedby="Current password" autoComplete="off" 
-                                        value={this.state.oldpassword} required
+                                        value={this.state.oldpassword} 
                                         onChange={this.handleInputChange}/>
                                 </div>
                                 <div className="input-group mb-3">
@@ -128,7 +113,7 @@ class ChangePassword extends Component {
                                     <label className='sr-only' htmlFor="newpassword">New&nbsp;Password</label>
                                     <input type="password" className="form-control form-control-sm alt" id="newpassword" name="newpassword"
                                         placeholder="New Password" aria-label="Confirm New password"
-                                        aria-describedby="Confirm New password" autoComplete="off" required
+                                        aria-describedby="Confirm New password" autoComplete="off" 
                                         value={this.state.newpassword}
                                         onChange={this.handleInputChange} />
                                 </div>
@@ -140,7 +125,7 @@ class ChangePassword extends Component {
                                     <input type="password" className="form-control form-control-sm alt" id="confirmnewpwd"
                                         name="confirmnewpwd" placeholder="Confirm New password"
                                         aria-label="Confirm New password" aria-describedby="Confirm New password"
-                                        autoComplete="off" required
+                                        autoComplete="off" 
                                         value={this.state.confirmnewpwd}
                                         onChange={this.handleInputChange} />
                                 </div>

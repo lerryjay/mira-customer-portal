@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withContext } from '../../common/context';
-import { HTTPURL, APIKEY } from '../../common/global_constant';
+import { HTTPURL, APIKEY, FILEURL } from '../../common/global_constant';
 import avatar from '../../assets/images/avatar.png'
 
 
@@ -52,7 +52,8 @@ class Profile extends Component {
         const headers = new Headers();
         headers.append('API-KEY', APIKEY);
         let form = new FormData(document.getElementById("profileform"));
-        form.append("userid", this.state.user.userid);;
+        form.append("userid", this.state.user.userid);
+        form.append('file', this.state.file);
 
 
         fetch(HTTPURL + 'user/updateprofile', {
@@ -112,8 +113,8 @@ class Profile extends Component {
         let {imagePreviewUrl} = this.state;
             let imagePreview = null;
             if (imagePreviewUrl) {
-                this.props.user.imageurl = true
-            imagePreview = (<img src={imagePreviewUrl} className="imagePreview" alt=""/>);
+                this.props.user.imageurl = imagePreviewUrl
+            imagePreview = (<img src={this.props.user.imageurl} className="imagePreview" alt=""/>);
             } 
         return (
             <div className="container mx-auto">
@@ -221,8 +222,9 @@ class Profile extends Component {
 
                             </div>
                             : <div className="card-body">
-                                <div className="image_sidebar" alt="" height="110px" width="110px" style={{ marginTop: '-80px' }} >
-                                    {imagePreview}
+                                <div className="image_sidebar" alt="" style={{ marginTop: '-80px' }} >
+                                <img height="190px" width="100%"  src={this.props.user.imageurl} />
+
                                 </div>
                             </div>
                             }

@@ -102,8 +102,8 @@ class CreateProduct extends Component {
         return (
 
             <div className="container mx-auto row">
+            <form onSubmit={this.handleSubmit} id="createproduct"> 
                 <div className="col-md-8 mb-3 mt-4 box1" id="profile">
-                    <form onSubmit={this.handleSubmit} id="createproduct"> 
                     
                             <div className="card">
                                 <div className="card-header bg-medium font-weight-bold text-dark">
@@ -192,14 +192,13 @@ class CreateProduct extends Component {
                                 </div>
                             </div>
                         </div>
-                    </form>
                 </div>
             
                 <div className="col-md-4 text-center mt-4 box2" id='img-avatar'>
                 <div className="card">
                             {!this.state.imageurl ? 
                             <div className="card-body">
-                                <img src={placeholder} alt=""   height="205px" width="250px" />
+                                <img src={placeholder} alt=""   height="205px" width="100%" />
 
                             </div>
 
@@ -218,6 +217,7 @@ class CreateProduct extends Component {
                                 
                         </div>
                 </div>
+                    </form>
             </div>
 
         )

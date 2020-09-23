@@ -1,8 +1,9 @@
 import React from 'react';
 import avatar from '../../assets/images/avatar.png'
 import { withContext } from '../context';
+import {FILEURL} from "../global_constant";
 const Nav = (props) => {
-    const { user } =  props;
+    const { user, loggedIn } =  props;
 
     const toggle1 = () => {
         // onclick Toggle button add sideBar
@@ -22,17 +23,20 @@ const Nav = (props) => {
               
              
             </div>
-                <div className="ml-auto">
-                    <span className="image_name mb-0 mr-3">{user.lastname } { user.firstname }</span>                
-                    <img src={avatar} className=" avatar-circle" height="30" width="30"/>
+               {loggedIn && <div className="ml-auto">
+                    <span className="image_name mb-0 mr-3">{user.lastname } { user.firstname }</span>      
+                    <img src={user.imageurl ? FILEURL + user.imageurl : avatar} className=" avatar-circle" height="30" width="30"/>
+                    
                 </div>
-
+                }
                 
-            <button className="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#ticketNav"
-                aria-controls="ticketNav" aria-expanded="false" aria-label="Toggle navigation" id="sidebarCollapse" onClick={toggle1}>
-                {/* <span className="navbar-toggler-icon bg-primary"></span> */}
-                <i className="fa fa-align-justify ml-4"></i>
-            </button>
+                {loggedIn && <button className="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#ticketNav"
+                    aria-controls="ticketNav" aria-expanded="false" aria-label="Toggle navigation" id="sidebarCollapse" onClick={toggle1}>
+                    {/* <span className="navbar-toggler-icon bg-primary"></span> */}
+                    <i className="fa fa-align-justify ml-4"></i>
+                </button>
+                }    
+                       
             </div>
 
             

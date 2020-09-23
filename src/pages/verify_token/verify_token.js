@@ -55,12 +55,12 @@ class VerifyToken extends Component {
             </div>
 
             {this.state.loading ? 
-            <button type="submit" className="btn btn-sm bg-btn">
+            <button type="submit" className="btn btn-sm btn-primary">
                 <div className="spinner-border text-secondary" role="status" id="loader">
                     <span className="sr-only">Loading...</span>
                 </div>
             </button>
-            : <button type="submit" className="btn btn-sm bg-btn">
+            : <button type="submit" className="btn btn-sm btn-primary">
                 <i className="fas fa-paper-plane fa-fw"></i>
                 SEND
             </button>

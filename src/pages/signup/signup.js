@@ -118,14 +118,14 @@ class SignUp extends Component {
             </div>
             
             {this.state.loading ? 
-            <button type="submit" className="btn btn-sm bg-btn">
-                <div className="spinner-border text-secondary" role="status" id="loader">
+            <button type="submit" className="btn btn-sm btn-primary">
+                <div className="spinner-border text-white" role="status" id="loader">
                     <span className="sr-only">Loading...</span>
                 </div>
             </button>
             :
-            <button type="submit" className="btn btn-sm bg-btn">
-                <i className="fas fa-sign-in-alt fa-fw"></i>
+            <button type="submit" className="btn btn-sm btn-primary">
+                <i className="fas fa-sign-in-alt fa-fw mr-1"></i>
                 SIGN UP
             </button>
             }

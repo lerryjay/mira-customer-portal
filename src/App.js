@@ -209,7 +209,52 @@ class App extends Component {
     }
     return res;
   }
+  updateProfile = async(data, myform) =>{
+    const headers = new Headers();
+    headers.append('API-KEY', APIKEY);
 
+    let form = new FormData(myform);
+    form.append("userid", this.state.user.userid);
+
+    const res = await fetch(HTTPURL + 'user/updateprofile', {
+      method: "POST",
+      body: form,
+      headers: headers,
+    }).then((response) => response.json());
+    if(res['status']){
+        const { user } = this.state;
+        user['lastname'] = data.lastname;
+        user['firstname'] = data.firstname;
+        user['email'] = data.email;
+        user['telephone'] = data.telephone;
+        user['country'] = data.country;
+        user['state'] = data.state;
+        this.setState({ user });
+        sessionStorage.setItem('user',JSON.stringify(user));
+    }
+    return res;
+  }
+
+  updateProfileImage = async(data, myimage) =>{
+    const headers = new Headers();
+    headers.append('API-KEY', APIKEY);
+
+    let form = new FormData(myimage);
+    form.append("userid", this.state.user.userid);
+
+    const res = await fetch(HTTPURL + 'user/updateimage', {
+      method: "POST",
+      body: form,
+      headers: headers,
+    }).then((response) => response.json());
+    if(res['status']){
+        const { user } = this.state;
+        user['imageurl'] = res.data;
+        this.setState({ user });
+        sessionStorage.setItem('user',JSON.stringify(user));
+    }
+    return res;
+  }
   getContext = () => {
     return {
       ...this.state,
@@ -225,6 +270,8 @@ class App extends Component {
       getTickets : this.getTickets,
       getUsers : this.getUsers,
       updateAdminPermission : this.updateAdminPermission.bind(this),
+      updateProfile : this.updateProfile,
+      updateProfileImage: this.updateProfileImage
     };
   };
 

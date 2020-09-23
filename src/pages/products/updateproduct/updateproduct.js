@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {withContext} from '../../../common/context';
-import { HTTPURL, APIKEY } from '../../../common/global_constant';
+import { HTTPURL, APIKEY, FILEURL } from '../../../common/global_constant';
 import placeholder from "../../../assets/images/product-placeholder.gif";
 
 class UpdateProduct extends Component {
@@ -11,6 +11,7 @@ class UpdateProduct extends Component {
             name : '', 
             id: '',
             description: '',
+            imageurl:'',
             errormessage: '',
             loading: false,
             successmessage: '',
@@ -37,7 +38,7 @@ class UpdateProduct extends Component {
         }).then(res => res.json())
         .then(result => {
             if (result.status) {
-                this.setState({ name: result.data.name, description: result.data.description, id: result.data.id})       
+                this.setState({ name: result.data.name, description: result.data.description, id: result.data.id, imageurl: result.data.imageurl})       
             }
          
         })
@@ -60,7 +61,7 @@ class UpdateProduct extends Component {
         form.append("productid", this.state.id);
         form.append("name", this.state.name);
         form.append("description", this.state.description);
-        form.append('files[]', this.state.file);
+        form.append('file', this.state.file);
 
         fetch(HTTPURL + 'product/update', {
             method: 'POST',
@@ -68,12 +69,14 @@ class UpdateProduct extends Component {
             headers: headers
         })
         .then(response => response.json())
-        .then(data => {
+        .then(async data => {
           
             this.setState({ loading: false });
             if(data.status === true) {
-                this.state.showAlert("success", data.message)
+                this.state.showAlert("success", data.message);
+                await this.state.getProducts();
                 this.props.history.goBack();
+
             } else{
                 this.state.showAlert("danger",  data.message)
             }
@@ -135,7 +138,9 @@ class UpdateProduct extends Component {
             let imagePreview = null;
             if (imagePreviewUrl) {
             imagePreview = (<img src={imagePreviewUrl} className="imagePreview"/>);
-            } 
+            }  else{
+                imagePreview = (<img src={FILEURL + this.state.imageurl} onError={(e) => { e.target.onerror = null; e.target.src = placeholder }} className="imagePreview"/>);
+            }
         return (
 
             <div className="container mx-auto row">
@@ -189,8 +194,8 @@ class UpdateProduct extends Component {
                                 <div className="float-right">
 
                                      {this.state.loading ? 
-                                <button type="submit" className="btn btn-sm bg-btn">
-                                    <div className="spinner-border text-secondary" role="status" id="loader">
+                                <button type="submit" className="btn btn-sm btn-primary">
+                                    <div className="spinner-border text-white" role="status" id="loader">
                                         <span className="sr-only">Loading...</span>
                                     </div>
                                 </button>
@@ -208,20 +213,13 @@ class UpdateProduct extends Component {
 
                 <div className="col-md-4 text-center mt-4 box2" id='img-avatar'>
                 <div className="card">
-                            {!this.state.imageurl ? 
-                            <div className="card-body">
-                                <img src={placeholder} alt=""   height="205px" width="250px" />
-
-                            </div>
-
-                            :
-                               <div className="card-body">
+                 <div className="card-body">
                                 <div className="imgPreview mb-2">
-                                    <i className="fa fa-trash" onClick={(e) => this.removeImage(e)}></i>
+                                    {/* <i className="fa fa-trash" onClick={(e) => this.removeImage(e)}></i> */}
                                         {imagePreview}
                                 </div>
                             </div>
-                            }
+
                             <label htmlFor="file" className="btn btn-sm btn-primary py-2 px-3">Attach Image</label>
                                 <input style={{display:'none'}} type={"file"}  id="file" 
                                 className="form-file form-file-sm" name="file"  placeholder=""

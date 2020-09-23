@@ -15,6 +15,7 @@ class Profile extends Component {
             telephone: '',
             country: '',
             state:'',
+            imageurl: ''
         }
     }
 
@@ -26,6 +27,7 @@ class Profile extends Component {
             telephone: this.props.user.telephone,
             country: this.props.user.country,
             state: this.props.user.state,
+            imageurl:this.props.user.imageurl
         })
     }
     editp() {
@@ -49,27 +51,27 @@ class Profile extends Component {
         e.preventDefault()
         this.setState({ loading: true });
 
-        const headers = new Headers();
-        headers.append('API-KEY', APIKEY);
-        let form = new FormData(document.getElementById("profileform"));
-        form.append("userid", this.state.user.userid);
-        form.append('file', this.state.file);
+        let data = {
+            lastname: this.state.lastname,
+            firstname: this.state.firstname,
+            email: this.state.email,
+            telephone: this.state.telephone,
+            country: this.state.country,
+            state: this.state.state
+        }
+        let form = document.getElementById("profileform")
+        // const res =  await this.state.updateProfile(form);
+        const res = await this.props.updateProfile(data,form )
 
+        this.setState({ loading: false });
+        
+        if(res['status']){
+            this.setState({ loading: false });
+            this.state.showAlert("success", res.message)
+        } else{
+            this.state.showAlert("danger", res.message)
+        }
 
-        fetch(HTTPURL + 'user/updateprofile', {
-            method: 'POST',
-            body: form,
-            headers: headers
-        })
-            .then(response => response.json())
-            .then(res => {
-                    this.setState({ loading: false });
-                    if(res.status === true) {
-                        this.state.showAlert("success", res.message)
-                    } else{
-                        this.state.showAlert("danger",  res.message)
-                    }
-            });
     }
     handleImageChange(e) {
         e.preventDefault();
@@ -108,6 +110,42 @@ class Profile extends Component {
 
         reader.readAsDataURL(file)
     }
+    async handleImageUpdate(e) {
+        let data = this.state.imageurl;
+        let form = document.getElementById("imageForm")
+        // const res =  await this.state.updateProfile(form);
+        const res = await this.props.updateProfileImage(data,form )
+
+        this.setState({ loading: false });
+        
+        if(res['status']){
+            this.setState({ loading: false });
+            this.setState({imageurl: res.data})
+            this.state.showAlert("success", res.message)
+        } else{
+            this.state.showAlert("danger", res.message)
+        }
+
+
+        
+        // const { user } = this.state;
+        // const form = new FormData(document.getElementById('imageForm'));
+        // form.append('userid', user.userid);
+        // const headers = new Headers();
+        // headers.append("API-KEY", APIKEY);
+        // const res = await fetch(`${HTTPURL}user/updateimage`, {
+        //   method: "POST",
+        //   headers: headers,
+        //   body: form
+        // }).then(res => res.json());
+        // if (res['status']) {
+        //     this.state.user.imageurl = res.data
+        //   this.state.showAlert("success", res.message)
+        // }
+        // else{
+        //   this.state.showAlert("danger",  res.message)
+        // }
+      }
 
     render() {
         let {imagePreviewUrl} = this.state;
@@ -217,21 +255,29 @@ class Profile extends Component {
                             <div className="card-header">
                             </div>
                             {!this.props.user.imageurl ? 
-                            <div className="card-body">
-                                <img src={avatar} alt="" className="image_sidebar"  height="inherit" width="170px" style={{ marginTop: '-80px' }}/>
+                            <div className="card-body position-relative mb-5">
+                                <form id="imageForm">
+                                <img src={ avatar} alt="" className="image_sidebar"  height="170px" width="170px" style={{ marginTop: '-80px' }}/>
 
-                            </div>
-                            : <div className="card-body">
-                                <div className="image_sidebar" alt="" style={{ marginTop: '-80px' }} >
-                                <img height="190px" width="100%"  src={this.props.user.imageurl} />
-
-                                </div>
-                            </div>
-                            }
-                            <label htmlFor="file" className="btn btn-sm btn-primary py-2 px-3">Attach Image</label>
+                                <label htmlFor="file" ><i class="fas fa-2x text-purple fa-camera-retro"></i> </label> 
                                 <input style={{display:'none'}} type={"file"}  id="file" 
                                 className="form-file form-file-sm" name="file"  placeholder=""
-                                onChange={(e)=>this.handleImageChange(e)} />
+                                onChange={(e)=>this.handleImageChange(e)}
+                                onChange={(e)=> this.handleImageUpdate(e)} />
+                                </form>
+                            </div>
+                            : <div className="card-body position-relative mb-5">
+                            <form id="imageForm">
+                                <img className="image_sidebar" height="170px" width="170px"  style={{ marginTop: '-80px' }} src={FILEURL + this.props.user.imageurl} />
+                            <label htmlFor="file" ><i class="fas fa-2x text-purple fa-camera-retro"></i> </label> 
+                                <input style={{display:'none'}} type={"file"}  id="file" 
+                                className="form-file form-file-sm" name="file"  placeholder=""
+                                onChange={(e)=>this.handleImageChange(e)} 
+                                onChange={(e)=> this.handleImageUpdate(e)}/>
+                                </form>
+
+                            </div>
+                            }
                                 
                         </div>
                     </div>

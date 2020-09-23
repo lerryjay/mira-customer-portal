@@ -39,7 +39,7 @@ class Region extends Controller
   public function states()
   {
     extract($_GET);
-    $countryid ??= '';
+    $countryid = $countryid ?? '';
     loadModel('region');
 
     $countryInvalid    = Validate::integar($countryid);;

@@ -23,7 +23,7 @@
      **/
     public function addTicket($companyId,$productId,$customerId,$title,$type,$message,$files,$status = 'pending'){
   
-      $id = uniqid();
+      $id = rand(10000,99999999);
       $insert =  $this->insert('tickets',['id'=>$id,'product_id'=>$productId,'customer_id'=>$customerId,'title'=>$title,'createdat'=>date("Y-m-d H:i:s"),'message'=>$message,'company_id'=>$companyId,'type'=>$type,'files'=>$files,'ticketstatus'=>$status]);
       if($insert) return $id;
       else false;

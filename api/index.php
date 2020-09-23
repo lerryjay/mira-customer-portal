@@ -2,7 +2,6 @@
   session_start();
   header('Access-Control-Allow-Headers: *');
   header('Content-Type: application/json');
-  header('Access-Control-Allow-Origin: *');
   $path = explode('/', trim($_SERVER['PHP_SELF'],'/'));
   define('BASE_PATH', $_SERVER['DOCUMENT_ROOT'].'/'.$path[0]);
   require_once './config.php';
@@ -51,20 +50,20 @@
   loadModel('validator');
   loadModel('file');
   loadModel('alert');
-  require_once BASE_PATH.'/api/controller/controller.php';
+  loadController('controller');
   $route = getroute();
-
-  require_once BASE_PATH.'/api/controller/'.$route[1].'.php';
-  // try {
+  loadController($route[1]);
+   try {
     $class = ucfirst($route[1]);
     $class = new $class();
     if(isset($route[2])){
       $func = $route[2];
       $class->$func();
     }else $class->index();
-  // } catch (Throwable $th) {
-  //   header('Content-Type:Application/json',true,404);
-  //   echo json_encode(["message"=>"Not found", "status"=>false]);
-  // }
+   } catch (Throwable $th) {
+    //   echo $th;
+     header('Content-Type:Application/json',true,500);
+     echo json_encode(["message"=>"An error was encountered while trying to handle this request", "status"=>false]);
+   }
   
 ?>

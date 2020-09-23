@@ -63,7 +63,7 @@
         $imageurl = File::upload("file",'user',false);
         $imageurl ?: '';
       }
-      $response = $this->userModel->register($firstname,$lastname,$othername,$email,$telephone,$password,$this->companyId,$imageurl);
+      $response = $this->userModel->register($firstname,$lastname,$othername,$email,(string)$telephone,$password,$this->companyId,$imageurl);
       if($response){
         $_SESSION['companyid'] = $this->companyId;
         $_SESSION['userid'] = $response;
@@ -95,12 +95,12 @@
     private function validateRegistration()
     {
       extract($_POST);
-      $email      ??= '';
-      $firstname  ??= '';
-      $othername  ??= '';
-      $lastname   ??= '';
-      $password   ??= '';
-      $telephone  ??= '';
+      $email = $email ?? '';
+      $firstname = $firstname ?? '';
+      $othername = $othername ?? '';
+      $lastname = $lastname ?? '';
+      $password = $password ?? '';
+     $telephone = $telephone ?? '';
       $companyId  = isset($companyid) ? $companyid : '';
 
       $emailInvalid      = Validate::email($email);
@@ -154,7 +154,7 @@
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Telephone is associated with another account!', 'data'=>['field'=>'telephone']]));
       }
       // no errors
-      return ['telephone'=>$telephone,'email'=>$email,'firstname'=>$firstname,'lastname'=>$lastname,'othername'=>$othername,'password'=>$password,'companyId'=>$this->companyId];
+      return ['telephone'=>(string)$telephone,'email'=>$email,'firstname'=>$firstname,'lastname'=>$lastname,'othername'=>$othername,'password'=>$password,'companyId'=>$this->companyId];
     }
 
     /**
@@ -176,7 +176,7 @@
       ];
 
       $loginValid     = Validate::string($loginId);
-      $passwordValid  = Validate::password($password);
+      $passwordValid  = Validate::string($password);
 
       if(!$loginValid && !$passwordValid) return ['loginId'=>$loginId, 'password'=>$password ];
       
@@ -199,6 +199,7 @@
       ];
       $loginData = $this->validateLogin();
       extract($loginData);
+
       $user = $this->userModel->getUserByLoginId($loginId);
       if($user){
         if (password_verify($password,$user['password'])) {
@@ -218,7 +219,7 @@
               'imageurl'=>$user['imageurl'],
               'role'=>$user['role'],
               'userid'=>$user['id'],
-              'permissions'=>explode('|',$user['permissions'])
+              'permissions'=>strlen($user['permissions']) > 1 ?explode('|',$user['permissions']) : [],
             ]
           ];
         }else session_destroy();
@@ -310,14 +311,14 @@
         $this->setOutput(json_encode($response));
       }
 
-      $user = $this->userModel->getUserById($userId);
+      $user = $this->userModel->getUserById($userid);
       if($user){
         if (password_verify($oldpassword,$user['password'])) {
-          $updated = $this->userModel->updatePassword($userId,$newpassword);
-          if($updated['status']){
+          $updated = $this->userModel->updatePassword($userid,$this->encryptPassword($newpassword));
+          if($updated){
             $response['status'] = true;
             $response['message'] = 'Password update successful';
-          }else $response['message'] = 'Unexpected error occurred!';
+          }else $response['message'] = 'User cannot be authenticated!';
         }else{
           $response['message'] = 'Invalid authentication!';
         }
@@ -473,10 +474,10 @@
     private function validateProfile()
     {
       extract($_POST);
-      $firstname  ??= '';
-      $othername  ??= '';
-      $lastname   ??= '';
-      $telephone  ??= '';
+      $firstname = $firstname ?? '';
+      $othername = $othername ?? '';
+      $lastname = $lastname ?? '';
+     $telephone = $telephone ?? '';
       $userId     = isset($userid) ? $userid : '';
       $username   = isset($username) ? $username : '';
 
@@ -561,8 +562,8 @@
       extract($_GET);
       loadModel('user');
 
-      $clientid ??= '';
-      $userid ??= '';
+      $clientid = $clientid ?? '';
+      $userid = $userid ?? '';
 
       loadController('user');
       $user = User::validateUser($userid,true);

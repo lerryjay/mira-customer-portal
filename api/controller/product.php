@@ -169,14 +169,14 @@
         $this->setOutput(json_encode(['status'=>false,'message'=>'You are not authorised to access this resource']));
       }
 
-      $name    ??= '';  
+      $name = $name ?? '';
       $nameError = Validate::string($name,false,true,4); 
       if($nameError){
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid product name', 'data'=>['field'=>'name']]));
       } 
 
-      $description     ??= '';
+      $description = $description ?? '';
       $descriptionError  = Validate::string($description,false,true,4); 
       if($descriptionError){
         $this->setOutputHeader(['Content-type:application/json']);
@@ -361,8 +361,6 @@
     {
       extract($this->validateusermodulepermission());
       extract($_POST);
-      $name ??= '';
-      $description ??= '';
 
       $name      = $name ?? '';
       $nameError =   Validate::string($name,false,true,2); 

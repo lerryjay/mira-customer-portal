@@ -15,7 +15,8 @@
       require BASE_PATH.'/api/model/phpmailer/class.phpmailer.php';
       $headers = 'MIME-Version: 1.0'. "\r\n";
       $headers .= 'Content-type: text/html; charset=iso-8859' . "\r\n";
-      $headers .= "From: notice@habopay.com";
+      $headers .= "From: info@miratechnologies.com.ng";
+      $headers .= "Reply-To: info@miratechnologies.com.ng";
     
       $mail = new PHPMailer;
       $mail->isSMTP();
@@ -44,8 +45,11 @@
       $mail->Subject = $subject;
       $mail->Body = $message;
 
-      if($mail->send()) return ['status'=>true,'message'=>'Message sent!'];
-      else return ['status'=>true,'message'=>'Sending failed!'.['data'=> $mail->ErrorInfo]];
+    //   if($mail->send()) return ['status'=>true,'message'=>'Message sent!'];
+    //   else
+      if(mail($email,$subject,$message,$headers)){
+           return ['status'=>true,'message'=>'Message sent!'];
+      }else return ['status'=>true,'message'=>'Sending failed!'.['data'=> $mail->ErrorInfo]];
     }
 
     /**

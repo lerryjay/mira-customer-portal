@@ -57,7 +57,11 @@
 
     public function validateApiKey($api = false)
     {
-      $headers = apache_request_headers();
+        if(function_exists('apache_request_headers')){
+            $headers = apache_request_headers();
+        }else{
+            $headers['api-key'] = $_SERVER['HTTP_API_KEY'];
+        }
 			$response = array();
 		    // Verifying Authorization Header
 	    if (!isset($headers['api-key']) && $api ) {

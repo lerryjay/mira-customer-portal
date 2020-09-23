@@ -73,24 +73,24 @@ class Clients extends Controller
   public function validateAddClient()
   {
     extract($_POST);
-    $lastname   ??= '';
-    $firstname  ??= '';
-    $othername  ??= '';
-    $email      ??= '';
-    $password   ??= '';
-    $telephone  ??= '';
+    $lastname   = $lastname ?? '';
+    $firstname  = $firstname ?? '';
+    $othername  = $othername ?? '';
+    $email      = $email ?? '';
+    $password   = $password ?? '';
+    $telephone  = $telephone ?? '';
     
-    $lga        ??= '';
-    $address    ??= '';
-    $stateid    ??= '';
-    $countryid  ??= '';
+    $lga        = $lga ?? '';
+    $address    = $address ?? '';
+    $stateid    = $stateid ?? '';
+    $countryid  = $countryid ?? '';
       
-    $companytelephone  ??= '';
-    $companyemail      ??= '';
-    $companylga        ??= '';
-    $companyaddress    ??= '';
-    $companystateid    ??= '';
-    $companycountryid  ??= '';
+    $companytelephone = $companytelephone ?? '';
+    $companyemail     = $companyemail ?? '';
+    $companylga       = $companylga ?? '';
+    $companyaddress   = $companyaddress ?? '';
+    $companystateid   = $companystateid ?? '';
+    $companycountryid = $companycountryid ?? '';
 
     $userId       =  $userid ?? '';
     $clientUserId =  $clientid ?? '';
@@ -253,6 +253,8 @@ class Clients extends Controller
   {
     extract($this->validateUpdateClient());
     $update = $this->clientModel->updateClient($clientUserId,['businessname'=>$businessName,'telephone'=>$companyTelephone,'email'=>$companyEmail,'address'=>$companyAddress,'country_id'=>$companyCountryId,'state_id'=>$companyStateId,'lga'=>$companyLga]);
+    
+    $this->userModel->updateUser($clientUserId,['email'=>$email,'firstname'=>$firstname,'lastname'=>$lastname,'telephone'=>$telephone,'othername'=>$othername]);
     if($update) $response = ['status'=>true,'message'=>'Client updated sucessfully!'];
     else $response = ['status'=>false,'message'=>'Client update failed due to an expected error!'];
     $this->setOutputHeader(['Content-type:application/json']);
@@ -269,13 +271,21 @@ class Clients extends Controller
   private function validateUpdateClient()
   {
     extract($_POST);
-    $companytelephone  ??= '';
-    $companyemail      ??= '';
-    $companylga        ??= '';
-    $companyaddress    ??= '';
-    $companystateid    ??= '';
-    $companycountryid  ??= '';
+    $companytelephone = $companytelephone ?? '';
+    $companyemail = $companyemail ?? '';
+    $companylga = $companylga ?? '';
+    $companyaddress = $companyaddress ?? '';
+    $companystateid = $companystateid ?? '';
+    $companycountryid = $companycountryid ?? '';
     $businessName =  $businessname ?? '';
+    
+    $email     = $email ?? '';
+    $telephone = $telephone ?? '';
+    $firstname = $firstname ?? '';
+    $lastname  = $lastname ?? '';
+    $othername = $othername ?? '';
+
+
     $userId       = $this->userId ?? $userid ??  '';
     $clientUserId = $clientid ?? '';
     loadController('user');
@@ -288,7 +298,35 @@ class Clients extends Controller
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode(['status'=>false,'message'=>'Client does not exist' ])); 
     }
+    
+    loadModel('user');
+    $this->userModel = new UserModel();
+    
+    $emailInvalid      = Validate::email($email);
+    if($emailInvalid && strlen ($clientUserId) < 1){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>$emailInvalid, 'data'=>['field'=>'email']]));
+    }
 
+    $emailExists    = $this->userModel->getUserByLoginId($email);
+    if($emailExists && $emailExists['userid'] !== $clientUserId){
+        $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode(['status'=>false, 'message'=>'Email is associated with another account!', 'data'=>['field'=>'email']]));
+    }
+
+    $telephoneInvalid  = Validate::telephone($telephone);
+    if($telephoneInvalid && strlen ($clientUserId) < 1){ 
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>$telephoneInvalid, 'data'=>['field'=>'telphone']]));
+        return ;
+    }
+
+    // check telephone exists
+    $telephoneExists = $this->userModel->getUserByTelephone($telephone);
+    if($telephoneExists && $telephoneExists['userid'] !== $clientUserId){ 
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode(['status'=>false, 'message'=>'Telephone is associated with another account!', 'data'=>['field'=>'telephone']]));
+    }
     
 
     $businessNameInvalid       = Validate::string($businessName,false,false,4);
@@ -333,7 +371,25 @@ class Clients extends Controller
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Please provide company lga', 'data'=>['field'=>'companylga']]));
     }
-    return ['businessName'=>$businessName,'companyTelephone'=>$companytelephone,'companyEmail'=>$companyemail,'companyAddress'=>$companyaddress,'companyStateId'=>$companystateid,'companyCountryId'=>$companycountryid,'companyLga'=>$companylga,'clientUserId'=>$clientUserId,'client'=>$client,'user'=>$user,'userId'=>$userId];
+    
+    $firstnameInvalid  = Validate::string($firstname,false,true,2,200);
+    if($firstnameInvalid){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid firstname', 'data'=>['field'=>'firstname']]));
+    }
+      
+    $lastnameInvalid       = Validate::string($lastname,false,true,1);
+    if($lastnameInvalid){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid lastname', 'data'=>['field'=>'lastname']]));
+    } 
+
+    $othernameInvalid       = Validate::string($othername,false,true,2);
+    if($othernameInvalid && strlen($othername) > 0){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid othername', 'data'=>['field'=>'othername']]));
+    } 
+    return ['businessName'=>$businessName,'companyTelephone'=>$companytelephone,'companyEmail'=>$companyemail,'companyAddress'=>$companyaddress,'companyStateId'=>$companystateid,'companyCountryId'=>$companycountryid,'companyLga'=>$companylga,'clientUserId'=>$clientUserId,'firstname'=>$firstname,'lastname'=>$lastname,'othername'=>$othername,'email'=>$email,'telephone'=>$telephone,'client'=>$client,'user'=>$user,'userId'=>$userId];
   }
 
    /**
@@ -349,9 +405,9 @@ class Clients extends Controller
   {
     extract($_GET);
     
-    $deleteuser ??= false;
-    $userid ??= '';
-    $clientid ??= '';
+    $deleteuser = $deleteuser ?? false;
+    $userid     = $userid ?? '';
+    $clientid   = $clientid ?? '';
 
     loadController('user');
     $user = User::validateUser($userid,true);
@@ -431,26 +487,26 @@ class Clients extends Controller
     extract($_POST);
     $userId  =  $this->userId ?? $userid ??  '';
     $modules =  isset($modules) ? explode(',',$modules) : [];
-    $cost  ??= 0;
+    $cost    =  $cost ??  0;
 
     $error = false;
 
-    $remarks      ??= ''; 
+    $remarks =  $remarks ?? ''; 
     if(strlen($remarks) > 0 && !$error  && Validate::string($remarks,true,true,2,1500)) $error = 'Invalid deployment remark or remark too long';
     
     $trainingdate = isset($trainingdate) ? date("Y-m-d",strtotime($trainingdate)) : date("Y-m-d", strtotime('0000-00-00')); 
-    $trainingstatus ??= 'pending';
+    $trainingstatus = $trainingstatus ?? 'pending';
     if(strlen($trainingstatus) > 0 && !$error && Validate::select($trainingstatus,['pending','ongoing','complete','incomplete'])) $error = 'Training status can only be either "pending","ongoing","complete","incomplete"';
 
-    $paymentdate  = isset($paymentdate) ? date("Y-m-d",strtotime($paymentdate)) : date("Y-m-d", strtotime('0000-00-00')); 
-    $paymentstatus  ??= 'pending'; 
+    $paymentdate   = isset($paymentdate) ? date("Y-m-d",strtotime($paymentdate)) : date("Y-m-d", strtotime('0000-00-00')); 
+    $paymentstatus = $paymentstatus ?? 'pending'; 
     if(strlen($paymentstatus) > 0 && !$error && Validate::select($paymentstatus,['pending','complete','incomplete'])) $error = 'Payment status can only be either "pending","complete","incomplete"';
     
-    $licenseduration  ??=  'annual';
+    $licenseduration  = $licenseduration ??  'annual';
     if(strlen($licenseduration) > 0 && !$error && Validate::select($licenseduration,['weekly','monthly','annual', 'bi-annual','indefinite'])) $error = 'License duration can only be either "weekly","monthly","annual", "bi-annual","indefinite"';
     
-    $deploymentdate  = isset($deploymentdate) ? date("Y-m-d",strtotime($deploymentdate)) : date("Y-m-d", strtotime('0000-00-00')); 
-    $deploymentstatus ??= 'pending'; 
+    $deploymentdate   = isset($deploymentdate) ? date("Y-m-d",strtotime($deploymentdate)) : date("Y-m-d", strtotime('0000-00-00')); 
+    $deploymentstatus =  $deploymentstatus ?? 'pending'; 
     if(strlen($deploymentstatus) > 0 && !$error && Validate::select($deploymentstatus,['pending','complete','ongoing','suspended','cancelled'])) $error = 'Deployment status can only be either "pending","complete","ongoing","suspended","cancelled"';
     
     $productId    =  $productid ?? '';
@@ -556,7 +612,7 @@ class Clients extends Controller
     extract($_GET);
 
     $userId = $this->userId ?? $userid ?? '';
-    $clientproductid ??= '';
+    $clientproductid = $clientproductid ?? '';
 
     loadController('user');
 
@@ -588,7 +644,7 @@ class Clients extends Controller
     extract($_POST);
     $error        = false;
     $userId       = $this->userId ?? $userid ??  '';
-    $clientproductid ??= '';
+    $clientproductid = $clientproductid ?? '';
 
     loadController('user');
     loadModel('client');
@@ -601,22 +657,22 @@ class Clients extends Controller
     
 
     $modules      = explode(',',$modules) ?? [];
-    $remarks      ??= ''; 
+    $remarks      = $remarks ??  ''; 
     if(strlen($remarks) > 0 && !$error  && Validate::string($remarks,true,true,2,1500)) $error = 'Invalid deployment remark or remark too long';
     
     $trainingdate = isset($trainingdate) ? date("Y-m-d",strtotime($trainingdate)) : date("Y-m-d", strtotime('0000-00-00')); 
-    $trainingstatus ??= 'pending';
+    $trainingstatus =  $trainingstatus ?? 'pending';
     if(strlen($trainingstatus) > 0 && !$error && Validate::select($trainingstatus,['pending','ongoing','complete','incomplete'])) $error = 'Training status can only be either "pending","ongoing","complete","incomplete"';
 
-    $paymentdate  = isset($paymentdate) ? date("Y-m-d",strtotime($paymentdate)) : date("Y-m-d", strtotime('0000-00-00')); 
-    $paymentstatus  ??= 'pending'; 
+    $paymentdate   = isset($paymentdate) ? date("Y-m-d",strtotime($paymentdate)) : date("Y-m-d", strtotime('0000-00-00')); 
+    $paymentstatus = $paymentstatus  ?? 'pending'; 
     if(strlen($paymentstatus) > 0 && !$error && Validate::select($paymentstatus,['pending','complete','incomplete'])) $error = 'Payment status can only be either "pending","complete","incomplete"';
     
-    $licenseduration  ??=  'annual';
+    $licenseduration   = $licenseduration  ??  'annual';
     if(strlen($licenseduration) > 0 && !$error && Validate::select($licenseduration,['weekly','monthly','annual', 'bi-annual','indefinite'])) $error = 'License duration can only be either "weekly","monthly","annual", "bi-annual","indefinite"';
     
-    $deploymentdate  = isset($deploymentdate) ? date("Y-m-d",strtotime($deploymentdate)) : date("Y-m-d", strtotime('0000-00-00')); 
-    $deploymentstatus ??= 'pending'; 
+    $deploymentdate     = isset($deploymentdate) ? date("Y-m-d",strtotime($deploymentdate)) : date("Y-m-d", strtotime('0000-00-00')); 
+    $deploymentstatus   = $deploymentstatus ?? 'pending'; 
     if(strlen($deploymentstatus) > 0 && !$error && Validate::select($deploymentstatus,['pending','complete','ongoing','suspended','cancelled'])) $error = 'Deployment status can only be either "pending","complete","ongoing","suspended","cancelled"';
 
 
@@ -661,7 +717,7 @@ class Clients extends Controller
   public function adddeploymentfile()
   {
     extract($_POST);
-    $clientproductid ??= '';
+    $clientproductid = $clientproductid ?? '';
     $userId = $this->userId ?? $userid ?? '';
 
     loadController('user');
@@ -702,8 +758,8 @@ class Clients extends Controller
   public function deletedeploymentfile()
   {
     extract($_GET);
-    $fileindex ??= '';
-    $clientproductid ??= '';
+    $fileindex = $fileindex ?? '';
+    $clientproductid = $clientproductid ?? '';
     $userId = $this->userId ?? $userid ?? '';
 
 
@@ -794,7 +850,7 @@ class Clients extends Controller
     extract($_GET);
 
     $userId = $this->userId ?? $userid ?? '';
-    $clientproductid ??= '';
+    $clientproductid = $clientproductid ?? '';
 
     loadController('user');
 

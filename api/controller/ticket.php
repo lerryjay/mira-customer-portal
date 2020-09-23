@@ -93,7 +93,7 @@
         $response['data'] = ['ticketid'=>TICKET_PREFIX.'-'.$add];
 
         //Send Notification
-        // $this->sendNewTicketMail(TICKET_PREFIX.'-'.$add,$customer['email'],$customerId !== $userId);
+        $this->sendNewTicketMail(TICKET_PREFIX.'-'.$add,$customer['email'],$customerId !== $userId);
       }
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
@@ -194,7 +194,7 @@
             loadModel('user');
             $this->userModel = new UserModel();
             $customer = $this->userModel->getUser($ticket['user_id']);
-            // $this->sendTicketStatusUpdateMail(TICKET_PREFIX.$ticketId,$customer['email']);
+            $this->sendTicketStatusUpdateMail(TICKET_PREFIX.$ticketId,$customer['email']);
           }
         }else $response['message'] = "Unexpected error saving ticket reply!";
       }else $response['message'] = "You do not have the authority to perform this action!";
@@ -374,28 +374,28 @@
                                             $byAdmin ?
                                               '<p style="font-family:inherit;color:#222;outline:none;margin:0;padding:0;font-size:12px">
                                                       A ticket has been created for you on our platform and is being attended to, for
-                                                      reference purpose we have assigned this ticket&UnderBar;id
+                                                      reference purpose we have assigned this ticket&#95;id
                                                       to your ticket. Please visit <a href="http://www.miratechnologies.com.ng/ticket">Our Platform</a> to monitor the progress of yout ticket
                                                       <br />
                                                   </p>'
                                               : 
                                               '<p style="font-family:inherit;color:#222;outline:none;margin:0;padding:0;font-size:12px">
                                                     Your ticket has been created and is being attended to, for
-                                                    reference purpose we have assigned this ticket&UnderBar;id
+                                                    reference purpose we have assigned this ticket&#95;id
                                                     to your ticket.
                                                     <br />
                                                 </p>'
                                               ).'
                                                 <h4>
-                                                    Ticket&UnderBar;ID&nbsp;&colon;&nbsp;
+                                                    Ticket&#95;ID&nbsp;&#58;&nbsp;
                                                     <span  style="font-style: oblique;letter-spacing: 1px;font-weight: 500;font-size: 14px;">&#35;'.$ticketId.' </span>
                                                 </h4>
                                                 <h4>
-                                                    Date&nbsp;&colon;&dash;&nbsp;
+                                                    Date&nbsp;&#58;&#8259;&nbsp;
                                                     <span style="font-style: oblique;letter-spacing: 1px;font-weight: 500;font-size: 14px;">'.date('Y-m-d').'</span>
                                                 </h4>
                                                 <h4>
-                                                    Time&nbsp;&colon;&dash;&nbsp;<span
+                                                    Time&nbsp;&#58;&#8259;&nbsp;<span
                                                         style="font-style: oblique;letter-spacing: 1px;font-weight: 500;font-size: 14px;">'.date("H : i").'/span>
                                                 </h4>
                                                 <p
@@ -565,7 +565,7 @@
                                                   </p>
                                               
                                                 <h4>
-                                                    Ticket&UnderBar;ID&nbsp;&colon;&nbsp;
+                                                    Ticket&#95;ID&nbsp;&#58;&nbsp;
                                                     <span  style="font-style: oblique;letter-spacing: 1px;font-weight: 500;font-size: 14px;">&#35;'.$ticketId.' </span>
                                                 </h4>
                                                 <p style="font-family:inherit;color:#222;outline:none;margin:0;padding:0;font-size:12px">

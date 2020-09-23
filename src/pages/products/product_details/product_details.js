@@ -166,6 +166,38 @@ class product_details extends Component {
     this.setState({ [name]: value, errormessage: "" });
   };
 
+  showDeleteModal(e) {
+    this.state.id = e
+    let modal = document.getElementById("myModal")
+    modal.style.display = "block";
+}
+
+deleteModal(e) {
+    let productid = e
+
+    const headers = new Headers();
+    headers.append('API-KEY', APIKEY);
+
+    fetch(HTTPURL + `product/delete?productid=${productid}&userid=${this.state.user.userid}`, {
+        method: 'GET',
+        headers: headers
+    })
+        .then(response => response.json())
+        .then(async data => {
+            if(data.status === true) {
+                this.state.showAlert("success", data.message);
+                await this.state.getProducts();
+                let modal = document.getElementById("myModal")
+                modal.style.display = "none";
+                this.props.history.push('/products');
+
+            } else{
+                this.state.showAlert("danger",  data.message)
+            }
+        });
+}
+
+
   saveModule = async (e) => {
     e.preventDefault();
     this.setState({ loading: true });
@@ -251,17 +283,39 @@ class product_details extends Component {
 
         {!this.state.loader && (
           <div>
-            <div className="row mt-4">
-              <div className="col-md-6">
+            <div className="row mt-4 mx-5">
+              <div className="col-md-5">
                 {/* <img src={this.state.imageurl} onError={`this.src=${ placeholder }`} className="img-fluid" alt="" /> */}
-                <div className="row justify-content-center">
-                  <img className="image-product px-3" src={FILEURL + this.state.imageurl} onError={(e) => { e.target.onerror = null; e.target.src = placeholder }} />
+                <div className="container">
+                  <div className="container-fluid">
+                    <img className="image-product px-3" src={FILEURL + this.state.imageurl} onError={(e) => { e.target.onerror = null; e.target.src = placeholder }} />
+                  </div>
                 </div>
               </div>
-              <div className="col-md-6">
+              <div className="col-md-7">
                 <h4 className="text-dark">{this.state.name}</h4>
                 <div className="description">
                   <p>{this.state.description}</p>
+                  
+                  <div className="row mt-5">
+                    <Link
+                      className="btn mt-3 m-2 btn-primary mb-2 rounded-0 px-5"
+                      to={() => `/updateproduct/${this.state.id}`}
+                    >
+                      <small className="newproduct" style={{ color: "#fff" }}>
+                        &nbsp;Update&nbsp;
+                      </small>
+                    </Link>
+                    <button
+                      type="button" onClick={() => this.showDeleteModal(this.state.id)}
+                      className="btn mt-3 m-2 btn-danger mb-2 rounded-0  px-5"
+                    >
+                      <small className="newproduct" style={{ color: "#fff" }}>
+                        &nbsp;Delete
+                      </small>
+                    </button>
+                  </div>
+           
                 </div>
               </div>
             </div>
@@ -299,7 +353,7 @@ class product_details extends Component {
                         {/* {this.state.packages} */}
                         {this.state.packages.map((module) => {
                           return (
-                            <div className="col-md-4">
+                            <div key={module.id} className="col-md-4">
                               <p className="list-group-item">
                                 {module.name}
                                 <label class=" float-right">
@@ -325,6 +379,29 @@ class product_details extends Component {
                 </div>
               </div>
             </div>
+
+            {/* Delete Product */}
+            {this.state.showmodal ?
+                <div id="myModal" class="modal">
+                    {/* Modal content  */}
+                    <div class="modal-content text-center p-5">
+                        <i className="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
+                        <h3>Are you sure?</h3>
+                        <p> Do you really want to delete this file?</p>
+                        <div className="row">
+                            <div className="col-md-6">
+                                <button onClick={this.closeModal} className="btn-block btn btn-outline-secondary">Cancel</button>
+                            </div>
+                            <div className="col-md-6">
+                                <button onClick={() => this.deleteModal(this.state.id)} className="btn btn-danger btn-block">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                :
+                <span></span>
+            }
+
 
             {/* Add New Module Modal */}
             {this.state.showmodal ? (

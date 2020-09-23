@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { withContext } from "../../../common/context";
 import avatar from "../../../assets/images/avatar.png";
-import { HTTPURL, APIKEY } from "../../../common/global_constant";
+import { HTTPURL, APIKEY ,FILEURL} from "../../../common/global_constant";
 
 class ViewClient extends Component {
   constructor(props) {
@@ -19,6 +19,9 @@ class ViewClient extends Component {
       showmodal: true,
       isloading: true,
       selectedProduct: "",
+      file:'',
+      imagePreviewUrl:'',
+      imageurl:'',
     };
   }
 
@@ -76,6 +79,7 @@ class ViewClient extends Component {
             companyaddress: result.data.companyaddress,
             userid: result.data.user_id,
             isloading: false,
+            imageurl:result.data.imageurl
           });
         }
       });
@@ -216,9 +220,84 @@ class ViewClient extends Component {
         }
 
   }
+  handleImageChange(e) {
+    e.preventDefault();
 
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    let images = []
+    for (var i = 0; i < e.target.files.length; i++) {
+        images[i] = e.target.files.item(i);
+    }
+    images = images.filter(file => file.name.match(/\.(jpg|jpeg|png|gif)$/))
+    
+    if (images.length === 0){
+
+        reader.onloadend = () => {
+            this.setState({
+                file: file,
+                imagePreviewUrl: '',
+                imageError: "Upload a valid Image"
+            });
+            
+            
+        }
+        
+        
+    } else {
+        this.setState({imageError: false})
+            reader.onloadend = () => {
+                this.setState({
+                    file: file,
+                    imagePreviewUrl: reader.result
+                });
+            }
+        }
+
+    reader.readAsDataURL(file)
+}
+
+async handleImageUpdate(e) {
+  const { user, userid } = this.state;
+  const form = new FormData(document.getElementById('imageForm'));
+  form.append('userid', user.userid);
+  form.append('clientid', userid);
+  const headers = new Headers();
+  headers.append("API-KEY", APIKEY);
+  const res = await fetch(`${HTTPURL}clients/updateimage`, {
+    method: "POST",
+    headers: headers,
+    body: form
+  }).then(res => res.json());
+  if (res['status']) {
+    this.setState({ imageurl: res.data });
+    this.state.showAlert("success", res.message)
+  }
+  else{
+    this.state.showAlert("danger",  res.message)
+  }
+}
 
   render() {
+    
+    let {imagePreviewUrl} = this.state;
+    let imagePreview = null;
+    if (imagePreviewUrl) {
+    imagePreview = (<img src={imagePreviewUrl} className="imagePreview"
+                    className="image_sidebar"
+                    height="170px"
+                    width="170px"
+                    style={{ marginTop: "-80px" }}
+                    />);
+    }  else{
+        imagePreview = (<img src={FILEURL + this.state.imageurl} onError={(e) => { e.target.onerror = null; e.target.src = avatar }} 
+                    className="image_sidebar"
+                    height="170px"
+                    width="170px"
+                    style={{ marginTop: "-80px" }}
+                    />);
+    }
     return (
       <div className="container-fluid px-5 mx-auto row">
         
@@ -247,18 +326,21 @@ class ViewClient extends Component {
                 <div className="col-md-4 text-center mb-3" id="profilePix">
                   <div className="card">
                     <div className="card-header"></div>
-                    <div className="card-body">
-                      <img
-                        src={avatar}
-                        alt=""
-                        className="image_sidebar"
-                        height="inherit"
-                        width="170px"
-                        style={{ marginTop: "-80px" }}
-                      />
+                    <div className="card-body mb-3 position-relative">
+                  <form id="imageForm">
+                      {imagePreview}
+                      <label htmlFor="file" ><i class="fas fa-2x text-purple fa-camera-retro"></i> </label> 
+                                <input style={{display:'none'}} type={"file"}  id="file" 
+                                className="form-file form-file-sm" name="file"  placeholder=""
+                                onChange={(e)=>this.handleImageChange(e) }
+                                onChange={(e)=> this.handleImageUpdate(e)}
+                                 />
+                  </form>
+                                
                     </div>
                   </div>
                 </div>
+
                 {!this.state.isloading && (
                   <div className="col-md-6 offset-md-1 pl-5">
                     <h3 className="text-dark">{this.state.businessname}</h3>

@@ -39,12 +39,18 @@ class Products extends Component {
             headers: headers
         })
             .then(response => response.json())
-            .then(data => {
-                console.log(data, "deleted")
-                let modal = document.getElementById("myModal")
-                modal.style.display = "none";
+            .then(async data => {
+                if(data.status === true) {
+                    this.state.showAlert("success", data.message);
+                    await this.state.getProducts();
+                    let modal = document.getElementById("myModal")
+                    modal.style.display = "none";
+                    this.props.history.push('/products');
+    
+                } else{
+                    this.state.showAlert("danger",  data.message)
+                }
             });
-            this.setState({ updateData: true });
     }
 
     closeModal() {
@@ -97,9 +103,11 @@ class Products extends Component {
                             {this.state.products.map((product, i) => {
                             return (
                                 <div className="col-md-3 col-lg-4 col-sm-12 my-2 d-flex justify-content-center" key={i}>
-                                    <div className="card text-center products">
+                                    <div className="card text-center products position-relative">
                                         {/* <img src={image} className="image_product" alt="" /> */}
-                                        <img className="img-fluid" src={FILEURL + product.imageurl} onError={(e) => { e.target.onerror = null; e.target.src = placeholder }} />
+                                        <div className="imageProduct">
+                                            <img className="imageProduct-inner" src={FILEURL + product.imageurl} onError={(e) => { e.target.onerror = null; e.target.src = placeholder }} />
+                                        </div>
                                         <div className="card-body">
                                             <h5 className="card-title">{product.name}</h5>
                                             {/* <Link  to={{ pathname:"", search}} onClick={this.handleViewMore}> */}
@@ -135,7 +143,7 @@ class Products extends Component {
                     <div id="myModal" class="modal">
                         {/* Modal content  */}
                         <div class="modal-content text-center p-5">
-                            <i class="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
+                            <i className="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
                             <h3>Are you sure?</h3>
                             <p> Do you really want to delete this file?</p>
                             <div className="row">

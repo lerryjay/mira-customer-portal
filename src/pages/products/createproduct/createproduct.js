@@ -46,7 +46,8 @@ class CreateProduct extends Component {
             if(res.status === true) {
                 this.state.showAlert("success",  res.message)
                 this.setState({loading : false,name: '', description: '', file: '', imagePreviewUrl: '', imageurl: ''});
-                this.state.getProducts();
+                await this.state.getProducts();
+                this.props.history.goBack();
             } else{
                 this.state.showAlert("danger",  res.message)
             }

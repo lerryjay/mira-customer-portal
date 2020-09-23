@@ -382,9 +382,8 @@ div.home a {
 }
 
 nav.bg-navbar {
-  color: whitesmoke;
-  background: #8894a2 !important;
-  /* background-color: #0a0b18; */
+  color: #28166f;;
+  background: #fff !important;
 }
 
 .navbar-toggler:focus {
@@ -504,7 +503,7 @@ input:checked + .slider:before {
 
 /* Add an active class to the active dropdown button */
 .active {
-  background-color: #04021b;
+  background-color: #0f033c ; /*04021b*/
   color: white;
 }
 
@@ -528,13 +527,26 @@ input:checked + .slider:before {
   text-decoration: none;
   transition: background-color .3s;
 }
+.navbar-dark .navbar-toggler {
+  color: #28166f !important;
+  border-color: rgba(255,255,255,.1);
+}
 
 /* Style the active/current link */
 .pagination a.active {
-  background-color: dodgerblue;
+  background-color: #28166f;
   color: white;
 }
-
+.avatar-circle{
+  border-radius: 50%;
+  border: 2px solid #28166f;;
+}
+.btn-primary:focus {
+  color: #fff;
+  background-color: #28166f !important;
+  border-color: #28166f !important;
+  box-shadow: 0 0 0 .2rem #28166f !important;
+}
 /* Add a grey background color on mouse-over */
 .pagination a:hover:not(.active) {background-color: #ddd;} 
 
@@ -659,15 +671,14 @@ img.image_sidebar {
   min-height: 100vh ;
   z-index: 2000;
   overflow-y: auto;
-  background: #8894a2;
+  background: #28166f ; /* #66023c #8a88a2 #9ab4ce  */
   background-repeat: no-repeat;
   background-size: cover;
   background-origin: border-box;
   color: #fff;
   overflow-x: hidden;
   transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
-  padding: 0 5px;
+  /* box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5); */
   font-weight: 910;
   font-size: 12px;
   font-family: 'Poppins', sans-serif;
@@ -703,16 +714,21 @@ div ul a li {
 #wrapper {
   width: 100vw;
 }
-p.image_name {
+span.image_name {
   font-family: "Poppins";
-  font-weight: 600;
-  font-size: large;
+  font-weight: 500;
+  font-size: 14px;
+}
+.btn-primary {
+  color: #fff;
+  background-color: #28166f !important;
+  border-color: #28166f !important;
 }
 .sidemenu {
   background-color: #8894a2;
   /* min-height: 100vh; */
   width: 200px;
-  margin-top: 55px;
+  margin-top: 45px;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -870,10 +886,10 @@ ul.components a p{
 div ul.components li:hover {
   padding: 10px 5px;
   margin: 5px 0;
-  background:#04021b !important;
-  border-color: #04021b !important;
+  background:#0f033c   !important;
+  border-color: #0f033c   !important;
   transform: scale(0.985);
-  border-radius: 4px;
+  border-radius: 0;
 }
 #preview img.col-md-3{
   margin-bottom: 1rem;

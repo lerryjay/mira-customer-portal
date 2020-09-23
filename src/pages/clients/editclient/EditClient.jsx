@@ -37,10 +37,8 @@ class EditClient extends Component {
 
     async componentDidMount(){
         this.state.showLoader();
-        await this.getClients();
         this.setState({ loading : false  });
         this.state.hideLoader();
-        this.getClient();
         this.getCountries();
     }
 
@@ -69,39 +67,74 @@ class EditClient extends Component {
         })
     }
 
+    componentWillMount() {
+        this.state.showLoader();
+        const clienId = this.props.location.pathname.split("/")[2];
+        fetch(
+          `${HTTPURL}clients/getclient?clientid=${clienId}&userid=${this.state.user.userid}`,
+          {
+            method: "GET",
+            headers: { "api-key": APIKEY },
+          }
+        )
+          .then((res) => res.json())
+          .then((result) => {
+            this.state.hideLoader();
+            if (result.status === true) {
+              this.setState({
+                lastname: result.data.lastname,
+                firstname: result.data.firstname,
+                othername: result.data.othername,
+                email: result.data.email,
+                telephone: result.data.telephone,
+                businessname: result.data.businessname,
+                companyemail: result.data.companyemail,
+                companytelephone: result.data.companytelephone,
+                companycountryid: result.data.companycountryid,
+                companystateid: result.data.companystateid,
+                companylga: result.data.companylga,
+                companyaddress: result.data.companyaddress,
+                userid: result.data.user_id,
+                isloading: false,
+              });
+            }
+          });
+      }
 
-    async getClients() {
-        const headers = new Headers();
-        headers.append('API-KEY', APIKEY );
-        const res = await fetch(HTTPURL + `clients/?userid=${this.state.user.userid}`, {
-            method: 'GET',
-            headers: headers
-        }).then(response => response.json());
 
-        if(res['status']) this.setState({ clients : res['data']})
-    }
+    // async getClients() {
+    //     const headers = new Headers();
+    //     headers.append('API-KEY', APIKEY );
+    //     const res = await fetch(HTTPURL + `clients/?userid=${this.state.user.userid}`, {
+    //         method: 'GET',
+    //         headers: headers
+    //     }).then(response => response.json());
 
-    getClient() {
-        const clientid = this.props.location.pathname.split('/')[2];
+    //     if(res['status']) this.setState({ clients : res['data']})
+    // }
+
+    // getClient() {
+    //     const clientid = this.props.location.pathname.split('/')[2];
         
-        const selectedClient = this.state.clients.find(client=>client.user_id == clientid);
-       if (selectedClient) {
-        this.setState({
-            businessname: selectedClient.businessname,
-            email: selectedClient.email,
-            telephone: selectedClient.telephone,
-            firstname: selectedClient.firstname,
-            lastname: selectedClient.lastname,
-            othername: selectedClient.othername,
-            companyemail: selectedClient.companyemail,
-            companytelephone: selectedClient.companytelephone,
-            companyaddress: selectedClient.companyaddress,
-            companycountryid: selectedClient.companycountryid,
-            companystateid: selectedClient.companystateid,
-            companylga: selectedClient.companylga
-        })
-       }
-    }
+    //     const selectedClient = this.state.clients.find(client=>client.user_id == clientid);
+        
+    //    if (selectedClient) {
+    //     this.setState({
+    //         businessname: selectedClient.businessname,
+    //         email: selectedClient.email,
+    //         telephone: selectedClient.telephone,
+    //         firstname: selectedClient.firstname,
+    //         lastname: selectedClient.lastname,
+    //         othername: selectedClient.othername,
+    //         companyemail: selectedClient.companyemail,
+    //         companytelephone: selectedClient.companytelephone,
+    //         companyaddress: selectedClient.companyaddress,
+    //         companycountryid: selectedClient.companycountryid,
+    //         companystateid: selectedClient.companystateid,
+    //         companylga: selectedClient.companylga
+    //     })
+    //    }
+    // }
 
     handleInputChange = e => {
         const { name, value } = e.target

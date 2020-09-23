@@ -137,8 +137,8 @@ class Profile extends Component {
                 <div className="row mt-4">
 
                     <div className="col-md-8 box1 mb-3" id="profile">
+                <form id="profileform" onSubmit={this.handleSubmit}>
 
-                        <form id="profileform" onSubmit={this.handleSubmit}>
                             <div className="card">
                                 <div className="card-header bg-medium font-weight-bold text-dark">
                                     Profile Information
@@ -196,9 +196,9 @@ class Profile extends Component {
                                 <div className="card-footer">
                                     <div className="text-center">
                                         {this.state.loading ?
-                                            <button type="submit" className="btn btn-sm bg-btn btn-primary">
-                                                <div className="spinner-border text-secondary" role="status" id="loader">
-                                                    <span className="sr-only">Loading...</span>
+                                            <button type="submit" className="btn btn-sm  btn-primary">
+                                                <div className="spinner-border text-white" role="status" id="loader">
+                                                    <span className="sr-only text-white">Loading...</span>
                                                 </div>
                                             </button>
                                             :
@@ -209,7 +209,7 @@ class Profile extends Component {
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                    </form>
                     </div>
 
                     <div className="col-md-4 text-center box2 mb-3" id='profilePix'>

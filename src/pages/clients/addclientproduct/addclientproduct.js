@@ -538,7 +538,7 @@ class AddClientProduct extends Component {
               <div className="card-footer">
                 <label
                   htmlFor="files"
-                  className="btn btn-sm btn-primary py-2 px-3"
+                  className="btn btn-sm bg-button py-2 px-3"
                 >
                   Attach Liscence and Files{" "}
                 </label>
@@ -560,7 +560,7 @@ class AddClientProduct extends Component {
                   {this.state.loading ? (
                     <button
                       type="submit"
-                      className="btn btn-sm btn-primary px-4"
+                      className="btn btn-sm bg-button px-4"
                     >
                       <div
                         className="spinner-border text-secondary"
@@ -573,7 +573,7 @@ class AddClientProduct extends Component {
                   ) : (
                     <button
                       type="submit"
-                      className="btn btn-sm btn-primary px-3 py-2"
+                      className="btn btn-sm bg-button px-3 py-2"
                     >
                       <i className="fas fa-folder-open mr-2"></i>
                       Save

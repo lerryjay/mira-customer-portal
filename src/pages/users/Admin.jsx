@@ -44,7 +44,7 @@ class Admin extends Component {
     return (
       <div className="container mt-4">
         <div className="w-100 text-center">
-          <h3>Administrators </h3>
+          <h3  className="text-uppercase">Administrators </h3>
         </div>
           {this.state.loader && (
             <div className="spin-center">

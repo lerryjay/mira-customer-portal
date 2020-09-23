@@ -23,12 +23,22 @@ class CreateClient extends Component {
             companystateid: '',
             companylga: '',
             businessname: '',
+            countries:[],
+            states:[],
 
             errormessage: '',
             loading: false,
             successmessage: ''
         };
     }
+    
+    async componentDidMount(){
+        this.state.showLoader();
+        this.setState({ loading : false  });
+        this.state.hideLoader();
+        this.getCountries();
+    }
+
 
     handleInputChange = e => {
         const { name, value } = e.target
@@ -90,6 +100,31 @@ class CreateClient extends Component {
         }
     }
 
+    
+    getCountries() {
+        const headers = new Headers();
+        headers.append('API-KEY', APIKEY );
+         fetch(HTTPURL + `region/countries`, {
+            method: 'GET',
+            headers: headers
+        }).then(response => response.json())
+        .then(data => {
+            this.setState({countries: data.data})
+        })
+
+    }
+
+    getStates(country_id) {
+        const headers = new Headers();
+        headers.append('API-KEY', APIKEY );
+        fetch(HTTPURL + `region/states?countryid=${country_id}`, {
+            method: 'GET',
+            headers: headers
+        }).then(response => response.json())
+        .then(data => {
+            this.setState({states: data.data})
+        })
+    }
 
 
     render() {
@@ -155,29 +190,55 @@ class CreateClient extends Component {
 
 
                                         <div className="col-md-4 mb-3">
-                                            <div className="form-group">
-                                                <label htmlFor="" className="sr-only">companycountryid</label>
-                                                <input type="text" className="form-control form-control-sm" name="companycountryid"
-                                                    id="companycountryid" placeholder="Country"
-                                                    value={this.state.companycountryid} 
-                                                    onChange={this.handleInputChange} />
-                                            </div>
+                                            <select
+                                            onChange={(e) => {
+                                                this.getStates(e.target.value);
+                                                this.setState({ companycountryid: e.target.value });
+                                            }}
+                                            value={this.state.companycountryid}
+                                            name="companycountryid"
+                                            id="companycountryid"
+                                            className=" form-control form-select form-select-sm"
+                                            >
+                                            <option value="" selected disabled>
+                                                Company&nbsp;Country&nbsp;
+                                            </option>
+
+                                            {this.state.countries.map((country) => {
+                                                return (
+                                                <option value={country.country_id}>{country.name}</option>
+                                                );
+                                            })}
+                                            </select>
                                         </div>
                                         <div className="col-md-4 mb-3">
-                                            <div className="form-group">
-                                                <label htmlFor="" className="sr-only">State</label>
-                                                <input type="text" className="form-control form-control-sm" name="companystateid"
-                                                    id="companystateid" placeholder="State"
-                                                    value={this.state.companystateid} 
-                                                    onChange={this.handleInputChange} />
-                                            </div>
+                                            <select
+                                            onChange={(e) => {
+                                                this.setState({ companystateid: e.target.value });
+                                            }}
+                                            value={this.state.companystateid}
+                                            name="companystateid"
+                                            id="companystateid"
+                                            className=" form-control form-select form-select-sm"
+                                            >
+                                            <option value="" selected disabled>
+                                                Company&nbsp;State&nbsp;
+                                            </option>
+
+                                            {this.state.states.map((state) => {
+                                                return (
+                                                <option value={state.states_id}>{state.name}</option>
+                                                );
+                                            })}
+                                            </select>
                                         </div>
                                         <div className="col-md-4 mb-3">
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Local&nbsp;Government&nbsp;Area</label>
                                                 <input type="text" className="form-control form-control-sm" name="companylga"
                                                     id="companylga" placeholder="Local Government Area"
-                                                    value={this.state.companylga} 
+                                                    value={this.state.companylga}  
+                                                    style={{ height: '35px' }}
                                                     onChange={this.handleInputChange} />
                                             </div>
                                         </div>

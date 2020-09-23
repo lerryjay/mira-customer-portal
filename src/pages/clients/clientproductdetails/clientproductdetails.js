@@ -216,7 +216,7 @@ class clientproductdetails extends Component {
                           <button
                           type="button"
                             onClick={this.closeinfoModal}
-                            className="btn-block btn btn-primary"
+                            className="btn-block btn bg-button"
                           >
                             OK
                           </button>

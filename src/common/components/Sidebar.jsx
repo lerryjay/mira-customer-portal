@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
-import avatar from '../../assets/images/avatar.png'
 
 import { withContext } from '../context';
 import { clientMenu, adminMenu } from '../global_constant';
@@ -26,14 +25,8 @@ const Sidebar = (props) => {
     }
     return (
         <div>
-            <div className="sidemenu" id="sidebar">
-                <ul className="list-unstyled components">
-                    <div className="py-2 text-white text-center">
-                        <img src={avatar} className="image_sidebar my-3" alt="" height="110px" width="110px" />
-                        <p className="image_name mb-0">{user.lastname } { user.firstname }</p>
-                    </div>
-                    <p className="mt-2 mb-2">MENU</p>
-                    <hr className="bg-white mb-0 mt-0" />
+            <div className="sidemenu pt-5" id="sidebar">
+                <ul className="list-unstyled components pl-2">
                     {
                         menu.map(item=>{
                             return(
@@ -48,7 +41,7 @@ const Sidebar = (props) => {
                                     <div>
                                         <div className="dropdown-btn nav-item" to={ item.route } onClick={()=>toggleDropdown(item)}>
                                             <li className={`"nav-item  ${props.location.pathname === item.route ? "active" : ""}`}>
-                                                <i className={`${ item.icon } mr-1 `}></i>&nbsp;{item.name }
+                                                <i className={`${ item.icon } float-right pr-3 `}></i>&nbsp;{item.name }
                                             </li>
                                         </div> 
                                         <div className="dropdown-container" style={item.isActive ?  {display: 'block'} : { display : 'none'}}>
@@ -67,7 +60,7 @@ const Sidebar = (props) => {
                                 :
                                 <NavLink className="nav-item" to={ item.route } onClick={toggle2}>
                                     <li className={`nav-item  text-white ${props.location.pathname === item.route ? "active" : ""}`}>
-                                        <i className={`${item.icon } pr-2`}></i>{item.name }
+                                        <i className={`${item.icon } float-right pr-3 `}></i>{item.name }
                                     </li>
                                 </NavLink>
                             );

@@ -144,11 +144,11 @@
         $upload = File::uploadImage("file",'product',false);
         $imageurl = $upload['status'] ? $upload['data'] : $imageurl;
         $message  = $upload['message'];
-      }else $upload = ['status'=>false];
+      }else $upload = ['status'=>true];
       $update = $this->productModel->updateProduct($productId,$name,$description,$imageurl);
       if($update && $upload['status']) $response = ['status'=>true,'message'=>'Product Updated sucessfully!'.$message];
       elseif($message)  $response = ['status'=>false,'message'=>$message];
-      else $response = ['status'=>false,'message'=>'Product Updated failed due to an expected error!'];
+      else $response = ['status'=>false,'message'=>'Product Update failed due to an expected error!'];
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     }

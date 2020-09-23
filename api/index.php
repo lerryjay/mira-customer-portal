@@ -61,7 +61,7 @@
       $class->$func();
     }else $class->index();
    } catch (Throwable $th) {
-    //   echo $th;
+      echo $th;
      header('Content-Type:Application/json',true,500);
      echo json_encode(["message"=>"An error was encountered while trying to handle this request", "status"=>false]);
    }

@@ -262,7 +262,7 @@
       $tokenexptime = date("H:i:s", strtotime("+ 30minutes"));
       $updated =   $this->userModel->updateUser($user['id'],['token'=>$token,'tokenexpdate'=>$tokenexpdate,'tokenexptime'=>$tokenexptime]);
       if($updated){
-        // Alert::sendMail($user['email'],'Password reset token',"<b>$token</b>");
+        // Alert::         ($user['email'],'Password reset token',"<b>$token</b>");
         $response = [
           'status'=>true,
           'message'=>'A token has been sent to your email. Please enter token to continue'
@@ -546,9 +546,9 @@
       if($user){
         $imageurl = '';
         if(isset($_FILES['file'])){
-          $upload = File::uploadImage("file",'user',false);
+          $upload = File::uploadImage("file",'user',false,450);
           if($upload['status']){
-           $update = $this->updateUser($userId,['imageurl'=>$upload['data']]);
+           $update = $this->userModel->updateUser($userId,['imageurl'=>$upload['data']]);
            $response = $update  ? ['status'=>true,'message'=>'Image updated successfully!', 'data'=>$upload['data']] : ['status'=>false,'message'=>'Image updated failed. An unexpected error occured!'];
           }else $response = ['status'=>false,'message'=>$upload['mesage']];
         }else $response = ['status'=>false,'message'=>'Please select an image for upload!'];

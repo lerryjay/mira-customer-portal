@@ -1,8 +1,8 @@
 <?php
   $db_server = 'localhost';
-  $db_user = 'ici_ticketapp';
-  $db_password = 'xSM73KIFbQg8';
-  $db = 'ici_ticketapp';
+  $db_user = 'root';//'ici_ticketapp';
+  $db_password = '';//'xSM73KIFbQg8';
+  $db = 'ticketapp';//'ici_ticketapp';
 
   define('TICKET_PREFIX','TKT');
 

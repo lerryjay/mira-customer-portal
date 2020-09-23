@@ -517,7 +517,7 @@
         </div>
       </body>';
       $subject = $byAdmin ? 'Ticket : A ticket has been opened for you':'Ticket : Ticket successfully opened!';
-      return Alert::sendMail($email,$subject,$html);
+      // return Alert::sendMail($email,$subject,$html);
     }
 
     /**
@@ -686,7 +686,7 @@
         </div>
       </body>';
       $subject = 'An update has been made on your ticket';
-      return Alert::sendMail($email,$subject,$html);
+      // return Alert::sendMail($email,$subject,$html);
     }
   }
 ?>

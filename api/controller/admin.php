@@ -426,7 +426,7 @@
         </div>
       </body>';
       $subject = 'TCustomer Portal: Account Registration';
-      return Alert::sendMail($email,$subject,$html);
+      // return Alert::sendMail($email,$subject,$html);
     }
   }
   

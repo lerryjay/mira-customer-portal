@@ -539,7 +539,7 @@ input:checked + .slider:before {
 }
 .avatar-circle{
   border-radius: 50%;
-  border: 2px solid #28166f;;
+  border: 2px solid #bdbdbd;
 }
 .btn-primary:focus {
   color: #fff;

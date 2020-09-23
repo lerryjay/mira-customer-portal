@@ -61,11 +61,7 @@ class ChangePassword extends Component {
             const headers = new Headers();
             headers.append('API-KEY',APIKEY);
             let form = new FormData(data);
-<<<<<<< HEAD
             form.append('userid',this.state.user.userid);
-=======
-            form.append("userid", this.state.user.userid);
->>>>>>> db3bd006fa67bc688068ae590b8e06c2348823ad
             const res = await fetch(HTTPURL + 'user/updatepassword', {
                 method: 'POST',
                 body: form,
@@ -131,13 +127,13 @@ class ChangePassword extends Component {
                                 </div>
                                 
                                 {this.state.loading ? 
-                                    <button type="submit" className="btn btn-sm bg-primary mt-3">
+                                    <button type="submit" className="btn btn-sm bg-btn">
                                         <div className="spinner-border text-secondary" role="status" id="loader">
                                             <span className="sr-only">Loading...</span>
                                         </div>
                                     </button>
                                     : 
-                                    <button type="submit" className="btn btn-sm btn-primary mt-3 px-5 py-2">
+                                    <button type="submit" className="btn bg-btn px-5 py-2">
                                             <i className="fas fa-save fa-fw pr-2"></i>
                                         Save
                                     </button>

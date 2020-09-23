@@ -56,15 +56,15 @@
      * @param int $maxSize  maximum file input size in kilobyte
      * @return array ['status':bool,'message':string,'data':[Array if mulitple else String]]
      **/
-    public static function uploadImage($filekey,$path,$multiple = false,$maxSize = 200)
+    public static function uploadImage($filekey,$path,$multiple = false,$maxSize = 450)
     {
       if(!empty($_FILES)){
-        $error;
+        $error = null;
         if(!in_array( strtolower(pathinfo($_FILES[$filekey]['name'],PATHINFO_EXTENSION)),['png','jpg','jpeg','gif'])){
           $error = 'Unsupported file format';
         }
-        if(getimagesize($_FILES[$filekey]["tmp_name"]) >  200 && $error)  $error = 'File too large';
-        else{
+        if($_FILES[$filekey]["size"] >  $maxSize * 1024 && !$error)  $error = 'File too large. File cannot be larger than '.$maxSize.'kb';
+        if(!$error){
           return Self::upload($filekey,$path,$multiple);
         }
         return ['status'=>False,'message'=>$error];

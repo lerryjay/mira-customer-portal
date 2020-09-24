@@ -66,7 +66,7 @@
      * Creates a new ticket for
      *  the given customer of a specific company
      *
-     * @param HTTPPOSTPARAMS $_POST - companyId,customerid,title,message,type - request,complaint,enquiry -,files, 
+     * @param HTTPPOSTPARAMS $_POST - companyId,customerid,title,message,type - support,complaint,enquiry -,files, 
      * @return JSONRESPONSE 
      **/
     public function add()
@@ -102,7 +102,7 @@
     /**
      * Validates creating a new ticket
      *
-     * @param HTTPPOSTPARAMS $_POST - companyId,customerid,title,message,type - request,complaint,enquiry -,files, 
+     * @param HTTPPOSTPARAMS $_POST - companyId,customerid,title,message,type - support,complaint,enquiry -,files, 
      * @return User Array if data is valid else exits the application with appropriate response 
      **/
     public function validateNewTicket()
@@ -114,7 +114,7 @@
       $type        = isset($type) ? $type : '';
       $customerId  = $customerid ?? '';
       $productId   = $productid ?? '';
-      $typeError   = Validate::select($type,['request','complaint','enquiry']);
+      $typeError   = Validate::select($type,['support','complaint','enquiry']);
       if($typeError){
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Please select the nature of the ticket', 'data'=>['field'=>'type']]));
@@ -137,7 +137,7 @@
           $this->setOutputHeader(['Content-type:application/json']);
           $this->setOutput(json_encode(['status'=>false, 'message'=>'Please enter a customerid', 'data'=>['field'=>'customerid']]));
         }
-      }
+      }else $customer = $user;
 
       loadModel('ticket');
       $this->ticketModel = new TicketModel();

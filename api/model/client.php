@@ -158,7 +158,7 @@
     public function getClientProducts($condition,$bindString,$bindValues)
     {
       
-      $sql = 'SELECT *,(SELECT name FROM products WHERE id = product_id) AS name,(SELECT description FROM products WHERE id = product_id) AS description FROM clientproducts '.$condition;
+      $sql = 'SELECT *,(SELECT name FROM products WHERE id = product_id) AS name,(SELECT imageurl FROM products WHERE id = product_id) AS imageurl,(SELECT description FROM products WHERE id = product_id) AS description FROM clientproducts '.$condition;
       $query = $this->query($sql,$bindString,$bindValues); 
       if($query) return $this->rows;
       else return false;

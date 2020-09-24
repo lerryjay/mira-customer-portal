@@ -284,16 +284,23 @@
         "message"=>"Error fetching replys!"
       ];
       $data = $this->validateUserTicketPermission();
+      extract($_POST);
+      $status = $status ?? ''; 
+      if(!in_array($status,['resolved','pending','cancelled'])){
+        $this->setOutputHeader(['Content-type:application/json']);
+        $this->setOutput(json_encode(['status'=>false,'message'=>'Status can only be pending,resolved,cancelled','data'=>['field'=>'status']]));
+      }
+
       extract($data);
 
       $updated = $this->ticketModel->updateTicketStatus($ticketId,$status);
-      if($updated['status']){
+      if($updated){
         $response['status'] = true;
         $response['message'] = ['Ticket status updated successfully'];
         if($user['role'] == 'admin'){
           loadModel('user');
           $this->userModel = new UserModel();
-          $customer = $this->userModel->getUser($ticket['user_id']);
+          $customer = $this->userModel->getUser($ticket['customer_id']);
           $this->sendTicketStatusUpdateMail(TICKET_PREFIX.$ticketId,$customer['email']);
         }
       }else $response['message'] = "An unexpected error occured. Please try again later";

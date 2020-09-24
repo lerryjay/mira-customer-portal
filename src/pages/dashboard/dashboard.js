@@ -11,11 +11,24 @@ class Dashboard extends Component {
       ...this.props,
       clients: "",
       id: 1,
+      pending: '',
+      resolved: '',
     };
   }
 
+componentDidMount(){
+  this.getResolvedTickets();
+  this.getPendingTickets();
+}
 
-  getLoader() {
+  getResolvedTickets(){
+    const resolved = this.state.tickets.filter(ticket => ticket.ticketstatus === 'resolved' )
+    this.setState({resolved: resolved.length})
+  }
+
+  getPendingTickets(){
+    const pending = this.state.tickets.filter(ticket => ticket.ticketstatus === "pending" )
+    this.setState({pending: pending.length})
 
   }
 
@@ -49,10 +62,10 @@ class Dashboard extends Component {
           <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
             <div className="p-2 card card1">
               <i className="fab fa-buffer fa-fw fa-2x mb-2"></i>
-              <p className="border-top text-right py-2">
+              <p className="font-card border-top text-right py-2">
                 {this.state.products.length}
                 <br />
-                <small>Products</small>
+                <span>Products</span>
               </p>
             </div>
           </div>
@@ -60,10 +73,10 @@ class Dashboard extends Component {
           <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
             <div className="p-2 card cardd">
               <i className="fas fa-check fa-fw fa-2x mb-2"></i>
-              <p className="border-top text-right py-2">
-                9.823
+              <p className="font-card  border-top text-right py-2">
+                <span className="">{this.state.resolved}</span>
                 <br />
-                <small>Resolved Tickets</small>
+                <span>Resolved Tickets</span>
               </p>
             </div>
           </div>
@@ -71,20 +84,20 @@ class Dashboard extends Component {
           <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
             <div className="p-2 card carddd">
               <i className="fas fa-comments fa-fw fa-2x mb-2"></i>
-              <p className="border-top text-right py-2">
-                9.823
+              <p className="font-card border-top text-right py-2">
+                {this.state.pending}
                 <br />
-                <small>Pending Tickets</small>
+                <span>Pending Tickets</span>
               </p>
             </div>
           </div>
           <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
             <div className="p-2 card cardddd">
               <i className="fas fa-ticket-alt fa-fw fa-2x mb-2"></i>
-              <p className="border-top text-right py-2">
+              <p className="font-card border-top text-right py-2">
                 {this.state.tickets.length}
                 <br />
-                <small>Tickets</small>
+                <span>Tickets</span>
               </p>
             </div>
           </div>

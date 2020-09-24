@@ -152,10 +152,14 @@ class product_details extends Component {
   }
 
   packageModal() {
-    let modal = document.getElementById("myModal");
+    let modal = document.getElementById("moduleModal");
     modal.style.display = "block";
   }
 
+  closepkgModal() {
+    let modal = document.getElementById("moduleModal");
+    modal.style.display = "none";
+  }
   closeModal() {
     let modal = document.getElementById("myModal");
     modal.style.display = "none";
@@ -221,7 +225,7 @@ deleteModal(e) {
               this.setState({ loading: false }); 
               this.getModules();
               this.state.showAlert("success",  res['message'])
-              let modal = document.getElementById("myModal");
+              let modal = document.getElementById("moduleModal");
               modal.style.display = "none";
               this.setState({ pkgname: "", pkgdescription: "" });
             }
@@ -405,7 +409,7 @@ deleteModal(e) {
 
             {/* Add New Module Modal */}
             {this.state.showmodal ? (
-              <div id="myModal" class="modal">
+              <div id="moduleModal" class="modal">
                 {/* Modal content  */}
                 <div class="modal-content text-center p-5">
                   <form onSubmit={this.saveModule} id="addpackage">
@@ -478,7 +482,7 @@ deleteModal(e) {
                           <div className="col-md-6">
                             <button
                               type="button"
-                              onClick={this.closeModal}
+                              onClick={this.closepkgModal}
                               className="btn-block btn btn-outline-secondary"
                             >
                               Cancel

@@ -126,14 +126,25 @@ class Profile extends Component {
               <div className="card">
                 <div className="card-header"></div>
                 <div className="card-body">
-                  <img
-                    src={avatar}
-                    alt=""
-                    className="image_sidebar"
-                    height="inherit"
-                    width="170px"
-                    style={{ marginTop: "-80px" }}
-                  />
+                  {this.state.selectedUser.imageurl 
+                  ?<img
+                  src={FILEURL + this.state.selectedUser.imageurl }
+                  alt=""
+                  className="image_sidebar"
+                  height="170px"
+                  width="170px"
+                  style={{ marginTop: "-80px" }}
+                />
+                :<img
+                src={avatar}
+                alt=""
+                className="image_sidebar"
+                height="170px"
+                width="170px"
+                style={{ marginTop: "-80px" }}
+              />
+                }
+                  
                 </div>
               </div>
             </div>

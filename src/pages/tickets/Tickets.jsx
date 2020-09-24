@@ -74,9 +74,9 @@ async getClients() {
     ).then((response) => response.json());
     if (res["status"]) {
       let tickets = res["data"];
-      for (let i = 0; i < this.state.tickets.length; i++) {
-        tickets.push(this.state.tickets[i]);
-      }
+      // for (let i = 0; i < this.state.tickets.length; i++) {
+      //   tickets.push(this.state.tickets[i]);
+      // }
       this.setState({ tickets });
     }
   }

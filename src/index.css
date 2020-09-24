@@ -58,6 +58,10 @@ body{
   cursor: pointer;
 }
 
+.font-card {
+  font-weight: 550;
+}
+
 @media (prefers-color-scheme: dark) {
   /* defaults to dark theme */
   div.home {
@@ -298,10 +302,10 @@ label {
 }
 .imgPreview .fa-trash{
   position: absolute;
-  left: 250px;
-  top:30px;
+  left: 92%;
   cursor: pointer;
   visibility: hidden;
+  top: 20px;
 }
 .imgPreview2 .fa-trash{
   position: relative;

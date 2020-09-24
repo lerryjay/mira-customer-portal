@@ -23,7 +23,7 @@ export const clientMenu = [
     sub: [
       {
         name: 'View Products',
-        route: '/clientproducts',
+        route: '/products',
         icon: '',
         isActive: false
       },

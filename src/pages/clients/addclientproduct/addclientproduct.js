@@ -46,7 +46,7 @@ class AddClientProduct extends Component {
     )
       .then((response) => response.json())
       .then((result) => {
-        if (result.status == true) {
+        if (result.status === true) {
           this.setState({ modules: result.data });
         }
       });
@@ -109,11 +109,11 @@ class AddClientProduct extends Component {
                 files: [],
                 deploymentdate: '',
                 trainingdate: '',
-                paymentdate: '',
                 remarks: '',
                 expirationstatus: '',
                 expirationdate: ''
               });
+              window.history.back();
           } else{
               this.state.showAlert("danger",  data.message)
           }
@@ -123,7 +123,7 @@ class AddClientProduct extends Component {
   addModule = async (moduleId) => {
     await this.setState((prevState) => ({
       selectedModules:
-        prevState.selectedModules.length == 0
+        prevState.selectedModules.length === 0
           ? [moduleId]
           : [...prevState.selectedModules, moduleId],
     }));
@@ -131,7 +131,7 @@ class AddClientProduct extends Component {
   removeModule = async (moduleId) => {
     await this.setState((prevState) => ({
       selectedModules: prevState.selectedModules.filter(
-        (mod) => mod != moduleId
+        (mod) => mod !== moduleId
       ),
     }));
   };
@@ -181,23 +181,14 @@ class AddClientProduct extends Component {
     this.setState({ files: files });
   }
 
-  paymentDate(date,licenseCoverage) {
-
-    if (licenseCoverage == "monthly") {
-         date = new Date()
-        let expiration = `${date.getUTCMonth() + 1}/${date.getUTCDay()}/${date.getUTCFullYear() + 1 }`
-        this.setState({ expirationdate : expiration });
-      } 
-  }
-
   render() {
     let files = this.state.files.map((file) => {
-      this.state.imagePreviewUrl = URL.createObjectURL(file);
+      this.setState({ imagePreviewUrl: URL.createObjectURL(file) });
       // this.setState({imagePreviewUrl: URL.createObjectURL(file) })
       return file.name.match(/\.(jpg|jpeg|png)$/) ? (
         <div className="imgPreview m-2" id="files">
           <i className="fa fa-trash" onClick={(e) => this.removeImage(e)}></i>
-          <img src={this.state.imagePreviewUrl} className="imagePreview" />
+          <img src={this.state.imagePreviewUrl} alt="Preview" className="imagePreview" />
         </div>
       ) : (
         <div className="other_files m-2" id="otherfiles">
@@ -538,7 +529,7 @@ class AddClientProduct extends Component {
               <div className="card-footer">
                 <label
                   htmlFor="files"
-                  className="btn btn-sm bg-button py-2 px-3"
+                  className="btn btn-sm btn-primary py-2 px-3"
                 >
                   Attach Liscence and Files{" "}
                 </label>
@@ -573,7 +564,7 @@ class AddClientProduct extends Component {
                   ) : (
                     <button
                       type="submit"
-                      className="btn btn-sm bg-button px-3 py-2"
+                      className="btn btn-sm btn-primary px-3 py-2"
                     >
                       <i className="fas fa-folder-open mr-2"></i>
                       Save

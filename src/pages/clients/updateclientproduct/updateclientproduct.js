@@ -49,7 +49,7 @@ class UpdateClientProduct extends Component {
     )
       .then((response) => response.json())
       .then((result) => {
-        if (result.status == true) {
+        if (result.status === true) {
           this.setState({ modules: result.data });
         }
       });
@@ -76,7 +76,6 @@ class UpdateClientProduct extends Component {
         cost,
         trainingdate,
         trainingstatus,
-        files,
         imageurl,
         remarks,
         modules,
@@ -199,15 +198,6 @@ class UpdateClientProduct extends Component {
     }
 
     this.setState({ files: files });
-  }
-
-  paymentDate(date, licenseCoverage) {
-
-    if (licenseCoverage == "monthly") {
-      date = new Date()
-      let expiration = `${date.getUTCMonth() + 1}/${date.getUTCDay()}/${date.getUTCFullYear() + 1}`
-      this.setState({ expirationdate: expiration });
-    }
   }
 
   render() {

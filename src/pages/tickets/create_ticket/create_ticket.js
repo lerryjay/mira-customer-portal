@@ -208,8 +208,8 @@ class create_ticket extends Component {
                                         onChange={(e) => this.handleImageChange(e)} />
                                     <div className="float-right">
                                         {this.state.loading ?
-                                            <button type="submit" className="btn btn-sm bg-btn">
-                                                <div className="spinner-border text-secondary" role="status" id="loader">
+                                            <button type="submit" className="btn btn-sm btn-primary">
+                                                <div className="spinner-border text-white" role="status" id="loader">
                                                     <span className="sr-only">Loading...</span>
                                                 </div>
                                             </button>

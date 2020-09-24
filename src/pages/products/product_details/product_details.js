@@ -288,7 +288,7 @@ deleteModal(e) {
         {!this.state.loader && (
           <div>
             <div className="row mt-4 mx-5">
-              <div className="col-md-5">
+              <div className="col-md-5 py-3">
                 {/* <img src={this.state.imageurl} onError={`this.src=${ placeholder }`} className="img-fluid" alt="" /> */}
                 <div className="container">
                   <div className="container-fluid">
@@ -296,11 +296,12 @@ deleteModal(e) {
                   </div>
                 </div>
               </div>
-              <div className="col-md-7">
+              <div className="col-md-7 py-3">
                 <h4 className="text-dark">{this.state.name}</h4>
                 <div className="description">
                   <p>{this.state.description}</p>
                   
+                  {this.state.user.role == "admin" &&  
                   <div className="row mt-5">
                     <Link
                       className="btn mt-3 m-2 btn-primary mb-2 rounded-0 px-5"
@@ -319,28 +320,30 @@ deleteModal(e) {
                       </small>
                     </button>
                   </div>
-           
+                  }
                 </div>
               </div>
             </div>
             <div className="row mt-5 px-5 d-flex">
               {/* <div className="col-md-12 packages"> */}
               <h5 className="text-dark mr-auto">MODULES</h5>
-              <button
-                type="button"
-                onClick={this.packageModal}
-                className="btn btn-sm btn-primary new_product mb-2"
-              >
-                <i
-                  className="fas fa-folder-plus"
-                  style={{ color: "#fff" }}
-                  aria-hidden="true"
+              {this.state.user.role == "admin" &&  
+                <button
+                  type="button"
+                  onClick={this.packageModal}
+                  className="btn btn-sm btn-primary new_product mb-2"
                 >
-                  <small className="newproduct" style={{ color: "#fff" }}>
-                    &nbsp;Add&nbsp;New&nbsp;Module
-                </small>
-                </i>
-              </button>
+                  <i
+                    className="fas fa-folder-plus"
+                    style={{ color: "#fff" }}
+                    aria-hidden="true"
+                  >
+                    <small className="newproduct" style={{ color: "#fff" }}>
+                      &nbsp;Add&nbsp;New&nbsp;Module
+                  </small>
+                  </i>
+                </button>
+              }
               {/* </div> */}
             </div>
 
@@ -360,7 +363,8 @@ deleteModal(e) {
                             <div key={module.id} className="col-md-4">
                               <p className="list-group-item">
                                 {module.name}
-                                <label class=" float-right">
+                                {this.state.user.role == "admin" &&  
+                                 <label class=" float-right">
                                   <Link onClick={() => this.infoModal(module.id)}>
                                     <i value={module.id} style={{ cursor: "pointer" }}
                                       className="fa fa-info-circle mr-3 text-info"
@@ -374,6 +378,7 @@ deleteModal(e) {
                                     <i className="fa fa-trash mr-2 text-danger"></i>
                                   </Link>
                                 </label>
+                                }
                               </p>
                             </div>
                           );

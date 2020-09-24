@@ -30,14 +30,11 @@ import Clients from "./pages/clients/Clients";
 import AddClient from "./pages/clients/addclient/addclient";
 import ViewClient from "./pages/clients/view_client/ViewClient";
 import CreateClient from "./pages/clients/create_client/CreateClient";
-import ClientProfile from "./pages/clients/clientprofile/ClientProfile";
-import ClientProducts from "./pages/clients/clientproducts/clientproducts";
 import CreateClientById from "./pages/clients/create_clientbyid/CreateClientById";
 import AddClientProduct from "./pages/clients/addclientproduct/addclientproduct";
-import ClientProductDetails from "./pages/clients/clientproductdetails/clientproductdetails";
 import UpdateClientProduct from "./pages/clients/updateclientproduct/updateclientproduct";
 import ViewClientProduct from "./pages/clients/viewclientproduct/viewclientproduct";
-import ViewProductCart from "./pages/clients/viewproductcart/viewproductcart";
+import ViewDeployment from "./pages/clients/viewproductcart/viewproductcart";
 import EditClient from "./pages/clients/editclient/EditClient"
 
 import CreateUser from "./pages/users/create_user/CreateUser";
@@ -111,19 +108,17 @@ class App extends Component {
     }).then((response) => response.json()).then((json) =>json);
     if (res['status']) {
       const { data } = res;
+      if (data.role === "admin") {
+        this.setState({admin: true });
+        this.getUsers();
+      } 
+      this.getTickets();
+      this.getProducts();
       sessionStorage.setItem("loggedIn", true);
       sessionStorage.setItem("userId", data.userid);
       sessionStorage.setItem("user", JSON.stringify(data));
-      this.getProducts();
-      this.getTickets();
       data.permissions = data.permissions == null ? [] : data.permissions;
-      if (data.role === "admin") {
-        this.setState({user : data,admin: true });
-        this.getUsers();
-      } else {
-        this.setState({ admin: false });
-      }
-      this.setState({ loggedIn: sessionStorage.getItem("loggedIn") });
+      this.setState({ loggedIn: true,user : data });
       return { status: true, message: "Login successful" };
     }else return {status: false, message: 'Invalid Username or Password'};
   };
@@ -161,7 +156,7 @@ class App extends Component {
       method: "POST",
       body: form,
       headers: headers,
-    }) .then((response) => response.json())
+    }).then((response) => response.json())
   };
 
   logoutUser = () =>{
@@ -200,7 +195,7 @@ class App extends Component {
       headers: headers,
     }).then((response) => response.json());
     if(res['status']){
-      if(adminid == this.state.user.userid){
+      if(adminid === this.state.user.userid){
         const { user } = this.state;
         user['permissions'] = data;
         this.setState({ user });
@@ -294,12 +289,12 @@ class App extends Component {
   {
     const headers = new Headers();
     headers.append('API-KEY',APIKEY);
-    const res = await fetch(HTTPURL + `user?userid=${ this.state.user.userid }`, { headers: headers }) .then(response => response.json());
+    const res = await fetch(HTTPURL + `user?userid=${ this.state.user.userid }`, { headers: headers }).then(response => response.json());
     if(res['status']){this.setState({ users : res['data']}); }
   }
 
   render() {
-    const { loggedIn, admin, user } = this.state;
+    const { loggedIn } = this.state;
     return (
       <Provider value={this.getContext()}>
         <div className="home">
@@ -325,10 +320,11 @@ class App extends Component {
                       <PrivateRoute path="/viewticket" permission="VIEWTICKET" component={ViewTicket} />
                       
 
-                      <UserPrivateRoute path="/clientprofile" component={ClientProfile} />
-                      <UserPrivateRoute path="/clientproductdetails" component={ProductCart} />
-                      <UserPrivateRoute path="/productcart" component={ViewProductCart} />
-                      <UserPrivateRoute path="/clientproducts" component={ClientProducts} />
+                      {/* <UserPrivateRoute path="/clientprofile" component={ClientProfile} /> */}
+                      {/* <UserPrivateRoute path="/clientproductdetails" component={ProductCart} />
+                      <UserPrivateRoute path="/clientproducts" component={ClientProducts} /> */}
+                      <UserPrivateRoute path="/productcart" component={ProductCart} />
+                      <UserPrivateRoute path="/viewdeployment" component={ViewDeployment} />
 
 
                       <AdminPrivateRoute path="/createproduct" permission="ADDPRODUCT"  component={CreateProduct} />

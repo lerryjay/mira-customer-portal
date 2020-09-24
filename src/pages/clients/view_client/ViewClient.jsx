@@ -284,10 +284,10 @@ async handleImageUpdate(e) {
     let {imagePreviewUrl} = this.state;
     let imagePreview = null;
     if (imagePreviewUrl) {
-    imagePreview = (<img src={imagePreviewUrl} className="imagePreview"
-                    className="image_sidebar"
+    imagePreview = (<img src={imagePreviewUrl} className="imagePreview image_sidebar"
                     height="170px"
                     width="170px"
+                    alt="Preview"
                     style={{ marginTop: "-80px" }}
                     />);
     }  else{
@@ -295,6 +295,7 @@ async handleImageUpdate(e) {
                     className="image_sidebar"
                     height="170px"
                     width="170px"
+                    alt="Preview"
                     style={{ marginTop: "-80px" }}
                     />);
     }
@@ -330,11 +331,10 @@ async handleImageUpdate(e) {
                   <form id="imageForm">
                       {imagePreview}
                       <label htmlFor="file" ><i class="fas fa-2x text-purple fa-camera-retro"></i> </label> 
-                                <input style={{display:'none'}} type={"file"}  id="file" 
-                                className="form-file form-file-sm" name="file"  placeholder=""
-                                onChange={(e)=>this.handleImageChange(e) }
-                                onChange={(e)=> this.handleImageUpdate(e)}
-                                 />
+                        <input style={{display:'none'}} type={"file"}  id="file" 
+                        className="form-file form-file-sm" name="file"  placeholder=""
+                        onChange={(e)=> { this.handleImageChange(e); this.handleImageUpdate(e); }}
+                          />
                   </form>
                                 
                     </div>
@@ -549,7 +549,7 @@ async handleImageUpdate(e) {
                 </div>
               </div>
 
-              {/* Delete Module Info */}
+              {/* Delete Product */}
               {this.state.showmodal ? (
                 <div id="deleteModal" class="modal">
                   {/* Modal content  */}

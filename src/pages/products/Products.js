@@ -82,15 +82,17 @@ class Products extends Component {
                     </div>
                 )}
 
+               {this.state.user.role == "admin" &&  
                 <div className="row mt-4 d-flex justify-content-end mr-3" >
-                    <Link to="/createproduct">
-                        <button type="button" className="btn btn-sm btn-primary new_product">
-                            <i className="fas fa-plus" aria-hidden="true">
-                                <small className="newproduct" style={{ color: '#fff' }}>&nbsp;Add&nbsp;Product</small>
-                            </i>
-                        </button>
-                    </Link>
-                </div>
+                        <Link to="/createproduct">
+                            <button type="button" className="btn btn-sm btn-primary new_product">
+                                <i className="fas fa-plus" aria-hidden="true">
+                                    <small className="newproduct" style={{ color: '#fff' }}>&nbsp;Add&nbsp;Product</small>
+                                </i>
+                            </button>
+                        </Link>
+                    </div>
+                }
    
                     <div className="row mx-5 my-2">
                         {this.state.products.length === 0 
@@ -115,14 +117,17 @@ class Products extends Component {
                                                 <span className="btn px-3 py-2 btn-primary" value={product.id} style={{ cursor: "pointer", fontSize: 'medium' }}>View</span>
                                             </Link>
                                         </div>
-                                        <Link to={() => `/updateproduct/${product.id}`}>
-                                            <i className="fa fa-edit mr-1"></i>
-                                        </Link>
+                                        {this.state.user.role == "admin" &&  
+                                            <Link to={() => `/updateproduct/${product.id}`}>
+                                                <i className="fa fa-edit mr-1"></i>
+                                            </Link>
+                                        }
 
-                                        <Link onClick={() => this.showDeleteModal(product.id)}>
-                                            <i className="fa fa-trash text-danger"></i>
-                                        </Link>
-
+                                        {this.state.user.role == "admin" &&  
+                                            <Link onClick={() => this.showDeleteModal(product.id)}>
+                                                <i className="fa fa-trash text-danger"></i>
+                                            </Link>
+                                        }
 
                                     </div>
 

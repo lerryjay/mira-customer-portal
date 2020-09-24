@@ -168,7 +168,7 @@ class Profile extends Component {
               </div>
             </div>
 
-            <div className="col-md-6 ">
+            <div className="col-md-8 ">
               <h3 className="text-dark">
                 {this.state.selectedUser.businessname}
               </h3>

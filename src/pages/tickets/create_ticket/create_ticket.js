@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { HTTPURL, APIKEY } from '../../../common/global_constant';
 import { withContext } from '../../../common/context';
+import pdf_placeholder from "../../../assets/images/pdf.png";
 
 class create_ticket extends Component {
     constructor(props) {
@@ -108,12 +109,20 @@ class create_ticket extends Component {
     render() {
         let files = this.state.files.map((file, index) => {
             // this.state.imagePreviewUrl = URL.createObjectURL(file)
+            // this.setState({imagePreviewUrl: URL.createObjectURL(file) })
             return (
                 file.name.match(/\.(jpg|jpeg|png)$/) 
-                     ? <img src={URL.createObjectURL(file)} className="col-md-3" alt="attachment"/>
-                     : <span>{file.name}</span>
+                     ?  <img src={URL.createObjectURL(file)} className="col-md-3" alt="attachment"/>
+                     : <span>
+                            <img
+                                src={pdf_placeholder}
+                                style={{ width: "100px", height: "100px" }}
+                                className="m-2"
+                            />
+                            <br/>
+                            {file.name}
+                        </span>
             )
-            // this.setState({imagePreviewUrl: URL.createObjectURL(file) })
             return (
                 file.name.match(/\.(jpg|jpeg|png)$/)
                     ? < div className="imgPreview  m-2" id="files">

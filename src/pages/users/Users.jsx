@@ -41,7 +41,7 @@ class Users extends Component {
 
   render() {
     return (
-      <div className="container mt-4">
+      <div className="container-fluid mt-4">
         <div className="w-100 text-center">
           <h3 className="text-uppercase">Customers </h3>
         </div>
@@ -62,7 +62,10 @@ class Users extends Component {
                                     </div>
                                     </div>
                                     :
-      !this.state.loader && <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
+      !this.state.loader && 
+      
+      <div className="table-responsive">
+      <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
           <thead>
             <tr>
               <th>S/N</th>
@@ -103,6 +106,7 @@ class Users extends Component {
             }
           </tbody>
         </table>
+          </div>
   }
       </div>
     )

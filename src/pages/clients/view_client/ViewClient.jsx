@@ -342,7 +342,7 @@ async handleImageUpdate(e) {
                 </div>
 
                 {!this.state.isloading && (
-                  <div className="col-md-6 offset-md-1 pl-5">
+                  <div className="col-md-8 pl-5">
                     <h3 className="text-dark">{this.state.businessname}</h3>
                     <div className="row mt-3">
                       <div className="col-md-12">
@@ -508,20 +508,20 @@ async handleImageUpdate(e) {
                                             <td>{product.deploymentstatus}</td>
                                             <td>{product.paymentstatus}</td>
                                             <td>{product.cost}</td>
-                                            <td style={{ minWidth: "70px" }}>
+                                            <td style={{ minWidth: "70px" }} className="d-flex justify-content-center">
                                               <Link
                                                 to={() =>
                                                   `/updateclientproduct/${product.id}`
                                                 }
                                               >
-                                                <button className="btn-primary mr-3"><i className="fa fa-edit"></i> Edit</button>
+                                                <button className="btn-primary m-1"><i className="fa fa-edit"></i> Edit</button>
                                               </Link>
                                               <Link
                                                 to={() =>
                                                   `/viewclientproduct/${product.id}`
                                                 }
                                               >
-                                              <button className="btn-primary mr-3"><i className="fa fa-eye"></i> View</button>
+                                              <button className="btn-primary m-1"><i className="fa fa-eye"></i> View</button>
                                               </Link>
                                               <Link
                                                 onClick={() =>
@@ -530,7 +530,7 @@ async handleImageUpdate(e) {
                                                   )
                                                 }
                                               >
-                                              <button className="btn-danger mr-3"> <i className="fa fa-trash text-white"></i> Delete</button>
+                                              <button className="btn-danger m-1"> <i className="fa fa-trash text-white"></i> Delete</button>
                                               </Link>
                                             </td>
                                           </tr>

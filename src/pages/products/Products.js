@@ -107,7 +107,7 @@ class Products extends Component {
                                 <div className="col-md-3 col-lg-4 col-sm-12 my-2 d-flex justify-content-center" key={i}>
                                     <div className="card text-center products position-relative">
                                         {/* <img src={image} className="image_product" alt="" /> */}
-                                        <div className="imageProduct">
+                                        <div className="imageProduct p-3">
                                             <img className="imageProduct-inner" src={FILEURL + product.imageurl} onError={(e) => { e.target.onerror = null; e.target.src = placeholder }} />
                                         </div>
                                         <div className="card-body">

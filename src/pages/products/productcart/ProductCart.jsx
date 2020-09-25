@@ -65,12 +65,19 @@ getProduct() {
 
         {  !this.state.loader &&
           <div className="container mt-4">
-            <div className="row my-2">
+            <div className="row mx-5 my-2">
+                        {this.state.products.length === 0 
+                        ? <div className="col-md-12 my-2">
+                            <div className="alert alert-warning mt-5" role="alert">
+                                <h6 className="text-center">No product has been added yet</h6>
+                            </div>
+                          </div>
+           : <div className="row my-2">
               {this.state.products.map((product, i) => {
                 return (
                   <div className="col-md-3 col-lg-4 col-sm-12 my-2  d-flex justify-content-center" key={i}>
                     <div className="card text-center products  position-relative">
-                    <div className="imageProduct">
+                    <div className="imageProduct p-3">
                         <img className="imageProduct-inner"
                         src={FILEURL + product.imageurl}
                         onError={(e) => {
@@ -98,6 +105,8 @@ getProduct() {
               )}
 
             </div>
+   } </div>
+        
           </div>
         }
       </div>

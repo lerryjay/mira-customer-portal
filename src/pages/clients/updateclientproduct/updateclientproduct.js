@@ -19,7 +19,6 @@ class UpdateClientProduct extends Component {
       licenseduration: "",
       expirationdate: '',
       remarks: '',
-      products: [],
       errormessage: "",
       loading: false,
       files: [],
@@ -36,7 +35,7 @@ class UpdateClientProduct extends Component {
     const clientproductid = this.props.location.pathname.split("/")[2];
     await this.setState({ clientproductid });
     this.getClientProduct();
-    this.props.user.role === 'admin' && this.getProducts();
+    
   }
   getModule(productId) {
     fetch(
@@ -101,18 +100,7 @@ class UpdateClientProduct extends Component {
     }
   }
 
-  getProducts() {
-    headers.append("API-KEY", APIKEY);
-    fetch(HTTPURL + `product?userid=${this.state.user.userid}`, {
-      method: "GET",
-      headers: headers,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({ products: data.data });
-
-      })
-  }
+  
 
   handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -214,10 +202,10 @@ class UpdateClientProduct extends Component {
               <div className="card-body px-5">
                 <div className="form-group row mb-3">
                   <select
-                    onChange={(e) => {
-                      this.getModule(e.target.value);
-                      this.setState({ type: e.target.value });
-                    }}
+                    // onChange={(e) => {
+                    //   this.getModule(e.target.value);
+                    //   this.setState({ type: e.target.value });
+                    // }}
                     value={this.state.productid}
                     name="productid"
                     id="productid"
@@ -449,7 +437,7 @@ class UpdateClientProduct extends Component {
                     </div>
                   </div>
                   <div className="col-md-4 text-center">
-                    <button className="btn btn-warning text-light btn-sm mt-4">Renew</button>
+                    <button className="btn bg-orangered text-light btn-sm mt-4">Renew</button>
                   </div>
                 </div>
                 <div className="row">

@@ -31,7 +31,9 @@ const data = {
     }]
 };
 
-const Chart = () => {
+// const chartTitle = "Ticket Statistics";
+
+function Chart(props) {
     return (
         <div className="container-fluid">
             <Line
@@ -39,7 +41,7 @@ const Chart = () => {
                 options={{
                     title: {
                         display: true,
-                        text: "Ticket Statistics",
+                        text: props.chartTitle,
                         fontSize: 20,
                         animation: {
                             easing: "easeInOutBack",
@@ -71,10 +73,9 @@ const Chart = () => {
                             }
                         }]
                     },
-                }}
-            />
+                }} />
         </div>
-    )
+    );
 }
 
 export default Chart

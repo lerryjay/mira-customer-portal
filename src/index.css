@@ -366,7 +366,56 @@ label {
   border-radius: 20px;
 }
 
+.text-large {
+  font-size: x-large;
+}
 /* =========================home ===================== */
+
+i.textprimary{
+  color: #28166f !important;
+}
+i.text-orangered{
+  color: orangered !important;
+}
+i.bg-orangered{
+  background: orangered;
+}
+button.bg-orangered{
+  background: orangered;
+}
+.tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab-btn {
+  display: block;
+  flex: 1;
+  padding: 8px 20px;
+  background: #eee;
+  border: 0;
+  font-weight: bold;
+}
+
+.tab-indicator-container {
+  display: flex;
+  background: #eee;
+  margin-bottom: 10px;
+}
+
+.tab-indicator {
+  height: 3px;
+  background: #28166f;
+  transition: transform 0.2s;
+}
+
+.tab-content {
+  padding: 10px;
+}
+button:focus {
+  outline: none !important;
+}
 
 div.home {
   color: #3c4b64;

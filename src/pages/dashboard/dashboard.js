@@ -3,6 +3,7 @@ import { withContext } from "../../common/context";
 import { Link } from "react-router-dom";
 import { HTTPURL, APIKEY } from "../../common/global_constant";
 import Chart from "./Chart";
+import Tabs from "./Tabs"
 
 class Dashboard extends Component {
   constructor(props) {
@@ -13,12 +14,14 @@ class Dashboard extends Component {
       id: 1,
       pending: '',
       resolved: '',
+      cancelled: ''
     };
   }
 
 componentDidMount(){
   this.getResolvedTickets();
   this.getPendingTickets();
+  this.getCancelledTickets();
 }
 
   getResolvedTickets(){
@@ -29,6 +32,12 @@ componentDidMount(){
   getPendingTickets(){
     const pending = this.state.tickets.filter(ticket => ticket.ticketstatus === "pending" )
     this.setState({pending: pending.length})
+
+  }
+
+  getCancelledTickets(){
+    const cancelled = this.state.tickets.filter(ticket => ticket.ticketstatus === "cancelled" )
+    this.setState({cancelled: cancelled.length})
 
   }
 
@@ -58,60 +67,179 @@ componentDidMount(){
   render() {
     return (
       <div>
-        <div className="row mt-3 mx-3 text-white">
-          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
-            <div className="p-2 card card1">
+         {/* <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+            <div className="p-2 card ">
               <i className="fab fa-buffer fa-fw fa-2x mb-2"></i>
               <p className="font-card border-top text-right py-2">
-                {this.state.products.length}
-                <br />
                 <span>Products</span>
-              </p>
-            </div>
-          </div>
-
-          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
-            <div className="p-2 card cardd">
-              <i className="fas fa-check fa-fw fa-2x mb-2"></i>
-              <p className="font-card  border-top text-right py-2">
-                <span className="">{this.state.resolved}</span>
                 <br />
-                <span>Resolved Tickets</span>
+                {this.state.products.length}
               </p>
             </div>
-          </div>
-
+          </div> 
+          check comments ticket-alt
+        */}
+      <Tabs>
+        <div title="General">
+          
+        <div className="row mt-3 mx-3 text-white">
+       
           <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
-            <div className="p-2 card carddd">
-              <i className="fas fa-comments fa-fw fa-2x mb-2"></i>
-              <p className="font-card border-top text-right py-2">
-                {this.state.pending}
-                <br />
-                <span>Pending Tickets</span>
-              </p>
-            </div>
-          </div>
-          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
-            <div className="p-2 card cardddd">
-              <i className="fas fa-ticket-alt fa-fw fa-2x mb-2"></i>
-              <p className="font-card border-top text-right py-2">
-                {this.state.tickets.length}
-                <br />
-                <span>Tickets</span>
-              </p>
-            </div>
-          </div>
-        </div>
-        { this.state.user.role ==='admin' &&
-          <div className="row card mt-3 mx-4 justify-content-center mx-2">
-            <div className="col-12 card-body shadow home-chart">
-              <div className="d-flex justify-content-between">
-                <div>
-                  <h4 className="card-title mb-0">Welcome Back!</h4>
-                  <div className="small text-muted">August 2020</div>
+            <div className="px-3 card py-4">
+              <div className="row align-items-center">
+                <div className="col">
+                  <i className="btn-primary py-3 px-4 text-white fa fa-database fa-2x "></i>
+                </div>
+                <div className="col font-card text-right">
+                  <span className=" ">
+                  Products
+                  </span>
+                  <br/>
+                  <span className="text-large">
+                    {this.state.products.length}
+                  </span>
                 </div>
               </div>
-              <Chart />
+            </div>
+          </div>
+          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+            <div className="px-3 card py-4">
+              <div className="row align-items-center">
+                <div className="col">
+                  <i className="bg-primary py-3 px-4 text-white fab fa-buffer fa-2x "></i>
+                </div>
+                <div className="col font-card text-right">
+                  <span className=" ">
+                  Tickets
+                  </span>
+                  <br/>
+                  <span className="text-large">
+                {this.state.tickets.length}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+            <div className="px-3 card py-4">
+              <div className="row align-items-center">
+                <div className="col">
+                  <i className="bg-orangered py-3 px-4 text-white fa fa-users fa-2x "></i>
+                </div>
+                <div className="col font-card text-right">
+                  <span className=" ">
+                  Clients
+                  </span>
+                  <br/>
+                  <span className="text-large">
+             {this.state.users.length}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+            <div className="px-3 card py-4">
+              <div className="row align-items-center">
+                <div className="col">
+                  <i className="bg-success py-3 px-4 text-white fa fa-chart-line fa-2x "></i>
+                </div>
+                <div className="col font-card text-right">
+                  <span className=" ">
+                  API
+                  </span>
+                  <br/>
+                  <span className="text-large">
+                    987
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>  
+        </div>
+     
+        { this.state.user.role ==='admin' &&
+          <div className="row  mt-3 mx-4 justify-content-center mx-2">
+          <div className="col-md-8  mt-2 card-body shadow home-chart">
+            <Chart chartTitle="Ticket Statistics"/>
+          </div>
+            <div className="col-md-4">
+              <div className="row">
+                
+              <div className="col-md-6 p-2">
+                <div className="px-3 card py-5">
+                  <div className="row align-items-center">
+                    <div className="col text-center">
+                      <i className="textprimary py-2 px-3 text-white fab fa-buffer fa-2x "></i>
+                      <br/>
+                      <span className="text-large">
+                {this.state.tickets.length}
+                      </span>
+                      <br/>
+                      <span className=" ">
+                      Total Tickets
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </div>
+           
+                <div className="col-md-6 p-2">
+                <div className="px-3 card py-5">
+                  <div className="row align-items-center">
+                    <div className="col text-center">
+                      <i className="textprimary py-2 px-3 text-white fa fa-check-circle fa-2x "></i>
+                      <br/>
+                      <span className="text-large">
+                        {this.state.resolved}
+                      </span>
+                      <br/>
+                      <span className=" ">
+                      Resolved Tickets
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </div>
+           
+                <div className="col-md-6 p-2">
+                <div className="px-3 card py-5">
+                  <div className="row align-items-center">
+                    <div className="col text-center">
+                      <i className="textprimary py-2 px-3 text-white fa fa-arrow-circle-up fa-2x "></i>
+                      <br/>
+                      <span className="text-large">
+                        {this.state.pending}
+                      </span>
+                      <br/>
+                      <span className=" ">
+                      Pending Tickets
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </div>
+
+                <div className="col-md-6 p-2">
+                <div className="px-3 card py-5">
+                  <div className="row align-items-center">
+                    <div className="col text-center">
+                      <i className="textprimary py-2 px-3 text-white fa fa-times-circle fa-2x "></i>
+                      <br/>
+                      <span className="text-large">
+                        {this.state.cancelled}
+                      </span>
+                      <br/>
+                      <span className=" ">
+                      Cancelled Tickets
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </div>
+           
+           
+                </div>
             </div>
           </div>
         }
@@ -213,9 +341,603 @@ componentDidMount(){
             </div>
           </div>
         </div>
-      </div>
+     
+        </div>
+        <div title="Ticket">
+         
+        <div className="row mt-3 mx-3 text-white">
+       
+       <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+         <div className="px-3 card py-4">
+           <div className="row align-items-center">
+             <div className="col">
+               <i className="btn-primary py-3 px-4 text-white fa fa-database fa-2x "></i>
+             </div>
+             <div className="col font-card text-right">
+               <span className=" ">
+               Products
+               </span>
+               <br/>
+               <span className="text-large">
+                 {this.state.products.length}
+               </span>
+             </div>
+           </div>
+         </div>
+       </div>
+       <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+         <div className="px-3 card py-4">
+           <div className="row align-items-center">
+             <div className="col">
+               <i className="bg-primary py-3 px-4 text-white fab fa-buffer fa-2x "></i>
+             </div>
+             <div className="col font-card text-right">
+               <span className=" ">
+               Tickets
+               </span>
+               <br/>
+               <span className="text-large">
+             {this.state.tickets.length}
+               </span>
+             </div>
+           </div>
+         </div>
+       </div>
+       <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+         <div className="px-3 card py-4">
+           <div className="row align-items-center">
+             <div className="col">
+               <i className="bg-orangered py-3 px-4 text-white fa fa-users fa-2x "></i>
+             </div>
+             <div className="col font-card text-right">
+               <span className=" ">
+               Clients
+               </span>
+               <br/>
+               <span className="text-large">
+             {this.state.users.length}
+               </span>
+             </div>
+           </div>
+         </div>
+       </div>
+       <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+         <div className="px-3 card py-4">
+           <div className="row align-items-center">
+             <div className="col">
+               <i className="bg-success py-3 px-4 text-white fa fa-chart-line fa-2x "></i>
+             </div>
+             <div className="col font-card text-right">
+               <span className=" ">
+               API
+               </span>
+               <br/>
+               <span className="text-large">
+                 987
+               </span>
+             </div>
+           </div>
+         </div>
+       </div>  
+     </div>
+  
+        { this.state.user.role ==='admin' &&
+          <div className="row  mt-3 mx-4 justify-content-center mx-2">
+          <div className="col-md-8  mt-2 card-body shadow home-chart">
+            <Chart chartTitle="Ticket Statistics"/>
+          </div>
+            <div className="col-md-4">
+              <div className="row">
+                
+              <div className="col-md-6 p-2">
+                <div className="px-3 card py-5">
+                  <div className="row align-items-center">
+                    <div className="col text-center">
+                      <i className="text-primary py-2 px-3 text-white fab fa-buffer fa-2x "></i>
+                      <br/>
+                      <span className="text-large">
+                {this.state.tickets.length}
+                      </span>
+                      <br/>
+                      <span className=" ">
+                      Total Tickets
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </div>
+           
+                <div className="col-md-6 p-2">
+                <div className="px-3 card py-5">
+                  <div className="row align-items-center">
+                    <div className="col text-center">
+                      <i className="text-primary py-2 px-3 text-white fa fa-check-circle fa-2x "></i>
+                      <br/>
+                      <span className="text-large">
+                        {this.state.resolved}
+                      </span>
+                      <br/>
+                      <span className=" ">
+                      Resolved Tickets
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </div>
+           
+                <div className="col-md-6 p-2">
+                <div className="px-3 card py-5">
+                  <div className="row align-items-center">
+                    <div className="col text-center">
+                      <i className="text-primary py-2 px-3 text-white fa fa-arrow-circle-up fa-2x "></i>
+                      <br/>
+                      <span className="text-large">
+                        {this.state.pending}
+                      </span>
+                      <br/>
+                      <span className=" ">
+                      Pending Tickets
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </div>
+
+                <div className="col-md-6 p-2">
+                <div className="px-3 card py-5">
+                  <div className="row align-items-center">
+                    <div className="col text-center">
+                      <i className="text-primary py-2 px-3 text-white fa fa-times-circle fa-2x "></i>
+                      <br/>
+                      <span className="text-large">
+                        {this.state.cancelled}
+                      </span>
+                      <br/>
+                      <span className=" ">
+                      Cancelled Tickets
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </div>
+           
+           
+                </div>
+            </div>
+          </div>
+        }
+        <div className="col-md-12 mb-3" id="profile">
+          <div id="table" className="card pt-2 mt-3 justify-content-center shadow px-2">
+            <h6 className="h6 text-left mt-2 mb-3 pr-3 font-weight-bold">Tickets&nbsp;</h6>
+            <div className="table-responsive">
+              <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
+                <thead>
+                  <tr>
+                    <th>S/N</th>
+                    <th>Date&nbsp;&&nbsp;Time</th>
+                    {this.state.user.role === "admin" && (
+                      <th>Client&nbsp;Name</th>
+                    )}
+                    {this.state.user.role === "admin" && <th>Email</th>}
+                    <th>Ticket&nbsp;Type</th>
+                    <th>Status</th>
+                    <th>View&nbsp;Ticket</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.tickets.map((ticket, index) => {
+                    return (
+                      <tr>
+                        <td>{index + 1}</td>
+                        <td>
+                          {new Date(
+                            ticket.createdat
+                          ).toLocaleDateString()}
+                        </td>
+                        {this.state.user.role === "admin" && (
+                          <td onClick={this.handleRoute}>
+                            {ticket.clientname}
+                          </td>
+                        )}
+                        {this.state.user.role === "admin" && (
+                          <td>{ticket.email}</td>
+                        )}
+                        <td>{ticket.type}</td>
+                        <td style={{ maxWidth: "150px" }}>
+                          <select
+                            className="custom-select custom-select-sm"
+                            value={ticket.ticketstatus}
+                            onChange={(e) =>
+                              this.ticketStatusUpdated(e, ticket)
+                            }
+                          >
+                            <option
+                              className="btn btn-sm text-success"
+                              value="resolved"
+                            >
+                              {" "}
+                                    &#10003;&nbsp;&nbsp;Resolved{" "}
+                            </option>
+                            <option
+                              className="btn btn-sm text-danger"
+                              value="cancelled"
+                            >
+                              &#1008;&nbsp;&nbsp;Cancelled
+                                  </option>
+                            <option
+                              className="btn btn-sm btn-light text-warning"
+                              value="pending"
+                            >
+                              &#10070;&nbsp;&nbsp;Pending
+                                  </option>
+                          </select>
+                        </td>
+                        <td
+                          className="align-middle"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <Link to={() => `/viewticket/${ticket.id}`}>
+                            <span
+                              className="badge px-3 py-2 badge-primary"
+                              value={ticket.id}
+                              style={{ cursor: "pointer" }}
+                            >
+                              View
+                                  </span>
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              {
+                this.state.tickets.length === 0 &&
+                <div className="card-body">
+                  <div className="alert alert-warning" role="alert">
+                    <h6 className="text-center">No ticket records!</h6>
+                  </div>
+                </div>
+
+              }
+            </div>
+          </div>
+        </div>
+     
+        </div>
+        <div title="Client">
+         
+        <div className="row mt-3 mx-3 text-white">
+       
+       <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+         <div className="px-3 card py-4">
+           <div className="row align-items-center">
+             <div className="col">
+               <i className="btn-primary py-3 px-4 text-white fa fa-database fa-2x "></i>
+             </div>
+             <div className="col font-card text-right">
+               <span className=" ">
+               Products
+               </span>
+               <br/>
+               <span className="text-large">
+                 {this.state.products.length}
+               </span>
+             </div>
+           </div>
+         </div>
+       </div>
+       <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+         <div className="px-3 card py-4">
+           <div className="row align-items-center">
+             <div className="col">
+               <i className="bg-primary py-3 px-4 text-white fab fa-buffer fa-2x "></i>
+             </div>
+             <div className="col font-card text-right">
+               <span className=" ">
+               Tickets
+               </span>
+               <br/>
+               <span className="text-large">
+             {this.state.tickets.length}
+               </span>
+             </div>
+           </div>
+         </div>
+       </div>
+       <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+         <div className="px-3 card py-4">
+           <div className="row align-items-center">
+             <div className="col">
+               <i className="bg-orangered py-3 px-4 text-white fa fa-users fa-2x "></i>
+             </div>
+             <div className="col font-card text-right">
+               <span className=" ">
+               Clients
+               </span>
+               <br/>
+               <span className="text-large">
+             {this.state.users.length}
+               </span>
+             </div>
+           </div>
+         </div>
+       </div>
+       <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+         <div className="px-3 card py-4">
+           <div className="row align-items-center">
+             <div className="col">
+               <i className="bg-success py-3 px-4 text-white fa fa-chart-line fa-2x "></i>
+             </div>
+             <div className="col font-card text-right">
+               <span className=" ">
+               API
+               </span>
+               <br/>
+               <span className="text-large">
+                 987
+               </span>
+             </div>
+           </div>
+         </div>
+       </div>  
+     </div>
+  
+        { this.state.user.role ==='admin' &&
+          <div className="row  mt-3 mx-4 justify-content-center mx-2">
+          <div className="col-md-8  mt-2 card-body shadow home-chart">
+            <Chart chartTitle="Client Statistics"/>
+          </div>
+            <div className="col-md-4">
+              <div className="row">
+                
+              <div className="col-md-6 p-2">
+                <div className="px-3 card py-5">
+                  <div className="row align-items-center">
+                    <div className="col text-center">
+                      <i className="text-orangered py-2 px-3 text-white fa fa-users fa-2x "></i>
+                      <br/>
+                      <span className="text-large">
+                {this.state.tickets.length}
+                      </span>
+                      <br/>
+                      <span className=" ">
+                      Total Clients
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </div>
+           
+                <div className="col-md-6 p-2">
+                <div className="px-3 card py-5">
+                  <div className="row align-items-center">
+                    <div className="col text-center">
+                      <i className="text-orangered py-2 px-3 text-white fa fa-check-circle fa-2x "></i>
+                      <br/>
+                      <span className="text-large">
+                        {this.state.resolved}
+                      </span>
+                      <br/>
+                      <span className=" ">
+                      Active Clients
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </div>
+           
+                <div className="col-md-6 p-2">
+                <div className="px-3 card py-5">
+                  <div className="row align-items-center">
+                    <div className="col text-center">
+                      <i className="text-orangered py-2 px-3 text-white fa fa-arrow-circle-up fa-2x "></i>
+                      <br/>
+                      <span className="text-large">
+                        {this.state.pending}
+                      </span>
+                      <br/>
+                      <span className=" ">
+                      Suspended Clients
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </div>
+
+                <div className="col-md-6 p-2">
+                <div className="px-3 card py-5">
+                  <div className="row align-items-center">
+                    <div className="col text-center">
+                      <i className="text-orangered py-2 px-3 text-white fa fa-times-circle fa-2x "></i>
+                      <br/>
+                      <span className="text-large">
+                        {this.state.cancelled}
+                      </span>
+                      <br/>
+                      <span className=" ">
+                      Deleted Clients
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </div>
+           
+           
+                </div>
+            </div>
+          </div>
+        }
+        </div>
+        <div title="API">
+         
+        <div className="row mt-3 mx-3 text-white">
+       
+       <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+         <div className="px-3 card py-4">
+           <div className="row align-items-center">
+             <div className="col">
+               <i className="btn-primary py-3 px-4 text-white fa fa-database fa-2x "></i>
+             </div>
+             <div className="col font-card text-right">
+               <span className=" ">
+               Products
+               </span>
+               <br/>
+               <span className="text-large">
+                 {this.state.products.length}
+               </span>
+             </div>
+           </div>
+         </div>
+       </div>
+       <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+         <div className="px-3 card py-4">
+           <div className="row align-items-center">
+             <div className="col">
+               <i className="bg-primary py-3 px-4 text-white fab fa-buffer fa-2x "></i>
+             </div>
+             <div className="col font-card text-right">
+               <span className=" ">
+               Tickets
+               </span>
+               <br/>
+               <span className="text-large">
+             {this.state.tickets.length}
+               </span>
+             </div>
+           </div>
+         </div>
+       </div>
+       <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+         <div className="px-3 card py-4">
+           <div className="row align-items-center">
+             <div className="col">
+               <i className="bg-orangered py-3 px-4 text-white fa fa-users fa-2x "></i>
+             </div>
+             <div className="col font-card text-right">
+               <span className=" ">
+               Clients
+               </span>
+               <br/>
+               <span className="text-large">
+             {this.state.users.length}
+               </span>
+             </div>
+           </div>
+         </div>
+       </div>
+       <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+         <div className="px-3 card py-4">
+           <div className="row align-items-center">
+             <div className="col">
+               <i className="bg-success py-3 px-4 text-white fa fa-chart-line fa-2x "></i>
+             </div>
+             <div className="col font-card text-right">
+               <span className=" ">
+               API
+               </span>
+               <br/>
+               <span className="text-large">
+                 987
+               </span>
+             </div>
+           </div>
+         </div>
+       </div>  
+     </div>
+  
+        { this.state.user.role ==='admin' &&
+          <div className="row  mt-3 mx-4 justify-content-center mx-2">
+          <div className="col-md-8  mt-2 card-body shadow home-chart">
+            <Chart chartTitle="API Statistics"/>
+          </div>
+            <div className="col-md-4">
+              <div className="row">
+                
+              <div className="col-md-6 p-2">
+                <div className="px-3 card py-5">
+                  <div className="row align-items-center">
+                    <div className="col text-center">
+                      <i className="text-success py-2 px-3 text-white fa fa-chart-line fa-2x "></i>
+                      <br/>
+                      <span className="text-large">
+                {this.state.tickets.length}
+                      </span>
+                      <br/>
+                      <span className=" ">
+                      Total APIs
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </div>
+           
+                <div className="col-md-6 p-2">
+                <div className="px-3 card py-5">
+                  <div className="row align-items-center">
+                    <div className="col text-center">
+                      <i className="text-success py-2 px-3 text-white fa fa-comments fa-2x "></i>
+                      <br/>
+                      <span className="text-large">
+                        {this.state.resolved}
+                      </span>
+                      <br/>
+                      <span className=" ">
+                      Bulk SMS
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </div>
+           
+                <div className="col-md-6 p-2">
+                <div className="px-3 card py-5">
+                  <div className="row align-items-center">
+                    <div className="col text-center">
+                      <i className="text-success py-2 px-3 text-white fab fa-bandcamp fa-2x "></i>
+                      <br/>
+                      <span className="text-large">
+                        {this.state.pending}
+                      </span>
+                      <br/>
+                      <span className=" ">
+                      BVN
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </div>
+
+                <div className="col-md-6 p-2">
+                <div className="px-3 card py-5">
+                  <div className="row align-items-center">
+                    <div className="col text-center">
+                      <i className="text-success py-2 px-3 text-white fa fa-map-marker-alt fa-2x "></i>
+                      <br/>
+                      <span className="text-large">
+                        {this.state.cancelled}
+                      </span>
+                      <br/>
+                      <span className=" ">
+                      Location
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </div>
+           
+           
+                </div>
+            </div>
+          </div>
+        }
+        </div>
+      </Tabs>
+ </div>
     );
   }
 }
 
 export default withContext(Dashboard);
+

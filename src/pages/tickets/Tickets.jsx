@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
 import { HTTPURL, APIKEY } from "../../common/global_constant";
 import { withContext } from "../../common/context";
@@ -129,14 +130,10 @@ async getClients() {
  
   handleClick(event) {
     const paginatedbuttons = document.querySelectorAll("a");
-    const {currentPage} = this.state;
   
     this.setState({
       currentPage: event.target.id
     });
-    // if (currentPage){
-    //   document.getElementById(event.target.id).className = 'active';
-    // } 
 
     paginatedbuttons.forEach(btn => {
       if(btn.id == event.target.id) {

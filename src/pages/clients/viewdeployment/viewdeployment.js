@@ -257,7 +257,7 @@ class viewclientproduct extends Component {
               <div className="row mt-5">
                 <Link
                   className="btn mt-3 m-2 btn-primary mb-2 rounded-0 px-5"
-                  to={() => `/updateclientproduct/${this.state.clientproductid}`}
+                  to={() => `/updatedeployment/${this.state.clientproductid}`}
                 >
                   <small className="newproduct" style={{ color: "#fff" }}>
                     &nbsp;Update&nbsp;

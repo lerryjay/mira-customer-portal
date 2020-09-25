@@ -29,7 +29,7 @@ export const clientMenu = [
       },
       {
         name: 'My Product',
-        route: '/productcart',
+        route: '/clientproducts',
         icon: '',
         isActive: false
       }

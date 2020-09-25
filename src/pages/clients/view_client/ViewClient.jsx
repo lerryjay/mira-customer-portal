@@ -451,7 +451,7 @@ async handleImageUpdate(e) {
                       <div className="row">
                         <div className="col">
                           <Link
-                            to={() => `/addclientproduct/${this.state.userid}`}
+                            to={() => `/adddeployment/${this.state.userid}`}
                             className="btn btn-sm btn-primary new_product mb-2"
                           >
                             <i
@@ -511,14 +511,14 @@ async handleImageUpdate(e) {
                                             <td style={{ minWidth: "70px" }} className="d-flex justify-content-center">
                                               <Link
                                                 to={() =>
-                                                  `/updateclientproduct/${product.id}`
+                                                  `/updatedeployment/${product.id}`
                                                 }
                                               >
                                                 <button className="btn-primary m-1"><i className="fa fa-edit"></i> Edit</button>
                                               </Link>
                                               <Link
                                                 to={() =>
-                                                  `/viewclientproduct/${product.id}`
+                                                  `/viewdeployment/${product.id}`
                                                 }
                                               >
                                               <button className="btn-primary m-1"><i className="fa fa-eye"></i> View</button>

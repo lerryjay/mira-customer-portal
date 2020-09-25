@@ -5,14 +5,12 @@ import { Link } from 'react-router-dom';
 import placeholder from "../../../assets/images/product-placeholder.gif";
 
 class ProductCart extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+  
+    state = {
       product: [],
       products: [],
       ...this.props
-    };
-  }
+    }
 
 
 componentDidMount() {
@@ -23,7 +21,6 @@ componentDidMount() {
 }
 
 getProduct() {
-  const clientid = this.props.location.pathname.split("/")[2];
   const headers = new Headers();
   headers.append("API-KEY", APIKEY);
   fetch(
@@ -83,12 +80,13 @@ getProduct() {
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = placeholder;
-                        }} />
+                        }} 
+                        alt="product logo" />
                     </div>                      
                     {/* <img className="img-fluid" src={placeholder} onError={(e) => { e.target.onerror = null; e.target.src = placeholder }} /> */}
                       <div className="card-body">
                         <h5 className="card-title">{product.name}</h5>
-                        <Link to={() => `/viewdeployment/${product.id}`}>
+                        <Link to={() => `/clientviewdeployment/${product.id}`}>
                           <span class="badge px-3 py-2 badge-primary" value={product.id} style={{ cursor: "pointer", fontSize: 'medium' }}>View</span>
                         </Link>
                       </div>

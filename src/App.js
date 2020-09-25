@@ -21,7 +21,6 @@ import CreateTicket from "./pages/tickets/create_ticket/create_ticket";
 import ViewTicket from "./pages/tickets/viewticket/ViewTicket";
 
 import Products from "./pages/products/Products";
-import ProductCart from "./pages/products/productcart/ProductCart";
 import CreateProduct from "./pages/products/createproduct/createproduct";
 import UpdateProduct from "./pages/products/updateproduct/updateproduct";
 import ProductDetails from "./pages/products/product_details/product_details";
@@ -31,11 +30,12 @@ import AddClient from "./pages/clients/addclient/addclient";
 import ViewClient from "./pages/clients/view_client/ViewClient";
 import CreateClient from "./pages/clients/create_client/CreateClient";
 import CreateClientById from "./pages/clients/create_clientbyid/CreateClientById";
-import AddClientProduct from "./pages/clients/addclientproduct/addclientproduct";
-import UpdateClientProduct from "./pages/clients/updateclientproduct/updateclientproduct";
-import ViewClientProduct from "./pages/clients/viewclientproduct/viewclientproduct";
-import ViewDeployment from "./pages/clients/viewproductcart/viewproductcart";
+import AddDeployment from "./pages/clients/adddeployment/adddeployment";
+import UpdateDeployment from "./pages/clients/updatedeployment/updatedeployment";
+import ViewDeployment from "./pages/clients/viewdeployment/viewdeployment";
+import ClientViewDeployment from "./pages/clients/clientviewdeployment/clientviewdeployment";
 import EditClient from "./pages/clients/editclient/EditClient"
+import ClientProducts from "./pages/clients/clientproducts/clientproducts";
 
 import CreateUser from "./pages/users/create_user/CreateUser";
 import AddAdmin from "./pages/users/addadministrator/addadministrator";
@@ -320,11 +320,8 @@ class App extends Component {
                       <PrivateRoute path="/viewticket" permission="VIEWTICKET" component={ViewTicket} />
                       
 
-                      {/* <UserPrivateRoute path="/clientprofile" component={ClientProfile} /> */}
-                      {/* <UserPrivateRoute path="/clientproductdetails" component={ProductCart} />
-                      <UserPrivateRoute path="/clientproducts" component={ClientProducts} /> */}
-                      <UserPrivateRoute path="/productcart" component={ProductCart} />
-                      <UserPrivateRoute path="/viewdeployment" component={ViewDeployment} />
+                      <UserPrivateRoute path="/clientproducts" component={ClientProducts} />
+                      <UserPrivateRoute path="/clientviewdeployment" component={ClientViewDeployment} />
 
 
                       <AdminPrivateRoute path="/createproduct" permission="ADDPRODUCT"  component={CreateProduct} />
@@ -336,9 +333,9 @@ class App extends Component {
                       <AdminPrivateRoute path="/createclientbyid"  permission="CREATECLIENT" component={CreateClientById} />
                       <AdminPrivateRoute path="/viewclient" permission="VIEWCLIENT" component={ViewClient} />
                       <AdminPrivateRoute path="/editclient" permission="UPDATECLIENT" component={EditClient} />
-                      <AdminPrivateRoute path="/addclientproduct"  permission="ADDDEPLOYMENT" component={AddClientProduct} />
-                      <AdminPrivateRoute path="/updateclientproduct" permission="UPDATEDEPLOYMENT" component={UpdateClientProduct} />
-                      <AdminPrivateRoute path="/viewclientproduct" permission="VIEWDEPLOYMENT" component={ViewClientProduct} />
+                      <AdminPrivateRoute path="/adddeployment"  permission="ADDDEPLOYMENT" component={AddDeployment} />
+                      <AdminPrivateRoute path="/updatedeployment" permission="UPDATEDEPLOYMENT" component={UpdateDeployment} />
+                      <AdminPrivateRoute path="/viewdeployment" permission="VIEWDEPLOYMENT" component={ViewDeployment} />
 
                       <AdminPrivateRoute path="/addadmin" permission="ADDADMIN" component={AddAdmin} />
                       <AdminPrivateRoute path="/createuser" permission="CREATEUSER" component={CreateUser} />

@@ -142,7 +142,7 @@ class Products extends Component {
                     </div>
 
                 {this.state.showmodal ?
-                    <div id="myModal" class="modal">
+                    <div id="myModal" className="modal">
                         {/* Modal content  */}
                         <div class="modal-content text-center p-5">
                             <i className="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>

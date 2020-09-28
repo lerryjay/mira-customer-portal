@@ -1,147 +1,185 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom';
-import { withContext } from '../../common/context'
-import Pagination from '../../common/components/Pagination'
+import { Link } from "react-router-dom";
+import avatar from '../../assets/images/avatar.png'
+import { withContext } from '../../common/context';
+import { HTTPURL, APIKEY } from '../../common/global_constant';
 
 class Users extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { 
-      ...this.props, 
-      loader: false,
-      currentPage: 1,
-      numberPerPage: 10,
-      totalLists: this.props.users,
-      pageNumbers: [],
-      currentLists: []
-    }
-  }
+    constructor(props) {
+        super(props)
 
-  showDropdown(userid){
-    let dropdown = document.getElementById(userid);
-    if(dropdown.style.display === "none"){
-      dropdown.style.display = "block";
-    } else {
-      dropdown.style.display = "none"
-    }
-  }
-
-  update = (newPage) => {
-    this.setState({currentPage:newPage});
-  }
-
-  render() {
-    
-    const { numberPerPage,currentPage, totalLists} = this.state
-
-    // Logic for displaying current lists
-    const indexOfLastList = currentPage * numberPerPage;
-    const indexOfFirstList = indexOfLastList - numberPerPage;
-    const currentLists = totalLists.slice(indexOfFirstList, indexOfLastList);
-    this.state.currentLists = currentLists
-
-
-    return (
-      <div className="container-fluid mt-4">
-        <div className="w-100 text-center">
-          <h3 className="text-uppercase">Customers </h3>
-        </div>
-
-        {this.state.loader && 
-        <div className="spin-center">
-        <span class="text-primary ">
-          <span class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></span>
-          Loading...
-        </span>
-        </div>
+        this.state = {
+            ...this.props,
+            showmodal: true,
+            loading: true,
+            id: '',
+            userid: ''
         }
 
-        {!this.state.loader && this.state.users.length === 0 ?
+    }
+
+    getUser(lastname) {
+        const selectedUser = this.state.users.find(user => user.lastname + user.firstname === (lastname) );
+        if (selectedUser) {
+            this.setState({
+                userid: selectedUser.userid
+            })
+        }
+    }
+
+    handleInputChange = e => {
+        let { name, value } = e.target
+        if (name === 'userid') {
+            const user = this.state.users.find(user => user.lastname + user.firstname === value);
+            if (user) value = user.userid;
+        }
+        this.setState({ [name]: value, errormessage: '' });
+    }
+
+    render() {
+
+        return (
+            <div className="container-fluid">
+                <div className="row d-flex align-items-center justify-content-center form">
+
+                    <div className="col-md-6 ">
+                        <div className="card mx-4 my-auto">
+                            <div className="card-body">
+                                <div className="text-center">
+                                    <h3>SEARCH CUSTOMERS<i className="fa fa-search pl-5"></i> </h3>
+                                </div> 
+                                <div className="form-group m-5">
+                                    <label htmlFor="name" className="font-weight-bold text-left sr-only">
+                                        Search
+                                    </label>
+                                    <input list="name" name="user" id="user"
+                                        onChange={this.handleInputChange} name="user" placeholder="Enter customer name to search" className="form-control"
+                                        onChange={(e) => {
+                                            this.getUser(e.target.value);
+                                        }} />
+                                    <datalist id="name">
+                                        {
+                                            this.state.users.map(user => <option value={user.lastname + user.firstname} />)
+                                        }
+                                    </datalist>
+
+                                    <div>
+                                        {this.state.userid === '' ?
+                                            <span></span>
+                                            :
+                                            this.state.userid &&
+                                            <div className="mt-5 text-center">
+                                                <Link to={() => `/userprofile/${this.state.userid}`} >
+                                                    <button className="btn btn-primary rounded-0 px-5" value={this.state.id} style={{ cursor: "pointer", fontSize: '16px' }}>View</button>
+                                                </Link>
+                                            </div>
+                                        }
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="col-md-12" >
+
+
+                    </div>
+                </div>
+
+
+
+
+                {/* <div className="col-md-12" >
+                                <div className="card-body">
+                                {!this.state.loading && this.state.clients.length === 0 ?
                                 <div className="card-body">
                                     <div className="alert alert-warning" role="alert">
-                                        <h6 className="text-center">No Customer records!</h6>
+                                        <h6 className="text-center">No client records!</h6>
                                     </div>
                                     </div>
                                     :
-      !this.state.loader && 
-      
-      <div className="table-responsive">
-      <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
-          <thead>
-            <tr>
-              <th>S/N</th>
-              <th>Firstname</th>
-              <th>Lastname</th>
-              <th>Email</th>
-              <th>Telephone</th>
-              <th>Business Name</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              this.state.currentLists.map((user,index)=>
-                <tr>
-                  <td>{ index + 1}</td>
-                  <td>{ user.firstname }</td>
-                  <td>{ user.lastname }</td>
-                  <td>{ user.email }</td>
-                  <td>{ user.telephone }</td>
-                  <td>{ user.isclient ? user.businessname : 'Not a client' }</td>
-                  <td> 
-                    <div className="dropdown">
-                        <button className="btn btn-secondary btn-sm dropdown-toggle" type="button" onClick={()=> this.showDropdown(user.userid)} id={"dropdownMenuButton"} data-toggle={"dropdown"} aria-haspopup={"true"} aria-expanded={"false"}>
-                          Select
-                        </button>
-                        <div className="dropdown-menu" id={user.userid} aria-labelledby={"dropdownMenuButton"}>
-                          <Link to={() => `/userprofile/${user.userid}`} className="dropdown-item"> View Profile </Link>
-                          <Link to={() => `/createuserticket/${user.userid}`} className="dropdown-item"> Create Ticket </Link>
-                          {!user.isclient && <Link to={() => `/createclient/${user.userid}`} className="dropdown-item"> Create Client Account </Link>}
-                          <div className="dropdown-divider"></div>
-                          <a className="dropdown-item text-danger" href="#">Suspend Account</a>
+                                    !this.state.loading && <div id='table' className=" pt-2 justify-content-center shadow">
+                                        <div className="table-responsive">
+                                            <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
+                                                <thead>
+                                                    <tr>
+                                                        <th><i className="fas fa-image"></i></th>
+                                                        <th>Name</th>
+                                                        <th>Email&nbsp;Address</th>
+                                                        <th>Telephone</th>
+                                                        <th>Company&nbsp;Name</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                {this.state.clients.map( client => {
+                                                     return(
+                                                        <tr>
+                                                        <td className="align-middle">
+                                                            <img src={avatar} alt="" width="30" height="30" className="rounded-circle" /></td>
+                                                            <td>{client.lastname} {client.firstname} {client.othername}</td>
+                                                            
+                                                        <td>{client.email} </td>
+                                                            <td>{client.telephone} </td>
+                                                            <td>{client.businessname}</td>
+                                                        <td>
+                                                            <Link to={() => `/viewClient/${client.userid}`} >
+                                                                <span className="badge px-3 py-2 m-2 badge-primary" value={client.id} style={{cursor:"pointer"}}>View</span>
+                                                            </Link>
+                                                            <Link onClick={() => this.showdeleteModal(client.userid)}>
+                                                                <span className="badge px-3 py-2 badge-danger" id="myBtn" style={{cursor:"pointer"}}>Delete</span>
+                                                            </Link>
+                                                        </td>
+                            
+                                                    </tr>
+
+                                                     )}
+                                                )}
+
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                }
+                                </div>
+    
+                            
+                            </div>
+                    </div>
+    
+    
+               */}
+
+                {this.state.showmodal ?
+                    <div id="myModal" className="modal">
+                        {/* Modal content  */}
+                        <div className="modal-content text-center p-5">
+                            <i className="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
+                            <h3>Are you sure?</h3>
+                            <p> Do you really want to delete this file?</p>
+                            <div className="row">
+                                <div className="col-md-6 col-sm-6">
+                                    <button onClick={this.closeModal} className="btn-block btn btn-outline-secondary mb-2">Cancel</button>
+                                </div>
+                                <div className="col-md-6 col-sm-6">
+                                    <form id="deleteclient">
+                                        <button onClick={() => this.deleteModal(this.state.id)} className="btn btn-danger btn-block">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </td>
-                </tr>
-              )
-            }
-          </tbody>
-        </table>
-          </div>
-  }
-
-  {/* Pagination */}
-  {this.state.totalLists.length > 0  && 
-       <div className="row mt-5">
-         <div className="col-md-4">
-            <div className="form-group mt-1">
-            {this.state.users.length > 0 &&  
-            <select 
-                onChange={(e) => {
-                  this.setState({ numberPerPage: e.target.value });
-                }}
-               style={{ maxWidth: "180px" }}
-              name="page" id="page" className=" form-control form-select form-select-sm">
-                    <option value="10" selected>10</option>
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                    <option value="40">40</option>
-                    <option value="50">50</option>
-                </select>
+                    </div>
+                    :
+                    <span></span>
                 }
-            </div>
-         </div>
 
-         <div className="col-md-8 ">
-            <div className="row  justify-content-center text-center">
-            <Pagination numberPerPage={this.state.numberPerPage} currentPage={this.state.currentPage} totalLists={this.state.users} pageNumbers={this.state.pageNumbers} currentLists={this.state.currentLists} update={this.update} />
-            </div>  
-           </div> 
-         </div>
-        }
-      </div>
-    )
-  }
+
+
+            </div>
+        )
+    }
 }
 export default withContext(Users);

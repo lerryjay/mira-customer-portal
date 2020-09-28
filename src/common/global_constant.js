@@ -161,6 +161,18 @@ export const adminMenu = [
     ]
   },
   {
+    name: 'API Metrics',
+    route: '/apilogs',
+    icon: 'fa fa-chart-line',
+    isActive: false
+  },
+  {
+    name: 'Transactions',
+    route: '/transactions',
+    icon: 'fa fa-chart-pie',
+    isActive: false
+  },
+  {
     name: 'Profile',
     route: '/profile',
     icon: 'fas fa-user',

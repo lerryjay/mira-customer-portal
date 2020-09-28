@@ -52,6 +52,8 @@ import PageLoader from "./common/components/PageLoader";
 import Alert from "./common/components/Alert";
 import NotFound from "./common/components/NotFound";
 import Forbidden from "./common/components/Forbidden";
+import ScrollToTop from "./common/components/ScrollToTop";
+
 
 
 
@@ -303,6 +305,7 @@ class App extends Component {
           <Fragment>
           {/* // basename="/ticketapp" */}
             <Router > 
+            <ScrollToTop />
               <Nav />
               <div className="App" id="wrapper">
                 { loggedIn && <Sidebar />}

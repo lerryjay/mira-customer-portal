@@ -21,7 +21,6 @@ import CreateTicket from "./pages/tickets/create_ticket/create_ticket";
 import ViewTicket from "./pages/tickets/viewticket/ViewTicket";
 
 import Products from "./pages/products/Products";
-import ProductCart from "./pages/products/productcart/ProductCart";
 import CreateProduct from "./pages/products/createproduct/createproduct";
 import UpdateProduct from "./pages/products/updateproduct/updateproduct";
 import ProductDetails from "./pages/products/product_details/product_details";
@@ -30,15 +29,13 @@ import Clients from "./pages/clients/Clients";
 import AddClient from "./pages/clients/addclient/addclient";
 import ViewClient from "./pages/clients/view_client/ViewClient";
 import CreateClient from "./pages/clients/create_client/CreateClient";
-import ClientProfile from "./pages/clients/clientprofile/ClientProfile";
-import ClientProducts from "./pages/clients/clientproducts/clientproducts";
 import CreateClientById from "./pages/clients/create_clientbyid/CreateClientById";
-import AddClientProduct from "./pages/clients/addclientproduct/addclientproduct";
-import ClientProductDetails from "./pages/clients/clientproductdetails/clientproductdetails";
-import UpdateClientProduct from "./pages/clients/updateclientproduct/updateclientproduct";
-import ViewClientProduct from "./pages/clients/viewclientproduct/viewclientproduct";
-import ViewProductCart from "./pages/clients/viewproductcart/viewproductcart";
+import AddDeployment from "./pages/clients/adddeployment/adddeployment";
+import UpdateDeployment from "./pages/clients/updatedeployment/updatedeployment";
+import ViewDeployment from "./pages/clients/viewdeployment/viewdeployment";
+import ClientViewDeployment from "./pages/clients/clientviewdeployment/clientviewdeployment";
 import EditClient from "./pages/clients/editclient/EditClient"
+import ClientProducts from "./pages/clients/clientproducts/clientproducts";
 
 import CreateUser from "./pages/users/create_user/CreateUser";
 import AddAdmin from "./pages/users/addadministrator/addadministrator";
@@ -55,6 +52,8 @@ import PageLoader from "./common/components/PageLoader";
 import Alert from "./common/components/Alert";
 import NotFound from "./common/components/NotFound";
 import Forbidden from "./common/components/Forbidden";
+import ScrollToTop from "./common/components/ScrollToTop";
+
 
 
 
@@ -111,19 +110,17 @@ class App extends Component {
     }).then((response) => response.json()).then((json) =>json);
     if (res['status']) {
       const { data } = res;
+      if (data.role === "admin") {
+        this.setState({admin: true });
+        this.getUsers();
+      } 
+      this.getTickets();
+      this.getProducts();
       sessionStorage.setItem("loggedIn", true);
       sessionStorage.setItem("userId", data.userid);
       sessionStorage.setItem("user", JSON.stringify(data));
-      this.getProducts();
-      this.getTickets();
       data.permissions = data.permissions == null ? [] : data.permissions;
-      if (data.role === "admin") {
-        this.setState({user : data,admin: true });
-        this.getUsers();
-      } else {
-        this.setState({ admin: false });
-      }
-      this.setState({ loggedIn: sessionStorage.getItem("loggedIn") });
+      this.setState({ loggedIn: true,user : data });
       return { status: true, message: "Login successful" };
     }else return {status: false, message: 'Invalid Username or Password'};
   };
@@ -161,7 +158,7 @@ class App extends Component {
       method: "POST",
       body: form,
       headers: headers,
-    }) .then((response) => response.json())
+    }).then((response) => response.json())
   };
 
   logoutUser = () =>{
@@ -200,7 +197,7 @@ class App extends Component {
       headers: headers,
     }).then((response) => response.json());
     if(res['status']){
-      if(adminid == this.state.user.userid){
+      if(adminid === this.state.user.userid){
         const { user } = this.state;
         user['permissions'] = data;
         this.setState({ user });
@@ -294,19 +291,20 @@ class App extends Component {
   {
     const headers = new Headers();
     headers.append('API-KEY',APIKEY);
-    const res = await fetch(HTTPURL + `user?userid=${ this.state.user.userid }`, { headers: headers }) .then(response => response.json());
+    const res = await fetch(HTTPURL + `user?userid=${ this.state.user.userid }`, { headers: headers }).then(response => response.json());
     if(res['status']){this.setState({ users : res['data']}); }
   }
 
   render() {
-    const { loggedIn, admin, user } = this.state;
+    const { loggedIn } = this.state;
     return (
       <Provider value={this.getContext()}>
         <div className="home">
           { this.state.alertActive  && <Alert type={ this.state.alertType } message={ this.state.alertMessage } />}
           { this.state.loaderActive && <PageLoader />}
           <Fragment>
-            <Router  basename="/ticketapp"> 
+            <Router basename="/customer-portal" > 
+            <ScrollToTop />
               <Nav />
               <div className="App" id="wrapper">
                 { loggedIn && <Sidebar />}
@@ -324,10 +322,8 @@ class App extends Component {
                       <PrivateRoute path="/viewticket" permission="VIEWTICKET" component={ViewTicket} />
                       
 
-                      <UserPrivateRoute path="/clientprofile" component={ClientProfile} />
-                      <UserPrivateRoute path="/clientproductdetails" component={ProductCart} />
-                      <UserPrivateRoute path="/productcart" component={ViewProductCart} />
                       <UserPrivateRoute path="/clientproducts" component={ClientProducts} />
+                      <UserPrivateRoute path="/clientviewdeployment" component={ClientViewDeployment} />
 
 
                       <AdminPrivateRoute path="/createproduct" permission="ADDPRODUCT"  component={CreateProduct} />
@@ -339,9 +335,9 @@ class App extends Component {
                       <AdminPrivateRoute path="/createclientbyid"  permission="CREATECLIENT" component={CreateClientById} />
                       <AdminPrivateRoute path="/viewclient" permission="VIEWCLIENT" component={ViewClient} />
                       <AdminPrivateRoute path="/editclient" permission="UPDATECLIENT" component={EditClient} />
-                      <AdminPrivateRoute path="/addclientproduct"  permission="ADDDEPLOYMENT" component={AddClientProduct} />
-                      <AdminPrivateRoute path="/updateclientproduct" permission="UPDATEDEPLOYMENT" component={UpdateClientProduct} />
-                      <AdminPrivateRoute path="/viewclientproduct" permission="VIEWDEPLOYMENT" component={ViewClientProduct} />
+                      <AdminPrivateRoute path="/adddeployment"  permission="ADDDEPLOYMENT" component={AddDeployment} />
+                      <AdminPrivateRoute path="/updatedeployment" permission="UPDATEDEPLOYMENT" component={UpdateDeployment} />
+                      <AdminPrivateRoute path="/viewdeployment" permission="VIEWDEPLOYMENT" component={ViewDeployment} />
 
                       <AdminPrivateRoute path="/addadmin" permission="ADDADMIN" component={AddAdmin} />
                       <AdminPrivateRoute path="/createuser" permission="CREATEUSER" component={CreateUser} />

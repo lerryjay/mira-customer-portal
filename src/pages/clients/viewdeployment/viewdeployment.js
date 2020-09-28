@@ -29,6 +29,7 @@ class viewclientproduct extends Component {
       previewFile: "",
       product_id: '',
       files: [],
+      showmodal: true,
     };
   }
 
@@ -80,6 +81,50 @@ class viewclientproduct extends Component {
       });
       this.getModule(product_id);
     }
+  }
+
+  
+   async showdeleteModal(clientproductid) {
+     const selectedProduct = this.state.products.find(
+      (item) => item.id === clientproductid
+    );
+    await this.setState({ selectedProduct });
+    let modal = document.getElementById("deleteModal");
+    modal.style.display = "block";
+    
+  }
+  closedeleteModal() {
+    let modal = document.getElementById("deleteModal");
+    modal.style.display = "none";
+  }
+   deleteProduct = async () => {
+    this.setState({ loading: true });;
+
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+        const result = await fetch(
+          `${HTTPURL}clients/deleteproduct?clientproductid=${this.state.clientproductid}&userid=${this.state.user.userid}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        ).then((response) => response.json());
+          if(result.status === true){
+            console.log(result.message)
+            this.setState({ loading: false });
+            this.state.showAlert("success", result.message)
+            // let modal = document.getElementById("deleteModal");
+            // modal.style.display = "none";
+            // window.history.go("-1");
+            this.props.history.goBack();
+            this.props.history.goBack();
+          }else{
+            this.setState({ loading: false });
+            this.state.showAlert("danger", result.message)
+            let modal = document.getElementById("deleteModal");
+            modal.style.display = "none";
+          }
+          
   }
 
    updateModules = async () =>{
@@ -202,6 +247,7 @@ class viewclientproduct extends Component {
                   e.target.onerror = null;
                   e.target.src = placeholder;
                 }}
+                alt="Product"
               />
             </div>
             <div className="col-md-7 offset-md-1">
@@ -211,12 +257,19 @@ class viewclientproduct extends Component {
               <div className="row mt-5">
                 <Link
                   className="btn mt-3 m-2 btn-primary mb-2 rounded-0 px-5"
-                  to={() => `/updateclientproduct/${this.state.clientproductid}`}
+                  to={() => `/updatedeployment/${this.state.clientproductid}`}
                 >
                   <small className="newproduct" style={{ color: "#fff" }}>
                     &nbsp;Update&nbsp;
                   </small>
                 </Link>
+                <Link
+                  onClick={() =>
+                    this.showdeleteModal(
+                      this.state.clientproductid
+                    )
+                  }
+                >
                 <button
                   type="button"
                   className="btn mt-3 m-2 btn-danger mb-2 rounded-0  px-5"
@@ -225,6 +278,7 @@ class viewclientproduct extends Component {
                     &nbsp;Delete
                   </small>
                 </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -286,7 +340,7 @@ class viewclientproduct extends Component {
               <h5 className="text-dark font-weight-bold">Remarks</h5>
             </div>
             <div className="col-md-12">
-              {this.state.remarks == "" ? (
+              {this.state.remarks === "" ? (
                 <div className="alert alert-warning" role="alert">
                   <h6 className="text-center">
                     Edit client product to add a remark!
@@ -360,6 +414,7 @@ class viewclientproduct extends Component {
                               e.target.onerror = null;
                               e.target.src = placeholder;
                             }}
+                            alt="Product"
                           />
                           <Link onClick={() => this.deleteFiles(index, item)}>
                               <i className="fa fa-trash text-danger"></i>
@@ -372,6 +427,7 @@ class viewclientproduct extends Component {
                               onClick={(e) => this.showFileModal(e, item)}
                               style={{ width: "100px", height: "100px" }}
                               className="m-2"
+                              alt="PDF logo"
                             />
                             <Link onClick={() => this.deleteFiles(index, item)}>
                                 <i className="fa fa-trash text-danger"></i>
@@ -396,6 +452,62 @@ class viewclientproduct extends Component {
           : <span></span>
             }
           </div>
+
+          {/* Delete Product */}
+          {this.state.showmodal ? (
+                <div id="deleteModal" class="modal">
+                  {/* Modal content  */}
+                  <div class="modal-content modal-del text-center p-5">
+                    {/* <div className="delete-icon">
+                          &times;
+                      </div> */}
+                    <i
+                      class="fa fa-exclamation-triangle fa-3x dark-red mb-2"
+                      aria-hidden="true"
+                    ></i>
+                    <h3>Are you sure?</h3>
+                    <p> Do you really want to delete this file?</p>
+                    <div className="row">
+                      <div className="col-md-6">
+                        <button
+                          onClick={this.closedeleteModal}
+                          className="btn-block btn btn-outline-secondary mb-2"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                      <div className="col-md-6">
+                        {this.state.loading ? (
+                          <button
+                            type="submit"
+                            className="btn btn-block btn-primary"
+                          >
+                            <div
+                              className="spinner-border text-danger"
+                              role="status"
+                              id="loader"
+                            >
+                              <span className="sr-only">Loading...</span>
+                            </div>
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() =>
+                              this.deleteProduct(this.state.clientproductid)
+                            }
+                            className="btn btn-danger btn-block"
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <span></span>
+              )}
+
 
           <div id="moduleModal" className="modal2">
             <div className="px-2 d-flex">
@@ -445,6 +557,7 @@ class viewclientproduct extends Component {
                 download
                 href={FILEURL + this.state.previewFile}
                 target="_blank"
+                rel="noopener noreferrer"
                 className="btn btn-primary rounded-0 top-left mr-auto"
                 style={{ position: "absolute" }}
               >
@@ -454,9 +567,9 @@ class viewclientproduct extends Component {
             </div>
             <div className="d-flex justify-content-center align-content-center">
               {this.state.previewFile.match(/\.(jpg|jpeg|png)$/) ? (
-                <img src={FILEURL + this.state.previewFile} />
+                <img src={FILEURL + this.state.previewFile} alt="View logo" />
               ) : (
-                  <img src={pdf_placeholder} />
+                  <img src={pdf_placeholder} alt="PDF logo" />
                 )}
             </div>
           </div>

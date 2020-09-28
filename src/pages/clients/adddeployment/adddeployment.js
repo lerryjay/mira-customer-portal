@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { HTTPURL, APIKEY } from "../../../common/global_constant";
 import { withContext } from "../../../common/context";
 
-const headers = new Headers();
-class UpdateClientProduct extends Component {
+
+class AddClientProduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,10 +16,9 @@ class UpdateClientProduct extends Component {
       deploymentdate: "",
       paymentdate: "",
       paymentstatus: "",
-      licenseduration: "",
+      liscenseduration: "",
       expirationdate: '',
-      remarks: '',
-      products: [],
+      remarks:'',
       errormessage: "",
       loading: false,
       files: [],
@@ -32,16 +31,14 @@ class UpdateClientProduct extends Component {
     };
   }
 
-  async componentWillMount() {
-    const clientproductid = this.props.location.pathname.split("/")[2];
-    await this.setState({ clientproductid });
-    this.getClientProduct();
-    this.props.user.role === 'admin' && this.getProducts();
+  componentWillMount() {
   }
   getModule(productId) {
+    const headers = new Headers();
+    headers.append("API-KEY",APIKEY);
     fetch(
       HTTPURL +
-      `product/modules?productid=${productId}&userid=${this.state.user.userid}`,
+        `product/modules?productid=${productId}&userid=${this.state.user.userid}`,
       {
         method: "GET",
         headers: headers,
@@ -49,72 +46,12 @@ class UpdateClientProduct extends Component {
     )
       .then((response) => response.json())
       .then((result) => {
-        if (result.status == true) {
+        if (result.status === true) {
           this.setState({ modules: result.data });
         }
       });
 
   }
-
-  async getClientProduct() {
-    const headers = new Headers();
-    headers.append("API-KEY", APIKEY);
-    const res = await fetch(
-      `${HTTPURL}clients/getproductdata?userid=${this.state.user.userid}&clientproductid=${this.state.clientproductid}`,
-      {
-        method: "GET",
-        headers: headers,
-      }
-    ).then((res) => res.json());
-    if (res["status"]) {
-      const {
-        paymentstatus,
-        paymentdate,
-        licenseduration,
-        deploymentdate,
-        deploymentstatus,
-        cost,
-        trainingdate,
-        trainingstatus,
-        files,
-        imageurl,
-        remarks,
-        modules,
-        product_id
-      } = res.data;
-      this.getModule(product_id);
-      const selectedModules = modules.map(item=>item.id);
-      this.setState({
-        productid: product_id,
-        paymentstatus,
-        paymentdate,
-        licenseduration,
-        deploymentdate,
-        deploymentstatus,
-        cost,
-        trainingdate,
-        trainingstatus,
-        imageurl,
-        remarks,
-        selectedModules,
-        product_id
-      });
-    }
-  }
-
-  getProducts() {
-    headers.append("API-KEY", APIKEY);
-    fetch(HTTPURL + `product?userid=${this.state.user.userid}`, {
-      method: "GET",
-      headers: headers,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({ products: data.data });
-
-      })
-  }
-
   handleInputChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value, errormessage: "" });
@@ -123,44 +60,89 @@ class UpdateClientProduct extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     this.setState({ loading: true });
-
+    const mod = this.state.selectedModules.toString();
+    // this.state.selectedModules.forEach((module) => {
+    //   mod += module + ",";
+    // });
+    
     let myHeaders = new Headers();
     myHeaders.append("api-key", APIKEY);
 
-    var formdata = new FormData();
-    formdata.append("clientproductid", this.props.location.pathname.split("/")[2]);
-    formdata.append("modules", this.state.selectedModules.toString());
-    formdata.append("cost", this.state.cost);
+    var formdata = new FormData(document.getElementById("addclientproduct"));
+
+    formdata.append("clientid", this.props.location.pathname.split("/")[2]);
+    formdata.append("modules", mod);
     formdata.append("userid", this.state.user.userid);
-    formdata.append("licenseduration", this.state.licenseduration);
-    formdata.append("paymentstatus", this.state.paymentstatus);
-    formdata.append("deploymentstatus", this.state.deploymentstatus);
-    formdata.append("trainingstatus", this.state.trainingstatus);
-    formdata.append("paymentdate", this.state.paymentdate);
-    formdata.append("trainingdate", this.state.trainingdate);
-    formdata.append("deploymentdate", this.state.deploymentdate);
-    formdata.append("remarks", this.state.remarks);
+    formdata.append("productid", this.state.type);
+    // formdata.append("cost", this.state.cost);
+    // formdata.append("liscenseduration", this.state.liscenseduration);
+    // formdata.append("paymentstatus", this.state.paymentstatus);
+    // formdata.append("deploymentstatus", this.state.deploymentstatus);
+    // formdata.append("trainingstatus", this.state.trainingstatus);
+    // formdata.append("paymentdate", this.state.paymentdate);
+    // formdata.append("trainingdate", this.state.trainingdate);
+    // formdata.append("deploymentdate", this.state.deploymentdate);
+    // formdata.append("remarks", this.state.remarks);
+    // formdata.append('files[]', this.state.files);
 
-    const res = await fetch(HTTPURL + "clients/updateproduct", {  method: "POST",  headers: myHeaders,body: formdata, }).then((response) => response.json())
-
-      this.setState({ loading: false });
-      if(res.status === true) {
-          this.state.showAlert("success", res.message)
-          window.history.back();
-      } else{
-          this.state.showAlert("danger",  res.message)
-      }
+    fetch(HTTPURL + "clients/addproduct", {
+      method: "POST",
+      headers: myHeaders,
+      body: formdata,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+          this.setState({ loading: false });
+          if(data.status === true) {
+              document.getElementById("addclientproduct").reset()
+              this.state.showAlert("success", data.message)
+              this.setState({
+                type: "",
+                liscenseduration: '',
+                paymentstatus: '',
+                deploymentstatus: '',
+                trainingstatus: '',
+                selectedModules: [],
+                cost: "",
+                paymentdate: '',
+                modules: [],
+                files: [],
+                deploymentdate: '',
+                trainingdate: '',
+                remarks: '',
+                expirationstatus: '',
+                expirationdate: ''
+              });
+              window.history.back();
+          } else{
+              this.state.showAlert("danger",  data.message)
+          }
+      });
   };
 
+  addModule = async (moduleId) => {
+    await this.setState((prevState) => ({
+      selectedModules:
+        prevState.selectedModules.length === 0
+          ? [moduleId]
+          : [...prevState.selectedModules, moduleId],
+    }));
+  };
+  removeModule = async (moduleId) => {
+    await this.setState((prevState) => ({
+      selectedModules: prevState.selectedModules.filter(
+        (mod) => mod !== moduleId
+      ),
+    }));
+  };
   handleCheck = ({ target }) => {
-    const index = this.state.selectedModules.findIndex(item=> item === target.value);
-    const { selectedModules } = this.state;
-    if (index > -1) {
-      selectedModules.splice(index,1);
+    if (target.checked) {
+      target.removeAttribute("checked");
+      this.addModule(target.id);
     } else {
-      selectedModules.push(target.value);
+      target.setAttribute("checked", true);
+      this.removeModule(target.id);
     }
-    this.setState({ selectedModules });
   };
 
   onFocus(e) {
@@ -171,8 +153,6 @@ class UpdateClientProduct extends Component {
     e.currentTarget.type = "text";
     e.currentTarget.placeholder = "Deployment Date";
   }
-
-
   trainingDate(e) {
     e.currentTarget.type = "text";
     e.currentTarget.placeholder = "Training Date";
@@ -201,49 +181,59 @@ class UpdateClientProduct extends Component {
     this.setState({ files: files });
   }
 
-  paymentDate(date, licenseCoverage) {
-
-    if (licenseCoverage == "monthly") {
-      date = new Date()
-      let expiration = `${date.getUTCMonth() + 1}/${date.getUTCDay()}/${date.getUTCFullYear() + 1}`
-      this.setState({ expirationdate: expiration });
-    }
-  }
-
   render() {
+    let files = this.state.files.map((file) => {
+      this.setState({ imagePreviewUrl: URL.createObjectURL(file) });
+      // this.setState({imagePreviewUrl: URL.createObjectURL(file) })
+      return file.name.match(/\.(jpg|jpeg|png)$/) ? (
+        <div className="imgPreview m-2" id="files">
+          <i className="fa fa-trash" onClick={(e) => this.removeImage(e)}></i>
+          <img src={this.state.imagePreviewUrl} alt="Preview" className="imagePreview" />
+        </div>
+      ) : (
+        <div className="other_files m-2" id="otherfiles">
+          <i
+            className="fa fa-trash"
+            onClick={(e) => this.removeOtherImage(e)}
+          ></i>
+          {file.name}
+        </div>
+      );
+    });
     return (
       <div className="container mx-auto row">
+        
+
         <div className="col-md-12 mb-3 mt-4" id="profile">
 
-          <form onSubmit={this.handleSubmit} id="updateclientproduct">
+          <form onSubmit={this.handleSubmit} id="addclientproduct">
             <div className="card">
               <div className="card-header bg-medium font-weight-bold text-dark">
-                UPDATE CLIENT PRODUCT
+              ADD CLIENT PRODUCT
               </div>
 
               <div className="card-body px-5">
                 <div className="form-group row mb-3">
-                  <select
-                    onChange={(e) => {
-                      this.getModule(e.target.value);
-                      this.setState({ type: e.target.value });
-                    }}
-                    value={this.state.productid}
-                    name="productid"
-                    id="productid"
-                    className=" form-control form-select form-select-sm"
-                    disabled
-                  >
-                    <option value="" selected disabled>
-                      ---Select&nbsp;product---&nbsp;
-                        </option>
+                <select
+                  onChange={(e) => {
+                    this.getModule(e.target.value);
+                    this.setState({ type: e.target.value });
+                  }}
+                  value={this.state.type}
+                  name="type"
+                  id="type"
+                  className=" form-control form-select form-select-sm"
+                >
+                  <option value="" selected disabled>
+                    ---Select&nbsp;product---&nbsp;
+                  </option>
 
-                    {this.state.products.map((product) => {
-                      return (
-                        <option value={product.id}>{product.name}</option>
-                      );
-                    })}
-                  </select>
+                  {this.state.products.map((product) => {
+                    return (
+                      <option value={product.id}>{product.name}</option>
+                    );
+                  })}
+                </select>
                 </div>
 
                 <div className="row">
@@ -413,7 +403,48 @@ class UpdateClientProduct extends Component {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col-md-4 mb-1">
+                  <div className="col-md-6 mb-1">
+                    <div className=" form-group">
+                      <label htmlFor="expirationstatus" className="font-weight-bold">
+                        Expiration Status
+                      </label>
+                      <select
+                        className=" form-control form-select form-select-sm"
+                        onChange={(e) => {
+                          this.setState({ expirationstatus: e.target.value });
+                        }}
+                        value={this.state.expirationstatus}
+                        name="expirationstatus"
+                        id="expirationstatus"
+                      >
+                          <option value="" selected disabled>
+                          Expiration&nbsp;Status&nbsp;
+                          </option>
+                              <option value="pending">Pending</option>
+                              <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                  </div>
+                  <div className="col-md-6 mb-1">
+                    <div className="form-group">
+                      <label htmlFor="expirationdate" className="font-weight-bold">
+                        Expiration Date
+                      </label>
+                      <input
+                         style={{ height: '35px' }}
+                        className="form-control form-control-sm"
+                        name="expirationdate"
+                        id="expirationdate"
+                        placeholder="Expiration Date"
+                        onBlur={this.expirationDate}
+                        onFocus={this.onFocus}
+                        value={this.state.expirationdate}
+                        onChange={this.handleInputChange}
+                      />
+                    </div>
+                  </div>
+               
+                  <div className="col-md-12 mb-1">
                     <div className="form-group">
                       <label htmlFor="licenseduration" className="font-weight-bold">
                         License Coverage
@@ -429,7 +460,7 @@ class UpdateClientProduct extends Component {
                         style={{ height: '35px' }}
                       >
                         <option value="" selected disabled>
-                          License&nbsp;Duration
+                          License&nbsp;Coverage
                           </option>
                         <option value="monthly">Monthly</option>
                         <option value="quaterly">Quarterly</option>
@@ -438,30 +469,7 @@ class UpdateClientProduct extends Component {
                         <option value="indefinite">Indefinite</option>
                       </select>
                     </div>
-                  </div>
-                  <div className="col-md-4 mb-1">
-                    <div className="form-group">
-                      <label htmlFor="expirationdate" className="font-weight-bold">
-                        Expiration Date
-                      </label>
-                      <input
-                         style={{ height: '35px' }}
-                        className="form-control form-control-sm"
-                        name="expirationdate"
-                        id="expirationdate"
-                        placeholder="Expiration Date"
-                        onBlur={this.expirationDate}
-                        onFocus={this.onFocus}
-                        value={this.state.expirationdate}
-                        onChange={this.handleInputChange}
-                        readOnly
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-4 text-center">
-                    <button className="btn btn-warning text-light btn-sm mt-4">Renew</button>
-                  </div>
-                </div>
+                  </div> </div>
                 <div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
@@ -487,13 +495,13 @@ class UpdateClientProduct extends Component {
                     this.state.modules.map((module) => (
                       <div className="col-md-4">
                         <p className="list-group-item">
-                          {module.name}
+                          {module.name}{" "}
                           <label className="switch float-right">
+                            {" "}
                             <input
                               type="checkbox"
-                              value={module.id}
-                              onChange={this.handleCheck}
-                              checked={ this.state.selectedModules.findIndex(item=>item === module.id) > -1}
+                              id={module.id}
+                              onClick={this.handleCheck}
                             />
                             <span className="slider round"></span>
                           </label>
@@ -513,14 +521,37 @@ class UpdateClientProduct extends Component {
                       </div>
                     )}
                 </div>
+                <div className="row justify-content-center" id="preview">
+                  {files}
+                </div>
               </div>
 
               <div className="card-footer">
+                <label
+                  htmlFor="files"
+                  className="btn btn-sm btn-primary py-2 px-3"
+                >
+                  Attach Liscence and Files{" "}
+                </label>
+                <i className="font-weight-bold">
+                  {" "}
+                  The only accepted files are *pdf, *jpg and *png
+                </i>
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  id="files"
+                  className="form-file form-file-sm"
+                  name="files[]"
+                  placeholder=""
+                  multiple
+                  onChange={(e) => this.handleImageChange(e)}
+                />
                 <div className="float-right">
                   {this.state.loading ? (
                     <button
                       type="submit"
-                      className="btn btn-sm btn-primary px-4"
+                      className="btn btn-sm bg-button px-4"
                     >
                       <div
                         className="spinner-border text-secondary"
@@ -531,21 +562,22 @@ class UpdateClientProduct extends Component {
                       </div>
                     </button>
                   ) : (
-                      <button
-                        type="submit"
-                        className="btn btn-sm btn-primary px-3 py-2"
-                      >
-                        <i className="fas fa-folder-open mr-2"></i>
+                    <button
+                      type="submit"
+                      className="btn btn-sm btn-primary px-3 py-2"
+                    >
+                      <i className="fas fa-folder-open mr-2"></i>
                       Save
-                      </button>
-                    )}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
           </form>
-        </div>
-      </div >
+
+          </div>
+      </div>
     );
   }
 }
-export default withContext(UpdateClientProduct);
+export default withContext(AddClientProduct);

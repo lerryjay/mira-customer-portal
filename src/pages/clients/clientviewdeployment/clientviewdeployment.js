@@ -123,7 +123,7 @@ class viewclientproduct extends Component {
           </div>
 
           <div className="row mt-4">
-            <div className="col-md-4">
+            <div className="col-md-4 py-3">
               <img
                 className="img-product"
                 src={FILEURL + this.state.imageurl}
@@ -133,7 +133,7 @@ class viewclientproduct extends Component {
                 }}
               />
             </div>
-            <div className="col-md-7 offset-md-1">
+            <div className="col-md-7 offset-md-1 py-3">
               <h3 className="text-dark">{this.state.productname}</h3>
               <h6>{this.state.productdescription}</h6>
             </div>

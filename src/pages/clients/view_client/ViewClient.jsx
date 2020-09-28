@@ -284,10 +284,10 @@ async handleImageUpdate(e) {
     let {imagePreviewUrl} = this.state;
     let imagePreview = null;
     if (imagePreviewUrl) {
-    imagePreview = (<img src={imagePreviewUrl} className="imagePreview"
-                    className="image_sidebar"
+    imagePreview = (<img src={imagePreviewUrl} className="imagePreview image_sidebar"
                     height="170px"
                     width="170px"
+                    alt="Preview"
                     style={{ marginTop: "-80px" }}
                     />);
     }  else{
@@ -295,6 +295,7 @@ async handleImageUpdate(e) {
                     className="image_sidebar"
                     height="170px"
                     width="170px"
+                    alt="Preview"
                     style={{ marginTop: "-80px" }}
                     />);
     }
@@ -330,11 +331,10 @@ async handleImageUpdate(e) {
                   <form id="imageForm">
                       {imagePreview}
                       <label htmlFor="file" ><i class="fas fa-2x text-purple fa-camera-retro"></i> </label> 
-                                <input style={{display:'none'}} type={"file"}  id="file" 
-                                className="form-file form-file-sm" name="file"  placeholder=""
-                                onChange={(e)=>this.handleImageChange(e) }
-                                onChange={(e)=> this.handleImageUpdate(e)}
-                                 />
+                        <input style={{display:'none'}} type={"file"}  id="file" 
+                        className="form-file form-file-sm" name="file"  placeholder=""
+                        onChange={(e)=> { this.handleImageChange(e); this.handleImageUpdate(e); }}
+                          />
                   </form>
                                 
                     </div>
@@ -342,7 +342,7 @@ async handleImageUpdate(e) {
                 </div>
 
                 {!this.state.isloading && (
-                  <div className="col-md-6 offset-md-1 pl-5">
+                  <div className="col-md-8 pl-5">
                     <h3 className="text-dark">{this.state.businessname}</h3>
                     <div className="row mt-3">
                       <div className="col-md-12">
@@ -451,7 +451,7 @@ async handleImageUpdate(e) {
                       <div className="row">
                         <div className="col">
                           <Link
-                            to={() => `/addclientproduct/${this.state.userid}`}
+                            to={() => `/adddeployment/${this.state.userid}`}
                             className="btn btn-sm btn-primary new_product mb-2"
                           >
                             <i
@@ -508,20 +508,20 @@ async handleImageUpdate(e) {
                                             <td>{product.deploymentstatus}</td>
                                             <td>{product.paymentstatus}</td>
                                             <td>{product.cost}</td>
-                                            <td style={{ minWidth: "70px" }}>
+                                            <td style={{ minWidth: "70px" }} className="d-flex justify-content-center">
                                               <Link
                                                 to={() =>
-                                                  `/updateclientproduct/${product.id}`
+                                                  `/updatedeployment/${product.id}`
                                                 }
                                               >
-                                                <button className="btn-primary mr-3"><i className="fa fa-edit"></i> Edit</button>
+                                                <button className="btn-primary m-1"><i className="fa fa-edit"></i> Edit</button>
                                               </Link>
                                               <Link
                                                 to={() =>
-                                                  `/viewclientproduct/${product.id}`
+                                                  `/viewdeployment/${product.id}`
                                                 }
                                               >
-                                              <button className="btn-primary mr-3"><i className="fa fa-eye"></i> View</button>
+                                              <button className="btn-primary m-1"><i className="fa fa-eye"></i> View</button>
                                               </Link>
                                               <Link
                                                 onClick={() =>
@@ -530,7 +530,7 @@ async handleImageUpdate(e) {
                                                   )
                                                 }
                                               >
-                                              <button className="btn-danger mr-3"> <i className="fa fa-trash text-white"></i> Delete</button>
+                                              <button className="btn-danger m-1"> <i className="fa fa-trash text-white"></i> Delete</button>
                                               </Link>
                                             </td>
                                           </tr>
@@ -549,7 +549,7 @@ async handleImageUpdate(e) {
                 </div>
               </div>
 
-              {/* Delete Module Info */}
+              {/* Delete Product */}
               {this.state.showmodal ? (
                 <div id="deleteModal" class="modal">
                   {/* Modal content  */}

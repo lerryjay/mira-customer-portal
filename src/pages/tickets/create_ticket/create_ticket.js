@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { HTTPURL, APIKEY } from '../../../common/global_constant';
 import { withContext } from '../../../common/context';
+import pdf_placeholder from "../../../assets/images/pdf.png";
 
 class create_ticket extends Component {
     constructor(props) {
@@ -107,13 +108,26 @@ class create_ticket extends Component {
 
     render() {
         let files = this.state.files.map((file, index) => {
-            this.state.imagePreviewUrl = URL.createObjectURL(file)
+            // this.state.imagePreviewUrl = URL.createObjectURL(file)
             // this.setState({imagePreviewUrl: URL.createObjectURL(file) })
+            return (
+                file.name.match(/\.(jpg|jpeg|png)$/) 
+                     ?  <img src={URL.createObjectURL(file)} className="col-md-3" alt="attachment"/>
+                     : <span>
+                            <img
+                                src={pdf_placeholder}
+                                style={{ width: "100px", height: "100px" }}
+                                className="m-2"
+                            />
+                            <br/>
+                            {file.name}
+                        </span>
+            )
             return (
                 file.name.match(/\.(jpg|jpeg|png)$/)
                     ? < div className="imgPreview  m-2" id="files">
-                        <i className="fa fa-trash" onClick={(e) => this.removeImage(e,file,index)}></i>
-                        <img src={this.state.imagePreviewUrl} className="imagePreview " />
+                        <i className="fa fa-trash position-absolute" onClick={(e) => this.removeImage(e,file,index)}></i>
+                        <img src={this.state.imagePreviewUrl} className="col-md-3" />
                     </div>
                     :
                     <div className="other_files   m-2" id="otherfiles" >
@@ -194,8 +208,8 @@ class create_ticket extends Component {
                                         onChange={(e) => this.handleImageChange(e)} />
                                     <div className="float-right">
                                         {this.state.loading ?
-                                            <button type="submit" className="btn btn-sm bg-btn">
-                                                <div className="spinner-border text-secondary" role="status" id="loader">
+                                            <button type="submit" className="btn btn-sm btn-primary">
+                                                <div className="spinner-border text-white" role="status" id="loader">
                                                     <span className="sr-only">Loading...</span>
                                                 </div>
                                             </button>

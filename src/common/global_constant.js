@@ -23,13 +23,13 @@ export const clientMenu = [
     sub: [
       {
         name: 'View Products',
-        route: '/clientproducts',
+        route: '/products',
         icon: '',
         isActive: false
       },
       {
         name: 'My Product',
-        route: '/productcart',
+        route: '/clientproducts',
         icon: '',
         isActive: false
       }

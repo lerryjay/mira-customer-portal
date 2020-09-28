@@ -42,7 +42,7 @@ class Admin extends Component {
   render() {
     const { user } = this.state;
     return (
-      <div className="container mt-4">
+      <div className="container-fluid mt-4">
         <div className="w-100 text-center">
           <h3  className="text-uppercase">Administrators </h3>
         </div>
@@ -79,7 +79,10 @@ class Admin extends Component {
                 </div>
                 </div>
                 :
-                !this.state.loader && <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
+                !this.state.loader && 
+                
+      <div className="table-responsive">
+                <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
           <thead>
             <tr>
               <th>S/N</th>
@@ -119,7 +122,8 @@ class Admin extends Component {
             }
           </tbody>
         </table>
-  }
+</div>
+ }
       </div>
     )
   }

@@ -1,34 +1,22 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import { withContext } from '../../common/context'
-import { HTTPURL,FILEURL,APIKEY } from '../../common/global_constant'
+import Pagination from '../../common/components/Pagination'
 
 class Users extends Component {
   constructor(props) {
     super(props);
     this.state = { 
       ...this.props, 
-      loader: false
+      loader: false,
+      currentPage: 1,
+      numberPerPage: 10,
+      totalLists: this.props.users,
+      pageNumbers: [],
+      currentLists: []
     }
   }
-
-  async getUsers()
-  {
-    const headers = new Headers();
-    headers.append('API-KEY',APIKEY);
-    const res = await fetch(HTTPURL + `user?userid=${ this.props.user.userid }`, {
-        headers: headers
-    })
-    .then(response => response.json());
-    if(res['status']){
-        this.setState({ users : res['data']});
-    }
-  }
-
-
-  componentDidMount() {
-  }
-
 
   showDropdown(userid){
     let dropdown = document.getElementById(userid);
@@ -39,9 +27,23 @@ class Users extends Component {
     }
   }
 
+  update = (newPage) => {
+    this.setState({currentPage:newPage});
+  }
+
   render() {
+    
+    const { numberPerPage,currentPage, totalLists} = this.state
+
+    // Logic for displaying current lists
+    const indexOfLastList = currentPage * numberPerPage;
+    const indexOfFirstList = indexOfLastList - numberPerPage;
+    const currentLists = totalLists.slice(indexOfFirstList, indexOfLastList);
+    this.state.currentLists = currentLists
+
+
     return (
-      <div className="container mt-4">
+      <div className="container-fluid mt-4">
         <div className="w-100 text-center">
           <h3 className="text-uppercase">Customers </h3>
         </div>
@@ -62,7 +64,10 @@ class Users extends Component {
                                     </div>
                                     </div>
                                     :
-      !this.state.loader && <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
+      !this.state.loader && 
+      
+      <div className="table-responsive">
+      <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
           <thead>
             <tr>
               <th>S/N</th>
@@ -76,7 +81,7 @@ class Users extends Component {
           </thead>
           <tbody>
             {
-              this.state.users.map((user,index)=>
+              this.state.currentLists.map((user,index)=>
                 <tr>
                   <td>{ index + 1}</td>
                   <td>{ user.firstname }</td>
@@ -103,7 +108,38 @@ class Users extends Component {
             }
           </tbody>
         </table>
+          </div>
   }
+
+  {/* Pagination */}
+  {this.state.totalLists.length > 0  && 
+       <div className="row mt-5">
+         <div className="col-md-4">
+            <div className="form-group mt-1">
+            {this.state.users.length > 0 &&  
+            <select 
+                onChange={(e) => {
+                  this.setState({ numberPerPage: e.target.value });
+                }}
+               style={{ maxWidth: "180px" }}
+              name="page" id="page" className=" form-control form-select form-select-sm">
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                </select>
+                }
+            </div>
+         </div>
+
+         <div className="col-md-8 ">
+            <div className="row  justify-content-center text-center">
+            <Pagination numberPerPage={this.state.numberPerPage} currentPage={this.state.currentPage} totalLists={this.state.users} pageNumbers={this.state.pageNumbers} currentLists={this.state.currentLists} update={this.update} />
+            </div>  
+           </div> 
+         </div>
+        }
       </div>
     )
   }

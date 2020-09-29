@@ -142,7 +142,7 @@
       ];
       $this->walletModel = new WalletModel();
       $transactions = $this->walletModel->searchTransactions($filters);
-      if(!$transactions){
+      if($transactions){
         $response = ['status'=>true,'message'=>'Wallet transactions retrieved successfuly', 'data'=>$transactions];
       }else $response = ['status'=>false,'message'=>'Error fetching transactions'.$error];
 

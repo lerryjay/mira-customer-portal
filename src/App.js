@@ -54,6 +54,9 @@ import NotFound from "./common/components/NotFound";
 import Forbidden from "./common/components/Forbidden";
 import ScrollToTop from "./common/components/ScrollToTop";
 
+import UserApiLogs from "./pages/api_logs/UserApi/api_logs";
+
+import Transactions from "./pages/transactions/transaction"
 
 
 
@@ -321,6 +324,8 @@ class App extends Component {
                       <PrivateRoute path="/createticket" permission="CREATETICKET" component={CreateTicket} />
                       <PrivateRoute path="/productdetails" permission="LISTPRODUCT" component={ProductDetails} />
                       <PrivateRoute path="/viewticket" permission="VIEWTICKET" component={ViewTicket} />
+                      <PrivateRoute path="/apilogs"  component={UserApiLogs} />
+                      <PrivateRoute path="/transactions"  component={Transactions} />
                       
 
                       <UserPrivateRoute path="/clientproducts" component={ClientProducts} />

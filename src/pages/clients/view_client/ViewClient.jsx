@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { withContext } from "../../../common/context";
 import avatar from "../../../assets/images/avatar.png";
-import { HTTPURL, APIKEY ,FILEURL} from "../../../common/global_constant";
+import { HTTPURL, APIKEY, FILEURL } from "../../../common/global_constant";
+import payment_card from "../../../assets/images/payment.png";
 
 class ViewClient extends Component {
   constructor(props) {
@@ -19,9 +20,9 @@ class ViewClient extends Component {
       showmodal: true,
       isloading: true,
       selectedProduct: "",
-      file:'',
-      imagePreviewUrl:'',
-      imageurl:'',
+      file: "",
+      imagePreviewUrl: "",
+      imageurl: "",
     };
   }
 
@@ -79,11 +80,16 @@ class ViewClient extends Component {
             companyaddress: result.data.companyaddress,
             userid: result.data.user_id,
             isloading: false,
-            imageurl:result.data.imageurl
+            imageurl: result.data.imageurl,
           });
         }
       });
   }
+
+  handleInputChange = (e) => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value, errormessage: "" });
+  };
 
   async componentDidMount() {
     this.getClients();
@@ -91,14 +97,17 @@ class ViewClient extends Component {
 
   async getClients() {
     const headers = new Headers();
-    headers.append('API-KEY', APIKEY );
-    const res = await fetch(HTTPURL + `clients/?userid=${this.state.user.userid}`, {
-        method: 'GET',
-        headers: headers
-    }).then(response => response.json());
-    
-    if(res['status']) this.setState({ clients : res['data']})
-}
+    headers.append("API-KEY", APIKEY);
+    const res = await fetch(
+      HTTPURL + `clients/?userid=${this.state.user.userid}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    ).then((response) => response.json());
+
+    if (res["status"]) this.setState({ clients: res["data"] });
+  }
 
   closedeleteModal() {
     let modal = document.getElementById("deleteModal");
@@ -115,30 +124,46 @@ class ViewClient extends Component {
   }
 
   deleteProduct() {
-    this.setState({ loading: true });;
+    this.setState({ loading: true });
 
-        const headers = new Headers();
-        headers.append("API-KEY", APIKEY);
-        const res = fetch(
-          `${HTTPURL}clients/deleteproduct?clientproductid=${this.state.selectedProduct.id}&userid=${this.state.user.userid}`,
-          {
-            method: "GET",
-            headers: headers,
-          }
-        );
-          if(res.status){
-            this.setState({ loading: false });
-            this.state.showAlert("success", res.message)
-            let modal = document.getElementById("deleteModal");
-            modal.style.display = "none";
-          }
-          else{
-            this.setState({ loading: false });
-            this.state.showAlert("danger", res.message)
-            let modal = document.getElementById("deleteModal");
-            modal.style.display = "none";
-          }
-          
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    const res = fetch(
+      `${HTTPURL}clients/deleteproduct?clientproductid=${this.state.selectedProduct.id}&userid=${this.state.user.userid}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    );
+    if (res.status) {
+      this.setState({ loading: false });
+      this.state.showAlert("success", res.message);
+      let modal = document.getElementById("deleteModal");
+      modal.style.display = "none";
+    } else {
+      this.setState({ loading: false });
+      this.state.showAlert("danger", res.message);
+      let modal = document.getElementById("deleteModal");
+      modal.style.display = "none";
+    }
+  }
+
+  closeWallet() {
+    let modal = document.getElementById("showWallet");
+    modal.style.display = "none";
+  }
+
+  async showWallet(clientid) {
+    const selectedClient = this.state.clients.find(
+      (client) => client.user_id === clientid
+    );
+    await this.setState({ selectedClient });
+    let modal = document.getElementById("showWallet");
+    modal.style.display = "block";
+  }
+
+  fundWallet = e => {
+    e.preventDefault()
   }
 
   closesuspendModal() {
@@ -155,31 +180,29 @@ class ViewClient extends Component {
     modal.style.display = "block";
   }
 
-   suspendClient = async () => {
+  suspendClient = async () => {
     this.setState({ loading: true });
 
-        const headers = new Headers();
-        headers.append("API-KEY", APIKEY);
-        const res = await fetch(
-          `${HTTPURL}user/suspend?clientid=${this.state.selectedClient.user_id}&userid=${this.state.user.userid}`,
-          {
-            method: "GET",
-            headers: headers,
-          }
-        );
-        if (res.status) {
-          this.setState({ loading: false });
-          this.state.showAlert("success", 'Suspend Successfully!')
-          let modal = document.getElementById("suspendModal");
-          modal.style.display = "none";
-        } 
-        else{
-          this.setState({ loading: false });
-          let modal = document.getElementById("suspendModal");
-          modal.style.display = "none";
-        }
-        
-  }
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    const res = await fetch(
+      `${HTTPURL}user/suspend?clientid=${this.state.selectedClient.user_id}&userid=${this.state.user.userid}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    );
+    if (res.status) {
+      this.setState({ loading: false });
+      this.state.showAlert("success", "Suspend Successfully!");
+      let modal = document.getElementById("suspendModal");
+      modal.style.display = "none";
+    } else {
+      this.setState({ loading: false });
+      let modal = document.getElementById("suspendModal");
+      modal.style.display = "none";
+    }
+  };
 
   closedeleteClient() {
     let modal = document.getElementById("deleteClient");
@@ -195,154 +218,162 @@ class ViewClient extends Component {
     modal.style.display = "block";
   }
 
-  deleteClient = async() => {
+  deleteClient = async () => {
     this.setState({ loading: true });
-        const headers = new Headers();
-        headers.append("API-KEY", APIKEY);
-        const res = await fetch(
-          `${HTTPURL}clients/delete?clientid=${this.state.selectedClient.user_id}&userid=${this.state.user.userid}`,
-          {
-            method: "GET",
-            headers: headers,
-          }
-        );
-        
-        if (res.status) {
-          this.setState({ loading: false });
-          this.state.showAlert("success", 'Deleted Successfully!')
-          let modal = document.getElementById("deleteClient");
-          modal.style.display = "none";
-        }
-        else{
-          this.setState({ loading: false });
-          let modal = document.getElementById("deleteClient");
-          modal.style.display = "none";
-        }
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    const res = await fetch(
+      `${HTTPURL}clients/delete?clientid=${this.state.selectedClient.user_id}&userid=${this.state.user.userid}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    );
 
-  }
+    if (res.status) {
+      this.setState({ loading: false });
+      this.state.showAlert("success", "Deleted Successfully!");
+      let modal = document.getElementById("deleteClient");
+      modal.style.display = "none";
+    } else {
+      this.setState({ loading: false });
+      let modal = document.getElementById("deleteClient");
+      modal.style.display = "none";
+    }
+  };
   handleImageChange(e) {
     e.preventDefault();
 
     let reader = new FileReader();
     let file = e.target.files[0];
 
-    let images = []
+    let images = [];
     for (var i = 0; i < e.target.files.length; i++) {
-        images[i] = e.target.files.item(i);
+      images[i] = e.target.files.item(i);
     }
-    images = images.filter(file => file.name.match(/\.(jpg|jpeg|png|gif)$/))
-    
-    if (images.length === 0){
+    images = images.filter((file) => file.name.match(/\.(jpg|jpeg|png|gif)$/));
 
-        reader.onloadend = () => {
-            this.setState({
-                file: file,
-                imagePreviewUrl: '',
-                imageError: "Upload a valid Image"
-            });
-            
-            
-        }
-        
-        
+    if (images.length === 0) {
+      reader.onloadend = () => {
+        this.setState({
+          file: file,
+          imagePreviewUrl: "",
+          imageError: "Upload a valid Image",
+        });
+      };
     } else {
-        this.setState({imageError: false})
-            reader.onloadend = () => {
-                this.setState({
-                    file: file,
-                    imagePreviewUrl: reader.result
-                });
-            }
-        }
+      this.setState({ imageError: false });
+      reader.onloadend = () => {
+        this.setState({
+          file: file,
+          imagePreviewUrl: reader.result,
+        });
+      };
+    }
 
-    reader.readAsDataURL(file)
-}
+    reader.readAsDataURL(file);
+  }
 
-async handleImageUpdate(e) {
-  const { user, userid } = this.state;
-  const form = new FormData(document.getElementById('imageForm'));
-  form.append('userid', user.userid);
-  form.append('clientid', userid);
-  const headers = new Headers();
-  headers.append("API-KEY", APIKEY);
-  const res = await fetch(`${HTTPURL}clients/updateimage`, {
-    method: "POST",
-    headers: headers,
-    body: form
-  }).then(res => res.json());
-  if (res['status']) {
-    this.setState({ imageurl: res.data });
-    this.state.showAlert("success", res.message)
+  async handleImageUpdate(e) {
+    const { user, userid } = this.state;
+    const form = new FormData(document.getElementById("imageForm"));
+    form.append("userid", user.userid);
+    form.append("clientid", userid);
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    const res = await fetch(`${HTTPURL}clients/updateimage`, {
+      method: "POST",
+      headers: headers,
+      body: form,
+    }).then((res) => res.json());
+    if (res["status"]) {
+      this.setState({ imageurl: res.data });
+      this.state.showAlert("success", res.message);
+    } else {
+      this.state.showAlert("danger", res.message);
+    }
   }
-  else{
-    this.state.showAlert("danger",  res.message)
-  }
-}
 
   render() {
-    
-    let {imagePreviewUrl} = this.state;
+    let { imagePreviewUrl } = this.state;
     let imagePreview = null;
     if (imagePreviewUrl) {
-    imagePreview = (<img src={imagePreviewUrl} className="imagePreview image_sidebar"
-                    height="170px"
-                    width="170px"
-                    alt="Preview"
-                    style={{ marginTop: "-80px" }}
-                    />);
-    }  else{
-        imagePreview = (<img src={FILEURL + this.state.imageurl} onError={(e) => { e.target.onerror = null; e.target.src = avatar }} 
-                    className="image_sidebar"
-                    height="170px"
-                    width="170px"
-                    alt="Preview"
-                    style={{ marginTop: "-80px" }}
-                    />);
+      imagePreview = (
+        <img
+          src={imagePreviewUrl}
+          className="imagePreview image_sidebar"
+          height="170px"
+          width="170px"
+          alt="Preview"
+          style={{ marginTop: "-80px" }}
+        />
+      );
+    } else {
+      imagePreview = (
+        <img
+          src={FILEURL + this.state.imageurl}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = avatar;
+          }}
+          className="image_sidebar"
+          height="170px"
+          width="170px"
+          alt="Preview"
+          style={{ marginTop: "-80px" }}
+        />
+      );
     }
     return (
       <div className="container-fluid px-5 mx-auto row">
-        
         {this.state.loader && (
-            <div className="spin-center">
-              <span class="text-primary ">
-                <span
-                  class="spinner-grow spinner-grow-sm mr-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                <span style={{ fontSize: "14px" }}>Loading...</span>
-              </span>
-            </div>
-          )}
-          
+          <div className="spin-center">
+            <span class="text-primary ">
+              <span
+                class="spinner-grow spinner-grow-sm mr-2"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span style={{ fontSize: "14px" }}>Loading...</span>
+            </span>
+          </div>
+        )}
+
         <div className="col-md-12 mb-3 mt-4" id="profile">
-
-
           {!this.state.loader && (
             <div>
-            <div className="w-100 text-center">
-              <h3>CLIENT INFORMATION </h3>
-            </div>
+              <div className="w-100 text-center">
+                <h3>CLIENT INFORMATION </h3>
+              </div>
               <div className="row my-5">
                 <div className="col-md-4 text-center mb-3" id="profilePix">
                   <div className="card">
                     <div className="card-header"></div>
                     <div className="card-body mb-3 position-relative">
-                  <form id="imageForm">
-                      {imagePreview}
-                      <label htmlFor="file" ><i class="fas fa-2x text-purple fa-camera-retro"></i> </label> 
-                        <input style={{display:'none'}} type={"file"}  id="file" 
-                        className="form-file form-file-sm" name="file"  placeholder=""
-                        onChange={(e)=> { this.handleImageChange(e); this.handleImageUpdate(e); }}
-                          />
-                  </form>
-                                
+                      <form id="imageForm">
+                        {imagePreview}
+                        <label htmlFor="file">
+                          <i class="fas fa-2x text-purple fa-camera-retro"></i>{" "}
+                        </label>
+                        <input
+                          style={{ display: "none" }}
+                          type={"file"}
+                          id="file"
+                          className="form-file form-file-sm"
+                          name="file"
+                          placeholder=""
+                          onChange={(e) => {
+                            this.handleImageChange(e);
+                            this.handleImageUpdate(e);
+                          }}
+                        />
+                      </form>
                     </div>
                   </div>
                 </div>
 
                 {!this.state.isloading && (
-                  <div className="col-md-8 pl-5">
+                  <div className="col-md-6 pl-5">
                     <h3 className="text-dark">{this.state.businessname}</h3>
                     <div className="row mt-3">
                       <div className="col-md-12">
@@ -377,43 +408,81 @@ async handleImageUpdate(e) {
                               &nbsp;Create&nbsp;Ticket&nbsp;
                             </small>
                           </Link>
-                          <Link
-                            onClick={() =>
-                              this.showsuspendModal(
-                                this.state.userid
-                              )
-                            }
-                          >
-                          <button
-                            type="button"
-                            className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
-                          >
-                            <small
-                              className="newproduct"
-                              style={{ color: "#fff" }}
+
+                          <Link to={() => `/apilogs/${this.state.userid}`}>
+                            <button
+                              type="button"
+                              className="btn mt-3 m-2 btn-primary mb-2"
                             >
-                              &nbsp;Suspend&nbsp;Account&nbsp;
-                            </small>
-                          </button>
+                              <small
+                                className="newproduct"
+                                style={{ color: "#fff" }}
+                              >
+                                &nbsp;API&nbsp;Logs&nbsp;
+                              </small>
+                            </button>
+                          </Link>
+                          <Link to={() => `/transactions/${this.state.userid}`}>
+                            <button
+                              type="button"
+                              className="btn mt-3 m-2 btn-primary mb-2"
+                            >
+                              <small
+                                className="newproduct"
+                                style={{ color: "#fff" }}
+                              >
+                                &nbsp;Transactions&nbsp;
+                              </small>
+                            </button>
+                          </Link>
+                          <Link
+                            onClick={() => this.showWallet(this.state.userid)}
+                          >
+                            <button
+                              type="button"
+                              className="btn mt-3 m-2 btn-primary mb-2"
+                            >
+                              <small
+                                className="newproduct"
+                                style={{ color: "#fff" }}
+                              >
+                                &nbsp;Fund Wallet&nbsp;
+                              </small>
+                            </button>
                           </Link>
                           <Link
                             onClick={() =>
-                              this.showdeleteClient(
-                                this.state.userid
-                              )
+                              this.showsuspendModal(this.state.userid)
                             }
                           >
-                          <button
-                            type="button"
-                            className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
-                          >
-                            <small
-                              className="newproduct"
-                              style={{ color: "#fff" }}
+                            <button
+                              type="button"
+                              className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
                             >
-                              &nbsp;Delete&nbsp;
-                            </small>
-                          </button>
+                              <small
+                                className="newproduct"
+                                style={{ color: "#fff" }}
+                              >
+                                &nbsp;Suspend&nbsp;Account&nbsp;
+                              </small>
+                            </button>
+                          </Link>
+                          <Link
+                            onClick={() =>
+                              this.showdeleteClient(this.state.userid)
+                            }
+                          >
+                            <button
+                              type="button"
+                              className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
+                            >
+                              <small
+                                className="newproduct"
+                                style={{ color: "#fff" }}
+                              >
+                                &nbsp;Delete&nbsp;
+                              </small>
+                            </button>
                           </Link>
                         </div>
                       </div>
@@ -508,20 +577,29 @@ async handleImageUpdate(e) {
                                             <td>{product.deploymentstatus}</td>
                                             <td>{product.paymentstatus}</td>
                                             <td>{product.cost}</td>
-                                            <td style={{ minWidth: "70px" }} className="d-flex justify-content-center">
+                                            <td
+                                              style={{ minWidth: "70px" }}
+                                              className="d-flex justify-content-center"
+                                            >
                                               <Link
                                                 to={() =>
                                                   `/updatedeployment/${product.id}`
                                                 }
                                               >
-                                                <button className="btn-primary m-1"><i className="fa fa-edit"></i> Edit</button>
+                                                <button className="btn-primary m-1">
+                                                  <i className="fa fa-edit"></i>{" "}
+                                                  Edit
+                                                </button>
                                               </Link>
                                               <Link
                                                 to={() =>
                                                   `/viewdeployment/${product.id}`
                                                 }
                                               >
-                                              <button className="btn-primary m-1"><i className="fa fa-eye"></i> View</button>
+                                                <button className="btn-primary m-1">
+                                                  <i className="fa fa-eye"></i>{" "}
+                                                  View
+                                                </button>
                                               </Link>
                                               <Link
                                                 onClick={() =>
@@ -530,7 +608,11 @@ async handleImageUpdate(e) {
                                                   )
                                                 }
                                               >
-                                              <button className="btn-danger m-1"> <i className="fa fa-trash text-white"></i> Delete</button>
+                                                <button className="btn-danger m-1">
+                                                  {" "}
+                                                  <i className="fa fa-trash text-white"></i>{" "}
+                                                  Delete
+                                                </button>
                                               </Link>
                                             </td>
                                           </tr>
@@ -548,6 +630,66 @@ async handleImageUpdate(e) {
                   </div>
                 </div>
               </div>
+
+              {/* Fund Wallet */}
+              {this.state.showmodal ? (
+                <div id="showWallet" class="modal2">
+                  
+                  {/* Modal content  */}
+                  <div class="modal-content modal-del text-center p-5">
+                <span className="close text-danger"
+                          onClick={this.closeWallet}>&times;</span>
+
+                    <h3 className="font-weight-bold">Fund Wallet</h3>
+                    <img src={payment_card} className="img-fluid" alt="payment_card"/>
+         
+                    <form onSubmit={this.fundWallet}>
+                    <div className="input-group mb-3">
+                      <span
+                        className="input-group-text bg-white alt"
+                        id="password"
+                      >
+                        &#8358;
+                        {/* <i className="fas fa-money-check fa-fw"></i> */}
+                      </span>
+                      {/* <label for="amount">Amount</label> */}
+                      <input
+                        type="text"
+                        className="form-control alt"
+                        id="text"
+                        name="text"
+                        placeholder="Amount"
+                        aria-label="text"
+                        aria-describedby="text"
+                        autoComplete="text"
+                        value={this.state.amount}
+                        onChange={this.handleInputChange}
+                      />
+                    </div>
+
+                    {this.state.loading ? (
+                      <button type="submit" className="btn btn-sm btn-primary">
+                        <div
+                          className="spinner-border text-white"
+                          role="status"
+                          id="loader"
+                        >
+                          <span className="sr-only">Loading...</span>
+                        </div>
+                      </button>
+                    ) : (
+                      <button type="submit" className="btn btn-sm btn-primary">
+                        <i className="fas fa-sign-in-alt fa-fw mr-1"></i>
+                        FUND
+                      </button>
+                    )}
+                    </form>
+                 
+                    </div> 
+                    </div>
+              ) : (
+                <span></span>
+              )}
 
               {/* Delete Product */}
               {this.state.showmodal ? (
@@ -644,7 +786,9 @@ async handleImageUpdate(e) {
                         ) : (
                           <button
                             onClick={() =>
-                              this.suspendClient(this.state.selectedClient.user_id)
+                              this.suspendClient(
+                                this.state.selectedClient.user_id
+                              )
                             }
                             className="btn btn-danger btn-block"
                           >
@@ -699,7 +843,9 @@ async handleImageUpdate(e) {
                         ) : (
                           <button
                             onClick={() =>
-                              this.deleteClient(this.state.selectedClient.user_id)
+                              this.deleteClient(
+                                this.state.selectedClient.user_id
+                              )
                             }
                             className="btn btn-danger btn-block"
                           >
@@ -713,10 +859,8 @@ async handleImageUpdate(e) {
               ) : (
                 <span></span>
               )}
-
-
-              </div>
-            )}
+            </div>
+          )}
         </div>
       </div>
     );

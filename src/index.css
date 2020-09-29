@@ -404,6 +404,11 @@ button.bg-orangered{
   margin-bottom: 10px;
 }
 
+.border-radius-4{
+  border-radius: 4px;
+}
+
+
 .tab-indicator {
   height: 3px;
   background: #28166f;
@@ -413,6 +418,20 @@ button.bg-orangered{
 .tab-content {
   padding: 10px;
 }
+
+.table-padding{
+  padding: .5rem !important;
+}
+
+.payment_card{
+  background: url('./assets/images/payment.png');
+  background-size: contain ;
+  background-repeat: no-repeat;
+  justify-content: flex-end;
+  align-items: center;
+  display: flex;
+}
+
 button:focus {
   outline: none !important;
 }

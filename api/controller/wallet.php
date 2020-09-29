@@ -83,8 +83,8 @@
       $this->walletModel = new WalletModel();
       if(!$error){
         $funded = $this->walletModel->addTransaction($this->companyId,$clientUserId,0,$amount,$description,$tlog);
-        if($funded)  $response = ['status'=>true,'message'=>'Wallet funded successfuly'];
-      }else $response = ['status'=>false,'message'=>'Error funding waller'.$error];
+        if($funded)  $response = ['status'=>true,'message'=>'Wallet debited successfuly'];
+      }else $response = ['status'=>false,'message'=>'Debit error'.$error];
       $this->setOutputHeader(['Content-type:application/jso n']);
       $this->setOutput(json_encode($response));
     }

@@ -23,7 +23,7 @@
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     };
-      }
+      
     }
     /**
      * undocumented function summary

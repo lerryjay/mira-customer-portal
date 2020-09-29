@@ -77,10 +77,10 @@ class WalletModel extends Model
    * @return type
    * @throws conditon
    **/
-  public function getUserWalletBalance($userId)
+  public function getUserWalletBalance($userId,$status = 1)
   {
-    $sql = 'SELECT SUM(credit - debit ) AS balance FROM waller WHERE user_id =  ?';
-    $query = $this->query($sql,'s',[$userId]); 
+    $sql = 'SELECT SUM(credit - debit ) AS balance FROM wallet WHERE user_id =  ? AND status = ? ';
+    $query = $this->query($sql,'si',[$userId,$status]); 
     if($query) return $this->row['balance'];
     else return false;
   }

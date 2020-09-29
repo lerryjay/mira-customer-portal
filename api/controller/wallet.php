@@ -169,13 +169,13 @@
       $userId       = $userid ??  '';
       $clientUserId = $clientid ?? '';
 
-      $user = User::validateUser($userid);
+      $user = User::validateUser($userId);
       if($user['role'] == 'user')  $clientUserId = $userId;
 
       $balance = $this->walletModel->getUserWalletBalance($clientUserId);
-      if(!$balance){
+      if($balance){
         $response = ['status'=>true,'message'=>'Your wallet balance is '.$balance, 'data'=>$balance];
-      }else $response = ['status'=>false,'message'=>'An unexpected error occured'.$error];
+      }else $response = ['status'=>false,'message'=>'An unexpected error occured'];
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     }

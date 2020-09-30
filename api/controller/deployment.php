@@ -197,6 +197,7 @@
       $deploymentid = $deploymentid ?? '';
 
       loadController('user');
+      loadModel('deployment');
 
       $user = User::validateUser($userId,true);
       $response = ['status'=>false,'message'=>'Invalid client product id'];

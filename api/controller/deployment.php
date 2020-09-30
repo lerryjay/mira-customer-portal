@@ -2,7 +2,7 @@
   /**
    * undocumented class
    */
-  class ClassName extends Controller
+  class Deployment extends Controller
   {
 
     public function index(){

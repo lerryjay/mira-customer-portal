@@ -46,7 +46,7 @@
         break;
     }
     
-    $insert = $this->clientModel->addDeployments($clientUserId,$productId,$modules,$cost,$remarks,$deploymentDate,$deploymentStatus,$trainingDate,$trainingStatus,$paymentDate,$paymentStatus,$licenseDuration,$expiryDate,implode(',',$attachedFiles));
+    $insert = $this->deploymentModel->add($clientUserId,$productId,$modules,$cost,$remarks,$deploymentDate,$deploymentStatus,$trainingDate,$trainingStatus,$paymentDate,$paymentStatus,$licenseDuration,$expiryDate,implode(',',$attachedFiles));
     
     if($insert){
       $response =  ['status'=>true,'message'=>'Client product registered successfully!'];
@@ -107,8 +107,8 @@
 
     $user = User::validateUser($userId,true);
 
-    $this->clientModel  = new ClientModel();
-    $client = $this->clientModel->getClientByUserId($clientUserId);
+    $this->deploymentModel  = new DeploymentModel();
+    $client = $this->deploymentModel->getClientByUserId($clientUserId);
     if(!$client  && !$error ) $error = 'Client does not exist';
 
     $this->productModel = new ProductModel();
@@ -150,7 +150,7 @@
     extract($this->validateUpdate());
     loadModel('client');
     
-    $this->clientModel = new ClientModel();
+    $this->deploymentModel = new DeploymentModel();
 
     switch ($licenseDuration) {
       case 'weekly':
@@ -170,7 +170,7 @@
         break;
     }
 
-    $updated = $this->clientModel->updateDeployments($deploymentId,['modules'=>$modules,'deploymentdate'=>$deploymentDate,'deploymentstatus'=>$deploymentStatus,'trainingdate'=>$trainingDate,'trainingstatus'=>$trainingStatus,'expirydate'=>$expiryDate,'licenseduration'=>$licenseDuration,'remarks'=>$remarks]);
+    $updated = $this->deploymentModel->updateDeployment($deploymentId,['modules'=>$modules,'deploymentdate'=>$deploymentDate,'deploymentstatus'=>$deploymentStatus,'trainingdate'=>$trainingDate,'trainingstatus'=>$trainingStatus,'expirydate'=>$expiryDate,'licenseduration'=>$licenseDuration,'remarks'=>$remarks]);
     
     if($updated) $response = ['status'=>true,'message'=>'Client product update sucessfully!'];
     else $response = ['status'=>false,'message'=>'Client product update failed due to an expected error!'];
@@ -202,8 +202,8 @@
     $invalidId  = Validate::string($deploymentid,false,true,2);
     if(!$invalidId){
       loadModel('client');
-      $this->clientModel = new ClientModel();
-      $deleted  = $this->clientModel->deleteDeployment($deploymentid);
+      $this->deploymentModel = new DeploymentModel();
+      $deleted  = $this->deploymentModel->delete($deploymentid);
       if($deleted)     {
         $response = ['status'=>true,'message'=>'Product deleted successfully'];
       }else $response['message'] =  'Unable to delete product';
@@ -228,8 +228,8 @@
 
     loadController('user');
     loadModel('client');
-    $this->clientModel = new ClientModel();
-    $product  = $this->clientModel->getDeploymentById($deploymentid);
+    $this->deploymentModel = new DeploymentModel();
+    $product  = $this->deploymentModel->getDeploymentById($deploymentid);
     $invalidId  = Validate::string($deploymentid,false,true,2);
     if(!$invalidId || !$product){
       $error = 'Invalid or unverifyable client product id ';
@@ -307,8 +307,8 @@
     $invalidId  = Validate::string($deploymentid,false,true,2);
     if(!$invalidId){
       loadModel('client');
-      $this->clientModel = new ClientModel();
-      $product  = $this->clientModel->getDeploymentById($deploymentid);
+      $this->deploymentModel = new DeploymentModel();
+      $product  = $this->deploymentModel->getDeploymentById($deploymentid);
       if($product)     {
         loadModel('product');
         $attachedFiles = '';
@@ -318,7 +318,7 @@
 
           $attachedFiles = strlen($product['files']) > 0 ? array_merge(explode(',',$product['files']),$attachedFiles) : $attachedFiles;
           $attachedFileString = implode(',',$attachedFiles);
-          $updated = $this->clientModel->updateDeployments($deploymentid,['files'=>$attachedFileString]);
+          $updated = $this->deploymentModel->updateDeployments($deploymentid,['files'=>$attachedFileString]);
           if($updated) $response =  ['status'=>true,'message'=>'File upload success', 'data'=>$attachedFiles];
         }else $response['message'] = 'File upload failed! Please check file type or if file is attached';
       }
@@ -342,7 +342,6 @@
     $deploymentid = $deploymentid ?? '';
     $userId = $this->userId ?? $userid ?? '';
 
-
     loadController('user');
 
     $user = User::validateUser($userId,true);
@@ -350,14 +349,14 @@
     $invalidId  = Validate::string($deploymentid,false,true,2);
     if(!$invalidId){
       loadModel('client');
-      $this->clientModel = new ClientModel();
-      $product  = $this->clientModel->getDeploymentById($deploymentid);
+      $this->deploymentModel = new DeploymentModel();
+      $product  = $this->deploymentModel->getDeploymentById($deploymentid);
       if($product)     {
         loadModel('product');
         $this->productModel = new ProductModel();
         $product['files'] = strlen($product['files']) > 1 ? explode(',',$product['files']) : [];
         array_splice($product['files'],$fileindex,1);
-        $deleted  = $this->clientModel->updateDeployments($deploymentid,['files'=>implode(',',$product['files'])]);
+        $deleted  = $this->deploymentModel->updateDeployments($deploymentid,['files'=>implode(',',$product['files'])]);
         if($deleted)     {
           $response = ['status'=>true,'message'=>'File deleted successfully'];
         }else $response['message'] =  'Invalid file index';
@@ -385,8 +384,8 @@
     $userId       =  $this->userId ?? $userid ??  '';
 
 
-    $this->clientModel  = new ClientModel();
-    $client = $this->clientModel->getClientByUserId($clientUserId);
+    $this->deploymentModel  = new DeploymentModel();
+    $client = $this->deploymentModel->getClientByUserId($clientUserId);
     if(!$client){
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode(['status'=>false,'message'=>'Client does not exist' ])); 
@@ -396,7 +395,7 @@
     if($user['role'] !== 'admin'  && $clientUserId !== $userId){
       $response = [ 'status'=>false,'message'=>'You don\'t have the right priviledges to access this resource'];
     }else{
-      $products = $this->clientModel->getDeploymentsByClient($clientUserId);
+      $products = $this->deploymentModel->getDeploymentsByClient($clientUserId);
       if($products){
         loadModel('product');
         $this->productModel = new ProductModel();
@@ -439,8 +438,8 @@
     $invalidId  = Validate::string($deploymentid,false,true,2);
     if(!$invalidId){
       loadModel('client');
-      $this->clientModel = new ClientModel();
-      $product  = $this->clientModel->getDeploymentById($deploymentid);
+      $this->deploymentModel = new DeploymentModel();
+      $product  = $this->deploymentModel->getDeploymentById($deploymentid);
       
       if($product){
         if($user['role'] !== 'admin'  && $product['user_id'] !== $userId){

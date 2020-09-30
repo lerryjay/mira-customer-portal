@@ -80,12 +80,15 @@
       $invalidAmount = Validate::float($amount);
       if($invalidAmount) $error = 'Invalid fund amount';
 
+      $balance = $this->walletModel->getUserWalletBalance($clientUserId);
+      if($amount > $balance) $error = 'Insufficient Funds';
+
       $this->walletModel = new WalletModel();
       if(!$error){
         $funded = $this->walletModel->addTransaction($this->companyId,$clientUserId,0,$amount,$description,$tlog);
         if($funded)  $response = ['status'=>true,'message'=>'Wallet debited successfuly'];
-      }else $response = ['status'=>false,'message'=>'Debit error'.$error];
-      $this->setOutputHeader(['Content-type:application/jso n']);
+      }else $response = ['status'=>false,'message'=>'Debit error:'.$error];
+      $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     }
 
@@ -172,10 +175,9 @@
       $user = User::validateUser($userId);
       if($user['role'] == 'user')  $clientUserId = $userId;
 
-      $balance = $this->walletModel->getUserWalletBalance($clientUserId);
-      if($balance){
-        $response = ['status'=>true,'message'=>'Your wallet balance is '.$balance, 'data'=>$balance];
-      }else $response = ['status'=>false,'message'=>'An unexpected error occured'];
+      $balance = $this->walletModel->getUserWalletBalance($clientUserId) ?: 0;
+      $response = ['status'=>true,'message'=>'Your wallet balance is '.$balance, 'data'=>$balance];
+      $response = ['status'=>false,'message'=>'An unexpected error occured'];
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     }

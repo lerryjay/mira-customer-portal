@@ -33,24 +33,17 @@
       $enddate    = isset($enddate) ? $enddate : '';
       $startdate  = isset($startdate) ? $startdate : '';
       $clientid = isset($clientid) ? $clientid : null;
+      
       $user = User::validateUser($userId);
-      $filters = ($user['role'] == 'user') ? 
-      [
-        "userId"=>$userid,
-        "limit"=>$limit,
-        "pageno"=>$pageno,
-        "on"=>$on,
-        "startdate"=>$startdate,
-        "enddate"=>$enddate,
-        "type"=>$type 
-      ] : [
+      $clientid = $user['role'] == 'admin' ? $clientid : $userid;
+      $filters = [
         "companyId"=>$user['company_id'],
         "limit"=>$limit,
         "pageno"=>$pageno,
         "userId"=>$clientid, 
         "on"=>$on,
-        "startdate"=>$startdate,
-        "enddate"=>$enddate,
+        "startDate"=>$startdate,
+        "endDate"=>$enddate,
         "type"=>$type
       ];
       $hasTickets =   $this->ticketModel->searchTicket($filters);
@@ -305,6 +298,55 @@
         }
       }else $response['message'] = "An unexpected error occured. Please try again later";
       
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
+    }
+
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
+    public function dailystatistics()
+    {
+      $response =  [
+        "status"=>true,
+        "data"=>[],
+        "message"=>"No ticket records!"
+      ];
+
+      extract($_GET);
+      loadModel('ticket');
+      loadController('user');
+      $this->ticketModel = new TicketModel();
+
+      $userId     = isset($userid) ? $userid : $this->userId;
+      $on         = isset($on) ? $on : '';
+      $type       = isset($type) ? $type : '';
+      $enddate    = isset($enddate) ? $enddate : '';
+      $startdate  = isset($startdate) ? $startdate : '';
+      $clientid = isset($clientid) ? $clientid : null;
+      
+      $user = User::validateUser($userId);
+      $clientid = $user['role'] == 'admin' ? $clientid : $userid;
+      $filters = [
+        "companyId"=>$user['company_id'],
+        "pageno"=>$pageno,
+        "userId"=>$clientid, 
+        "on"=>$on,
+        "startDate"=>$startdate,
+        "endDate"=>$enddate,
+        "type"=>$type
+      ];
+      $hasTickets =   $this->ticketModel->searchTicket($filters);
+      if($hasTickets){
+        $response['data'] = $hasTickets;
+        $response['message'] = "Ticket records found";
+      }
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     }

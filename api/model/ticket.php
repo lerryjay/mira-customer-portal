@@ -107,9 +107,9 @@
       $conditions .= isset($filter['type']) && $filter['type'] != NULL  ? "AND type = '".$filter['type']."'" : "";
       $conditions .= isset($filter['userId']) && $filter['userId'] != NULL  ? "AND customer_id = '".$filter['userId']."'" : "";
       $conditions .= isset($filter['companyId']) && $filter['companyId'] != NULL  ? "AND company_id = '".$filter['companyId']."'" : "";
-      $conditions .= isset($filter['on'])  && $filter['on'] != NULL ? "AND dateadded = '".$filter['on']."'" : "";
-      $conditions .= isset($filter['startDate'])  && $filter['startDate'] != NULL ? "AND dateadded >= '".$filter['startDate']."'" : "";
-      $conditions .= isset($filter['endDate']) && $filter['endDate'] != NULL  ? "AND dateadded <= '".$filter['endDate']."'" : "";
+      $conditions .= isset($filter['on'])  && $filter['on'] != NULL ? "AND createdat LIKE '%".$filter['on']."%'" : "";
+      $conditions .= isset($filter['startDate'])  && $filter['startDate'] != NULL ? "AND createdat >= '".$filter['startDate']."'" : "";
+      $conditions .= isset($filter['endDate']) && $filter['endDate'] != NULL  ? "AND createdat <= '".$filter['endDate']."'" : "";
 
       $conditions .= isset($filter['order_by']) ? " ORDER BY ".$filter['order_by'] : " ORDER BY createdat";
       $conditions .= isset($filter['order']) ? " ".$filter['order'] : " DESC";

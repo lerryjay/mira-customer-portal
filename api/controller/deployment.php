@@ -108,8 +108,9 @@
 
       $user = User::validateUser($userId,true);
 
+      $this->clientModel  = new ClientModel();
       $this->deploymentModel  = new DeploymentModel();
-      $client = $this->deploymentModel->getClientByUserId($clientUserId);
+      $client = $this->clientModel->getClientByUserId($clientUserId);
       if(!$client  && !$error ) $error = 'Client does not exist';
 
       $this->productModel = new ProductModel();
@@ -150,7 +151,6 @@
     {
       extract($this->validateUpdate());
       loadModel('client');
-      loadModel('deployment');
       
       $this->deploymentModel = new DeploymentModel();
 
@@ -230,6 +230,8 @@
 
       loadController('user');
       loadModel('client');
+      loadModel('deployment');
+
       $this->deploymentModel = new DeploymentModel();
       $product  = $this->deploymentModel->getDeploymentById($deploymentid);
       $invalidId  = Validate::string($deploymentid,false,true,2);
@@ -321,7 +323,7 @@
 
             $attachedFiles = strlen($product['files']) > 0 ? array_merge(explode(',',$product['files']),$attachedFiles) : $attachedFiles;
             $attachedFileString = implode(',',$attachedFiles);
-            $updated = $this->deploymentModel->updateDeployments($deploymentid,['files'=>$attachedFileString]);
+            $updated = $this->deploymentModel->updateDeployment($deploymentid,['files'=>$attachedFileString]);
             if($updated) $response =  ['status'=>true,'message'=>'File upload success', 'data'=>$attachedFiles];
           }else $response['message'] = 'File upload failed! Please check file type or if file is attached';
         }
@@ -360,7 +362,7 @@
           $this->productModel = new ProductModel();
           $product['files'] = strlen($product['files']) > 1 ? explode(',',$product['files']) : [];
           array_splice($product['files'],$fileindex,1);
-          $deleted  = $this->deploymentModel->updateDeployments($deploymentid,['files'=>implode(',',$product['files'])]);
+          $deleted  = $this->deploymentModel->updateDeployment($deploymentid,['files'=>implode(',',$product['files'])]);
           if($deleted)     {
             $response = ['status'=>true,'message'=>'File deleted successfully'];
           }else $response['message'] =  'Invalid file index';

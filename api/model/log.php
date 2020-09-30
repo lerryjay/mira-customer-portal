@@ -67,7 +67,7 @@
       $pageno      = (string) isset($filter['pageno']) ? $filter['pageno'] : 1;
       $conditions .= ' LIMIT '.(string) $limit;
       $conditions .= ' OFFSET '.(string) (($pageno - 1 ) * $limit);
-      echo $conditions;//  = ltrim($conditions,'AND');
+      $conditions;//  = ltrim($conditions,'AND');
       return $this->getLogs('WHERE a.status = ? '.$conditions,'i',[$status]);
     }
 

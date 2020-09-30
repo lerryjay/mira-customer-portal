@@ -60,8 +60,8 @@
       $on = $on ?? '';
       $error = false;
       $type = $type ?? '';
-      $limit = $limit ?? '';
-      $pageno = $pageno ?? '';
+      $limit = $limit ?? 20;
+      $pageno = $pageno ?? 1;
       $servicecode  = $servicecode ?? '';
       $statuscode   = $statuscode ?? '';
       $clientid = $clientid ?? '';
@@ -79,12 +79,12 @@
       $this->deploymentModel = new DeploymentModel();
       $user = [];
       $deployment  = $this->deploymentModel->getDeploymentById($deploymentId);
+      
       if(!$deployment) $user = User::validateUser($userid);
       else $user = User::validateUser($deployment['user_id']);
       if(!$deployment && !$user) $error = 'Request could not be authenticated';
-
-      $clientUserId = $user['role'] == 'admin' ? $clientid ??  '' : $userid;
-
+      $clientUserId = $user['role'] == 'admin' ? ($clientid ??  '') : ( $deployment ? $deployment['user_id'] : $userid);
+      
       $filters = 
       [
         "userId"=>$clientUserId,
@@ -106,7 +106,6 @@
         if($logs){
           $data = [];
           foreach($logs as $item =>$value){
-            // var_dump($value);
             $data[] = [
               'productname'=>$value['productname'],
               'businessname'=>$value['businessname'],
@@ -160,6 +159,7 @@
       if(!$deployment) $user = User::validateUser($userid);
       else $user = User::validateUser($deployment['user_id']);
       if(!$deployment && !$user) $error = 'Request could not be authenticated';
+      $clientUserId = $user['role'] == 'admin' ? ($clientid ??  '') : ( $deployment ? $deployment['user_id'] : $userid);
 
       $dates = [];
       loadModel('log');

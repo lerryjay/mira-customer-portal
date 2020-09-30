@@ -46,13 +46,12 @@
      * @return type
      * @throws conditon
      **/
-    public function getAllLogs($filters,$status = 1 )
+    public function getAllLogs($filter,$status = 1 )
     {
       $conditions  = '';
       $conditions .= isset($filter['type']) && $filter['type'] != NULL  ? "AND type = '".$filter['type']."'" : "";
       $conditions .= isset($filter['userId']) && $filter['userId'] != NULL  ? "AND d.user_id = '".$filter['userId']."'" : "";
       
-      $conditions .= isset($filter['deploymentId']) && $filter['deploymentId'] != NULL  ? "AND deployment_id = '".$filter['deploymentId']."'" : "";
       $conditions .= isset($filter['deploymentId']) && $filter['deploymentId'] != NULL  ? "AND deployment_id = '".$filter['deploymentId']."'" : "";
       $conditions .= isset($filter['servicecode']) && $filter['servicecode'] != NULL  ? "AND servicecode = '".$filter['servicecode']."'" : "";
       $conditions .= isset($filter['statuscode']) && $filter['statuscode'] != NULL  ? "AND statuscode = '".$filter['statuscode']."'" : "";
@@ -68,7 +67,7 @@
       $pageno      = (string) isset($filter['pageno']) ? $filter['pageno'] : 1;
       $conditions .= ' LIMIT '.(string) $limit;
       $conditions .= ' OFFSET '.(string) (($pageno - 1 ) * $limit);
-      $conditions  = ltrim($conditions,'AND');
+      echo $conditions;//  = ltrim($conditions,'AND');
       return $this->getLogs('WHERE a.status = ? '.$conditions,'i',[$status]);
     }
 

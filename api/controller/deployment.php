@@ -389,7 +389,7 @@
       loadModel('deployment');
       loadController('user');
       $clientUserId =  $clientid ?? '';
-      $userId       =  $this->userId ?? $userid ??  '';
+      $userId       =  $userid ?? $this->userId ?? '';
 
 
       $this->clientModel      = new ClientModel();

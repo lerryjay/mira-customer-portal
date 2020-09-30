@@ -335,7 +335,7 @@
       $clientid = $user['role'] == 'admin' ? $clientid : $userid;
       $filters = [
         "companyId"=>$user['company_id'],
-        "pageno"=>$pageno,
+         "pageno"=>$pageno,
         "userId"=>$clientid, 
         "on"=>$on,
         "startDate"=>$startdate,

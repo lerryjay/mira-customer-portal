@@ -172,12 +172,19 @@
       $userId       = $userid ??  '';
       $clientUserId = $clientid ?? '';
 
-      $user = User::validateUser($userId);
-      if($user['role'] == 'user')  $clientUserId = $userId;
+      $user = [];
+      $deployment  = $this->deploymentModel->getDeploymentById($deploymentId);
+      if(!$deployment) $user = User::validateUser($userid);
+      else $user = User::validateUser($deployment['user_id']);
+      if(!$deployment && !$user) $error = 'Request could not be authenticated';
 
-      $balance = $this->walletModel->getUserWalletBalance($clientUserId) ?: 0;
-      $response = ['status'=>true,'message'=>'Your wallet balance is '.$balance, 'data'=>$balance];
-      $response = ['status'=>false,'message'=>'An unexpected error occured'];
+      $clientUserId = $user['role'] == 'admin' ? $clientid ??  '' : $userid;
+
+      if(!$error){
+        $balance = $this->walletModel->getUserWalletBalance($clientUserId) ?: 0;
+        $response = ['status'=>true,'message'=>'Your wallet balance is '.$balance, 'data'=>$balance];
+      }else ['status'=>true,'message'=>'Error fetching balance: '.$error, 'data'=>$balance];
+
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     }

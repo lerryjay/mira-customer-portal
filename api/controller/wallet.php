@@ -166,15 +166,20 @@
     {
       extract($_GET);
       loadModel('wallet');
+      loadModel('deployment');
       loadController('user');
       $this->walletModel = new WalletModel();
+      $this->deploymentModel = new DeploymentModel();
 
+
+      $error        = false;
       $userId       = $userid ??  '';
       $clientUserId = $clientid ?? '';
+      $deploymentId = $deploymentid ?? '';
 
       $user = [];
       $deployment  = $this->deploymentModel->getDeploymentById($deploymentId);
-      if(!$deployment) $user = User::validateUser($userid);
+      if(!$deployment) $user = User::validateUser($userId);
       else $user = User::validateUser($deployment['user_id']);
       if(!$deployment && !$user) $error = 'Request could not be authenticated';
 

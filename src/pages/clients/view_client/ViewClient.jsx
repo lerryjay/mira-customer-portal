@@ -23,6 +23,7 @@ class ViewClient extends Component {
       file: "",
       imagePreviewUrl: "",
       imageurl: "",
+      amount: ''
     };
   }
 
@@ -163,7 +164,36 @@ class ViewClient extends Component {
   }
 
   fundWallet = e => {
-    e.preventDefault()
+    e.preventDefault();
+      this.setState({ loading: true });
+
+        const headers = new Headers();
+        headers.append('API-KEY', APIKEY);
+
+        let form = new FormData();
+        form.append("userid", this.state.user.userid);
+        form.append("clientid", this.props.location.pathname.split("/")[2]);
+        form.append("amount", this.state.amount);
+
+        
+        fetch(HTTPURL + 'wallet/fund', {
+            method: 'POST',
+            body: form,
+            headers: headers
+        }).then(response => response.json())
+        .then(result => { 
+                this.setState({ loading: false });
+                if(result.status === true) {
+                    this.setState({ loading: false });
+                    this.state.showAlert("success", result.message)
+                    this.setState({ amount: ''})
+                    let modal = document.getElementById("showWallet");
+                    modal.style.display = "none";
+                } else{
+                    this.setState({ loading: false });
+                    this.state.showAlert("danger",  result.message)
+                }
+        })
   }
 
   closesuspendModal() {
@@ -637,13 +667,18 @@ class ViewClient extends Component {
                   
                   {/* Modal content  */}
                   <div class="modal-content modal-del text-center p-5">
-                <span className="close text-danger"
-                          onClick={this.closeWallet}>&times;</span>
+                    <div className="row font-weight-bold mb-4">
+                      <span className="text-large mx-auto">Fund Wallet</span>
+                      <span className="text-danger close-fund"
+                          onClick={this.closeWallet}>&times;</span>  
 
-                    <h3 className="font-weight-bold">Fund Wallet</h3>
-                    <img src={payment_card} className="img-fluid" alt="payment_card"/>
+                    </div>
+
+                    <div className="payment_card">
+                    {/* <img src={payment_card} className="img-fluid" alt="payment_card"/> */}
          
-                    <form onSubmit={this.fundWallet}>
+                   <div className="col-md-7"> 
+                     <form onSubmit={this.fundWallet}>
                     <div className="input-group mb-3">
                       <span
                         className="input-group-text bg-white alt"
@@ -684,7 +719,11 @@ class ViewClient extends Component {
                       </button>
                     )}
                     </form>
-                 
+            
+                     </div>
+
+
+                    </div>
                     </div> 
                     </div>
               ) : (

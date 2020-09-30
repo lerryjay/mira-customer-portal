@@ -81,6 +81,10 @@ export const adminMenu = [
     isActive: false
   },
   {
+    name: 'Support',
+    isDivider: true
+  },
+  {
     name: 'Tickets',
     icon: 'fa fa-ticket-alt',
     isActive: false,
@@ -100,6 +104,12 @@ export const adminMenu = [
     ]
   },
   {
+    name: 'API Metrics',
+    route: '/apilogs',
+    icon: 'fa fa-chart-line',
+    isActive: false
+  },
+  {
     name: 'Clients',
     icon: 'fa fa-user-friends',
     isActive: false,
@@ -117,6 +127,12 @@ export const adminMenu = [
         isActive: false,
       }
     ]
+  },
+  {
+    name: 'Transactions',
+    route: '/transactions',
+    icon: 'fa fa-chart-pie',
+    isActive: false
   },
   {
     name: 'Products',
@@ -159,18 +175,6 @@ export const adminMenu = [
         isActive: false,
       }
     ]
-  },
-  {
-    name: 'API Metrics',
-    route: '/apilogs',
-    icon: 'fa fa-chart-line',
-    isActive: false
-  },
-  {
-    name: 'Transactions',
-    route: '/transactions',
-    icon: 'fa fa-chart-pie',
-    isActive: false
   },
   {
     name: 'Profile',

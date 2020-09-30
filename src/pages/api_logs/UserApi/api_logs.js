@@ -165,13 +165,8 @@ class api_logs extends Component {
 
     return (
       <div>
-      <div className="row mt-4">
-        <div className="w-100 text-center">
-          <h3>API Metrics </h3>
-        </div>
-        </div>
         <div className="row m-4 d-flex justify-content-end ">
-          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3  hover-effect">
             <div className="px-3 card py-4">
               <div className="row align-items-center">
                 <div className="col">
@@ -185,7 +180,7 @@ class api_logs extends Component {
               </div>
             </div>
           </div>
-          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3 hover-effect">
             <div className="px-3 card py-4">
               <div className="row align-items-center">
                 <div className="col">
@@ -199,7 +194,7 @@ class api_logs extends Component {
               </div>
             </div>
           </div>
-          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3 hover-effect">
             <div className="px-3 card py-4">
               <div className="row align-items-center">
                 <div className="col">
@@ -213,7 +208,7 @@ class api_logs extends Component {
               </div>
             </div>
           </div>
-          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
+          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3 hover-effect">
             <div className="px-3 card py-4">
               <div className="row align-items-center">
                 <div className="col">
@@ -241,7 +236,10 @@ class api_logs extends Component {
                 <div
                   id="table"
                   className="card pt-2 mt-3 justify-content-center shadow px-2"
-                >
+                >      
+                <div className="card-header bg-medium font-weight-bold text-dark">
+                    API USAGE STATISTICS
+                </div>
                   <div className="table-responsive">
                     <table
                       className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart"
@@ -293,7 +291,7 @@ class api_logs extends Component {
               <div className="row mt-5">
                 <div className="col-md-4">
                   <div className="form-group mt-1">
-                    {this.state.tickets.length > 0 && (
+                    {this.state.totalLists.length > 0 && (
                       <select
                         onChange={(e) => {
                           this.setState({ numberPerPage: e.target.value });
@@ -332,8 +330,12 @@ class api_logs extends Component {
           </div>
 
           <div className="col-md-3 col-sm-12 box2 mt-3 mb-3">
-            <div className="card p-3">
-              <label
+            <div className="card">
+                <div className="card-header bg-medium font-weight-bold text-dark">
+                <i class="fa fa-filter"></i> FILTER BY
+                </div>
+                <div className="p-3">
+                <label
                 htmlFor="customer"
                 style={{ display: "block" }}
                 className="font-weight-bold"
@@ -479,7 +481,9 @@ class api_logs extends Component {
                   </button>
                 </div>
               </form>
-            </div>
+            
+                </div>
+           </div>
           </div>
       
       </div>

@@ -430,10 +430,28 @@ button.bg-orangered{
   justify-content: flex-end;
   align-items: center;
   display: flex;
+  height: 130px;
 }
 
 button:focus {
   outline: none !important;
+}
+
+.zoom-effect{
+  transition: all 1s ease-in-out;
+}
+.zoom-effect:hover{
+  transform: scale(1.05);
+  transition: all .5s ease-in-out;
+}
+
+.hover-effect{
+  transition: all ease-in-out 0.5s;
+}
+
+.hover-effect:hover{
+  transform: scale(1.05);
+  transition: all ease-in-out 0.5s;
 }
 
 div.home {
@@ -664,6 +682,26 @@ input:checked + .slider:before {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #2828b4; 
+}
+
+.border-top-green{
+  border-top: 5px solid green !important;
+}
+
+.close-fund {
+  color: #fff;
+  position: absolute;
+  top: 40px;
+  right: 35px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-fund:hover,
+.close-fund:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 
@@ -961,7 +999,6 @@ div.cardddd {
 
 div ul.components li, ul.components a p {
   padding: 10px;
-  margin: 3px 0;
   transition: all ease-in-out 0.5s;
 }
 ul.components a p{

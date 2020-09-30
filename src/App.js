@@ -15,6 +15,8 @@ import Dashboard from "./pages/dashboard/dashboard";
 import ChangePassword from "./pages/change_password/ChangePassword";
 import Profile from "./pages/profile/Profile";
 import VerifyToken from "./pages/verify_token/verify_token";
+import VerifyLinkToken from "./pages/verifylinktoken/verifylinktoken";
+import ResetPassword from "./pages/resetpassword/resetpassword";
 
 import Tickets from "./pages/tickets/Tickets";
 import CreateTicket from "./pages/tickets/create_ticket/create_ticket";
@@ -356,6 +358,8 @@ class App extends Component {
                   
                   {<Route path="/forgot_password" component={ForgotPassword} />}
                   {<Route path="/verifytoken" component={VerifyToken} />}
+                  {<Route path="/verifylinktoken" component={VerifyLinkToken} />}
+                  {<Route path="/resetpassword" component={ResetPassword} />}
                   {<Route path="/signup" component={SignUp} />}
                   {<NotLoggedInRoute path="/login" component={Login} />}
                   {<Route path="/forbidden" component={Forbidden} />}

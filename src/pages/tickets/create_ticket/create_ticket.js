@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, { Component } from 'react';
 
 import { HTTPURL, APIKEY } from '../../../common/global_constant';
@@ -60,9 +61,11 @@ class create_ticket extends Component {
         .then(result => { 
                 this.setState({ loading: false });
                 if(result.status === true) {
+                    this.setState({ loading: false });
                     this.state.showAlert("success", result.message)
                     this.setState({ imagePreviewUrl: '', title: '', type: '', message: '', customerid: '', file: []})
                 } else{
+                    this.setState({ loading: false });
                     this.state.showAlert("danger",  result.message)
                 }
         })
@@ -115,6 +118,7 @@ class create_ticket extends Component {
                      ?  <img src={URL.createObjectURL(file)} className="col-md-3" alt="attachment"/>
                      : <span>
                             <img
+                                alt="pdf placeholder"
                                 src={pdf_placeholder}
                                 style={{ width: "100px", height: "100px" }}
                                 className="m-2"
@@ -123,18 +127,18 @@ class create_ticket extends Component {
                             {file.name}
                         </span>
             )
-            return (
-                file.name.match(/\.(jpg|jpeg|png)$/)
-                    ? < div className="imgPreview  m-2" id="files">
-                        <i className="fa fa-trash position-absolute" onClick={(e) => this.removeImage(e,file,index)}></i>
-                        <img src={this.state.imagePreviewUrl} className="col-md-3" />
-                    </div>
-                    :
-                    <div className="other_files   m-2" id="otherfiles" >
-                        <i className="fa fa-trash" onClick={(e) => this.removeOtherImage(e)}></i>
-                        {file.name}
-                    </div>
-            )
+            // return (
+            //     file.name.match(/\.(jpg|jpeg|png)$/)
+            //         ? < div className="imgPreview  m-2" id="files">
+            //             <i className="fa fa-trash position-absolute" onClick={(e) => this.removeImage(e,file,index)}></i>
+            //             <img src={this.state.imagePreviewUrl} className="col-md-3" />
+            //         </div>
+            //         :
+            //         <div className="other_files   m-2" id="otherfiles" >
+            //             <i className="fa fa-trash" onClick={(e) => this.removeOtherImage(e)}></i>
+            //             {file.name}
+            //         </div>
+            // )
         })
         return (
             <div className="container text-white mt-4">
@@ -163,7 +167,7 @@ class create_ticket extends Component {
                                             this.state.user.role == 'admin' &&
                                             <div className="col-md-12 mb-3">
                                                 <div className="form-group">
-                                                    <input list="customers" name="customerid" id="customerid" onChange={this.handleInputChange} name="customerid" placeholder="Enter customer name" className="form-control" />
+                                                    <input list="customers" name="customerid" id="customerid" onChange={this.handleInputChange} placeholder="Enter customer name" className="form-control" />
                                                     <datalist id="customers">
                                                         {
                                                             this.state.users.map(user => <option value={user.firstname + ' ' + user.lastname} />)

@@ -117,9 +117,14 @@ class api_logs extends Component {
           ],
           pageNumbers: [],
           currentLists: [],
+          deploymentid: ''
         };
       }
     
+      componentDidMount() {
+        this.getLogs();
+      }
+
       handleInputChange = (e) => {
         const { name, value } = e.target;
         if (name === "searchUser") {
@@ -149,7 +154,48 @@ class api_logs extends Component {
           }
         });
       }
+
+      async getLogs() {
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+        
+        let clientid = this.props.location.pathname.split("/")[2];
+        // let deploymentid = this.state.deploymentid;
     
+        const res = await fetch(
+          HTTPURL + `log/list?userid=${this.state.user.userid}&clientid=${clientid}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        ).then((response) => response.json());
+    
+        if (res["status"]) this.setState({ totalLists: res["data"] });
+      
+      }
+
+      handleSearch = async (e) => {
+        e.preventDefault();
+
+        const { user, deploymentid, on, startdate, enddate} = this.state;
+    
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+         await fetch(
+          HTTPURL +
+            `log/list/?userid=${user.userid}&deploymentid=${deploymentid}&on=${on}&startdate=${startdate}&enddate=${enddate}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status) this.setState({ totalLists: data.data });
+          });
+      };
+       
+
       update = (newPage) => {
         this.setState({ currentPage: newPage });
       };
@@ -229,7 +275,7 @@ class api_logs extends Component {
       <div className="col-md-9 col-sm-12 box1 mb-3" id="profile">
             {this.state.totalLists.length === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
-                <h6 className="text-center">No API logs records!</h6>
+                <h6 className="text-center">No log records!</h6>
               </div>
             ) : (
               <div>
@@ -252,7 +298,7 @@ class api_logs extends Component {
                           <th>Client</th>
                           <th>Request</th>
                           <th>Status code</th>
-                          <th>Status</th>
+                          <th>Service Code</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -260,22 +306,22 @@ class api_logs extends Component {
                           return (
                             <tr>
                             <td className="table-padding">
-                              {request.createdat}
+                              {request.date}
                             </td>
                               {this.state.user.role == "admin" && (
                                 <td onClick={this.handleRoute}
                                 className="table-padding">
-                                  {request.client}
+                                  {request.clientname}
                                 </td>
                               )}
-                              <td className="table-padding">{request.url}</td>
+                              <td className="table-padding">{request.ip}</td>
                               <td className="table-padding">
-                                <span className={request.code == '200' ? 'text-success' : 'text-danger'} >{request.code}</span>
+                                <span >{request.statuscode}</span>
                               </td>
                               <td className="table-padding"
                                 style={{ minWidth: "100px", maxWidth: "100px" }}
                               >
-                                <span className={request.code == '200' ? 'text-success' : 'text-danger' }>{request.status}</span>
+                                <span>{request.servicecode}</span>
                                </td>
                               </tr>
                           );
@@ -330,6 +376,7 @@ class api_logs extends Component {
           </div>
 
           <div className="col-md-3 col-sm-12 box2 mt-3 mb-3">
+            
             <div className="card">
                 <div className="card-header bg-medium font-weight-bold text-dark">
                 <i class="fa fa-filter"></i> FILTER BY

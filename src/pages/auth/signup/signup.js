@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-import Validators  from "../../common/Validators";
-import {withContext} from '../../common/context';
+import Validators  from "../../../common/Validators";
+import {withContext} from '../../../common/context';
 
 class SignUp extends Component {
     constructor(props) {

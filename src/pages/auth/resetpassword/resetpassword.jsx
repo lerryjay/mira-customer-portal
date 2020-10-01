@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import Validators  from "../../common/Validators";
-import {withContext} from '../../common/context';
-import { APIKEY, HTTPURL } from '../../common/global_constant';
+import Validators  from "../../../common/Validators";
+import {withContext} from '../../../common/context';
+import { APIKEY, HTTPURL } from '../../../common/global_constant';
 
 class ResetPassword extends Component {
     constructor(props){

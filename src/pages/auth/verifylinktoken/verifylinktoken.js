@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-import { HTTPURL,APIKEY } from "../../common/global_constant";
-import Validators  from "../../common/Validators";
-import {withContext} from '../../common/context';
+import {withContext} from '../../../common/context';
 
 class VerifyLinkToken extends Component {
     constructor(props){

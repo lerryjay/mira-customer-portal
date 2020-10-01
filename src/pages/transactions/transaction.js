@@ -17,107 +17,14 @@ class transaction extends Component {
           clients: [],
           currentPage: 1,
           numberPerPage: 10,
-          totalLists: [
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Acciss ebs',
-                price: 2000,
-                status: 'Successful'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Mira HPro',
-                price: 450,
-                status: 'Failed'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Acciss ebs',
-                price: 9800,
-                status: 'Cancelled'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Mira HPro',
-                price: 1000,
-                status: 'Successful'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Acciss ebs',
-                price: 200,
-                status: 'Successful'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Mira HPro',
-                price: 200,
-                status: 'Failed'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Acciss ebs',
-                price: 7600,
-                status: 'Cancelled'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Mira HPro',
-                price: 200,
-                status: 'Successful'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Acciss ebs',
-                price: 7600,
-                status: 'Successful'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Mira HPro',
-                price: 100,
-                status: 'Failed'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Acciss ebs',
-                price: 300,
-                status: 'Cancelled'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Mira HPro',
-                price: 200,
-                status: 'Successful'
-
-            },
-          ],
+          totalLists: [],
           pageNumbers: [],
           currentLists: [],
         };
+      }
+
+      componentDidMount() {
+        this.getTransactions();
       }
     
       handleInputChange = (e) => {
@@ -150,6 +57,25 @@ class transaction extends Component {
         });
       }
     
+      async getTransactions() {
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+        
+        let clientid = this.props.location.pathname.split("/")[2];
+    
+        const res = await fetch(
+          HTTPURL + `wallet/transactions?&userid=${this.state.user.userid}&clientid=${clientid}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        ).then((response) => response.json());
+    
+        if (res["status"]) this.setState({ totalLists: res["data"] });
+      
+      }
+
+
       update = (newPage) => {
         this.setState({ currentPage: newPage });
       };
@@ -249,9 +175,9 @@ class transaction extends Component {
                         <tr>
                           <th className="table-padding">Date</th>
                           <th>Customer</th>
-                          <th>Product</th>
-                          <th>Price</th>
-                          <th>Status</th>
+                          <th>Description</th>
+                          <th>Credit</th>
+                          <th>Transaction Log</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -259,18 +185,18 @@ class transaction extends Component {
                           return (
                             <tr>
                             <td className="table-padding">
-                              {transaction.createdat}
+                              {transaction.tdate}
                             </td>
                               {this.state.user.role == "admin" && (
                                 <td onClick={this.handleRoute}
                                 className="table-padding">
-                                  {transaction.customer}
+                                  {transaction.clientname}
                                 </td>
                               )}
-                              <td className="table-padding">{transaction.product}</td>
-                              <td className="table-padding">&#8358;{transaction.price}</td>
+                              <td className="table-padding">{transaction.description}</td>
+                              <td className="table-padding">&#8358;{transaction.credit}</td>
                               <td className="table-padding">
-                                <span className={transaction.status == 'Successful' ? 'text-success' : 'text-danger'} >{transaction.status}</span>
+                                <span className={transaction.status == 'Successful' ? 'text-success' : 'text-danger'} >{transaction.tlog}</span>
                               </td>
                               </tr>
                           );

@@ -23,6 +23,8 @@ class ViewClient extends Component {
       file: "",
       imagePreviewUrl: "",
       imageurl: "",
+      amount: '',
+      walletBalance: ''
     };
   }
 
@@ -34,7 +36,7 @@ class ViewClient extends Component {
 
     fetch(
       HTTPURL +
-        `clients/products?userid=${this.state.user.userid}&clientid=${clientid}`,
+        `deployment/list?userid=${this.state.user.userid}&clientid=${clientid}`,
       {
         method: "GET",
         headers: headers,
@@ -93,6 +95,7 @@ class ViewClient extends Component {
 
   async componentDidMount() {
     this.getClients();
+    this.getWalletBalance();
   }
 
   async getClients() {
@@ -123,19 +126,21 @@ class ViewClient extends Component {
     modal.style.display = "block";
   }
 
-  deleteProduct() {
+ async deleteProduct() {
     this.setState({ loading: true });
 
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
-    const res = fetch(
-      `${HTTPURL}clients/deleteproduct?clientproductid=${this.state.selectedProduct.id}&userid=${this.state.user.userid}`,
+    const res = await fetch(
+      `${HTTPURL}deployment/delete?deploymentid=${this.state.selectedProduct.id}&userid=${this.state.user.userid}`,
       {
-        method: "GET",
+        method: "POST",
         headers: headers,
       }
-    );
-    if (res.status) {
+    ).then((response) => response.json());
+    if (res.status === true) {
+      this.getClients();
+      this.getProducts();
       this.setState({ loading: false });
       this.state.showAlert("success", res.message);
       let modal = document.getElementById("deleteModal");
@@ -163,8 +168,57 @@ class ViewClient extends Component {
   }
 
   fundWallet = e => {
-    e.preventDefault()
+    e.preventDefault();
+      this.setState({ loading: true });
+
+        const headers = new Headers();
+        headers.append('API-KEY', APIKEY);
+
+        let form = new FormData();
+        form.append("userid", this.state.user.userid);
+        form.append("clientid", this.props.location.pathname.split("/")[2]);
+        form.append("amount", this.state.amount);
+
+        
+        fetch(HTTPURL + 'wallet/fund', {
+            method: 'POST',
+            body: form,
+            headers: headers
+        }).then(response => response.json())
+        .then(result => { 
+                this.setState({ loading: false });
+                if(result.status === true) {
+                  this.getWalletBalance();
+                    this.setState({ loading: false });
+                    this.state.showAlert("success", result.message)
+                    this.setState({ amount: ''})
+                    let modal = document.getElementById("showWallet");
+                    modal.style.display = "none";
+                } else{
+                    this.setState({ loading: false });
+                    this.state.showAlert("danger",  result.message)
+                }
+        })
   }
+
+  async getWalletBalance() {
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    
+    let clientid = this.props.location.pathname.split("/")[2];
+
+    const res = await fetch(
+      HTTPURL + `wallet/balance?clientid=${clientid}&userid=${this.state.user.userid}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    ).then((response) => response.json());
+
+    if (res["status"]) this.setState({ walletBalance: res["data"] });
+  
+  }
+
 
   closesuspendModal() {
     let modal = document.getElementById("suspendModal");
@@ -228,7 +282,7 @@ class ViewClient extends Component {
         method: "GET",
         headers: headers,
       }
-    );
+    ).then((response) => response.json());
 
     if (res.status) {
       this.setState({ loading: false });
@@ -373,10 +427,12 @@ class ViewClient extends Component {
                 </div>
 
                 {!this.state.isloading && (
-                  <div className="col-md-6 pl-5">
+                  <div className="col-md-8 pl-5">
                     <h3 className="text-dark">{this.state.businessname}</h3>
                     <div className="row mt-3">
                       <div className="col-md-12">
+                        <div className="row">
+                        <div className="col-md-7">
                         <h6>{this.state.companyemail}</h6>
                         <h6>{this.state.companytelephone}</h6>
                         <h6>{this.state.companyaddress}</h6>
@@ -384,7 +440,25 @@ class ViewClient extends Component {
                           {this.state.companylga}, {this.state.companystateid},{" "}
                           {this.state.companycountryid}
                         </h6>
-                        <div className="row mt-5">
+                        </div>
+                        <div className="col-md-5">
+                        <div className=" hover-effect">
+                            <div className="px-3 card py-4">
+                              <div className="row align-items-center">
+                                <div className="col">
+                                <i className=" border-radius-4 fa fa-money-check py-3 px-4 text-white btn-primary fa-2x"></i>
+                                </div>
+                                <div className="col font-card text-right">
+                                  <span className=" ">Wallet Balance</span>
+                                  <br />
+                                  <span className="text-large">{this.state.walletBalance}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        </div>
+                        <div className="row mt-2">
                           <Link
                             className="btn mt-3 m-2 btn-primary mb-2 rounded-0"
                             to={() => `/editclient/${this.state.userid}`}
@@ -486,6 +560,7 @@ class ViewClient extends Component {
                           </Link>
                         </div>
                       </div>
+        
                     </div>
                   </div>
                 )}
@@ -637,13 +712,18 @@ class ViewClient extends Component {
                   
                   {/* Modal content  */}
                   <div class="modal-content modal-del text-center p-5">
-                <span className="close text-danger"
-                          onClick={this.closeWallet}>&times;</span>
+                    <div className="row font-weight-bold mb-4">
+                      <span className="text-large mx-auto">Fund Wallet</span>
+                      <span className="text-danger close-fund"
+                          onClick={this.closeWallet}>&times;</span>  
 
-                    <h3 className="font-weight-bold">Fund Wallet</h3>
-                    <img src={payment_card} className="img-fluid" alt="payment_card"/>
+                    </div>
+
+                    <div className="payment_card">
+                    {/* <img src={payment_card} className="img-fluid" alt="payment_card"/> */}
          
-                    <form onSubmit={this.fundWallet}>
+                   <div className="col-md-7"> 
+                     <form onSubmit={this.fundWallet}>
                     <div className="input-group mb-3">
                       <span
                         className="input-group-text bg-white alt"
@@ -656,12 +736,12 @@ class ViewClient extends Component {
                       <input
                         type="text"
                         className="form-control alt"
-                        id="text"
-                        name="text"
+                        id="amount"
+                        name="amount"
                         placeholder="Amount"
                         aria-label="text"
-                        aria-describedby="text"
-                        autoComplete="text"
+                        aria-describedby="amount"
+                        autoComplete="amount"
                         value={this.state.amount}
                         onChange={this.handleInputChange}
                       />
@@ -684,7 +764,11 @@ class ViewClient extends Component {
                       </button>
                     )}
                     </form>
-                 
+            
+                     </div>
+
+
+                    </div>
                     </div> 
                     </div>
               ) : (

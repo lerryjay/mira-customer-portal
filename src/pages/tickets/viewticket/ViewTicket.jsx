@@ -107,12 +107,17 @@ class ViewTicket extends Component {
       headers: headers,
     })
       .then((response) => response.json())
-      .then((json) => {
-        return json;
+      .then((result) => {
+        this.setState({ loading: false });
+        if(result.status === true) {
+            this.state.showAlert("success", result.message)
+        } else{
+            this.state.showAlert("danger",  result.message)
+        }      
       });
 
-    this.setState({ chat: "", files: "" });
     this.setState({ updateData: true });
+    this.setState({ chat: "", inputfiles: [] });
   };
 
   fileChange = function () {
@@ -272,7 +277,6 @@ class ViewTicket extends Component {
                         id="chat"
                         cols="20"
                         rows="4"
-                        required
                         placeholder="Message"
                         type="text"
                         className="form-control my-3"

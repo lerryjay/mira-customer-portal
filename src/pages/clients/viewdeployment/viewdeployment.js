@@ -38,7 +38,7 @@ class viewclientproduct extends Component {
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
     const res = await fetch(
-      `${HTTPURL}clients/getproductdata?userid=${this.state.user.userid}&clientproductid=${this.state.clientproductid}`,
+      `${HTTPURL}deployment/info?userid=${this.state.user.userid}&deploymentid=${this.state.clientproductid}`,
       {
         method: "GET",
         headers: headers,
@@ -103,7 +103,7 @@ class viewclientproduct extends Component {
         const headers = new Headers();
         headers.append("API-KEY", APIKEY);
         const result = await fetch(
-          `${HTTPURL}clients/deleteproduct?clientproductid=${this.state.clientproductid}&userid=${this.state.user.userid}`,
+          `${HTTPURL}deployment/delete?deploymentid=${this.state.clientproductid}&userid=${this.state.user.userid}`,
           {
             method: "GET",
             headers: headers,
@@ -200,10 +200,10 @@ class viewclientproduct extends Component {
     const { user, clientproductid } = this.state;
     const form = new FormData(document.getElementById('fileForm'));
     form.append('userid', user.userid);
-    form.append('clientproductid', clientproductid);
+    form.append('deploymentid', clientproductid);
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
-    const res = await fetch(`${HTTPURL}clients/adddeploymentfile`, {
+    const res = await fetch(`${HTTPURL}deployment/addfile`, {
       method: "POST",
       headers: headers,
       body: form
@@ -219,7 +219,7 @@ class viewclientproduct extends Component {
     const headers = new Headers();
     headers.append('API-KEY', APIKEY);
 
-    fetch(HTTPURL + `clients/deletedeploymentfile?clientproductid=${clientproductid}&userid=${this.state.user.userid}&fileindex=${index}`, {
+    fetch(HTTPURL + `deployment/deletefile?deploymentid=${clientproductid}&userid=${this.state.user.userid}&fileindex=${index}`, {
         method: 'GET',
         headers: headers
     })

@@ -59,7 +59,7 @@ class UpdateClientProduct extends Component {
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
     const res = await fetch(
-      `${HTTPURL}clients/getproductdata?userid=${this.state.user.userid}&clientproductid=${this.state.clientproductid}`,
+      `${HTTPURL}deployment/info?userid=${this.state.user.userid}&deploymentid=${this.state.clientproductid}`,
       {
         method: "GET",
         headers: headers,
@@ -115,7 +115,7 @@ class UpdateClientProduct extends Component {
     myHeaders.append("api-key", APIKEY);
 
     var formdata = new FormData();
-    formdata.append("clientproductid", this.props.location.pathname.split("/")[2]);
+    formdata.append("deploymentid", this.props.location.pathname.split("/")[2]);
     formdata.append("modules", this.state.selectedModules.toString());
     formdata.append("cost", this.state.cost);
     formdata.append("userid", this.state.user.userid);
@@ -128,7 +128,7 @@ class UpdateClientProduct extends Component {
     formdata.append("deploymentdate", this.state.deploymentdate);
     formdata.append("remarks", this.state.remarks);
 
-    const res = await fetch(HTTPURL + "clients/updateproduct", {  method: "POST",  headers: myHeaders,body: formdata, }).then((response) => response.json())
+    const res = await fetch(HTTPURL + "deployment/update", {  method: "POST",  headers: myHeaders,body: formdata, }).then((response) => response.json())
 
       this.setState({ loading: false });
       if(res.status === true) {

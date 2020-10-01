@@ -6,6 +6,7 @@ import Chart from "./Chart";
 import Tabs from "./Tabs";
 import Maincards from "./maincards";
 import Minicards from "./minicards";
+import Pagination from "../../common/components/Pagination";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -16,7 +17,16 @@ class Dashboard extends Component {
       id: 1,
       pending: '',
       resolved: '',
-      cancelled: ''
+      cancelled: '',
+      currentPage: 1,
+      numberPerPage: 10,
+      totalLists: [],
+      pageNumbers: [],
+      currentLists: [],
+      todaytickets: [],
+      clients: [],
+      suspendedclient: '',
+      deletedclient: ''
     };
   }
 
@@ -24,6 +34,23 @@ componentDidMount(){
   this.getResolvedTickets();
   this.getPendingTickets();
   this.getCancelledTickets();
+  this.getTransactions();
+  this.todayTickets();
+  this.getActiveClients();
+  this.getSuspendedClients();
+  this.getDeletedClients();
+  this.getClients()
+}
+
+async getClients() {
+  const headers = new Headers();
+  headers.append('API-KEY', APIKEY);
+  const res = await fetch(HTTPURL + `clients/?userid=${this.state.user.userid}`, {
+      method: 'GET',
+      headers: headers
+  }).then(response => response.json());
+
+  if (res['status']) this.setState({ clients: res['data'] })
 }
 
   getResolvedTickets(){
@@ -41,6 +68,21 @@ componentDidMount(){
     const cancelled = this.state.tickets.filter(ticket => ticket.ticketstatus === "cancelled" )
     this.setState({cancelled: cancelled.length})
 
+  }
+
+  getActiveClients(){
+    const activeclient = this.state.clients.filter(user => user.status === 'active' )
+    this.setState({activeclient: activeclient.length})
+  }
+
+  getSuspendedClients(){
+    const suspendedclient = this.state.clients.filter(user => user.status === 'suspended' )
+    this.setState({suspendedclient: suspendedclient.length})
+  }
+
+  getDeletedClients(){
+    const deletedclient = this.state.clients.filter(user => user.status === 'deleted' )
+    this.setState({deletedclient: deletedclient.length})
   }
 
 
@@ -65,8 +107,65 @@ componentDidMount(){
     }
   }
 
+  async getTransactions() {
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+
+    const { user} = this.state;
+
+    let tdate = new Date().toLocaleDateString();
+
+    const res = await fetch(
+      HTTPURL + `wallet/transactions?userid=${user.userid}&on=${tdate}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    ).then((response) => response.json());
+
+    if (res["status"]) {
+
+      this.setState({ totalLists: res["data"] });
+    }
+  
+  }
+
+  async todayTickets() {
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+
+    const { user} = this.state;
+
+    let on = new Date().toLocaleDateString();
+
+    const res = await fetch(
+      HTTPURL + `ticket?userid=${user.userid}&on=${on}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    ).then((response) => response.json());
+
+    if (res["status"]) {
+      this.setState({ todaytickets: res["data"] });
+    }
+  
+  }
+
+
+  update = (newPage) => {
+    this.setState({ currentPage: newPage });
+  };
 
   render() {
+    const { numberPerPage, currentPage, totalLists } = this.state;
+
+    // Logic for displaying current lists
+    const indexOfLastList = currentPage * numberPerPage;
+    const indexOfFirstList = indexOfLastList - numberPerPage;
+    const currentLists = totalLists.slice(indexOfFirstList, indexOfLastList);
+    this.state.currentLists = currentLists;
+
     return (
       <div>
       <Tabs>
@@ -74,7 +173,7 @@ componentDidMount(){
           <div className="row mt-3 mx-3 text-white">
             <Maincards title="Products" total={this.state.products.length} icon="fa fa-database" iconBackground="btn-primary" />
             <Maincards title="Tickets" total={this.state.tickets.length} icon="fab fa-buffer" iconBackground="bg-primary" />
-            <Maincards title="Clients" total={this.state.users.length} icon="fa fa-users" iconBackground="bg-orangered" />
+            <Maincards title="Clients" total={this.state.clients.length} icon="fa fa-users" iconBackground="bg-orangered" />
             <Maincards title="API" total="987" icon="fa fa-chart-line" iconBackground="bg-success" />
           </div>
      
@@ -92,13 +191,13 @@ componentDidMount(){
               </div>
             </div>
           </div>
-        
-        <div className="col-md-12 mb-3" id="profile">
+
+               
+          <div className="col-md-12 mb-3" id="profile">
           <div id="table" className="card pt-2 mt-3 justify-content-center shadow px-2">
             <h6 className="h6 text-left mt-2 mb-3 pr-3 font-weight-bold">Tickets&nbsp;</h6>
             <div className="table-responsive">
               <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
-                {/* <caption>Hello World!</caption> */}
                 <thead>
                   <tr>
                     <th>S/N</th>
@@ -113,7 +212,7 @@ componentDidMount(){
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.tickets.map((ticket, index) => {
+                  {this.state.todaytickets.map((ticket, index) => {
                     return (
                       <tr>
                         <td>{index + 1}</td>
@@ -180,7 +279,7 @@ componentDidMount(){
                 </tbody>
               </table>
               {
-                this.state.tickets.length === 0 &&
+                this.state.todaytickets.length === 0 &&
                 <div className="card-body">
                   <div className="alert alert-warning" role="alert">
                     <h6 className="text-center">No ticket records!</h6>
@@ -192,6 +291,68 @@ componentDidMount(){
           </div>
         </div>
      
+        
+          <div className="container-fluid row">
+      <div className="col-md-12 col-sm-12 box1 mb-3" id="profile">
+            {this.state.totalLists.length === 0 ? (
+              <div className="alert alert-warning mt-5" role="alert">
+                <h6 className="text-center">No transaction records!</h6>
+              </div>
+            ) : (
+              <div>
+                <div
+                  id="table"
+                  className="card pt-2 mt-3 justify-content-center shadow px-2"
+                >
+                <div className="card-header bg-medium font-weight-bold text-dark">
+                    TRANSACTION HISTORY
+                </div>
+                  <div className="table-responsive">
+                    <table
+                      className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart"
+                      id="myTable"
+                    >
+                      {/* <caption>Hello World!</caption> */}
+                      <thead>
+                        <tr>
+                          <th className="table-padding">Date</th>
+                          <th>Customer</th>
+                          <th>Description</th>
+                          <th>Credit</th>
+                          <th>Transaction Log</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.state.currentLists.map((transaction, index) => {
+                          return (
+                            <tr>
+                            <td className="table-padding">
+                              {transaction.tdate}
+                            </td>
+                              {this.state.user.role == "admin" && (
+                                <td onClick={this.handleRoute}
+                                className="table-padding">
+                                  {transaction.clientname}
+                                </td>
+                              )}
+                              <td className="table-padding">{transaction.description}</td>
+                              <td className="table-padding">&#8358;{transaction.credit}</td>
+                              <td className="table-padding">
+                                <span className={transaction.status == 'Successful' ? 'text-success' : 'text-danger'} >{transaction.tlog}</span>
+                              </td>
+                              </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+      </div>
+  
         </div>
 
 
@@ -199,7 +360,7 @@ componentDidMount(){
           <div className="row mt-3 mx-3 text-white">
               <Maincards title="Products" total={this.state.products.length} icon="fa fa-database" iconBackground="btn-primary" />
               <Maincards title="Tickets" total={this.state.tickets.length} icon="fab fa-buffer" iconBackground="bg-primary" />
-              <Maincards title="Clients" total={this.state.users.length} icon="fa fa-users" iconBackground="bg-orangered" />
+              <Maincards title="Clients" total={this.state.clients.length} icon="fa fa-users" iconBackground="bg-orangered" />
               <Maincards title="API" total="987" icon="fa fa-chart-line" iconBackground="bg-success" />
           </div>
 
@@ -321,7 +482,7 @@ componentDidMount(){
           <div className="row mt-3 mx-3 text-white">
               <Maincards title="Products" total={this.state.products.length} icon="fa fa-database" iconBackground="btn-primary" />
               <Maincards title="Tickets" total={this.state.tickets.length} icon="fab fa-buffer" iconBackground="bg-primary" />
-              <Maincards title="Clients" total={this.state.users.length} icon="fa fa-users" iconBackground="bg-orangered" />
+              <Maincards title="Clients" total={this.state.clients.length} icon="fa fa-users" iconBackground="bg-orangered" />
               <Maincards title="API" total="987" icon="fa fa-chart-line" iconBackground="bg-success" />
           </div>
 
@@ -332,10 +493,10 @@ componentDidMount(){
           </div>
             <div className="col-md-4">
               <div className="row">
-                <Minicards title="Total Clients" total={this.state.tickets.length} icon="fa fa-users" iconBackground="text-orangered" />
-                <Minicards title="Active Clients" total={this.state.resolved} icon="fa fa-check-circle" iconBackground="text-orangered" />
-                <Minicards title="Suspended Clients" total={this.state.pending} icon="fa fa-arrow-circle-up" iconBackground="text-orangered" />
-                <Minicards title="Deleted Clients" total={this.state.cancelled} icon="fa fa-times-circle" iconBackground="text-orangered" />
+                <Minicards title="Total Clients" total={this.state.clients.length} icon="fa fa-users" iconBackground="text-orangered" />
+                <Minicards title="Active Clients" total={this.state.activeclient} icon="fa fa-check-circle" iconBackground="text-orangered" />
+                <Minicards title="Suspended Clients" total={this.state.suspendedclient} icon="fa fa-arrow-circle-up" iconBackground="text-orangered" />
+                <Minicards title="Deleted Clients" total={this.state.deletedclient} icon="fa fa-times-circle" iconBackground="text-orangered" />
               </div>
             </div>
           </div>
@@ -347,7 +508,7 @@ componentDidMount(){
           <div className="row mt-3 mx-3 text-white">
               <Maincards title="Products" total={this.state.products.length} icon="fa fa-database" iconBackground="btn-primary" />
               <Maincards title="Tickets" total={this.state.tickets.length} icon="fab fa-buffer" iconBackground="bg-primary" />
-              <Maincards title="Clients" total={this.state.users.length} icon="fa fa-users" iconBackground="bg-orangered" />
+              <Maincards title="Clients" total={this.state.clients.length} icon="fa fa-users" iconBackground="bg-orangered" />
               <Maincards title="API" total="987" icon="fa fa-chart-line" iconBackground="bg-success" />
           </div>
   
@@ -357,10 +518,10 @@ componentDidMount(){
           </div>
             <div className="col-md-4">
               <div className="row">
-                <Minicards title="Total APIs" total={this.state.tickets.length} icon="fa fa-chart-line" iconBackground="text-success" />
-                <Minicards title="Bulk SMS" total={this.state.resolved} icon="fa fa-comments" iconBackground="text-success" />
-                <Minicards title="BVN" total={this.state.pending} icon="fab fa-bandcamp" iconBackground="text-success" />
-                <Minicards title="Location" total={this.state.cancelled} icon="fa fa-map-marker-alt" iconBackground="text-success" /> </div>
+                <Minicards title="Total APIs" total="230" icon="fa fa-chart-line" iconBackground="text-success" />
+                <Minicards title="Bulk SMS" total="120" icon="fa fa-comments" iconBackground="text-success" />
+                <Minicards title="BVN" total="60" icon="fab fa-bandcamp" iconBackground="text-success" />
+                <Minicards title="Location" total="50" icon="fa fa-map-marker-alt" iconBackground="text-success" /> </div>
             </div>
           </div>
         

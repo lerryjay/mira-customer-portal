@@ -94,7 +94,7 @@ class Clients extends Component {
                 <div className="row d-flex align-items-center justify-content-center form">
 
                     <div className="col-md-6 ">
-                        <div className="card mx-4 my-auto">
+                        <div className="card">
                             <div className="card-body">
                                 <div className="text-center">
                                     <h3>SEARCH CLIENT<i className="fa fa-search pl-5"></i> </h3>

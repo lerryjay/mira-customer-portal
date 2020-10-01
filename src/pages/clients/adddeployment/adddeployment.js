@@ -85,7 +85,7 @@ class AddClientProduct extends Component {
     // formdata.append("remarks", this.state.remarks);
     // formdata.append('files[]', this.state.files);
 
-    fetch(HTTPURL + "clients/addproduct", {
+    fetch(HTTPURL + "deployment/add", {
       method: "POST",
       headers: myHeaders,
       body: formdata,

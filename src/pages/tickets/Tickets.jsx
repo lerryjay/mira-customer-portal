@@ -125,7 +125,7 @@ class Tickets extends Component {
     headers.append("API-KEY", APIKEY);
     const res = await fetch(
       HTTPURL +
-        `ticket/?userid=${user.userid}&clientid=${userid}&on=${on}&startdate=${startdate}&enddate=${enddate}&type=${type}`,
+        `ticket?userid=${user.userid}&clientid=${userid}&on=${on}&startdate=${startdate}&enddate=${enddate}&type=${type}`,
       {
         method: "GET",
         headers: headers,

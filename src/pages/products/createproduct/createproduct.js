@@ -47,7 +47,7 @@ class CreateProduct extends Component {
                 this.state.showAlert("success",  res.message)
                 this.setState({loading : false,name: '', description: '', file: '', imagePreviewUrl: '', imageurl: ''});
                 await this.state.getProducts();
-                this.props.history.goBack();
+                this.props.history.push('/products')
             } else{
                 this.state.showAlert("danger",  res.message)
             }
@@ -180,11 +180,15 @@ class CreateProduct extends Component {
                                 <div className="float-right">
 
                                      {this.state.loading ? 
-                                <button type="submit" className="btn btn-sm bg-btn">
-                                    <div className="spinner-border text-secondary" role="status" id="loader">
-                                        <span className="sr-only">Loading...</span>
-                                    </div>
-                                </button>
+                                        <button type="submit" className="btn btn-sm btn-primary">
+                                            <div
+                                            className="spinner-border text-white"
+                                            role="status"
+                                            id="loader"
+                                            >
+                                            <span className="sr-only">Loading...</span>
+                                            </div>
+                                        </button>
                                 : <button type="submit" className="btn btn-sm btn-primary px-3 py-2">
                                     <i className="fas fa-folder-open mr-2"></i>
                                         Save

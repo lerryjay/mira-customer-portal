@@ -17,107 +17,14 @@ class transaction extends Component {
           clients: [],
           currentPage: 1,
           numberPerPage: 10,
-          totalLists: [
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Acciss ebs',
-                price: 2000,
-                status: 'Successful'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Mira HPro',
-                price: 450,
-                status: 'Failed'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Acciss ebs',
-                price: 9800,
-                status: 'Cancelled'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Mira HPro',
-                price: 1000,
-                status: 'Successful'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Acciss ebs',
-                price: 200,
-                status: 'Successful'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Mira HPro',
-                price: 200,
-                status: 'Failed'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Acciss ebs',
-                price: 7600,
-                status: 'Cancelled'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Mira HPro',
-                price: 200,
-                status: 'Successful'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Acciss ebs',
-                price: 7600,
-                status: 'Successful'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Mira HPro',
-                price: 100,
-                status: 'Failed'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Acciss ebs',
-                price: 300,
-                status: 'Cancelled'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                customer: 'Joe John',
-                product: 'Mira HPro',
-                price: 200,
-                status: 'Successful'
-
-            },
-          ],
+          totalLists: [],
           pageNumbers: [],
           currentLists: [],
         };
+      }
+
+      componentDidMount() {
+        this.getTransactions();
       }
     
       handleInputChange = (e) => {
@@ -150,6 +57,25 @@ class transaction extends Component {
         });
       }
     
+      async getTransactions() {
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+        
+        let clientid = this.props.location.pathname.split("/")[2];
+    
+        const res = await fetch(
+          HTTPURL + `wallet/transactions?&userid=${this.state.user.userid}&clientid=${clientid}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        ).then((response) => response.json());
+    
+        if (res["status"]) this.setState({ totalLists: res["data"] });
+      
+      }
+
+
       update = (newPage) => {
         this.setState({ currentPage: newPage });
       };
@@ -165,74 +91,68 @@ class transaction extends Component {
 
     return (
       <div>
-      <div className="row mt-4">
-        <div className="w-100 text-center">
-          <h3>TRANSACTIONS </h3>
-        </div>
-        </div>
-        <div className="row m-4 d-flex justify-content-end ">
-          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
-            <div className="px-3 card py-4">
-              <div className="row align-items-center">
-                <div className="col">
-                  <i className=" border-radius-4 fa fa-chart-pie py-3 px-4 text-white btn-primary fa-2x"></i>
-                </div>
-                <div className="col font-card text-right">
-                  <span className=" ">Total Transactions</span>
-                  <br />
-                  <span className="text-large">230</span>
-                </div>
+      <div className="row m-4 d-flex justify-content-end ">
+        <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3  hover-effect">
+          <div className="px-3 card py-4">
+            <div className="row align-items-center">
+              <div className="col">
+              <i className=" border-radius-4 fa fa-chart-line py-3 px-4 text-white btn-primary fa-2x"></i>
               </div>
-            </div>
-          </div>
-          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
-            <div className="px-3 card py-4">
-              <div className="row align-items-center">
-                <div className="col">
-                  <i className=" border-radius-4 fa fa-check-circle py-3 px-4 text-white bg-success fa-2x"></i>
-                </div>
-                <div className="col font-card text-right">
-                  <span className=" ">Successful Transactions</span>
-                  <br />
-                  <span className="text-large">230</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
-            <div className="px-3 card py-4">
-              <div className="row align-items-center">
-                <div className="col">
-                  <i className=" border-radius-4 fab fa-bandcamp py-3 px-4 text-white bg-orangered fa-2x"></i>
-                </div>
-                <div className="col font-card text-right">
-                  <span className=" ">Cancelled Transactions</span>
-                  <br />
-                  <span className="text-large">230</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3">
-            <div className="px-3 card py-4">
-              <div className="row align-items-center">
-                <div className="col">
-                  <i className=" border-radius-4 fa fa-times-circle py-3 px-4 text-white bg-danger fa-2x"></i>
-                </div>
-                <div className="col font-card text-right">
-                  <span className=" ">Failed Transactions</span>
-                  <br />
-                  <span className="text-large">230</span>
-                </div>
+              <div className="col font-card text-right">
+                <span className=" ">Total<br/> Transactions</span>
+                <br />
+                <span className="text-large">230</span>
               </div>
             </div>
           </div>
         </div>
-
-     
+        <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3 hover-effect">
+          <div className="px-3 card py-4">
+            <div className="row align-items-center">
+              <div className="col">
+              <i className=" border-radius-4 fa fa-check-circle py-3 px-4 text-white bg-success fa-2x"></i>
+              </div>
+              <div className="col font-card text-right">
+                <span className=" ">Successful<br/> Transactions</span>
+                <br />
+                <span className="text-large">230</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3 hover-effect">
+          <div className="px-3 card py-4">
+            <div className="row align-items-center">
+              <div className="col">
+              <i className=" border-radius-4 fab fa-bandcamp py-3 px-4 text-white bg-orangered fa-2x"></i>
+              </div>
+              <div className="col font-card text-right">
+                <span className=" ">Cancelled<br/> Transactions</span>
+                <br />
+                <span className="text-large">230</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3 hover-effect">
+          <div className="px-3 card py-4">
+            <div className="row align-items-center">
+              <div className="col">
+              <i className=" border-radius-4 fa fa-times-circle py-3 px-4 text-white bg-danger fa-2x"></i>
+              </div>
+              <div className="col font-card text-right">
+                <span className=" ">Failed <br/> Transactions</span>
+                <br />
+                <span className="text-large">230</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        
       <div className="container-fluid row">
       <div className="col-md-9 col-sm-12 box1 mb-3" id="profile">
-            {this.state.tickets.length === 0 ? (
+            {this.state.totalLists.length === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No transaction records!</h6>
               </div>
@@ -242,6 +162,9 @@ class transaction extends Component {
                   id="table"
                   className="card pt-2 mt-3 justify-content-center shadow px-2"
                 >
+                <div className="card-header bg-medium font-weight-bold text-dark">
+                    TRANSACTION HISTORY
+                </div>
                   <div className="table-responsive">
                     <table
                       className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart"
@@ -252,9 +175,9 @@ class transaction extends Component {
                         <tr>
                           <th className="table-padding">Date</th>
                           <th>Customer</th>
-                          <th>Product</th>
-                          <th>Price</th>
-                          <th>Status</th>
+                          <th>Description</th>
+                          <th>Credit</th>
+                          <th>Transaction Log</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -262,18 +185,18 @@ class transaction extends Component {
                           return (
                             <tr>
                             <td className="table-padding">
-                              {transaction.createdat}
+                              {transaction.tdate}
                             </td>
                               {this.state.user.role == "admin" && (
                                 <td onClick={this.handleRoute}
                                 className="table-padding">
-                                  {transaction.customer}
+                                  {transaction.clientname}
                                 </td>
                               )}
-                              <td className="table-padding">{transaction.product}</td>
-                              <td className="table-padding">&#8358;{transaction.price}</td>
+                              <td className="table-padding">{transaction.description}</td>
+                              <td className="table-padding">&#8358;{transaction.credit}</td>
                               <td className="table-padding">
-                                <span className={transaction.status == 'Successful' ? 'text-success' : 'text-danger'} >{transaction.status}</span>
+                                <span className={transaction.status == 'Successful' ? 'text-success' : 'text-danger'} >{transaction.tlog}</span>
                               </td>
                               </tr>
                           );
@@ -328,7 +251,11 @@ class transaction extends Component {
           </div>
 
           <div className="col-md-3 col-sm-12 box2 mt-3 mb-3">
-            <div className="card p-3">
+            <div className="card">
+                <div className="card-header bg-medium font-weight-bold text-dark">
+                <i class="fa fa-filter"></i> FILTER BY
+                </div>
+                <div className="p-3">
               <label
                 htmlFor="customer"
                 style={{ display: "block" }}
@@ -475,6 +402,7 @@ class transaction extends Component {
                   </button>
                 </div>
               </form>
+              </div>
             </div>
           </div>
       

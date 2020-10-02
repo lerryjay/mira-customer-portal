@@ -8,15 +8,16 @@ import "./assets/css/rotating-card.css";
 import { Provider } from "./common/context";
 import { AdminPrivateRoute, PrivateRoute, UserPrivateRoute,NotLoggedInRoute } from './common/protected_route';
 
-import Login from "./pages/login/login";
-import SignUp from "./pages/signup/signup";
-import ForgotPassword from "./pages/forgot_password/forgot_password";
-import Dashboard from "./pages/dashboard/dashboard";
-import ChangePassword from "./pages/change_password/ChangePassword";
+import Login from "./pages/auth/login/login";
+import SignUp from "./pages/auth/signup/signup";
+import ForgotPassword from "./pages/auth/forgot_password/forgot_password";
+import VerifyToken from "./pages/auth/verify_token/verify_token";
+import VerifyLinkToken from "./pages/auth/verifylinktoken/verifylinktoken";
+import ResetPassword from "./pages/auth/resetpassword/resetpassword";
+
 import Profile from "./pages/profile/Profile";
-import VerifyToken from "./pages/verify_token/verify_token";
-import VerifyLinkToken from "./pages/verifylinktoken/verifylinktoken";
-import ResetPassword from "./pages/resetpassword/resetpassword";
+import ChangePassword from "./pages/change_password/ChangePassword";
+import Dashboard from "./pages/dashboard/dashboard";
 
 import Tickets from "./pages/tickets/Tickets";
 import CreateTicket from "./pages/tickets/create_ticket/create_ticket";

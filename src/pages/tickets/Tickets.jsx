@@ -112,8 +112,7 @@ class Tickets extends Component {
       headers: headers,
       body: form,
     }).then((response) => response.json());
-    if (res["status"]) {
-    }
+    // res.status && this.state.getTickets() && this.getTickets();
   }
 
   handleSearch = async (e) => {

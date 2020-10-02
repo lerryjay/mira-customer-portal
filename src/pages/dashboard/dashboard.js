@@ -24,9 +24,15 @@ class Dashboard extends Component {
       pageNumbers: [],
       currentLists: [],
       todaytickets: [],
+      servicesStatistics: [],
       clients: [],
       suspendedclient: '',
-      deletedclient: ''
+      deletedclient: '',
+      totalapi : 0 ,
+      errorapi : 0,
+      succssapi : 0,
+      cancelledapi : 0,
+      smscalls:0
     };
   }
 
@@ -39,7 +45,86 @@ componentDidMount(){
   this.getActiveClients();
   this.getSuspendedClients();
   this.getDeletedClients();
+  this.getApiStatistics();
+  this.getServiceStatistics();
   this.getClients()
+}
+
+formatDate(date){
+  var dd = date.getDate();
+  var mm = date.getMonth()+1;
+  var yyyy = date.getFullYear();
+  if(dd<10) {dd='0'+dd}
+  if(mm<10) {mm='0'+mm}
+  date = yyyy+'-'+mm+'-'+dd;
+  return date
+}
+
+
+
+Last7Days () {
+  var result = [];
+  for (var i=0; i<7; i++) {
+      var d = new Date();
+      d.setDate(d.getDate() - i);
+      result.push( this.formatDate(d) )
+  }
+
+  return(result);
+}
+
+shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+  return array;
+}
+
+
+async getApiStatistics()
+{
+  const headers = new Headers();
+  headers.append('API-KEY', APIKEY);
+  const res = await fetch(HTTPURL + `log/statistics?userid=${this.state.user.userid}`, {
+      method: 'GET',
+      headers: headers
+  }).then(response => response.json());
+
+  if (res['status']) this.setState({ totalapi: res['data']['total'],errorapi: res['data']['error'],cancelledapi :  res['data']['cancelled'],sucessapi : res['data']['success']});
+}
+
+async getServiceStatistics()
+{
+  const headers = new Headers();
+  headers.append('API-KEY', APIKEY);
+  const res = await fetch(HTTPURL + `service/list?userid=${this.state.user.userid}`, { method: 'GET',headers: headers }).then(response => response.json());
+  let servicetypes =  res.status ? this.shuffle(res['data']) : [];
+
+  let servicesStatistics = [];
+
+  if(servicetypes.length > 0){
+    const dates  = this.Last7Days();
+    servicetypes = servicetypes.filter((item,index)=>index < 3);
+    const res = await fetch(HTTPURL + `log/statistics?userid=${this.state.user.userid}&enddate=${dates[0]}&startdate=${dates[6]}`, { method: 'GET',headers: headers }).then(response => response.json());
+    res.status && servicesStatistics.push({code : 'Last 7 days',count : res['data']['total']})
+
+    for (let index = 0; index < servicetypes.length; index++) {
+      const res = await fetch(HTTPURL + `log/statistics?userid=${this.state.user.userid}&servicecode=${servicetypes[index]['code']}&enddate=${dates[0]}&startdate=${dates[6]}`, { method: 'GET',headers: headers }).then(response => response.json());
+      res.status && servicesStatistics.push({code : servicetypes[index]['code'],count : res['data']['total']});
+      !res.status && servicesStatistics.push({code : servicetypes[index]['code'],count : 0});
+    }
+    
+    this.setState({servicesStatistics})
+  }
+  
 }
 
 async getClients() {
@@ -52,6 +137,9 @@ async getClients() {
 
   if (res['status']) this.setState({ clients: res['data'] })
 }
+
+
+
 
   getResolvedTickets(){
     const resolved = this.state.tickets.filter(ticket => ticket.ticketstatus === 'resolved' )
@@ -84,6 +172,7 @@ async getClients() {
     const deletedclient = this.state.clients.filter(user => user.status === 'deleted' )
     this.setState({deletedclient: deletedclient.length})
   }
+
 
 
   ticketStatusUpdated(e, ticket) {
@@ -174,7 +263,7 @@ async getClients() {
             <Maincards title="Products" total={this.state.products.length} icon="fa fa-database" iconBackground="btn-primary" />
             <Maincards title="Tickets" total={this.state.tickets.length} icon="fab fa-buffer" iconBackground="bg-primary" />
             <Maincards title="Clients" total={this.state.clients.length} icon="fa fa-users" iconBackground="bg-orangered" />
-            <Maincards title="API" total="987" icon="fa fa-chart-line" iconBackground="bg-success" />
+            <Maincards title="API" total={this.state.totalapi} icon="fa fa-chart-line" iconBackground="bg-success" />
           </div>
      
        
@@ -361,7 +450,7 @@ async getClients() {
               <Maincards title="Products" total={this.state.products.length} icon="fa fa-database" iconBackground="btn-primary" />
               <Maincards title="Tickets" total={this.state.tickets.length} icon="fab fa-buffer" iconBackground="bg-primary" />
               <Maincards title="Clients" total={this.state.clients.length} icon="fa fa-users" iconBackground="bg-orangered" />
-              <Maincards title="API" total="987" icon="fa fa-chart-line" iconBackground="bg-success" />
+              <Maincards title="API" total={this.state.totalapi} icon="fa fa-chart-line" iconBackground="bg-success" />
           </div>
 
      
@@ -483,7 +572,7 @@ async getClients() {
               <Maincards title="Products" total={this.state.products.length} icon="fa fa-database" iconBackground="btn-primary" />
               <Maincards title="Tickets" total={this.state.tickets.length} icon="fab fa-buffer" iconBackground="bg-primary" />
               <Maincards title="Clients" total={this.state.clients.length} icon="fa fa-users" iconBackground="bg-orangered" />
-              <Maincards title="API" total="987" icon="fa fa-chart-line" iconBackground="bg-success" />
+              <Maincards title="API" total={this.state.totalapi} icon="fa fa-chart-line" iconBackground="bg-success" />
           </div>
 
         { this.state.user.role ==='admin' &&
@@ -506,10 +595,10 @@ async getClients() {
 
         <div title="API">
           <div className="row mt-3 mx-3 text-white">
-              <Maincards title="Products" total={this.state.products.length} icon="fa fa-database" iconBackground="btn-primary" />
-              <Maincards title="Tickets" total={this.state.tickets.length} icon="fab fa-buffer" iconBackground="bg-primary" />
-              <Maincards title="Clients" total={this.state.clients.length} icon="fa fa-users" iconBackground="bg-orangered" />
-              <Maincards title="API" total="987" icon="fa fa-chart-line" iconBackground="bg-success" />
+              <Maincards title="Total" total={this.state.totalapi} icon="fa fa-database" iconBackground="btn-primary" />
+              <Maincards title="Success" total={this.state.succssapi} icon="fa fa-check" iconBackground="bg-success" />
+              <Maincards title="Error" total={this.state.errorapi} icon="fa fa-exclamation-triangle" iconBackground="bg-orangered" />
+              <Maincards title="Cancelled" total={ this.state.cancelledapi} icon="fa fa-times" iconBackground="bg-danger" />
           </div>
   
           <div className="row  mt-3 mx-4 justify-content-center mx-2">
@@ -518,10 +607,10 @@ async getClients() {
           </div>
             <div className="col-md-4">
               <div className="row">
-                <Minicards title="Total APIs" total="230" icon="fa fa-chart-line" iconBackground="text-success" />
-                <Minicards title="Bulk SMS" total="120" icon="fa fa-comments" iconBackground="text-success" />
-                <Minicards title="BVN" total="60" icon="fab fa-bandcamp" iconBackground="text-success" />
-                <Minicards title="Location" total="50" icon="fa fa-map-marker-alt" iconBackground="text-success" /> </div>
+                {
+                  this.state.servicesStatistics.map(item=><Minicards title={item.code} total={item.count} icon="fa fa-comments" iconBackground="text-success" />)
+                }
+                </div>
             </div>
           </div>
         

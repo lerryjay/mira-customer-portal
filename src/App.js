@@ -8,15 +8,16 @@ import "./assets/css/rotating-card.css";
 import { Provider } from "./common/context";
 import { AdminPrivateRoute, PrivateRoute, UserPrivateRoute,NotLoggedInRoute } from './common/protected_route';
 
-import Login from "./pages/login/login";
-import SignUp from "./pages/signup/signup";
-import ForgotPassword from "./pages/forgot_password/forgot_password";
+import Login from "./pages/auth/login/login";
+import SignUp from "./pages/auth/signup/signup";
+import ForgotPassword from "./pages/auth/forgot_password/forgot_password";
+import VerifyToken from "./pages/auth/verify_token/verify_token";
+import VerifyLinkToken from "./pages/auth/verifylinktoken/verifylinktoken";
+import ResetPassword from "./pages/auth/resetpassword/resetpassword";
+
 import Dashboard from "./pages/dashboard/dashboard";
 import ChangePassword from "./pages/change_password/ChangePassword";
 import Profile from "./pages/profile/Profile";
-import VerifyToken from "./pages/verify_token/verify_token";
-import VerifyLinkToken from "./pages/verifylinktoken/verifylinktoken";
-import ResetPassword from "./pages/resetpassword/resetpassword";
 
 import Tickets from "./pages/tickets/Tickets";
 import CreateTicket from "./pages/tickets/create_ticket/create_ticket";
@@ -57,8 +58,8 @@ import Forbidden from "./common/components/Forbidden";
 import ScrollToTop from "./common/components/ScrollToTop";
 
 import UserApiLogs from "./pages/api_logs/UserApi/api_logs";
-
 import Transactions from "./pages/transactions/transaction"
+import Services from "./pages/services/services"
 
 
 
@@ -328,6 +329,7 @@ class App extends Component {
                       <PrivateRoute path="/viewticket" permission="VIEWTICKET" component={ViewTicket} />
                       <PrivateRoute path="/apilogs"  component={UserApiLogs} />
                       <PrivateRoute path="/transactions"  component={Transactions} />
+                      <PrivateRoute path="/services"  component={Services} />
                       
 
                       <UserPrivateRoute path="/clientproducts" component={ClientProducts} />

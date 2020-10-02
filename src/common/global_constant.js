@@ -154,6 +154,12 @@ export const adminMenu = [
     ]
   },
   {
+    name: 'Services',
+    route: '/services',
+    icon: 'fa fa-cog',
+    isActive: false
+  },
+  {
     name: 'Account',
     isDivider: true
   },

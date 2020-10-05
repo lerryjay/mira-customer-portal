@@ -112,8 +112,7 @@ class Tickets extends Component {
       headers: headers,
       body: form,
     }).then((response) => response.json());
-    if (res["status"]) {
-    }
+    // res.status && this.state.getTickets() && this.getTickets();
   }
 
   handleSearch = async (e) => {
@@ -180,10 +179,7 @@ class Tickets extends Component {
               </div>
             ) : (
               <div>
-                <div
-                  id="table"
-                  className="card pt-2 mt-3 justify-content-center shadow px-2"
-                >
+                <div id="table" className="card pt-2 mt-3 justify-content-center shadow px-2">
                   <div className="table-responsive">
                     <table
                       className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart"
@@ -316,7 +312,6 @@ class Tickets extends Component {
               </div>
             )}
           </div>
-
           <div className="col-md-3 col-sm-12 box2 mt-3 mb-3">
             <div className="card p-3">
               <label
@@ -455,16 +450,10 @@ class Tickets extends Component {
                   </select>
                 </div>
 
-                <div className="form-group mt-1 text-right">
-                  <button
-                    type="submit"
-                    className="btn btn-primary btn-md"
-                    style={{ cursor: "pointer", fontSize: "16px" }}
-                  >
-                    Search
-                  </button>
-                </div>
-              </form>
+            <div className="form-group mt-1 text-right">
+              <button type="submit" className="btn btn-outline-dark btn-sm rounded-0 btn-md" style={{cursor:"pointer", fontSize:'16px'}}>Search</button>
+            </div>
+            </form>                  
             </div>
           </div>
         </div>

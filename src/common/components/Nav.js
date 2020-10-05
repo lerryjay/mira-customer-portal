@@ -5,41 +5,16 @@ import {FILEURL} from "../global_constant";
 const Nav = (props) => {
     const { user, loggedIn } =  props;
 
-    // const toggle = () => {
-    //     //Link click remove sidebar
-    //     document.querySelectorAll(".nav-item").forEach(item => {
-    //         item.addEventListener("click", () => {
-    //             document.querySelector('#sidebar').classList.toggle('active');
-    //             document.querySelector('.overlay').classList.toggle('active');
-    //         })
-    //     })
-    //     // onclick Toggle button add sideBar
-    //     document.querySelector("#sidebarCollapse").addEventListener("click", () => {
-    //         document.querySelector('#sidebar').classList.toggle('active');
-    //         document.querySelector('.overlay').classList.toggle('active');
-    //         document.querySelector('#sidebar').classList.toggle('sidemenu');
-    //     })
-    //     //onclick overlay hide sideBar
-    //     document.querySelector(".overlay").addEventListener("click", () => {
-    //         document.querySelector('#sidebar').classList.remove('active');
-    //         document.querySelector('.overlay').classList.remove('active');
-    //     });
-    // }
-
-
-
     const toggle1 = () => {
         // onclick Toggle button add sideBar
         document.querySelector('#sidebar').classList.toggle('active');
         document.querySelector('.overlay').classList.toggle('active');
         document.querySelector('#sidebar').classList.toggle('sidemenu');
     }
-
-
     
     return (
 
-        <nav className="navbar navbar-expand-lg navbar-dark bg-navbar px-2 fixed-top up" id="Navigation">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-navbar px-2 fixed-top up shadow" id="Navigation">
 
             <div className="container-fluid row">
             <div className="ml-3">
@@ -73,11 +48,6 @@ const Nav = (props) => {
                     </li>
                 </ul>
             </div>
-
-            {/* <span className="">
-                <i id='btn-toggle' className="fas fa-moon"></i>
-                <i id='btn-toggle' className="fas fa-sun sr-only"></i>
-            </span> */}
         </nav>)
 }
 export default withContext(Nav);

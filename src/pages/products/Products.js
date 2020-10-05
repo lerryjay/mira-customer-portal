@@ -94,14 +94,12 @@ class Products extends Component {
                     </div>
                 }
    
-                    <div className="row mx-5 my-2">
+                    <div>
                         {this.state.products.length === 0 
-                        ? <div className="row my-2">
-                            <div className="alert alert-warning mt-5" role="alert">
-                                <h6 className="text-center">No product has been added yet</h6>
-                            </div>
-                          </div>
-                        : <div className="row my-2">
+                        ? <div className="col-md-12 w-100 alert alert-warning mt-5" role="alert">
+                            <h6 className="text-center">No product has been added yet</h6>
+                        </div>
+                        : <div className="row w-100 mx-5 my-2">
                             {this.state.products.map((product, i) => {
                             return (
                                 <div className="col-md-3 col-lg-4 col-sm-12 my-2 d-flex justify-content-center" key={i}>
@@ -130,7 +128,6 @@ class Products extends Component {
                                         }
 
                                     </div>
-
                                 </div>
 
 

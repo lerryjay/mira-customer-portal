@@ -48,9 +48,9 @@ class Admin extends Component {
         </div>
           {this.state.loader && (
             <div className="spin-center">
-              <span class="text-primary ">
+              <span className="text-primary ">
                 <span
-                  class="spinner-grow spinner-grow-sm mr-2"
+                  className="spinner-grow spinner-grow-sm mr-2"
                   role="status"
                   aria-hidden="true"
                 ></span>
@@ -97,7 +97,7 @@ class Admin extends Component {
           <tbody>
             {
               this.state.users.map((user,index)=>
-                <tr>
+                <tr key={index}>
                   <td>{ index + 1}</td>
                   <td>{ user.firstname }</td>
                   <td>{ user.lastname }</td>

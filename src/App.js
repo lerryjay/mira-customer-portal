@@ -60,6 +60,7 @@ import ScrollToTop from "./common/components/ScrollToTop";
 import UserApiLogs from "./pages/api_logs/UserApi/api_logs";
 import Transactions from "./pages/transactions/transaction"
 import Services from "./pages/services/services"
+import Training from "./pages/training/training"
 
 
 
@@ -139,9 +140,7 @@ class App extends Component {
       method: "POST",
       body: form,
       headers: headers,
-    })
-      .then((response) => response.json())
-      .then((json) => json);
+    }).then((response) => response.json());
   };
 
   forgotPassword =  (data) => {
@@ -155,6 +154,33 @@ class App extends Component {
     }).then((response) => response.json())
 
   };
+
+  verifyToken = async (token)=>{
+    this.setState({ loading : true });
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    const form = new FormData();
+    form.append('token',token);
+    const res = await fetch(`${HTTPURL}user/verifytoken`,{ method : 'POST',body : form, headers  }).then(res=>res.json());
+    this.setState({ loading : false });
+    if(res.status){
+        this.state.showAlert('success','Token verified successfully');
+        this.props.history.push('/reset-passwrd');
+    }else this.state.showAlert('danger',res.message);
+  }
+
+  async verifyLinkToken(token){
+    this.setState({ loading : true });
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    const form = new FormData();
+    form.append('token',token);
+    const res = await fetch(`${HTTPURL}user/verifylinktoken`,{ method : 'POST',body : form, headers  }).then(res=>res.json());
+    this.setState({ loading : false });
+    if(res.status){
+        this.state.showAlert('success','Token verified successfully');
+    }else this.state.showAlert('danger',res.message);
+  }
 
   changePassword =  (data) => {
     const headers = new Headers();
@@ -309,8 +335,7 @@ class App extends Component {
           { this.state.alertActive  && <Alert type={ this.state.alertType } message={ this.state.alertMessage } />}
           { this.state.loaderActive && <PageLoader />}
           <Fragment>
-          {/* // basename="/ticketapp" */}
-            <Router > 
+            <Router basename="/customer-portal" > 
             <ScrollToTop />
               <Nav />
               <div className="App" id="wrapper">
@@ -330,6 +355,7 @@ class App extends Component {
                       <PrivateRoute path="/apilogs"  component={UserApiLogs} />
                       <PrivateRoute path="/transactions"  component={Transactions} />
                       <PrivateRoute path="/services"  component={Services} />
+                      <PrivateRoute path="/training"  component={Training} />
                       
 
                       <UserPrivateRoute path="/clientproducts" component={ClientProducts} />

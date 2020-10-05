@@ -43,7 +43,7 @@ class ForgotPassword extends Component {
               fetch(HTTPURL + "user/forgotpassword", {
               method: "POST",
               body: form,
-              headers: headers,
+              headers,
               })
               .then((response) => response.json())
               .then((res) => {

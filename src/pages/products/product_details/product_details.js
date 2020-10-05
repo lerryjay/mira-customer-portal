@@ -364,7 +364,7 @@ deleteModal(e) {
                               <p className="list-group-item">
                                 {module.name}
                                 {this.state.user.role == "admin" &&  
-                                 <label class=" float-right">
+                                 <span class=" float-right">
                                   <Link onClick={() => this.infoModal(module.id)}>
                                     <i value={module.id} style={{ cursor: "pointer" }}
                                       className="fa fa-info-circle mr-3 text-info"
@@ -377,7 +377,7 @@ deleteModal(e) {
                                   <Link onClick={() => this.showdeleteInfoModule(module.id)}>
                                     <i className="fa fa-trash mr-2 text-danger"></i>
                                   </Link>
-                                </label>
+                                </span>
                                 }
                               </p>
                             </div>

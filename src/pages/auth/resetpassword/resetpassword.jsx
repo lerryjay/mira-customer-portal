@@ -10,10 +10,8 @@ class ResetPassword extends Component {
 
         this.state = { 
             ...this.props, 
-            oldpassword : '' , 
             newpassword: '',
             confirmnewpwd: '',
-            
             loading: false, 
             errormessage: '',
             successmessage: ''
@@ -28,56 +26,24 @@ class ResetPassword extends Component {
     handleSubmit = async e => {
         e.preventDefault()
         this.setState({ loading: true });
-
-        const {oldpassword, newpassword, confirmnewpwd} = this.state
-       
-        //Waste 3 seconds
-        if(!Validators.validatePassword(oldpassword,1).status){
-            const err = Validators.validatePassword(oldpassword,1).message;
-            if(err){
-                this.setState({ loading: false });
-                this.state.showAlert("danger", err)
-            }
-        } else if(!Validators.validatePassword(newpassword,1).status){
-            const err = Validators.validatePassword(newpassword,1).message;
-            if(err){
-                this.setState({ loading: false });
-                this.state.showAlert("danger", err)
-            }
-        } else if(!Validators.validatePassword(confirmnewpwd,1).status){
-            const err = Validators.validatePassword(confirmnewpwd,1).message;
-            if(err){
-                this.setState({ loading: false });
-                this.state.showAlert("danger", err)
-            }
-        }else if(newpassword !== confirmnewpwd) {
-            const err = "Password does not match!"
-            if(err){
-                this.setState({ loading: false });
-                this.state.showAlert("danger", err)
-            }
-        } else {
-            let data = document.getElementById("changepassword")
+        let err = false;
+        const { newpassword, confirmnewpwd} = this.state
+        if(!Validators.validatePassword(newpassword,1).status)err = Validators.validatePassword(newpassword,1).message;
+        else if(newpassword !== confirmnewpwd)  err = "Password does not match!"
+        if(!err) {
             const headers = new Headers();
             headers.append('API-KEY',APIKEY);
-            let form = new FormData(data);
+            let form = new FormData();
             form.append("userid", this.state.user.userid);
-            const res = await fetch(HTTPURL + 'user/updatepassword', {
-                method: 'POST',
-                body: form,
-                headers: headers
-            })
-            .then(response => response.json())
-            this.setState({loading : false});
+            form.append("password", newpassword);
+            const res = await fetch(HTTPURL + 'user/updatepassword', { method: 'POST',body: form,  headers }).then(response => response.json())
             if(res.status){
-                this.setState({loading : false});
                 this.state.showAlert('success',res.message);
-                this.setState({oldpassword: '', newpassword: '', confirmnewpwd: ''})
-            }else {
-                this.setState({loading : false});
-                this.state.showAlert('danger',res.message);
-            }
-        }
+                this.setState({ newpassword: '', confirmnewpwd: ''});
+                this.props.history.push('/login');
+            }else this.state.showAlert('danger',res.message);
+        } else this.state.showAlert("danger", err)
+        this.setState({loading : false});
     }
 
     render() {

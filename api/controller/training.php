@@ -98,7 +98,7 @@
     {
       $get = $_GET;
       $get['userid'] = $this->appUser;
-      $res = $this->do_get($this->url.'course/list',$get,$this->headers);
+      $res = $this->do_get($this->url.'user/list',$get,$this->headers);
 
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput($res);

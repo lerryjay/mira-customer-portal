@@ -453,7 +453,10 @@ button:focus {
   transform: scale(1.05);
   transition: all ease-in-out 0.5s;
 }
-
+.table-responsive{
+  overflow-x: scroll !important;
+  min-height: 100vh !important;
+}
 div.home {
   color: #3c4b64;
   background-color: #ddd;
@@ -864,11 +867,19 @@ span.image_name {
   font-size: large !important;
   margin-top: 20px;
 }
+
+.img-name{
+  display: block;
+}
 @media(max-width: 987px) {
   .content {
     margin-left: 0 !important;
   }
+  .img-name{
+    display: none;
+  }
 }
+
 
  
 @media (min-width: 992px) {

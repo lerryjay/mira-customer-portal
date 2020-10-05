@@ -16,24 +16,8 @@ export const clientMenu = [
     isActive: false
   },
   {
-    name: 'Product',
-    route: 'product',
-    icon: 'fab fa-buffer',
-    isActive: false,
-    sub: [
-      {
-        name: 'View Products',
-        route: '/products',
-        icon: '',
-        isActive: false
-      },
-      {
-        name: 'My Product',
-        route: '/clientproducts',
-        icon: '',
-        isActive: false
-      }
-    ]
+    name: 'Support',
+    isDivider: true
   },
   {
     name: 'Ticket',
@@ -54,6 +38,44 @@ export const clientMenu = [
         isActive: false,
       }
     ]
+  },
+  {
+    name: 'Transactions',
+    route: '/transactions',
+    icon: 'fa fa-chart-pie',
+    isActive: false
+  },
+  {
+    name: 'Product',
+    route: 'product',
+    icon: 'fab fa-buffer',
+    isActive: false,
+    sub: [
+      {
+        name: 'View Products',
+        route: '/products',
+        icon: '',
+        isActive: false
+      },
+      {
+        name: 'My Product',
+        route: '/clientproducts',
+        icon: '',
+        isActive: false
+      }
+    ]
+  },
+  {
+    name: 'API Metrics',
+    route: '/apilogs',
+    icon: 'fa fa-chart-line',
+    isActive: false
+  },
+  {
+    name: 'Services',
+    route: '/services',
+    icon: 'fa fa-cog',
+    isActive: false
   },
   {
     name: 'Account',
@@ -137,6 +159,25 @@ export const adminMenu = [
   {
     name: 'Products',
     icon: 'fab fa-buffer',
+    isActive: false,
+    sub: [
+      {
+        name: 'Add Product',
+        route: '/createproduct',
+        icon: '',
+        isActive: false,
+      },
+      {
+        name: 'All Products',
+        route: '/products',
+        icon: '',
+        isActive: false,
+      }
+    ]
+  },
+  {
+    name: 'Training',
+    icon: 'fa fa-book',
     isActive: false,
     sub: [
       {

@@ -42,13 +42,13 @@ const Nav = (props) => {
         <nav className="navbar navbar-expand-lg navbar-dark bg-navbar px-2 fixed-top up" id="Navigation">
 
             <div className="container-fluid row">
-            <div className="ml-5">
+            <div className="ml-3">
                 <img src="https://miratechnologiesng.com/img/icons/miraicon.png" alt="AppLogo" height="30" />
                 <span className="logoname text-uppercase h6 ml-3">&nbsp; Mira Technologies</span>
               
              
             </div>
-               {loggedIn && <div className="ml-auto">
+               {loggedIn && <div className="ml-auto img-name">
                     <span className="image_name mb-0 mr-3">{user.lastname } { user.firstname }</span>      
                     <img src={user.imageurl ? FILEURL + user.imageurl : avatar} className=" avatar-circle" height="30" width="30"/>
                     

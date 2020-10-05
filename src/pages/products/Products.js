@@ -96,12 +96,12 @@ class Products extends Component {
    
                     <div className="row mx-5 my-2">
                         {this.state.products.length === 0 
-                        ? <div className="row mx-5 my-2">
+                        ? <div className="row my-2">
                             <div className="alert alert-warning mt-5" role="alert">
                                 <h6 className="text-center">No product has been added yet</h6>
                             </div>
                           </div>
-                        : <div className="row mx-5 my-2">
+                        : <div className="row my-2">
                             {this.state.products.map((product, i) => {
                             return (
                                 <div className="col-md-3 col-lg-4 col-sm-12 my-2 d-flex justify-content-center" key={i}>
@@ -152,7 +152,7 @@ class Products extends Component {
                             <h3>Are you sure?</h3>
                             <p> Do you really want to delete this file?</p>
                             <div className="row">
-                                <div className="col-md-6">
+                                <div className="col-md-6 mb-1">
                                     <button onClick={this.closeModal} className="btn-block btn btn-outline-secondary">Cancel</button>
                                 </div>
                                 <div className="col-md-6">

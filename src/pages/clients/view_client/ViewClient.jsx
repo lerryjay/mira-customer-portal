@@ -379,7 +379,7 @@ class ViewClient extends Component {
       );
     }
     return (
-      <div className="container-fluid px-5 mx-auto row">
+      <div className="container-fluid mx-auto row">
         {this.state.loader && (
           <div className="spin-center">
             <span class="text-primary ">

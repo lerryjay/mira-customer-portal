@@ -349,7 +349,7 @@ deleteModal(e) {
 
             <div className="col-md-12 ">
 
-              <div className="card">
+              <div className="card mb-4">
                 <div className="card-body">
                   {this.state.packages.length === 0 ? (
                     <div class="alert alert-warning" role="alert">
@@ -398,7 +398,7 @@ deleteModal(e) {
                         <h3>Are you sure?</h3>
                         <p> Do you really want to delete this file?</p>
                         <div className="row">
-                            <div className="col-md-6">
+                            <div className="col-md-6 mb-1">
                                 <button onClick={this.closeModal} className="btn-block btn btn-outline-secondary">Cancel</button>
                             </div>
                             <div className="col-md-6">
@@ -484,7 +484,7 @@ deleteModal(e) {
                         </div>
 
                         <div className="row">
-                          <div className="col-md-6">
+                          <div className="col-md-6 mb-1">
                             <button
                               type="button"
                               onClick={this.closepkgModal}
@@ -692,7 +692,7 @@ deleteModal(e) {
                   <h3>Are you sure?</h3>
                   <p> Do you really want to delete this file?</p>
                   <div className="row">
-                    <div className="col-md-6">
+                    <div className="col-md-6 mb-1">
                       <button onClick={this.closedeleteModal} className="btn-block btn btn-outline-secondary mb-2">Cancel</button>
                     </div>
                     <div className="col-md-6">

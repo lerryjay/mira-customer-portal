@@ -291,9 +291,7 @@ async getClients() {
           </div>
         </div>
      
-        
-          <div className="container-fluid row">
-      <div className="col-md-12 col-sm-12 box1 mb-3" id="profile">
+      <div className="col-md-12 mb-3" id="profile">
             {this.state.totalLists.length === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No transaction records!</h6>
@@ -351,7 +349,6 @@ async getClients() {
             )}
           </div>
 
-      </div>
   
         </div>
 

@@ -187,6 +187,63 @@
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     }
+
+
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
+    public function statistics()
+    {
+      extract($_GET);
+      $userid = $userid ?? '';
+      $on = $on ?? '';
+      $error = false;
+      $type = $type ?? '';
+      $enddate = $enddate ?? '';
+      $clientid = $clientid ?? '';
+      $startdate = $startdate ?? '';
+      $statuscode   = $statuscode ?? '';
+      $servicecode  = $servicecode ?? '';
+      $clientUserId = $clientid ?? '';
+      $deploymentId = $deploymentid ?? '';
+
+      loadModel('log');
+      loadModel('deployment');
+      loadController('user');
+      $this->deploymentModel = new DeploymentModel();
+      $this->logModel = new LogModel();
+      $deployment  = $this->deploymentModel->getDeploymentById($deploymentId);
+      if(!$deployment) $user = User::validateUser($userid);
+      else $user = User::validateUser($deployment['user_id']);
+      if(!$deployment && !$user) $error = 'Request could not be authenticated';
+      $clientUserId = $user['role'] == 'admin' ? ($clientid ??  '') : ( $deployment ? $deployment['user_id'] : $userid);
+
+      $filter = 
+      [
+        "userId"=>$clientUserId,
+        "deploymentId"=>$deploymentId,
+        "companyId"=>$this->companyId,
+        "on"=>$on,
+        "startdate"=>$startdate,
+        "enddate"=>$enddate,
+        "statuscode"=>$statuscode,
+        "servicecode"=>$servicecode,
+        "type"=>$type 
+      ];
+
+      $data = $this->logModel->searchStatistics($filter);
+      $data = $data ?: ['total'=>0,'error'=>0,'success'=>0,'cancelled'=>0];
+        
+      $response = ['status'=>true,'message'=>'Statistics fetch success','data'=>$data];
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
+    }
   }
   
 ?>

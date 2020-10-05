@@ -56,6 +56,56 @@
      * @return type
      * @throws conditon
      **/
+    public function servicecharge()
+    {
+      extract($_POST);
+      loadModel('service');
+      loadModel('deployment');
+
+      $error        = false;
+      $debit        = false;
+      $service      = [];
+      $deployment   = [];
+      $servicecode  = $servicecode ?? '';
+      $deploymentId = $deploymentid ?? '';
+      $extraCharge  = $extra ?? 0;
+
+      $this->serviceModel = new ServiceModel();
+      $this->deploymentModel = new DeploymentModel();
+
+      $deployment = $this->deploymentModel->getDeploymentById($deploymentId);
+      if(!$deployment) $error = 'Invalid deployment ID supplied';
+      
+      if(!$error) $service = $this->serviceModel->getServiceByCode($servicecode);
+      if(!$service && !$error) $error = 'Service not recognised';
+
+      if(!$error){
+        $clientUserId = $deployment['user_id'];
+        $tlog         = $tlog ?? date('Y-m-d H:i:s').'|'.$clientUserId;
+        $description  = $description ?? $service['title'];
+        $balance = $this->walletModel->getUserWalletBalance($clientUserId);
+        $tAmount = $service['cost'] + $extraCharge;
+        
+        if($balance < $tAmount){
+          $response = ['status'=>false,'message'=>'Insufficient funds'];
+        }else{ 
+          $debit    = $this->walletModel->addTransaction($this->companyId,$clientUserId,0,$tAmount,$description,$tlog);
+          $response = ['status'=>true,'message'=>'Transaction successful'];
+        }
+      }else $response = ['status'=>false,'message'=>'Transaction failed: '.$error];
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
+    }
+
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
     public function debit()
     {
       loadController('user');

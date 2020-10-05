@@ -82,7 +82,8 @@
      **/
     private function getStatistics($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT COUNT(*) AS total FROM apilogs a '.$condition;
+      $innerConditions =  strlen($condition) > 0 ? ' AND '. ltrim($condition, 'WHERE') : "";
+      $sql = 'SELECT COUNT(*) AS total,(SELECT COUNT(*) FROM apilogs  INNER JOIN deployments d ON d.id = apilogs.deployment_id WHERE statuscode = "0" OR statuscode = "00" '.$innerConditions.') AS success,(SELECT COUNT(*) FROM apilogs  INNER JOIN deployments d ON d.id = apilogs.deployment_id WHERE statuscode = "11"  '.$innerConditions.') AS error, (SELECT COUNT(*) FROM apilogs   INNER JOIN deployments d ON d.id = apilogs.deployment_id WHERE statuscode = "22"  '.$innerConditions.') AS cancelled FROM apilogs a INNER JOIN deployments d ON d.id = a.deployment_id '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->row;
       else return false;
@@ -97,7 +98,7 @@
      * @return type
      * @throws conditon
      **/
-    public function searchStatistics($filter,$status = 1){
+    public function searchStatistics($filter){
       $conditions  = '';
       $conditions .= isset($filter['type']) && $filter['type'] != NULL  ? "AND type = '".$filter['type']."'" : "";
       $conditions .= isset($filter['userId']) && $filter['userId'] != NULL  ? "AND d.user_id = '".$filter['userId']."'" : "";
@@ -110,7 +111,9 @@
       $conditions .= isset($filter['on'])  && $filter['on'] != NULL ? "AND created_at LIKE '%".$filter['on']."%'" : "";
       $conditions .= isset($filter['startDate'])  && $filter['startDate'] != NULL ? "AND created_at >= '".$filter['startDate']."'" : "";
       $conditions .= isset($filter['endDate']) && $filter['endDate'] != NULL  ? "AND created_at <= '".$filter['endDate']."'" : "";
-      return $this->getStatistics('WHERE status = ? '.$conditions,'i',[$status]);
+      $conditions  = ltrim($conditions,'AND');
+      $conditions = strlen($conditions) > 1 ? 'WHERE '.$conditions : '';
+      return $this->getStatistics($conditions,[]);
     }
   }
 ?>

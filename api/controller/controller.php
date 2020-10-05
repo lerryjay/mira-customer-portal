@@ -84,5 +84,66 @@
         }
       }
     }
+
+     /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
+    public function do_post($url, $params=array(),$headers = []) 
+    {
+      $ch = curl_init();
+      curl_setopt($ch,CURLOPT_URL,$url);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    
+      $params_string = '';
+      if (is_array($params) && count($params)) {
+        foreach($params as $key=>$value) {
+          $params_string .= $key.'='.$value.'&'; 
+        }
+        rtrim($params_string, '&');
+        curl_setopt($ch,CURLOPT_POST, count($params));
+        curl_setopt($ch,CURLOPT_POSTFIELDS, $params_string);
+      }
+      curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+      //execute post
+      $result = curl_exec($ch);
+      //close connection
+      curl_close($ch);
+      return $result;
+    }
+
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
+    public function do_get($url,$params = [],$headers = [])
+    {
+      $ch = curl_init();
+      $params_string = '';
+      if (is_array($params) && count($params)) {
+        foreach($params as $key=>$value) {
+          $params_string .= $key.'='.$value.'&'; 
+        }
+        rtrim($params_string, '&');
+      }
+      curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+      curl_setopt($ch,CURLOPT_URL,$url.'?'.$params_string);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+      //execute get
+      $result = curl_exec($ch);
+      //close connection
+      curl_close($ch);
+      return $result;
+    }
   }
 ?>

@@ -122,8 +122,8 @@
       if($res['status']){
         $courses = $this->do_get($this->url.'training/list',$get,$this->headers);
         $courses = json_decode($courses,true);
-        if($courses['status'])$res['courses'] = $courses['data'];
-        else $res['courses'] = [];
+        if($courses['status'])$res['data']['courses'] = $courses['data'];
+        else $res['data']['courses'] = [];
       }
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($res));

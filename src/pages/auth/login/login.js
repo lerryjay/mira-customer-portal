@@ -43,17 +43,18 @@ class Login extends Component {
            }
         }else{
 
-            let form = new FormData(document.getElementById("loginform"));
-            const res = await this.props.login(form);
-
-                this.setState({ loading: false });
-                if(res['status']) {
-                    this.state.showAlert("success", res['message'])
-                    //find a way to redirect here 
-                this.props.history.push('/dashboard');
-                } else{
-                    this.state.showAlert("danger",   res['message'])
-                }
+                let form = new FormData(document.getElementById("loginform"));
+                const res = await this.props.login(form);
+    
+                    this.setState({ loading: false });
+                    if(res['status']) {
+                        this.state.showAlert("success", res['message'])
+                        //find a way to redirect here 
+                    this.props.history.push('/dashboard');
+                    } else{
+                        this.state.showAlert("danger",   res['message'])
+                    }
+           
 
         }
     }

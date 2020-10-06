@@ -60,9 +60,18 @@ import ScrollToTop from "./common/components/ScrollToTop";
 import UserApiLogs from "./pages/api_logs/UserApi/api_logs";
 import Transactions from "./pages/transactions/transaction"
 import Services from "./pages/services/services"
-import Training from "./pages/training/training"
 
+import CoursePage from "./pages/training/coursepage"
+import AddCourse from "./pages/training/courses/addcourse"
+import ViewCourse from "./pages/training/courses/viewcourse"
+import UpdateCourse from "./pages/training/courses/updatecourse"
+import Courses from "./pages/training/courses/courses"
 
+import StudentPage from "./pages/training/studentpage"
+import AddStudent from "./pages/training/students/addstudent"
+import Students from "./pages/training/students/students"
+import ViewStudent from "./pages/training/students/viewstudent"
+import UpdateStudent from "./pages/training/students/updatestudent"
 
 
 
@@ -355,7 +364,16 @@ class App extends Component {
                       <PrivateRoute path="/apilogs"  component={UserApiLogs} />
                       <PrivateRoute path="/transactions"  component={Transactions} />
                       <PrivateRoute path="/services"  component={Services} />
-                      <PrivateRoute path="/training"  component={Training} />
+                      <PrivateRoute path="/coursepage"  component={CoursePage} />
+                      <PrivateRoute path="/addcourse"  component={AddCourse} />
+                      <PrivateRoute path="/viewcourse"  component={ViewCourse} />
+                      <PrivateRoute path="/editcourse"  component={UpdateCourse} />
+                      <PrivateRoute path="/courses"  component={Courses} />
+                      <PrivateRoute path="/studentpage"  component={StudentPage} />
+                      <PrivateRoute path="/addstudent"  component={AddStudent} />
+                      <PrivateRoute path="/viewstudent"  component={ViewStudent} />
+                      <PrivateRoute path="/editstudent"  component={UpdateStudent} />
+                      <PrivateRoute path="/students"  component={Students} />
                       
 
                       <UserPrivateRoute path="/clientproducts" component={ClientProducts} />

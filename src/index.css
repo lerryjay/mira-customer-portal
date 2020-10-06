@@ -455,7 +455,7 @@ button:focus {
 }
 .table-responsive{
   overflow-x: scroll !important;
-  min-height: 100vh !important;
+  /* min-height: 100vh !important; */
 }
 div.home {
   color: #3c4b64;

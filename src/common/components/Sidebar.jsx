@@ -33,7 +33,7 @@ const Sidebar = (props) => {
                                 item.isDivider ? 
                                
                                 <div className="nav-item px-0">
-                                    <li className="nav-item font-weight-bold text-uppercase mt-3"><b>{ item.name ? item.name : '' }</b></li>
+                                    <li className="nav-item font-weight-bold text-uppercase mt-2"><b>{ item.name ? item.name : '' }</b></li>
                                     <hr className="bg-white mt-0 mb-0" />
                                 </div> 
                                 : 

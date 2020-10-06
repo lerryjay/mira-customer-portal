@@ -117,10 +117,15 @@
     {
       $get = $_GET;
       $get['userid'] = $this->appUser;
-      $res = $this->do_get($this->url.'user/list',$get,$this->headers);
-
+      $res = $this->do_get($this->url.'user/profile',$get,$this->headers);
+      $res = json_decode($res,true);
+      if($res['status']){
+        $courses = $this->do_get($this->url.'training/list',$get,$this->headers);
+        $courses = json_decode($courses,true);
+        if($courses['status'])$res['courses'] = $courses['data'];
+      }
       $this->setOutputHeader(['Content-type:application/json']);
-      $this->setOutput($res);
+      $this->setOutput(json_encode($res));
     }
 
     /**

@@ -47,7 +47,6 @@ class Services extends Component {
     ).then((response) => response.json());
     if (res["status"]) {
       this.setState({ totalLists: res['data'] });
-      console.log(this.state.totalLists)
     }
   }
 
@@ -509,7 +508,6 @@ class Services extends Component {
                                   type="submit"
                                   className="btn btn-primary btn-block"
                                 >
-                                  <i className="fas fa-folder-open mr-2"></i>
                               Update
                                 </button>
                               )}

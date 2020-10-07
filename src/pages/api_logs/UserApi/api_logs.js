@@ -17,112 +17,20 @@ class api_logs extends Component {
           clients: [],
           currentPage: 1,
           numberPerPage: 10,
-          totalLists: [
-            {
-                createdat: "20/07/2020 10:03pm",
-                client: 'Ada Obi',
-                url: 'www.url.com',
-                code: 200,
-                status: 'Successful'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                client: 'Ada Obi',
-                url: 'www.url.com',
-                code: 403,
-                status: 'Cancelled'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                client: 'Ada Obi',
-                url: 'www.url.com',
-                code: 404,
-                status: 'Failed'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                client: 'Ada Obi',
-                url: 'www.url.com',
-                code: 200,
-                status: 'Successful'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                client: 'Ada Obi',
-                url: 'www.url.com',
-                code: 200,
-                status: 'Successful'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                client: 'Ada Obi',
-                url: 'www.url.com',
-                code: 403,
-                status: 'Cancelled'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                client: 'Ada Obi',
-                url: 'www.url.com',
-                code: 404,
-                status: 'Failed'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                client: 'Ada Obi',
-                url: 'www.url.com',
-                code: 200,
-                status: 'Successful'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                client: 'Ada Obi',
-                url: 'www.url.com',
-                code: 200,
-                status: 'Successful'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                client: 'Ada Obi',
-                url: 'www.url.com',
-                code: 403,
-                status: 'Cancelled'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                client: 'Ada Obi',
-                url: 'www.url.com',
-                code: 404,
-                status: 'Failed'
-
-            },
-            {
-                createdat: "20/07/2020 10:03pm",
-                client: 'Ada Obi',
-                url: 'www.url.com',
-                code: 200,
-                status: 'Successful'
-
-            },
-          ],
+          totalLists: [ ],
           pageNumbers: [],
           currentLists: [],
-          deploymentid: ''
+          deploymentid: '',
+          totalapi : 0 ,
+          errorapi : 0,
+          sucessapi : 0,
+          cancelledapi : 0,
         };
       }
     
       componentDidMount() {
         this.getLogs();
+        this.getApiStatistics();
       }
 
       handleInputChange = (e) => {
@@ -158,12 +66,9 @@ class api_logs extends Component {
       async getLogs() {
         const headers = new Headers();
         headers.append("API-KEY", APIKEY);
-        
-        let clientid = this.props.location.pathname.split("/")[2];
-        // let deploymentid = this.state.deploymentid;
-    
+                
         const res = await fetch(
-          HTTPURL + `log/list?userid=${this.state.user.userid}&clientid=${clientid}`,
+          HTTPURL + `log/list?userid=${this.state.user.userid}`,
           {
             method: "GET",
             headers: headers,
@@ -173,6 +78,18 @@ class api_logs extends Component {
         if (res["status"]) this.setState({ totalLists: res["data"] });
       
       }
+
+      async getApiStatistics()
+{
+  const headers = new Headers();
+  headers.append('API-KEY', APIKEY);
+  const res = await fetch(HTTPURL + `log/statistics?userid=${this.state.user.userid}`, {
+      method: 'GET',
+      headers: headers
+  }).then(response => response.json());
+  console.log(  res['data']  )
+  if (res['status']) this.setState({ totalapi: res['data']['total'],errorapi: res['data']['error'],cancelledapi :  res['data']['cancelled'],sucessapi : res['data']['success']});
+}
 
       handleSearch = async (e) => {
         e.preventDefault();
@@ -210,18 +127,18 @@ class api_logs extends Component {
         this.state.currentLists = currentLists;
 
     return (
-      <div>
-        <div className="row m-4 d-flex justify-content-end ">
+      <div className="container">
+      <div className="row my-4 d-flex justify-content-end ">
           <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3  hover-effect">
             <div className="px-3 card py-4">
               <div className="row align-items-center">
                 <div className="col">
-                <i className=" border-radius-4 fa fa-chart-line py-3 px-4 text-white btn-primary fa-2x"></i>
+                <i className=" border-radius-4 fa fa-database py-3 px-4 text-white btn-primary fa-2x"></i>
                 </div>
                 <div className="col font-card text-right">
-                  <span className=" ">Total Api Logs</span>
+                  <span className=" ">Total</span>
                   <br />
-                  <span className="text-large">230</span>
+                  <span className="text-large">{this.state.totalapi}</span>
                 </div>
               </div>
             </div>
@@ -230,12 +147,12 @@ class api_logs extends Component {
             <div className="px-3 card py-4">
               <div className="row align-items-center">
                 <div className="col">
-                <i className=" border-radius-4 fa fa-check-circle py-3 px-4 text-white bg-success fa-2x"></i>
+                <i className=" border-radius-4 fa fa-check py-3 px-4 text-white bg-success fa-2x"></i>
                 </div>
                 <div className="col font-card text-right">
-                  <span className=" ">Successful</span>
+                  <span className=" ">Success</span>
                   <br />
-                  <span className="text-large">230</span>
+                  <span className="text-large">{this.state.sucessapi}</span>
                 </div>
               </div>
             </div>
@@ -244,26 +161,26 @@ class api_logs extends Component {
             <div className="px-3 card py-4">
               <div className="row align-items-center">
                 <div className="col">
-                <i className=" border-radius-4 fab fa-bandcamp py-3 px-4 text-white bg-orangered fa-2x"></i>
+                <i className=" border-radius-4 fa fa-exclamation-triangle py-3 px-4 text-white bg-orangered fa-2x"></i>
+                </div>
+                <div className="col font-card text-right">
+                  <span className=" ">Error</span>
+                  <br />
+                  <span className="text-large">{this.state.errorapi}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3 hover-effect">
+            <div className="px-3 card py-4">
+              <div className="row align-items-center">
+                <div className="col">
+                <i className=" border-radius-4 fa fa-times py-3 px-4 text-white bg-danger fa-2x"></i>
                 </div>
                 <div className="col font-card text-right">
                   <span className=" ">Cancelled</span>
                   <br />
-                  <span className="text-large">230</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3 hover-effect">
-            <div className="px-3 card py-4">
-              <div className="row align-items-center">
-                <div className="col">
-                <i className=" border-radius-4 fa fa-times-circle py-3 px-4 text-white bg-danger fa-2x"></i>
-                </div>
-                <div className="col font-card text-right">
-                  <span className=" ">Failed</span>
-                  <br />
-                  <span className="text-large">230</span>
+                  <span className="text-large">{this.state.cancelledapi}</span>
                 </div>
               </div>
             </div>
@@ -271,7 +188,7 @@ class api_logs extends Component {
         </div>
 
      
-      <div className="container-fluid row">
+      <div className="row">
       <div className="col-md-9 col-sm-12 box1 mb-3" id="profile">
             {this.state.totalLists.length === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
@@ -377,6 +294,7 @@ class api_logs extends Component {
 
           <div className="col-md-3 col-sm-12 box2 mt-3 mb-3">
             
+          <form onSubmit={this.handleSearch}>
             <div className="card">
                 <div className="card-header bg-medium font-weight-bold text-dark">
                 <i class="fa fa-filter"></i> FILTER BY
@@ -422,7 +340,6 @@ class api_logs extends Component {
                 title="Type in something"
               />
 
-              <form onSubmit={this.handleSearch}>
                 <div className="form-group mt-3">
                   <label
                     htmlFor="startdate"
@@ -527,10 +444,11 @@ class api_logs extends Component {
                     Search
                   </button>
                 </div>
-              </form>
             
                 </div>
+         
            </div>
+         </form>
           </div>
       
       </div>

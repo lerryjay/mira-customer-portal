@@ -30,7 +30,7 @@ class Dashboard extends Component {
       deletedclient: '',
       totalapi : 0 ,
       errorapi : 0,
-      succssapi : 0,
+      sucessapi : 0,
       cancelledapi : 0,
       smscalls:0
     };
@@ -412,7 +412,7 @@ async getClients() {
                       <tbody>
                         {this.state.currentLists.map((transaction, index) => {
                           return (
-                            <tr>
+                            <tr key={index}>
                             <td className="table-padding">
                               {transaction.tdate}
                             </td>
@@ -593,7 +593,7 @@ async getClients() {
         <div title="API">
           <div className="row mt-3 mx-3 text-white">
               <Maincards title="Total" total={this.state.totalapi} icon="fa fa-database" iconBackground="btn-primary" />
-              <Maincards title="Success" total={this.state.succssapi} icon="fa fa-check" iconBackground="bg-success" />
+              <Maincards title="Success" total={this.state.sucessapi} icon="fa fa-check" iconBackground="bg-success" />
               <Maincards title="Error" total={this.state.errorapi} icon="fa fa-exclamation-triangle" iconBackground="bg-orangered" />
               <Maincards title="Cancelled" total={ this.state.cancelledapi} icon="fa fa-times" iconBackground="bg-danger" />
           </div>
@@ -605,7 +605,7 @@ async getClients() {
             <div className="col-md-4 box2">
               <div className="row">
                 {
-                  this.state.servicesStatistics.map(item=><Minicards title={item.code} total={item.count} icon="fa fa-comments" iconBackground="text-success" />)
+                  this.state.servicesStatistics.map(item=><Minicards title={item.code} total={item.count} key={item} icon="fa fa-comments" iconBackground="text-success" />)
                 }
                 </div>
             </div>

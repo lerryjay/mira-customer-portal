@@ -41,10 +41,42 @@ class Profile extends Component {
     }
   }
 
+  showsuspendModal(adminid) {
+    const selectedUser = this.state.users.find(  (item) => item.adminid === adminid );
+    this.setState({ selectedUser });
+    let modal = document.getElementById("suspendModal")
+    modal.style.display = "block";
+  }
 
   closesuspendModal() {
     let modal = document.getElementById("suspendModal");
     modal.style.display = "none";
+  }
+
+  suspendAdmin = async () => {
+    this.setState({ loading: true });
+
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+        const res = await fetch(
+          `${HTTPURL}user/suspend?adminid=${this.state.selectedUser.user_id}&userid=${this.state.user.userid}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        );
+        if (res.status) {
+          this.setState({ loading: false });
+          this.state.showAlert("success", 'Suspend Successfully!')
+          let modal = document.getElementById("suspendModal");
+          modal.style.display = "none";
+        } 
+        else{
+          this.setState({ loading: false });
+          let modal = document.getElementById("suspendModal");
+          modal.style.display = "none";
+        }
+        
   }
 
   render() {
@@ -132,7 +164,7 @@ class Profile extends Component {
                     <Link to={() => `/updateadmin/${this.state.selectedUser.adminid}`}>
                       <button
                         type="button"
-                        className="btn mt-3 m-2 btn-primary rounded-0 mb-2"
+                        className="btn mt-3 btn-sm m-2 btn-primary rounded-0 mb-2"
                       >
                         <small className="newproduct text-light">
                           &nbsp;Edit&nbsp;Account&nbsp;
@@ -141,7 +173,7 @@ class Profile extends Component {
                     </Link>
                     <button
                       type="button"
-                      className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
+                      className="btn mt-3 m-2 btn-sm  btn-danger mb-2 rounded-0"
                       onClick={() =>
                         this.showsuspendModal(
                           this.state.selectedUser.adminid
@@ -158,7 +190,7 @@ class Profile extends Component {
                       )
                     }
                       type="button"
-                      className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
+                      className="btn mt-3 m-2 btn-sm  btn-danger mb-2 rounded-0"
                     >
                       <small className="newproduct text-white" >
                         &nbsp;Delete&nbsp;Account&nbsp;
@@ -212,9 +244,9 @@ class Profile extends Component {
                     </button>
                   ) : (
                       <button
-                        // onClick={() =>
-                        //   this.suspendClient(this.state.selectedClient.adminid)
-                        // }
+                        onClick={() =>
+                          this.suspendAdmin(this.state.selectedUser.adminid)
+                        }
                         className="btn btn-danger btn-block"
                       >
                         Suspend

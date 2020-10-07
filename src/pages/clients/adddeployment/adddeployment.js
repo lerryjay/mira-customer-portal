@@ -183,8 +183,6 @@ class AddClientProduct extends Component {
 
   render() {
     let files = this.state.files.map((file) => {
-      this.setState({ imagePreviewUrl: URL.createObjectURL(file) });
-      // this.setState({imagePreviewUrl: URL.createObjectURL(file) })
       return file.name.match(/\.(jpg|jpeg|png)$/) ? (
         <div className="imgPreview m-2" id="files">
           <i className="fa fa-trash" onClick={(e) => this.removeImage(e)}></i>
@@ -213,7 +211,7 @@ class AddClientProduct extends Component {
               </div>
 
               <div className="card-body px-5">
-                <div className="form-group row mb-3">
+                <div className="form-group  mb-3">
                 <select
                   onChange={(e) => {
                     this.getModule(e.target.value);

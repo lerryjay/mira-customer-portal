@@ -399,7 +399,7 @@ class ViewClient extends Component {
               <div className="w-100 text-center">
                 <h3>CLIENT INFORMATION </h3>
               </div>
-              <div className="row my-5">
+              <div className="row mt-5 mb-3">
                 <div className="col-md-4 text-center mb-3" id="profilePix">
                   <div className="card">
                     <div className="card-header"></div>
@@ -427,12 +427,12 @@ class ViewClient extends Component {
                 </div>
 
                 {!this.state.isloading && (
-                  <div className="col-md-8 pl-5">
+                  <div className="col-md-8">
                     <h3 className="text-dark">{this.state.businessname}</h3>
                     <div className="row mt-3">
                       <div className="col-md-12">
                         <div className="row">
-                        <div className="col-md-7">
+                        <div className="col-md-7 mb-2">
                         <h6>{this.state.companyemail}</h6>
                         <h6>{this.state.companytelephone}</h6>
                         <h6>{this.state.companyaddress}</h6>
@@ -458,9 +458,9 @@ class ViewClient extends Component {
                           </div>
                         </div>
                         </div>
-                        <div className="row mt-2">
+                        <div className="mt-2">
                           <Link
-                            className="btn mt-3 m-2 btn-primary mb-2 rounded-0"
+                            className="btn mt-3 m-2 btn-primary mb-2 btn-sm"
                             to={() => `/editclient/${this.state.userid}`}
                           >
                             <small
@@ -472,7 +472,7 @@ class ViewClient extends Component {
                           </Link>
 
                           <Link
-                            className="btn mt-3 m-2 btn-primary mb-2 rounded-0"
+                            className="btn mt-3 m-2 btn-primary mb-2 btn-sm"
                             to={() => `/createuserticket/${this.state.userid}`}
                           >
                             <small
@@ -486,7 +486,7 @@ class ViewClient extends Component {
                           <Link to={() => `/apilogs/${this.state.userid}`}>
                             <button
                               type="button"
-                              className="btn mt-3 m-2 btn-primary mb-2"
+                              className="btn mt-3 m-2 btn-primary mb-2 btn-sm"
                             >
                               <small
                                 className="newproduct"
@@ -499,7 +499,7 @@ class ViewClient extends Component {
                           <Link to={() => `/transactions/${this.state.userid}`}>
                             <button
                               type="button"
-                              className="btn mt-3 m-2 btn-primary mb-2"
+                              className="btn mt-3 m-2 btn-primary mb-2 btn-sm"
                             >
                               <small
                                 className="newproduct"
@@ -514,7 +514,7 @@ class ViewClient extends Component {
                           >
                             <button
                               type="button"
-                              className="btn mt-3 m-2 btn-primary mb-2"
+                              className="btn mt-3 m-2 btn-primary mb-2 btn-sm"
                             >
                               <small
                                 className="newproduct"
@@ -531,7 +531,7 @@ class ViewClient extends Component {
                           >
                             <button
                               type="button"
-                              className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
+                              className="btn mt-3 m-2 btn-danger mb-2 rounded-0 btn-sm"
                             >
                               <small
                                 className="newproduct"
@@ -548,7 +548,7 @@ class ViewClient extends Component {
                           >
                             <button
                               type="button"
-                              className="btn mt-3 m-2 btn-danger mb-2 rounded-0"
+                              className="btn mt-3 m-2 btn-danger mb-2 rounded-0 btn-sm"
                             >
                               <small
                                 className="newproduct"

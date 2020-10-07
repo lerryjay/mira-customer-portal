@@ -67,9 +67,9 @@ class CreateClient extends Component {
 
     render() {
         return (
-            <div className="container mx-auto row mt-4">
-
-                <div className="col-md-8 offset-2">
+            <div className="container">
+                <div className="row justify-content-center  mt-4">
+                <div className="col-md-10">
 
                         <form onSubmit={this.handleSubmit} id="createclient">
 
@@ -133,7 +133,7 @@ class CreateClient extends Component {
                             </div>
                         </form>
                     </div>
-
+                    </div>
                 </div>
 
         )

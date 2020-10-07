@@ -11,9 +11,8 @@ class AddClient extends Component {
     render() {
         return (
             <div className="container ">
-                <div className="row">
-                    <div className="col-md-8 offset-2">
-                        <div className="row pt-3">
+                <div className="row justify-content-center">
+                        <div className="pt-3">
                             
                             <div className="col pt-3">
                             <div className="card text-center products">
@@ -39,7 +38,7 @@ class AddClient extends Component {
                             </div>
                             </div>
               
-                        </div>
+                        
                     </div>
                 </div>
             </div>

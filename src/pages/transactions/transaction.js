@@ -90,8 +90,8 @@ class transaction extends Component {
         this.state.currentLists = currentLists;
 
     return (
-      <div>
-      <div className="row m-4 d-flex justify-content-end ">
+      <div className="container">
+      <div className="row my-4 d-flex justify-content-end ">
         <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3  hover-effect">
           <div className="px-3 card py-4">
             <div className="row align-items-center">
@@ -101,7 +101,7 @@ class transaction extends Component {
               <div className="col font-card text-right">
                 <span className=" ">Total<br/> Transactions</span>
                 <br />
-                <span className="text-large">230</span>
+                <span className="text-large">{this.state.totalLists.length}</span>
               </div>
             </div>
           </div>
@@ -150,8 +150,9 @@ class transaction extends Component {
         </div>
       </div>
         
-      <div className="container-fluid row">
-      <div className="col-md-9 col-sm-12 box1 mb-3" id="profile">
+        
+        <div className="row">
+        <div className="col-md-9 col-sm-12 box1 mb-3" id="profile">
             {this.state.totalLists.length === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No transaction records!</h6>
@@ -406,7 +407,7 @@ class transaction extends Component {
             </div>
           </div>
       
-      </div>
+        </div>
      
       </div>
     );

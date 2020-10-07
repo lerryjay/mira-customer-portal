@@ -360,26 +360,32 @@ deleteModal(e) {
                         {/* {this.state.packages} */}
                         {this.state.packages.map((module) => {
                           return (
-                            <div key={module.id} className="col-md-4">
-                              <p className="list-group-item">
-                                {module.name}
+                            <div key={module.id} className="col-md-4 mb-2">
+                              <div className="list-group-item">
+                                <div className="row">
+                                  <div className="col-md-9 pr-1" style={{overflow: 'hidden', textOverflow: 'ellipsis',whiteSpace: 'nowrap'}}>
+                                      <span>{module.name}</span>
+                                    </div>
+                                  <div className="col-md-3 pl-0">
                                 {this.state.user.role == "admin" &&  
                                  <span class=" float-right">
                                   <Link onClick={() => this.infoModal(module.id)}>
                                     <i value={module.id} style={{ cursor: "pointer" }}
-                                      className="fa fa-info-circle mr-3 text-info"
+                                      className="fa fa-info-circle mr-1 text-info"
                                     ></i>
                                   </Link>
                                   <Link onClick={() => this.updateModal(module.id)}>
                                     <i value={module.id} style={{ cursor: "pointer" }}
-                                      className="fa fa-edit mr-3 text-primary"></i>
+                                      className="fa fa-edit mr-1 text-primary"></i>
                                   </Link>
                                   <Link onClick={() => this.showdeleteInfoModule(module.id)}>
-                                    <i className="fa fa-trash mr-2 text-danger"></i>
+                                    <i className="fa fa-trash mr text-danger"></i>
                                   </Link>
                                 </span>
                                 }
-                              </p>
+                                    </div>
+                                  </div>
+                              </div>
                             </div>
                           );
                         })}
@@ -416,7 +422,7 @@ deleteModal(e) {
             {this.state.showmodal ? (
               <div id="moduleModal" class="modal">
                 {/* Modal content  */}
-                <div class="modal-content text-center p-5">
+                <div class="modal-content text-center">
                   <form onSubmit={this.saveModule} id="addpackage">
                     <div className="card">
                       <div className="card-header bg-medium font-weight-bold text-dark">
@@ -531,7 +537,7 @@ deleteModal(e) {
             {this.state.showmodal ? (
               <div id="infoModal" class="modal">
                 {/* Modal content  */}
-                <div class="modal-content p-5">
+                <div class="modal-content">
                   <form>
                     <div className="card">
                       <div className="card-header bg-medium font-weight-bold text-dark text-center">
@@ -586,7 +592,7 @@ deleteModal(e) {
             {this.state.showmodal ? (
               <div id="updateModal" class="modal">
                 {/* Modal content  */}
-                <div class="modal-content p-5">
+                <div class="modal-content">
                   <form onSubmit={this.handleUpdate}>
                     <div className="card">
                       <div className="card-header bg-medium font-weight-bold text-dark text-center">
@@ -636,21 +642,18 @@ deleteModal(e) {
 
 
 
-                        <div className="row">
-                          <div className="col-md-6">
+                        <div className="d-flex justify-content-center">
                             <button
                               type="button"
                               onClick={this.closeupdateModal}
-                              className="btn-block btn btn-outline-secondary mb-2"
+                              className="btn btn-outline-secondary m-1 w-50"
                             >
                               Cancel
                           </button>
-                          </div>
-                          <div className="col-md-6">
                             {this.state.loading ? (
                               <button
                                 type="submit"
-                                className="btn btn-block btn-primary"
+                                className="btn btn-sm btn-primary m-1 w-50"
                               >
                                 <div
                                   className="spinner-border text-secondary"
@@ -663,13 +666,12 @@ deleteModal(e) {
                             ) : (
                                 <button
                                   type="submit"
-                                  className="btn btn-primary btn-block"
+                                  className="btn btn-sm btn-primary m-1 w-50"
                                 >
-                                  <i className="fas fa-folder-open mr-2"></i>
+                                  <i className="fas fa-folder-open"></i>&nbsp;
                               Update
                                 </button>
                               )}
-                          </div>
                         </div>
                       </div>
                     </div>

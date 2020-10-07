@@ -81,7 +81,7 @@ class Admin extends Component {
                 :
                 !this.state.loader && 
                 
-      <div className="table-responsive">
+      <div className="table-responsive" style={{minHeight: '100vh'}}>
                 <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
           <thead>
             <tr>

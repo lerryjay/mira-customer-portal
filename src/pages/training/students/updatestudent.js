@@ -147,9 +147,9 @@ class UpdateCourse extends Component {
             }
         return (
 
-            <div className="container mx-auto row">
+            <div className="container justify-content-center mt-4 row">
                 
-                <div className="col-md-8 offset-2">
+                <div className="col-md-8">
 
                         <form onSubmit={this.handleSubmit} id="createclient">
 

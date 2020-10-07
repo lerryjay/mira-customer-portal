@@ -128,6 +128,8 @@ class CreateClientById extends Component {
 
             <div className="container mx-auto">
                 <div className="row mt-5 justify-content-center">
+                <div className="col-md-12">
+
                     <form onSubmit={this.handleSubmit} id="createclient"> 
                     
                             <div className="card">
@@ -269,7 +271,7 @@ class CreateClientById extends Component {
                         </div>
                     </form>
                 </div>
-            
+            </div>
                 </div>
 
         )

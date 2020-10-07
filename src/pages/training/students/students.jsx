@@ -95,7 +95,7 @@ class Students extends Component {
     this.state.currentLists = currentLists;
 
     return (
-      <div className="container-fluid px-5">
+      <div className="container-fluid">
           <div className="w-100 text-center">
             <h3>Students </h3>
           </div>
@@ -113,7 +113,7 @@ class Students extends Component {
           : <span></span>
         }
 
-          <div className="col-md-12 col-sm-12 box1 mb-3" id="profile">
+          <div className="col-md-12 box1 mb-3" id="profile">
             {this.state.tickets.length === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No student records!</h6>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withContext } from '../../../common/context';
-import { HTTPURL, APIKEY,ADMINPERMISSIONS } from "../../../common/global_constant";
+import { HTTPURL, FILEURL, APIKEY,ADMINPERMISSIONS } from "../../../common/global_constant";
 import avatar from '../../../assets/images/avatar.png'
 
 
@@ -21,6 +21,7 @@ class UpdateAdmin extends Component {
             country: '',
             state:'',
             permissions: [],
+            imageurl: '',
             successmessage: ''
         }
         this.permissions = ADMINPERMISSIONS;
@@ -54,7 +55,8 @@ class UpdateAdmin extends Component {
             telephone: selectedUser.telephone,
             country: selectedUser.country,
             state: selectedUser.state,
-            permissions : selectedUser.permissions
+            permissions : selectedUser.permissions,
+            imageurl : selectedUser.imageurl
          });
       }
     }
@@ -165,7 +167,7 @@ class UpdateAdmin extends Component {
         let {imagePreviewUrl} = this.state;
             let imagePreview = null;
             if (imagePreviewUrl) {
-                this.props.user.imageurl = true
+                this.state.imageurl = true
             imagePreview = (<img src={imagePreviewUrl} className="imagePreview"/>);
             } 
         return (
@@ -252,15 +254,16 @@ class UpdateAdmin extends Component {
                         <div className="card">
                             <div className="card-header">
                             </div>
-                            {!this.props.user.imageurl ? 
+                            {!this.state.imageurl ? 
                             <div className="card-body">
                                 <img src={avatar} alt="" className="image_sidebar"  height="inherit" width="170px" style={{ marginTop: '-80px' }}/>
 
                             </div>
                             : <div className="card-body">
-                                <div className="image_sidebar" alt="" height="110px" width="110px" style={{ marginTop: '-80px' }} >
-                                    {imagePreview}
-                                </div>
+                                <img
+                  src={FILEURL + this.state.imageurl }
+                  className="image_sidebar" alt="" height="170px" width="170px" style={{ marginTop: '-80px' }}
+                />
                             </div>
                             }
                             <label htmlFor="file" className="btn btn-sm btn-primary py-2 px-3">Attach Image</label>

@@ -132,9 +132,7 @@ class ChangePassword extends Component {
                                             <span className="sr-only">Loading...</span>
                                         </div>
                                     </button>
-                                    : 
-                                    <button type="submit" className="btn bg-btn px-5 py-2">
-                                            <i className="fas fa-save fa-fw pr-2"></i>
+                                    :<button type="submit" className="btn btn-sm btn-primary px-3">
                                         Save
                                     </button>
                                 }

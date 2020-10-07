@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { BrowserRouter as Router, Switch,Route} from "react-router-dom";
+import { BrowserRouter as Router, Switch,Route, Redirect} from "react-router-dom";
 import { HTTPURL,APIKEY } from "./common/global_constant";
 
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
@@ -73,6 +73,7 @@ import Students from "./pages/training/students/students"
 import ViewStudent from "./pages/training/students/viewstudent"
 import UpdateStudent from "./pages/training/students/updatestudent"
 import ViewStudentCourse from "./pages/training/students/viewsudentcourse"
+import login from "./pages/auth/login/login";
 
 
 
@@ -92,6 +93,10 @@ class App extends Component {
         role : 'user',
         permissions : []
       },
+      loginid : '',
+      enablereset : false,
+      accepttoken : false,
+      token : ''
     };
     this.loginUser  = this.loginUser.bind(this);
     this.showAlert  = this.showAlert.bind(this);
@@ -153,16 +158,14 @@ class App extends Component {
     }).then((response) => response.json());
   };
 
-  forgotPassword =  (data) => {
+  forgotPassword = async (loginid) => {
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
-    let form = new FormData(data);
-    return  fetch(HTTPURL + "user/forgotpassword", {
-      method: "POST",
-      body: form,
-      headers: headers,
-    }).then((response) => response.json())
-
+    let form = new FormData();
+    form.append('loginid',loginid)
+    const res = await fetch(HTTPURL + "user/forgotpassword", {method: "POST", body: form, headers: headers, }).then((response) => response.json());
+    if(res.status) this.setState({loginid : loginid,accepttoken : true });
+    return res;
   };
 
   verifyToken = async (token)=>{
@@ -171,36 +174,42 @@ class App extends Component {
     headers.append("API-KEY", APIKEY);
     const form = new FormData();
     form.append('token',token);
+    form.append('loginid',this.state.loginid );
+    console.log('login id', this.state.loginid);
     const res = await fetch(`${HTTPURL}user/verifytoken`,{ method : 'POST',body : form, headers  }).then(res=>res.json());
+    if(res.status) await this.setState({ enablereset : true,token,accepttoken : false });
     this.setState({ loading : false });
-    if(res.status){
-        this.state.showAlert('success','Token verified successfully');
-        this.props.history.push('/reset-passwrd');
-    }else this.state.showAlert('danger',res.message);
+    return res;
   }
 
-  async verifyLinkToken(token){
+  verifyLinkToken = async (token) => {
     this.setState({ loading : true });
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
     const form = new FormData();
     form.append('token',token);
-    const res = await fetch(`${HTTPURL}user/verifylinktoken`,{ method : 'POST',body : form, headers  }).then(res=>res.json());
+    const res = await fetch(`${HTTPURL}user/verifytoken`,{ method : 'POST',body : form, headers  }).then(res=>res.json());
     this.setState({ loading : false });
-    if(res.status){
-        this.state.showAlert('success','Token verified successfully');
-    }else this.state.showAlert('danger',res.message);
+    if(res.status) this.setState({ enablereset : true,token  })
+    return res;
   }
 
-  changePassword =  (data) => {
+  resetPassword = async (password) => {
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
-    let form =  FormData(data);
-    return  fetch(HTTPURL + "user/updatepassword", {
+    let form = new FormData();
+    form.append('password',password);
+    form.append('loginid',this.state.loginid);
+    form.append('token',this.state.token);
+   
+    const res = await fetch(HTTPURL + "user/resetpassword", {
       method: "POST",
       body: form,
       headers: headers,
-    }).then((response) => response.json())
+    }).then((response) => response.json());
+
+    if(res.status) this.setState({ loginid : '', enablereset : false });
+    return res;
   };
 
   logoutUser = () =>{
@@ -301,6 +310,9 @@ class App extends Component {
       logout: this.logoutUser,
       signup: this.signupUser,
       forgotpassword: this.forgotPassword,
+      verifyToken : this.verifyToken,
+      verifyLinkToken : this.verifyLinkToken,
+      resetPassword : this.resetPassword,
       changepassword: this.changePassword,
       showLoader : this.showLoader,
       hideLoader : this.hideLoader,
@@ -406,10 +418,10 @@ class App extends Component {
                       <AdminPrivateRoute path="/viewadmin" permission="VIEWADMIN" component={ViewAdmin} />
                       <AdminPrivateRoute path="/userprofile" permission="VIEWUSER" component={UserProfile} />
                   
-                  {<Route path="/forgot_password" component={ForgotPassword} />}
-                  {<Route path="/verifytoken" component={VerifyToken} />}
-                  {<Route path="/verifylinktoken" component={VerifyLinkToken} />}
-                  {<Route path="/resetpassword" component={ResetPassword} />}
+                  {<Route path="/forgot-password" component={ForgotPassword} />}
+                  {<Route path="/verify-token" component={(props)=> this.state.accepttoken ?  <VerifyToken {...props} /> : <Redirect to="/login" /> } />}
+                  {<Route path="/vlt" component={VerifyLinkToken} />}
+                  {<Route path="/reset-password" component={(props)=> this.state.enablereset ? <ResetPassword {...props} /> : <Redirect to="/login" /> } />}
                   {<Route path="/signup" component={SignUp} />}
                   {<NotLoggedInRoute path="/login" component={Login} />}
                   {<Route path="/forbidden" component={Forbidden} />}

@@ -31,12 +31,7 @@ class ResetPassword extends Component {
         if(!Validators.validatePassword(newpassword,1).status)err = Validators.validatePassword(newpassword,1).message;
         else if(newpassword !== confirmnewpwd)  err = "Password does not match!"
         if(!err) {
-            const headers = new Headers();
-            headers.append('API-KEY',APIKEY);
-            let form = new FormData();
-            form.append("userid", this.state.user.userid);
-            form.append("password", newpassword);
-            const res = await fetch(HTTPURL + 'user/updatepassword', { method: 'POST',body: form,  headers }).then(response => response.json())
+            const res = await this.state.resetPassword(newpassword);
             if(res.status){
                 this.state.showAlert('success',res.message);
                 this.setState({ newpassword: '', confirmnewpwd: ''});
@@ -48,7 +43,7 @@ class ResetPassword extends Component {
 
     render() {
         return (
-            <div className="container">
+            <div className="container animated fadeIn">
                 <div className="row col-lg-6 col-md-8 col-sm-10 col-xs-12 mx-auto cent">
 
                     <div className="card bg-light shadow border-0 py-3">

@@ -24,6 +24,15 @@
       return $this->getUser('WHERE( email = ? OR username = ? )AND status = ? ', 'ssi', [$loginId,$loginId,$status]);
     }
 
+    public function getUserByToken($token,$status = 1 )
+    {
+      return $this->getUser('WHERE token = ? AND status = ? ', 'si', [$token,$status]);
+    }
+    public function getUserByStringToken($token,$status = 1 )
+    {
+      return $this->getUser('WHERE hfield = ? AND status = ? ', 'si', [$token,$status]);
+    }
+
     public function getUserByTelephone($telephone,$status = 1)
     {
       return $this->getUser('WHERE telephone = ? AND status = ?', 'si', [$telephone,$status]);

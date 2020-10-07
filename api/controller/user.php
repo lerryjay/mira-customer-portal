@@ -237,18 +237,10 @@
     public function forgotpassword()
     {
       extract($_POST);
-      $email = isset($email) ? $email : '';
-      if(Validate::email($email)){
-        $response = [
-          'status'=>false,
-          'message'=>'Please enter username or email to reset password!'
-        ];
-        $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode($response));
-      }
+      $loginid = isset($loginid) ? $loginid : '';
       loadModel('user');
       $this->userModel = new UserModel();
-      $user = $this->userModel->getUserByLoginId($email);
+      $user = $this->userModel->getUserByLoginId($loginid);
       if(!$user){
         $response = [
           'status'=>false,
@@ -257,10 +249,10 @@
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode($response));
       }
-      $token = 123342;
+      $token = rand(100000,999999);
       $tokenexpdate = date("Y-m-d", strtotime("+ 30minutes"));
       $tokenexptime = date("H:i:s", strtotime("+ 30minutes"));
-      $updated =   $this->userModel->updateUser($user['id'],['token'=>$token,'tokenexpdate'=>$tokenexpdate,'tokenexptime'=>$tokenexptime]);
+      $updated =   $this->userModel->updateUser($user['id'],['token'=>$token,'tokenexpdate'=>$tokenexpdate,'tokenexptime'=>$tokenexptime,'hfield'=>md5($token)]);
       if($updated){
         // Alert::         ($user['email'],'Password reset token',"<b>$token</b>");
         $response = [
@@ -340,25 +332,18 @@
      **/
     public function verifytoken()
     {
-      $response = [
-        'status'=>false,
-        'message'=>'Invalid userid'
-      ];
       extract($_POST);
-      if(!isset($userid)){
-        $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode($response));
-      }
-
+      $loginid = $loginid ?? '';
+      $token   = $token ?? '';
       if(!isset($token) || Validate::string($token,false,true)){
         $response['message'] = isset($token) ? Validate::string($token) : 'Please provide token';
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode($response));
       }
 
-      $user = $this->userModel->getUserById($userid);
+      $user =  $this->userModel->getUserByLoginId($loginid) ?: $this->userModel->getUserByStringToken($token); ;
       if($user){
-        if($user['token'] != $token || date("Y-m-d") > date("Y-m-d", strtotime($user['tokenexpdate']))  || date("H:i:s") > date("H:i:s", strtotime($user['tokenexptime']))) $response['message'] = 'Invalid token!';
+        if(($user['token'] != $token && $user['hfield'] != $token) || date("Y-m-d") > date("Y-m-d", strtotime($user['tokenexpdate']))  || date("H:i:s") > date("H:i:s", strtotime($user['tokenexptime']))) $response['message'] = 'Invalid token!';
         else{
           $response = [
             'status'=>true,
@@ -387,13 +372,8 @@
       ];
 
       extract($_POST);
-
-      if(!isset($userid)){
-        $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode($response));
-      }
-
-      $userId = $userid;
+      $token  = $token ?? '';
+      $loginId  = $loginid ?? '';
 
       if(!isset($password) || Validate::password($password)){
         $response['message'] = isset($password) ? Validate::password($password) : 'Please enter new password';
@@ -407,24 +387,18 @@
         $this->setOutput(json_encode($response));
       }
 
-      $user = $this->userModel->getUserById($userId);
+      $user = $this->userModel->getUserByLoginId($loginId) ?: $this->userModel->getUserByStringToken($token);
       if($user){
-        if($user['token'] != $token || date("Y-m-d") > date("Y-m-d", strtotime($user['tokenexpdate']))  || date("H-i-s") > date("Y-m-d", strtotime($user['tokenexptime']))) $response['message'] = 'Invalid token!';
+        if(($user['token'] != $token && $user['hfield'] != $token) || date("Y-m-d") > date("Y-m-d", strtotime($user['tokenexpdate']))  || date("H-i-s") > date("Y-m-d", strtotime($user['tokenexptime']))) $response['message'] = 'Invalid token!';
         else{
-          $updated = $this->userModel->updatePassword($userId,$password);
+          $password  = $password = $this->encryptPassword($password);
+          $updated   = $this->userModel->updateUser($user['id'],['password'=>$password,'token'=>'']);
           if($updated){
-            $response = [
-              'status'=>true,
-              'message'=>'Password updated!'
-            ];
-          }else{
-            $response['message'] = 'Password update failed';
-          }
-          
+            $response = [ 'status'=>true,'message'=>'Password updated!' ];
+          }else $response['message'] = 'Password update failed';
         }
-      }else{
-        $response['message'] = 'Account not found!';
-      }
+      }else $response['message'] = 'Account not found!';
+      
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     }

@@ -8,40 +8,47 @@ class VerifyLinkToken extends Component {
         super(props);
         this.state = {
             ...this.props,
-            loading:false,
+            loading:true,
             valid : false,
             tokenError : ''
         };
     }
 
-    async componentDidMount(){
-        this.setState({ loading : true });
+    verifytoken = async ()=>{
         const token = this.props.location.pathname.split("/")[2];
-        const res = await this.state.VerifyLinkToken(token);
-        if(res.status) this.setState({ loading : false, valid : true });
-        else  this.setState({ loading : false, valid : false });
+        if(token != null && token.length > 0){
+            const res = await this.state.verifyLinkToken(token);
+            if(res.status) this.setState({ loading : false, valid : true });
+            else  this.setState({ loading : false, valid : false });
+        }else this.setState({ loading : false, valid : false,token : 'Invalid reset token' });
+    }
+
+     componentDidMount(){
+         this.verifytoken();
     }
 
     render() {
         return (
             <div>
-                <div className="container">
+                <div className="container animated fadeIn">
                     <div className="row form">
                         <div className=" col-lg-5 col-md-8 col-sm-10 col-xs-12 mx-auto">
 
                             <div className="card bg-light shadow py-3 border-top-green">
                                 <div className="card-body py-lg-5 text-muted text-center ">
                                     <div className="mb-3">
-                                        <i className="fa fa-check-circle fa-4x bg-white text-success rounded-circle"></i>
+                                        {
+                                            !this.state.loading && <i className={`fa fa-4x ${ this.state.valid ? 'fa-check-circle text-success' :  'fa-times-circle text-danger'  } bg-white  rounded-circle`}></i>
+                                        }
                                     </div>
                                     {
-                                        !this.state.loading && <p className="text-dnager mb-3"> Verifying token ...</p>
+                                        this.state.loading && <h4 className=" mb-3"> Verifying...</h4>
                                     }
                                     {
-                                        !this.state.loading && !this.state.valid && <p className="text-dnager mb-3"> Token verification failed! {this.state.tokenError }</p>
+                                        !this.state.loading && !this.state.valid && <h5 className="mb-3"> Token verification failed! {this.state.tokenError }</h5>
                                     }
                                     {
-                                        !this.state.loading && this.state.valid && <p className="text-success mb-3"> Congratulations, the link has been verified succesfully! You can now proceed to reset your password.</p>
+                                        !this.state.loading && this.state.valid && <p className="text-success my-5" style={{ fontSize:'15px'}}> Congratulations, the link has been verified succesfully! You can now proceed to reset your password.</p>
                                     }
                                     {this.state.loading ?
                                         <button type="submit" className="btn btn-sm btn-primary">
@@ -49,10 +56,10 @@ class VerifyLinkToken extends Component {
                                                 <span className="sr-only">Loading...</span>
                                             </div>
                                         </button>
-                                        : <Link to="/resetpassword" className="btn btn-sm btn-success px-5 py-2">
-                                            <i className="fas fa-paper-plane fa-fw mr-2"></i>
-                                            CONTINUE
-                                        </Link>
+                                        :  this.state.valid ? <Link to="/reset-password" className="btn btn-sm btn-success mt-2 px-5 py-2">
+                                            Reset Password
+                                            <i className="fas fa-arrow-right fa-fw ml-5"></i>
+                                        </Link>: <Link to="/login" className="btn btn-link">Back to login</Link>
                                     }
                                 </div>
                             </div>

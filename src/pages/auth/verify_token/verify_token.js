@@ -22,7 +22,12 @@ class VerifyToken extends Component {
     }
 
     verifyToken = async e =>{
-        await this.state.verifyToken(this.state.token);
+        e.preventDefault();
+        const res = await this.state.verifyToken(this.state.token);
+        if(res.status){
+            this.state.showAlert('success','Token validated. Please procees to reset your password');
+            this.props.history.push('reset-password');
+        }else this.state.showAlert('danger',res.message);
     }
 
 

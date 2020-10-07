@@ -72,6 +72,7 @@ import AddStudent from "./pages/training/students/addstudent"
 import Students from "./pages/training/students/students"
 import ViewStudent from "./pages/training/students/viewstudent"
 import UpdateStudent from "./pages/training/students/updatestudent"
+import ViewStudentCourse from "./pages/training/students/viewsudentcourse"
 
 
 
@@ -364,16 +365,19 @@ class App extends Component {
                       <PrivateRoute path="/apilogs"  component={UserApiLogs} />
                       <PrivateRoute path="/transactions"  component={Transactions} />
                       <PrivateRoute path="/services"  component={Services} />
+
                       <PrivateRoute path="/coursepage"  component={CoursePage} />
                       <PrivateRoute path="/addcourse"  component={AddCourse} />
                       <PrivateRoute path="/viewcourse"  component={ViewCourse} />
                       <PrivateRoute path="/editcourse"  component={UpdateCourse} />
                       <PrivateRoute path="/courses"  component={Courses} />
+
                       <PrivateRoute path="/studentpage"  component={StudentPage} />
                       <PrivateRoute path="/addstudent"  component={AddStudent} />
                       <PrivateRoute path="/viewstudent"  component={ViewStudent} />
                       <PrivateRoute path="/editstudent"  component={UpdateStudent} />
                       <PrivateRoute path="/students"  component={Students} />
+                      <PrivateRoute path="/viewstudentcourse"  component={ViewStudentCourse} />
                       
 
                       <UserPrivateRoute path="/clientproducts" component={ClientProducts} />

@@ -62,6 +62,11 @@ body{
   font-weight: 550;
 }
 
+.hover.btn-link:hover {
+  color: #eff7ff !important;
+  text-decoration: underline;
+}
+
 @media (prefers-color-scheme: dark) {
   /* defaults to dark theme */
   div.home {
@@ -454,7 +459,7 @@ button:focus {
   transition: all ease-in-out 0.5s;
 }
 .table-responsive{
-  overflow-x: scroll !important;
+  overflow-x: auto !important;
   /* min-height: 100vh !important; */
 }
 div.home {
@@ -1105,3 +1110,14 @@ select {
 #chat small{
   font-size: 11px;
 }
+
+#studentPix div.card-header {
+  background-color: #28166f ;
+  border-color: #28166f ;
+  padding: 63px 0;
+}
+.custom-show{
+  transition: all 5s ease-in-out !important;
+}
+
+

@@ -5,16 +5,9 @@ import { withContext } from "../../../common/context";
 import avatar from "../../../assets/images/addstudent.png";
 
 
-class viewcourse extends Component {
+class viewstudentcourse extends Component {
     state = {
-      courses: [],
-      title: '',
-      description: '',
-      cost: '',
-      date:'',
-      durations:'',
-      imageurl: '',
-      courseid: '',
+      course: [],
       showmodal: true
     }
 
@@ -23,27 +16,25 @@ class viewcourse extends Component {
     }
     
     async getCourse() {
-        const headers = new Headers();
-        headers.append("API-KEY", APIKEY);
-        const res = await fetch(HTTPURL + `training/listcourses`, {
-            headers: headers,
-        }).then((response) => response.json());
-        if (res["status"]) {
-            this.setState({ courses: res["data"]});
+       
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
 
-            const courseid = this.props.location.pathname.split("/")[2];
-    
-            const selectedCourse = this.state.courses.find(course => course.id == courseid);
-            await this.setState({
-              title: selectedCourse.title,
-              description: selectedCourse.description,
-              cost: selectedCourse.cost,
-              date: selectedCourse.createdat,
-              durations: selectedCourse.durations,
-              imageurl: selectedCourse.imageurl,
-              courseid: selectedCourse.id
-            });
-        }
+    const studentid = this.props.location.pathname.split("/")[3];
+    const courseid = this.props.location.pathname.split("/")[2];
+
+    const res = await fetch(HTTPURL + `training/studentprofile?studentid=${studentid}&userid=${this.props.user.userid}`, {
+      headers: headers,
+    }).then((response) => response.json());
+    if (res["status"]) {
+         const courses = res["data"].courses
+         const selectedCourse = courses.find(
+          (course) => course.id === courseid
+        );
+        this.setState({
+          course : selectedCourse
+        });
+  }
     }
 
     closedeleteModal() {
@@ -52,18 +43,9 @@ class viewcourse extends Component {
     }
   
      showdeleteModal(courseid) {
-      const selectedCourse = this.state.courses.find(
+      const selectedCourse = this.state.course.courses.find(
         (course) => course.id === courseid
       );
-      this.setState({
-        title: selectedCourse.title,
-        description: selectedCourse.description,
-        cost: selectedCourse.cost,
-        date: selectedCourse.createdat,
-        durations: selectedCourse.durations,
-        imageurl: selectedCourse.imageurl,
-        courseid: selectedCourse.id
-      });
 
       let modal = document.getElementById("suspendModal")
       modal.style.display = "block";
@@ -90,9 +72,9 @@ class viewcourse extends Component {
         
    <div className="col-md-4">
           <div className="card">
-          {this.state.imageurl 
+          {this.state.course.imageurl 
                   ?<img
-                  src={FILEURL + this.state.imageurl }
+                  src={FILEURL + this.state.course.imageurl }
                   alt=""
                   className="image_sidebar"
                   height="170px"
@@ -110,7 +92,7 @@ class viewcourse extends Component {
                 }
             <div className="card-body">
               <h5 className="card-title">
-                {this.state.title}
+                {this.state.course.title}
                 </h5>
             </div>
           </div>
@@ -121,18 +103,19 @@ class viewcourse extends Component {
                   <div className="card-body">
                     <h4>Course Description</h4>
                     <p>
-                    {this.state.description}
+                    {this.state.course.description}
                     </p>
             <ul className="list-group list-group-flush">
-                    <li className="list-group-item"><i className="fa fa-calendar text-purple mr-3"></i> Duration <span className="float-right"> {this.state.duration}</span> </li>
-                    <li className="list-group-item"><i className="fa fa-credit-card text-purple mr-3"></i> Fees <span className="float-right">&#8358; {this.state.cost}</span> </li>
-                    <li className="list-group-item"><i className="fa fa-users text-purple mr-3"></i> Participants <span className="float-right"> {this.state.participant}</span> </li>
+                    <li className="list-group-item"><i className="fa fa-credit-card text-purple mr-3"></i> Fees <span className="float-right">&#8358;{this.state.course.cost}</span> </li>
+                    <li className="list-group-item"><i className="fa fa-wallet text-purple mr-3"></i> Payment Status <span className="float-right">{this.state.course.paymentstatus}</span> </li>
+                    <li className="list-group-item"><i className="fab fa-cc-paypal text-purple mr-3"></i>Pay Option <span className="float-right">{this.state.course.payoption}</span> </li>
+                    <li className="list-group-item"><i className="fa fa-calendar-alt text-purple mr-3"></i> Payment Date <span className="float-right">{this.state.course.paymentdate}</span> </li>
                   
             </ul>
             </div>
                   <div className="col-md-12">
 
-                      <Link to={() => `/editcourse/${this.state.courseid}`}>
+
                         <button
                           type="button"
                           className="btn mt-3 m-2 btn-primary mb-2"
@@ -141,14 +124,7 @@ class viewcourse extends Component {
                             &nbsp;Edit&nbsp;Course&nbsp;
                           </small>
                         </button>
-                      </Link>
-                      <Link
-                        onClick={() =>
-                          this.showdeleteModal(
-                            this.state.courseid
-                          )
-                        }
-                      >
+                        
                       <button
                         type="button"
                         className="btn mt-3 m-2 btn-danger mb-2"
@@ -160,7 +136,7 @@ class viewcourse extends Component {
                           &nbsp;Delete Course&nbsp;
                         </small>
                       </button>
-                      </Link>
+                      
                 </div>
 
                 </div>
@@ -171,7 +147,7 @@ class viewcourse extends Component {
                 </div>
 
                 {/* Delete Course */}
-              {this.state.showmodal ? (
+              {this.state.course.showmodal ? (
                 <div id="suspendModal" class="modal">
                   {/* Modal content  */}
                   <div class="modal-content modal-del text-center p-5">
@@ -194,7 +170,7 @@ class viewcourse extends Component {
                         </button>
                       </div>
                       <div className="col-md-6">
-                        {this.state.loading ? (
+                        {this.state.course.loading ? (
                           <button
                             type="submit"
                             className="btn btn-block btn-danger"
@@ -210,7 +186,7 @@ class viewcourse extends Component {
                         ) : (
                           <button
                             onClick={() =>
-                              this.deleteCourse(this.state.courseid)
+                              this.deleteCourse(this.state.course.courseid)
                             }
                             className="btn btn-danger btn-block"
                           >
@@ -228,4 +204,4 @@ class viewcourse extends Component {
         )
     }
 }
-export default withContext(viewcourse);
+export default withContext(viewstudentcourse);

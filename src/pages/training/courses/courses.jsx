@@ -146,7 +146,7 @@ class Tickets extends Component {
         }
 
           <div className="col-md-12 col-sm-12 box1 mb-3" id="profile">
-            {this.state.tickets.length === 0 ? (
+            {this.state.totalLists.length === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No course records!</h6>
               </div>

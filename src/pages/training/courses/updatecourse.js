@@ -75,10 +75,9 @@ class UpdateCourse extends Component {
         }).then((response) => response.json())
         this.setState({ loading: false });
         if (res.status) {
-          this.getCourses();
           this.state.showAlert('success',res.message)
-          let modal = document.getElementById("updateModal");
-          modal.style.display = "none";
+          this.props.history.goBack();
+
         }
         else{
           this.state.showAlert('danger', res.message);

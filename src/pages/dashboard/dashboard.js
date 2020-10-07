@@ -268,10 +268,10 @@ async getClients() {
      
        
           <div className="row  mt-3 mx-4 justify-content-center mx-2">
-          <div className="col-md-8  mt-2 card-body shadow home-chart">
+          <div className="col-md-8  box1 mt-2 card-body shadow home-chart">
             <Chart chartTitle="Ticket Statistics"/>
           </div>
-            <div className="col-md-4">
+            <div className="col-md-4 box2">
               <div className="row">
                 <Minicards title="Total Tickets" total={this.state.tickets.length} icon="fab fa-buffer" iconBackground="textprimary" />
                 <Minicards title="Resolved Tickets" total={this.state.resolved} icon="fa fa-check-circle" iconBackground="textprimary" />
@@ -452,10 +452,10 @@ async getClients() {
 
      
           <div className="row  mt-3 mx-4 justify-content-center mx-2">
-          <div className="col-md-8  mt-2 card-body shadow home-chart">
+          <div className="col-md-8 box1  mt-2 card-body shadow home-chart">
             <Chart chartTitle="Ticket Statistics"/>
           </div>
-            <div className="col-md-4">
+            <div className="col-md-4 box2">
               <div className="row">
                 <Minicards title="Total Tickets" total={this.state.tickets.length} icon="fab fa-buffer" iconBackground="text-primary" />
                 <Minicards title="Resolved Tickets" total={this.state.resolved} icon="fa fa-check-circle" iconBackground="text-primary" />
@@ -574,10 +574,10 @@ async getClients() {
 
         { this.state.user.role ==='admin' &&
           <div className="row  mt-3 mx-4 justify-content-center mx-2">
-          <div className="col-md-8  mt-2 card-body shadow home-chart">
+          <div className="col-md-8 box1 mt-2 card-body shadow home-chart">
             <Chart chartTitle="Client Statistics"/>
           </div>
-            <div className="col-md-4">
+            <div className="col-md-4 box2">
               <div className="row">
                 <Minicards title="Total Clients" total={this.state.clients.length} icon="fa fa-users" iconBackground="text-orangered" />
                 <Minicards title="Active Clients" total={this.state.activeclient} icon="fa fa-check-circle" iconBackground="text-orangered" />
@@ -599,10 +599,10 @@ async getClients() {
           </div>
   
           <div className="row  mt-3 mx-4 justify-content-center mx-2">
-          <div className="col-md-8  mt-2 card-body shadow home-chart">
+          <div className="col-md-8 box1 mt-2 card-body shadow home-chart">
             <Chart chartTitle="API Statistics"/>
           </div>
-            <div className="col-md-4">
+            <div className="col-md-4 box2">
               <div className="row">
                 {
                   this.state.servicesStatistics.map(item=><Minicards title={item.code} total={item.count} icon="fa fa-comments" iconBackground="text-success" />)

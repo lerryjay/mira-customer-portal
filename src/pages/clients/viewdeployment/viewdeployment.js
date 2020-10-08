@@ -426,9 +426,9 @@ class viewclientproduct extends Component {
                               className="m-2"
                               alt="PDF logo"
                             />
-                            <Link onClick={() => this.deleteFiles(index, item)}>
+                            <span onClick={() => this.deleteFiles(index, item)}>
                                 <i className="fa fa-trash text-danger"></i>
-                            </Link>
+                            </span>
                           </div>
                         )}
                       <br /> {item}

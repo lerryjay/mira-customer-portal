@@ -22,7 +22,7 @@ class UpdateAdmin extends Component {
             state:'',
             permissions: [],
             imageurl: '',
-            successmessage: ''
+            successmessage: '',
         }
         this.permissions = ADMINPERMISSIONS;
     }
@@ -136,7 +136,6 @@ class UpdateAdmin extends Component {
 
     handleCheck =  ({ target }) => {
         const { permissions } = this.state;
-        console.log('clicked me ', permissions);
         const index = permissions.findIndex(item=>item === target.value);
         if (index > -1) {
             permissions.splice(index,1);
@@ -188,12 +187,12 @@ class UpdateAdmin extends Component {
                                         <div className="form-group col-md-6 mb-3">
                                             <label htmlFor="" className="sr-only">Lastname</label>
                                             <input type="text" className="form-control form-control-sm" name="lastname" disabled
-                                                id="lastname" value={this.state.lastname}  placeholder="Name" autoComplete="lastname" onChange={this.handleInputChange} />
+                                                id="lastname" value={this.state.lastname}  placeholder="Lastname" autoComplete="lastname" onChange={this.handleInputChange} />
                                         </div>
                                         <div className="form-group col-md-6 mb-3">
                                             <label htmlFor="" className="sr-only">Firstname</label>
                                             <input type="text" className="form-control form-control-sm" name="firstname" disabled
-                                                id="firstname" value={this.state.firstname} placeholder="Name" autoComplete="firstname" onChange={this.handleInputChange} />
+                                                id="firstname" value={this.state.firstname} placeholder="Firstname" autoComplete="firstname" onChange={this.handleInputChange} />
                                         </div>
                                     </div>
 
@@ -206,7 +205,7 @@ class UpdateAdmin extends Component {
                                             <div className="form-group col-md-6 mb-3">
                                                 <label htmlFor="" className="sr-only">Phone-number</label>
                                                 <input type="text" className="form-control form-control-sm" name="telephone"
-                                                    id="telephone" value={this.state.telephone} placeholder="090 ......." disabled autoComplete="tel" onChange={this.handleInputChange} />
+                                                    id="telephone" value={this.state.telephone} placeholder="090 ......." disabled autoComplete="telephone" onChange={this.handleInputChange} />
                                             </div>
                                         
 
@@ -216,14 +215,14 @@ class UpdateAdmin extends Component {
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Country</label>
                                                 <input type="text" className="form-control form-control-sm" name="country"
-                                                    id="country" value={this.state.country} placeholder="Country" disabled autoComplete="country" onChange={this.handleInputChange} />
+                                                    id="country" value={this.state.country || ''} placeholder="Country" disabled autoComplete="country" onChange={this.handleInputChange} />
                                             </div>
                                         </div>
                                         <div className="col-md-6 mb-3">
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">State</label>
                                                 <input type="text" className="form-control form-control-sm" name="state"
-                                                    id="state" value={this.state.state} placeholder="State" disabled autoComplete="state" onChange={this.handleInputChange} />
+                                                    id="state" value={this.state.state || ''} placeholder="State" disabled autoComplete="state" onChange={this.handleInputChange} />
                                             </div>
                                         </div>
                                     </div>

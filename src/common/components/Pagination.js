@@ -29,7 +29,7 @@ const Pagination = ( {numberPerPage, currentPage, totalLists, pageNumbers, updat
 
 
   return (
-        pageNumbers &&<div className="pagination">
+        pageNumbers.length > 0 &&<div className="pagination">
           <a href="#">&laquo;</a>
           {pageNumbers.map((pageNumber,index) => {
             if(pageNumber == 1 ) {

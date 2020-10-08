@@ -257,8 +257,9 @@ class UpdateCourse extends Component {
                                             name="gender"
                                             id="gender"
                                             className=" form-control form-select form-select-sm"
+                                            defaultValue=""
                                             >
-                                            <option value="" selected disabled> Gender</option>
+                                            <option value=""  disabled> Gender</option>
                                             <option value="male">Male</option>
                                             <option value="female">Female</option>
 
@@ -275,8 +276,9 @@ class UpdateCourse extends Component {
                                             name="companycountryid"
                                             id="companycountryid"
                                             className=" form-control form-select form-select-sm"
+                                            defaultValue=""
                                             >
-                                            <option value="" selected disabled>
+                                            <option value=""  disabled>
                                                 Company&nbsp;Country&nbsp;
                                             </option>
 
@@ -296,8 +298,9 @@ class UpdateCourse extends Component {
                                             name="companystateid"
                                             id="companystateid"
                                             className=" form-control form-select form-select-sm"
+                                            defaultValue=""
                                             >
-                                            <option value="" selected disabled>
+                                            <option value=""  disabled>
                                                 Company&nbsp;State&nbsp;
                                             </option>
 

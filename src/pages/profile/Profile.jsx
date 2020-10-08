@@ -216,14 +216,14 @@ class Profile extends Component {
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Country</label>
                                                 <input type="text" className="form-control form-control-sm" name="country"
-                                                    id="country" value={this.state.country} placeholder="Country" disabled autoComplete="country" onChange={this.handleInputChange} />
+                                                    id="country" value={this.state.country || ''} placeholder="Country" disabled autoComplete="country" onChange={this.handleInputChange} />
                                             </div>
                                         </div>
                                         <div className="col-md-6 mb-3">
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">State</label>
                                                 <input type="text" className="form-control form-control-sm" name="state"
-                                                    id="state" value={this.state.state} placeholder="State" disabled autoComplete="state" onChange={this.handleInputChange} />
+                                                    id="state" value={this.state.state || ''} placeholder="State" disabled autoComplete="state" onChange={this.handleInputChange} />
                                             </div>
                                         </div>
                                     </div>

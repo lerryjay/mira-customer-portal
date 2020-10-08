@@ -21,7 +21,10 @@ class Services extends Component {
       selectedService: '',
       title: '',
       code: '',
-      cost: ''
+      cost: '',
+      edittitle: '',
+      editcode: '',
+      editcost: '',
     };
   }
   

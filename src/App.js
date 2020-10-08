@@ -175,7 +175,6 @@ class App extends Component {
     const form = new FormData();
     form.append('token',token);
     form.append('loginid',this.state.loginid );
-    console.log('login id', this.state.loginid);
     const res = await fetch(`${HTTPURL}user/verifytoken`,{ method : 'POST',body : form, headers  }).then(res=>res.json());
     if(res.status) await this.setState({ enablereset : true,token,accepttoken : false });
     this.setState({ loading : false });

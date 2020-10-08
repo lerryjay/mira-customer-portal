@@ -202,7 +202,7 @@ class Tickets extends Component {
                       <tbody>
                         {this.state.currentLists.map((ticket, index) => {
                           return (
-                            <tr>
+                            <tr key={index}>
                               <td>#{ticket.id}</td>
                               {this.state.user.role == "admin" && (
                                 <td onClick={this.handleRoute}>
@@ -285,7 +285,7 @@ class Tickets extends Component {
                         id="page"
                         className=" form-control form-select form-select-sm"
                       >
-                        <option value="10" selected>
+                        <option value="10" defaultValue>
                           10
                         </option>
                         <option value="20">20</option>
@@ -330,11 +330,11 @@ class Tickets extends Component {
                 className="form-control"
               />
               <datalist id="customers">
-                {this.state.users.map((user) => (
-                  <option value={user.firstname + " " + user.lastname} />
+                {this.state.users.map((user,i) => (
+                  <option key={i} value={user.firstname + " " + user.lastname} />
                 ))}
-                {this.state.clients.map((client) => (
-                  <option value={client.businessname} />
+                {this.state.clients.map((client,i) => (
+                  <option key={i} value={client.businessname} />
                 ))}
               </datalist>
 
@@ -440,8 +440,9 @@ class Tickets extends Component {
                     name="type"
                     id="type"
                     className=" form-control form-select form-select-sm"
-                  >
-                    <option value="" disabled selected>
+                    defaultValue=""
+                    >
+                      <option value="">
                       -- Select --
                     </option>
                     <option value="complaint">Complaint</option>

@@ -173,7 +173,7 @@ class Tickets extends Component {
                       <tbody>
                         {this.state.currentLists.map((course, index) => {
                           return (
-                            <tr>
+                            <tr key={index}>
                               <td>
                                   <img style={{width: '50px'}} src={FILEURL + course.imageurl} onError={(e) => { e.target.onerror = null; e.target.src = placeholder }} />
                               </td>
@@ -223,8 +223,9 @@ class Tickets extends Component {
                         name="page"
                         id="page"
                         className=" form-control form-select form-select-sm"
+                        defaultValue="10"
                       >
-                        <option value="10" selected>
+                        <option value="10" >
                           10
                         </option>
                         <option value="20">20</option>
@@ -253,9 +254,9 @@ class Tickets extends Component {
 
              {/* Update module info */}
              {this.state.showmodal ? (
-              <div id="updateModal" class="modal">
+              <div id="updateModal" className="modal">
                 {/* Modal content  */}
-                <div class="modal-content pt-5 pb-2">
+                <div className="modal-content pt-5 pb-2">
                   <form onSubmit={this.handleUpdate}>
                     <div className="card">
                       <div className="card-header bg-medium font-weight-bold text-dark text-center">
@@ -369,13 +370,13 @@ class Tickets extends Component {
 
             {/* Delete Module Info */}
             {this.state.showmodal ?
-              <div id="deleteModal" class="modal">
+              <div id="deleteModal" className="modal">
                 {/* Modal content  */}
-                <div class="modal-content modal-del text-center p-5">
+                <div className="modal-content modal-del text-center p-5">
                   {/* <div className="delete-icon">
                           &times;
                       </div> */}
-                  <i class="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
+                  <i className="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
                   <h3>Are you sure?</h3>
                   <p> Do you really want to delete this service?</p>
                   <div className="row">

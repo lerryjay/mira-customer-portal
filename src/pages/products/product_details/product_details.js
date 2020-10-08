@@ -274,9 +274,9 @@ deleteModal(e) {
 
         {this.state.loader && (
           <div className="spin-center">
-            <span class="text-primary ">
+            <span className="text-primary ">
               <span
-                class="spinner-grow spinner-grow-sm mr-2"
+                className="spinner-grow spinner-grow-sm mr-2"
                 role="status"
                 aria-hidden="true"
               ></span>
@@ -352,7 +352,7 @@ deleteModal(e) {
               <div className="card mb-4">
                 <div className="card-body">
                   {this.state.packages.length === 0 ? (
-                    <div class="alert alert-warning" role="alert">
+                    <div className="alert alert-warning" role="alert">
                       Oops, Product module is empty!
                     </div>
                   ) : (
@@ -368,19 +368,19 @@ deleteModal(e) {
                                     </div>
                                   <div className="col-md-3 pl-0">
                                 {this.state.user.role == "admin" &&  
-                                 <span class=" float-right">
-                                  <Link onClick={() => this.infoModal(module.id)}>
+                                 <span className=" float-right">
+                                  <span onClick={() => this.infoModal(module.id)}>
                                     <i value={module.id} style={{ cursor: "pointer" }}
                                       className="fa fa-info-circle mr-1 text-info"
                                     ></i>
-                                  </Link>
-                                  <Link onClick={() => this.updateModal(module.id)}>
+                                  </span>
+                                  <span onClick={() => this.updateModal(module.id)}>
                                     <i value={module.id} style={{ cursor: "pointer" }}
                                       className="fa fa-edit mr-1 text-primary"></i>
-                                  </Link>
-                                  <Link onClick={() => this.showdeleteInfoModule(module.id)}>
+                                  </span>
+                                  <span onClick={() => this.showdeleteInfoModule(module.id)}>
                                     <i className="fa fa-trash mr text-danger"></i>
-                                  </Link>
+                                  </span>
                                 </span>
                                 }
                                     </div>
@@ -397,9 +397,9 @@ deleteModal(e) {
 
             {/* Delete Product */}
             {this.state.showmodal ?
-                <div id="myModal" class="modal">
+                <div id="myModal" className="modal">
                     {/* Modal content  */}
-                    <div class="modal-content text-center p-5">
+                    <div className="modal-content text-center p-5">
                         <i className="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
                         <h3>Are you sure?</h3>
                         <p> Do you really want to delete this file?</p>
@@ -420,9 +420,9 @@ deleteModal(e) {
 
             {/* Add New Module Modal */}
             {this.state.showmodal ? (
-              <div id="moduleModal" class="modal">
+              <div id="moduleModal" className="modal">
                 {/* Modal content  */}
-                <div class="modal-content text-center">
+                <div className="modal-content text-center">
                   <form onSubmit={this.saveModule} id="addpackage">
                     <div className="card">
                       <div className="card-header bg-medium font-weight-bold text-dark">
@@ -535,9 +535,9 @@ deleteModal(e) {
 
             {/* Show module info */}
             {this.state.showmodal ? (
-              <div id="infoModal" class="modal">
+              <div id="infoModal" className="modal">
                 {/* Modal content  */}
-                <div class="modal-content">
+                <div className="modal-content">
                   <form>
                     <div className="card">
                       <div className="card-header bg-medium font-weight-bold text-dark text-center">
@@ -562,7 +562,8 @@ deleteModal(e) {
                                 <span className="font-weight-bold">
                                   Description:
                               </span>
-                                <p>{this.state.selectedModule.description}</p>
+                              <br/>
+                                {this.state.selectedModule.description}
                               </p>
                             </div>
                           </div>
@@ -590,9 +591,9 @@ deleteModal(e) {
 
             {/* Update module info */}
             {this.state.showmodal ? (
-              <div id="updateModal" class="modal">
+              <div id="updateModal" className="modal">
                 {/* Modal content  */}
-                <div class="modal-content">
+                <div className="modal-content">
                   <form onSubmit={this.handleUpdate}>
                     <div className="card">
                       <div className="card-header bg-medium font-weight-bold text-dark text-center">
@@ -684,13 +685,13 @@ deleteModal(e) {
 
             {/* Delete Module Info */}
             {this.state.showmodal ?
-              <div id="deleteModal" class="modal">
+              <div id="deleteModal" className="modal">
                 {/* Modal content  */}
-                <div class="modal-content modal-del text-center p-5">
+                <div className="modal-content modal-del text-center p-5">
                   {/* <div className="delete-icon">
                           &times;
                       </div> */}
-                  <i class="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
+                  <i className="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
                   <h3>Are you sure?</h3>
                   <p> Do you really want to delete this file?</p>
                   <div className="row">

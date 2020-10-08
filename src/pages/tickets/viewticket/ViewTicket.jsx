@@ -161,10 +161,13 @@ class ViewTicket extends Component {
                 <p> {this.state.message} </p>
               </div>
               <div className="row">
-                {this.state.attachedFiles.map((item) => (
-                  <div className="col-6 col-md-4 col-lg-2">
+                {this.state.attachedFiles.map((item,i) => (
+                  <div className="col-6 col-md-4 col-lg-2" 
+                  key={i}>
                     {item.match(/\.(jpg|jpeg|png)$/) ? (
                       <img
+                      key={i}
+                      alt="TicketImage"
                         id="img"
                         style={{ width: "100px", height: "100px" }}
                         className="m-2"
@@ -177,6 +180,8 @@ class ViewTicket extends Component {
                       />
                     ) : (
                       <img
+                      key={i}
+                      alt="TicketImage"
                         src={pdf_placeholder}
                         onClick={(e) => this.showModal(e, item)}
                         style={{ width: "100px", height: "100px" }}
@@ -222,9 +227,9 @@ class ViewTicket extends Component {
               }}
             >
               <div id="chat">
-                {this.state.chats.map((chat) => {
+                {this.state.chats.map((chat,i) => {
                   return (
-                    <div>
+                    <div key={i}>
                       {chat.role === "admin" ? (
                         <div className="row mb-4" id="client">
                           <div className="col-md-7 col-sm-12 ">
@@ -236,9 +241,11 @@ class ViewTicket extends Component {
                               <br />
                               <small>{chat.role}</small>
                             </div>
-                            {JSON.parse(chat.files).map((file) => {
+                            {JSON.parse(chat.files).map((file,i) => {
                               return (
-                                <div className="mt-2 ml-3">
+                                <div
+                                key={i}
+                                className="mt-2 ml-3">
                                   <img src={FILEURL + file} height="50px" alt={file}/>
                                 </div>
                               );

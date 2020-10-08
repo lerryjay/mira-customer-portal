@@ -263,14 +263,12 @@ class viewclientproduct extends Component {
                     &nbsp;Update&nbsp;
                   </small>
                 </Link>
-                <Link
+                <button
                   onClick={() =>
                     this.showdeleteModal(
                       this.state.clientproductid
                     )
                   }
-                >
-                <button
                   type="button"
                   className="btn mt-3 m-2 btn-danger mb-2 rounded-0  px-5"
                 >
@@ -278,7 +276,6 @@ class viewclientproduct extends Component {
                     &nbsp;Delete
                   </small>
                 </button>
-                </Link>
               </div>
             </div>
           </div>
@@ -361,8 +358,8 @@ class viewclientproduct extends Component {
           </div>
           <div className="row">
             {this.state.modules.length > 0 ? (
-              this.state.modules.map((item) => (
-                <div className="col-md-3">
+              this.state.modules.map((item,i) => (
+                <div className="col-md-3" key={i}>
                   <p className="list-group-item">{item.name}</p>
                 </div>
               ))
@@ -401,7 +398,7 @@ class viewclientproduct extends Component {
             ? <div className="row">
                 {this.state.files.length ? (
                   this.state.files.map((item, index) => (
-                    <div className="col-md-3 col-lg-2 text-center py-2">
+                    <div className="col-md-3 col-lg-2 text-center py-2" key={index}>
                       {item.match(/\.(jpg|jpeg|png)$/) ? (
                         <div className="attached_files">
                           <img
@@ -455,14 +452,14 @@ class viewclientproduct extends Component {
 
           {/* Delete Product */}
           {this.state.showmodal ? (
-                <div id="deleteModal" class="modal">
+                <div id="deleteModal" className="modal">
                   {/* Modal content  */}
-                  <div class="modal-content modal-del text-center p-5">
+                  <div className="modal-content modal-del text-center p-5">
                     {/* <div className="delete-icon">
                           &times;
                       </div> */}
                     <i
-                      class="fa fa-exclamation-triangle fa-3x dark-red mb-2"
+                      className="fa fa-exclamation-triangle fa-3x dark-red mb-2"
                       aria-hidden="true"
                     ></i>
                     <h3>Are you sure?</h3>
@@ -520,8 +517,8 @@ class viewclientproduct extends Component {
               <div className="card-body">
                 <div className="row">
                 {
-                  this.state.productmodules.map((module) => (
-                    <div className="col-md-4">
+                  this.state.productmodules.map((module,i) => (
+                    <div className="col-md-4" key={i}>
                       <p className="list-group-item">
                         {module.name}
                         <label className="switch float-right">

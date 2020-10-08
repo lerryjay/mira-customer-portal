@@ -221,7 +221,7 @@ class api_logs extends Component {
                       <tbody>
                         {this.state.currentLists.map((request, index) => {
                           return (
-                            <tr>
+                            <tr key={index} >
                             <td className="table-padding">
                               {request.date}
                             </td>
@@ -264,7 +264,7 @@ class api_logs extends Component {
                         id="page"
                         className=" form-control form-select form-select-sm"
                       >
-                        <option value="10" selected>
+                        <option value="10" defaultValue>
                           10
                         </option>
                         <option value="20">20</option>
@@ -297,7 +297,7 @@ class api_logs extends Component {
           <form onSubmit={this.handleSearch}>
             <div className="card">
                 <div className="card-header bg-medium font-weight-bold text-dark">
-                <i class="fa fa-filter"></i> FILTER BY
+                <i className="fa fa-filter"></i> FILTER BY
                 </div>
                 <div className="p-3">
                 <label
@@ -316,11 +316,11 @@ class api_logs extends Component {
                 className="form-control"
               />
               <datalist id="customers">
-                {this.state.users.map((user) => (
-                  <option value={user.firstname + " " + user.lastname} />
+                {this.state.users.map((user,i) => (
+                  <option key={i} value={user.firstname + " " + user.lastname} />
                 ))}
-                {this.state.clients.map((client) => (
-                  <option value={client.businessname} />
+                {this.state.clients.map((client,i) => (
+                  <option key={i} value={client.businessname} />
                 ))}
               </datalist>
 
@@ -425,8 +425,9 @@ class api_logs extends Component {
                     name="type"
                     id="type"
                     className=" form-control form-select form-select-sm"
+                    defaultValue=""
                   >
-                    <option value="" disabled selected>
+                    <option value="">
                       -- Select --
                     </option>
                     <option value="successful">Successful</option>

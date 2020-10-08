@@ -1,8 +1,8 @@
-// export const HTTPURL =  "http://192.168.1.4:8080/ticketapp/api/"; 
 // export const HTTPURL_TRN =  "http://192.168.1.4:8080/training_portal/api/"; 
-// export const FILEURL = "http://192.168.1.4:8080/ticketapp/"; 
-export const HTTPURL =  'http://localhost/ticketapp/api/';
-export const FILEURL = 'http://localhost/ticketapp/';
+export const HTTPURL =  "http://192.168.1.4:8080/ticketapp/api/"; 
+export const FILEURL = "http://192.168.1.4:8080/ticketapp/"; 
+// export const HTTPURL =  'http://localhost/ticketapp/api/';
+// export const FILEURL = 'http://localhost/ticketapp/';
 
 // export const HTTPURL =  "https://www.miratechnologies.com.ng/ticketapp/api/"; 
 // export const FILEURL = "https://www.miratechnologies.com.ng/ticketapp/";

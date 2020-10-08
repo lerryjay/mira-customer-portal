@@ -289,8 +289,8 @@ class UpdateAdmin extends Component {
                                 <div className="card-body">
                                     <div className="row">
                                     {
-                                    this.permissions.map((permission) => (
-                                        <div className="col-md-3">
+                                    this.permissions.map((permission,i) => (
+                                        <div className="col-md-3" key={i}>
                                           <p className="list-group-item px-2" style={{ fontSize: "12px"}}>
                                             {permission.name}
                                             <label className="switch float-right">
@@ -298,9 +298,9 @@ class UpdateAdmin extends Component {
                                                 type="checkbox"
                                                 value={permission.name}
                                                 onChange={this.handleCheck}
-                                                checked={ this.state.permissions.findIndex(item=>item === permission.name) > -1}
+                                                checked={ this.state.permissions.findIndex( (item,i)=>item === permission.name) > -1}
                                               />
-                                              <span className="slider round"></span>
+                                              <span key={i} className="slider round"></span>
                                             </label>
                                           </p>
                                         </div>

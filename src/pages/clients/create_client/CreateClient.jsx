@@ -200,13 +200,13 @@ class CreateClient extends Component {
                                             id="companycountryid"
                                             className=" form-control form-select form-select-sm"
                                             >
-                                            <option value="" selected disabled>
+                                            <option value="">
                                                 Company&nbsp;Country&nbsp;
                                             </option>
 
-                                            {this.state.countries.map((country) => {
+                                            {this.state.countries.map((country,i) => {
                                                 return (
-                                                <option value={country.country_id}>{country.name}</option>
+                                                <option key={i} value={country.country_id}>{country.name}</option>
                                                 );
                                             })}
                                             </select>
@@ -221,13 +221,13 @@ class CreateClient extends Component {
                                             id="companystateid"
                                             className=" form-control form-select form-select-sm"
                                             >
-                                            <option value="" selected disabled>
+                                            <option value="">
                                                 Company&nbsp;State&nbsp;
                                             </option>
 
-                                            {this.state.states.map((state) => {
+                                            {this.state.states.map((state,i) => {
                                                 return (
-                                                <option value={state.states_id}>{state.name}</option>
+                                                <option key={i} value={state.states_id}>{state.name}</option>
                                                 );
                                             })}
                                             </select>

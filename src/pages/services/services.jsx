@@ -214,13 +214,13 @@ class Services extends Component {
           
          <div className="col-md-12">
          <div className="row mt-4 d-flex justify-content-end mr-3" >
-            <Link onClick={() => this.showaddService()}>
+            <span onClick={() => this.showaddService()}>
                   <button type="button" className="btn btn-sm btn-primary new_product">
                       <i className="fas fa-plus" aria-hidden="true">
                           <small className="newproduct" style={{ color: '#fff' }}>&nbsp;Add&nbsp;Service</small>
                       </i>
                   </button>
-              </Link>
+              </span>
           </div>
          </div>
           
@@ -254,7 +254,7 @@ class Services extends Component {
                       <tbody>
                         {this.state.currentLists.map((service, index) => {
                           return (
-                            <tr>
+                            <tr key={index}>
                               <td>{index + 1}</td>
                               <td>{service.code}</td>
                               <td>{service.title}</td>
@@ -270,13 +270,13 @@ class Services extends Component {
                                 className="align-middle"
                                 style={{ cursor: "pointer" }}
                               >
-                              <Link onClick={() => this.updateModal(service.id)}>
+                              <span onClick={() => this.updateModal(service.id)}>
                                 <i value={service.id} style={{ cursor: "pointer" }}
                                   className="fa fa-edit mr-3 text-primary"></i>
-                              </Link>
-                              <Link onClick={() => this.showdeleteModal(service.id)}>
+                              </span>
+                              <span onClick={() => this.showdeleteModal(service.id)}>
                                 <i className="fa fa-trash mr-2 text-danger"></i>
-                              </Link>
+                              </span>
                               </td>
                             </tr>
                           );
@@ -292,9 +292,9 @@ class Services extends Component {
 
 {/* Add Services modal */}
 {this.state.showmodal ? (
-              <div id="addServiceModal" class="modal">
+              <div id="addServiceModal" className="modal">
                 {/* Modal content  */}
-                <div class="modal-content pt-5 pb-2">
+                <div className="modal-content pt-5 pb-2">
                   <form onSubmit={this.addService}>
                     <div className="card">
                       <div className="card-header bg-medium font-weight-bold text-dark text-center">
@@ -409,9 +409,9 @@ class Services extends Component {
 
             {/* Update module info */}
             {this.state.showmodal ? (
-              <div id="updateModal" class="modal">
+              <div id="updateModal" className="modal">
                 {/* Modal content  */}
-                <div class="modal-content pt-5 pb-2">
+                <div className="modal-content pt-5 pb-2">
                   <form onSubmit={this.handleUpdate}>
                     <div className="card">
                       <div className="card-header bg-medium font-weight-bold text-dark text-center">
@@ -524,13 +524,13 @@ class Services extends Component {
 
             {/* Delete Module Info */}
             {this.state.showmodal ?
-              <div id="deleteModal" class="modal">
+              <div id="deleteModal" className="modal">
                 {/* Modal content  */}
-                <div class="modal-content modal-del text-center p-5">
+                <div className="modal-content modal-del text-center p-5">
                   {/* <div className="delete-icon">
                           &times;
                       </div> */}
-                  <i class="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
+                  <i className="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
                   <h3>Are you sure?</h3>
                   <p> Do you really want to delete this service?</p>
                   <div className="row">

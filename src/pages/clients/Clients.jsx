@@ -110,7 +110,7 @@ class Clients extends Component {
                                         }} />
                                     <datalist id="business">
                                         {
-                                            this.state.clients.map(client => <option value={client.businessname} />)
+                                            this.state.clients.map((client,i) => <option key={i} value={client.businessname} />)
                                         }
                                     </datalist>
 

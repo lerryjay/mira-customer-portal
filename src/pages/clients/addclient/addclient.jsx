@@ -20,7 +20,7 @@ class AddClient extends Component {
                                     <h5 className="card-title">From Existing Users</h5>
                                 <img src={image} className="image_product" alt="" />
                                     <Link to='/createclientbyid'>
-                                        <span class="btn btn-primary" style={{ cursor: "pointer", fontSize: 'medium' }}>Continue</span>
+                                        <span className="btn btn-primary" style={{ cursor: "pointer", fontSize: 'medium' }}>Continue</span>
                                     </Link>
                                 </div>
                             </div>
@@ -32,7 +32,7 @@ class AddClient extends Component {
                                     <h5 className="card-title">Setup New Profile</h5>
                                 <img src={profile} className="image_product" alt="" />
                                     <Link to='/createclient'>
-                                        <span class="btn  btn-primary" style={{ cursor: "pointer", fontSize: 'medium' }}>Continue</span>
+                                        <span className="btn  btn-primary" style={{ cursor: "pointer", fontSize: 'medium' }}>Continue</span>
                                     </Link>
                                 </div>
                             </div>

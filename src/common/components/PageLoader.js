@@ -3,9 +3,9 @@ import React from 'react'
 const PageLoader = () => {
   return (
     <div className="spin-center">
-      <span class="text-primary ">
+      <span className="text-primary ">
         <span
-          class="spinner-grow spinner-grow-sm mr-2"
+          className="spinner-grow spinner-grow-sm mr-2"
           role="status"
           aria-hidden="true"
         ></span>

@@ -486,7 +486,7 @@ async getClients() {
                 <tbody>
                   {this.state.tickets.map((ticket, index) => {
                     return (
-                      <tr>
+                      <tr key={index}>
                         <td>{index + 1}</td>
                         <td>
                           {new Date(
@@ -605,7 +605,7 @@ async getClients() {
             <div className="col-md-4 box2">
               <div className="row">
                 {
-                  this.state.servicesStatistics.map(item=><Minicards title={item.code} total={item.count} key={item} icon="fa fa-comments" iconBackground="text-success" />)
+                  this.state.servicesStatistics.map((item,i)=><Minicards title={item.code} total={item.count} key={i} icon="fa fa-comments" iconBackground="text-success" />)
                 }
                 </div>
             </div>

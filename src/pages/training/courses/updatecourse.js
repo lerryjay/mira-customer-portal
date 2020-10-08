@@ -114,7 +114,10 @@ class UpdateCourse extends Component {
                                         <div className="col-md-12 mb-3">
                                         <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Title</label>
-                                                <input type="text" className="form-control form-control-sm" name="title"
+                                                <input
+                                                 type="text" 
+                                                 className="form-control" 
+                                                name="title"
                                                     id="title" placeholder="Course Title"
                                                     value={this.state.title} 
                                                     onChange={this.handleInputChange} />
@@ -123,7 +126,7 @@ class UpdateCourse extends Component {
                                         <div className="col-md-12 mb-3">
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Description</label>
-                                                <input type="text" className="form-control form-control-sm" name="description"
+                                                <input type="text" className="form-control" name="description"
                                                     id="description" placeholder="Course Description"
                                                     value={this.state.description} 
                                                     onChange={this.handleInputChange} />
@@ -133,7 +136,7 @@ class UpdateCourse extends Component {
                                         <div className="col-md-12 mb-3">
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Cost</label>
-                                                <input type="text" className="form-control form-control-sm" name="cost"
+                                                <input type="text" className="form-control" name="cost"
                                                     id="cost" placeholder="Cost"
                                                     value={this.state.cost} 
                                                     onChange={this.handleInputChange} />

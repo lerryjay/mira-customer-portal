@@ -71,9 +71,9 @@ class Products extends Component {
 
                 {this.state.loader && (
                     <div className="spin-center">
-                        <span class="text-primary ">
+                        <span className="text-primary ">
                             <span
-                                class="spinner-grow spinner-grow-sm mr-2"
+                                className="spinner-grow spinner-grow-sm mr-2"
                                 role="status"
                                 aria-hidden="true"
                             ></span>
@@ -122,9 +122,9 @@ class Products extends Component {
                                         }
 
                                         {this.state.user.role == "admin" &&  
-                                            <Link onClick={() => this.showDeleteModal(product.id)}>
+                                            <span onClick={() => this.showDeleteModal(product.id)}>
                                                 <i className="fa fa-trash text-danger"></i>
-                                            </Link>
+                                            </span>
                                         }
 
                                     </div>
@@ -144,7 +144,7 @@ class Products extends Component {
                 {this.state.showmodal ?
                     <div id="myModal" className="modal">
                         {/* Modal content  */}
-                        <div class="modal-content text-center p-5">
+                        <div className="modal-content text-center p-5">
                             <i className="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
                             <h3>Are you sure?</h3>
                             <p> Do you really want to delete this file?</p>

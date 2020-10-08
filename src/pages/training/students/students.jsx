@@ -141,7 +141,7 @@ class Students extends Component {
                       <tbody>
                         {this.state.currentLists.map((student, index) => {
                           return (
-                            <tr>
+                            <tr key={index}>
                               <td>
                                   <img style={{width: '50px'}} src={FILEURL + student.imageurl} onError={(e) => { e.target.onerror = null; e.target.src = placeholder }} />
                               </td>
@@ -189,8 +189,9 @@ class Students extends Component {
                         name="page"
                         id="page"
                         className=" form-control form-select form-select-sm"
+                        defaultValue="10"
                       >
-                        <option value="10" selected>
+                        <option value="10" >
                           10
                         </option>
                         <option value="20">20</option>

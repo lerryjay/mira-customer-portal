@@ -144,9 +144,9 @@ class CreateClientById extends Component {
                                    <div className="col-md-12 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Client&nbsp;ID</label>
-                                            <select  onChange={this.handleInputChange} className="form-control form-control-sm" name="clientid">
+                                            <select  onChange={this.handleInputChange} className="form-control form-control-sm" name="clientid" defaultValue="">
                                                <option value="">Please select User</option>
-                                                {this.state.users.length > 0 ? this.state.users.map(client => <option value={client.user_id} >{client.lastname} {client.firstname}</option>) : null}
+                                                {this.state.users.length > 0 ? this.state.users.map( (client,i) => <option key={i} value={client.user_id} >{client.lastname} {client.firstname}</option>) : null}
                                             </select>
                                             
                                         </div>
@@ -194,13 +194,13 @@ class CreateClientById extends Component {
                                             id="companycountryid"
                                             className=" form-control form-select form-select-sm"
                                             >
-                                            <option value="" selected disabled>
+                                            <option value="" >
                                                 Company&nbsp;Country&nbsp;
                                             </option>
 
-                                            {this.state.countries.map((country) => {
+                                            {this.state.countries.map((country,i) => {
                                                 return (
-                                                <option value={country.country_id}>{country.name}</option>
+                                                <option key={i} value={country.country_id}>{country.name}</option>
                                                 );
                                             })}
                                             </select>
@@ -215,13 +215,13 @@ class CreateClientById extends Component {
                                             id="companystateid"
                                             className=" form-control form-select form-select-sm"
                                             >
-                                            <option value="" selected disabled>
+                                            <option value="" >
                                                 Company&nbsp;State&nbsp;
                                             </option>
 
-                                            {this.state.states.map((state) => {
+                                            {this.state.states.map((state,i) => {
                                                 return (
-                                                <option value={state.states_id}>{state.name}</option>
+                                                <option key={i} value={state.states_id}>{state.name}</option>
                                                 );
                                             })}
                                             </select>

@@ -382,9 +382,9 @@ class ViewClient extends Component {
       <div className="container-fluid mx-auto row">
         {this.state.loader && (
           <div className="spin-center">
-            <span class="text-primary ">
+            <span className="text-primary ">
               <span
-                class="spinner-grow spinner-grow-sm mr-2"
+                className="spinner-grow spinner-grow-sm mr-2"
                 role="status"
                 aria-hidden="true"
               ></span>
@@ -407,7 +407,7 @@ class ViewClient extends Component {
                       <form id="imageForm">
                         {imagePreview}
                         <label htmlFor="file">
-                          <i class="fas fa-2x text-purple fa-camera-retro"></i>{" "}
+                          <i className="fas fa-2x text-purple fa-camera-retro"></i>{" "}
                         </label>
                         <input
                           style={{ display: "none" }}
@@ -509,10 +509,8 @@ class ViewClient extends Component {
                               </small>
                             </button>
                           </Link>
-                          <Link
-                            onClick={() => this.showWallet(this.state.userid)}
-                          >
                             <button
+                             onClick={() => this.showWallet(this.state.userid)}
                               type="button"
                               className="btn mt-3 m-2 btn-primary mb-2 btn-sm"
                             >
@@ -523,13 +521,10 @@ class ViewClient extends Component {
                                 &nbsp;Fund Wallet&nbsp;
                               </small>
                             </button>
-                          </Link>
-                          <Link
+                            <button
                             onClick={() =>
                               this.showsuspendModal(this.state.userid)
                             }
-                          >
-                            <button
                               type="button"
                               className="btn mt-3 m-2 btn-danger mb-2 rounded-0 btn-sm"
                             >
@@ -540,13 +535,10 @@ class ViewClient extends Component {
                                 &nbsp;Suspend&nbsp;Account&nbsp;
                               </small>
                             </button>
-                          </Link>
-                          <Link
+                            <button
                             onClick={() =>
                               this.showdeleteClient(this.state.userid)
                             }
-                          >
-                            <button
                               type="button"
                               className="btn mt-3 m-2 btn-danger mb-2 rounded-0 btn-sm"
                             >
@@ -557,7 +549,6 @@ class ViewClient extends Component {
                                 &nbsp;Delete&nbsp;
                               </small>
                             </button>
-                          </Link>
                         </div>
                       </div>
         
@@ -616,7 +607,7 @@ class ViewClient extends Component {
                     </div>
                     <div className="col-md-12">
                       {this.state.products.length === 0 ? (
-                        <div class="alert alert-warning" role="alert">
+                        <div className="alert alert-warning" role="alert">
                           No product has been added for this client!
                         </div>
                       ) : (
@@ -646,7 +637,7 @@ class ViewClient extends Component {
                                     {this.state.products.map(
                                       (product, index) => {
                                         return (
-                                          <tr>
+                                          <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>{product.name}</td>
                                             <td>{product.deploymentstatus}</td>
@@ -676,19 +667,17 @@ class ViewClient extends Component {
                                                   View
                                                 </button>
                                               </Link>
-                                              <Link
+                                                <button
                                                 onClick={() =>
                                                   this.showdeleteModal(
                                                     product.id
                                                   )
                                                 }
-                                              >
-                                                <button className="btn-danger m-1">
+                                                 className="btn-danger m-1">
                                                   {" "}
                                                   <i className="fa fa-trash text-white"></i>{" "}
                                                   Delete
                                                 </button>
-                                              </Link>
                                             </td>
                                           </tr>
                                         );
@@ -708,10 +697,10 @@ class ViewClient extends Component {
 
               {/* Fund Wallet */}
               {this.state.showmodal ? (
-                <div id="showWallet" class="modal2">
+                <div id="showWallet" className="modal2">
                   
                   {/* Modal content  */}
-                  <div class="modal-content modal-del text-center p-5">
+                  <div className="modal-content modal-del text-center p-5">
                     <div className="row font-weight-bold mb-4">
                       <span className="text-large mx-auto">Fund Wallet</span>
                       <span className="text-danger close-fund"
@@ -777,14 +766,14 @@ class ViewClient extends Component {
 
               {/* Delete Product */}
               {this.state.showmodal ? (
-                <div id="deleteModal" class="modal">
+                <div id="deleteModal" className="modal">
                   {/* Modal content  */}
-                  <div class="modal-content modal-del text-center p-5">
+                  <div className="modal-content modal-del text-center p-5">
                     {/* <div className="delete-icon">
                           &times;
                       </div> */}
                     <i
-                      class="fa fa-exclamation-triangle fa-3x dark-red mb-2"
+                      className="fa fa-exclamation-triangle fa-3x dark-red mb-2"
                       aria-hidden="true"
                     ></i>
                     <h3>Are you sure?</h3>
@@ -832,14 +821,14 @@ class ViewClient extends Component {
 
               {/* Suspend Account */}
               {this.state.showmodal ? (
-                <div id="suspendModal" class="modal2">
+                <div id="suspendModal" className="modal2">
                   {/* Modal content  */}
-                  <div class="modal-content modal-del text-center p-5">
+                  <div className="modal-content modal-del text-center p-5">
                     {/* <div className="delete-icon">
                           &times;
                       </div> */}
                     <i
-                      class="fa fa-exclamation-triangle fa-3x dark-red mb-2"
+                      className="fa fa-exclamation-triangle fa-3x dark-red mb-2"
                       aria-hidden="true"
                     ></i>
                     <h3>Are you sure?</h3>
@@ -889,14 +878,14 @@ class ViewClient extends Component {
 
               {/* Delete Client */}
               {this.state.showmodal ? (
-                <div id="deleteClient" class="modal">
+                <div id="deleteClient" className="modal">
                   {/* Modal content  */}
-                  <div class="modal-content modal-del text-center p-5">
+                  <div className="modal-content modal-del text-center p-5">
                     {/* <div className="delete-icon">
                           &times;
                       </div> */}
                     <i
-                      class="fa fa-exclamation-triangle fa-3x dark-red mb-2"
+                      className="fa fa-exclamation-triangle fa-3x dark-red mb-2"
                       aria-hidden="true"
                     ></i>
                     <h3>Are you sure?</h3>

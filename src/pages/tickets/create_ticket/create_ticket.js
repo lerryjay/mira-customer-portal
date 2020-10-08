@@ -155,8 +155,10 @@ class create_ticket extends Component {
 
                                         <div className="col-md-12 mb-3">
                                             <div className="form-group">
-                                                <select onChange={this.handleInputChange} name="type" id="type" className=" form-control form-select form-select-sm">
-                                                    <option value="" disabled selected>-- Select&nbsp;Ticket&nbsp;Type --</option>
+                                                <select onChange={this.handleInputChange} name="type" id="type" className=" form-control form-select form-select-sm"
+                                                       defaultValue=""
+                                                       >
+                                                         <option value="">-- Select&nbsp;Ticket&nbsp;Type --</option>
                                                     <option value="complaint" >Complaint</option>
                                                     <option value="enquiry">Enquiry</option>
                                                     <option value="support">Support</option>
@@ -170,7 +172,7 @@ class create_ticket extends Component {
                                                     <input list="customers" name="customerid" id="customerid" onChange={this.handleInputChange} placeholder="Enter customer name" className="form-control" />
                                                     <datalist id="customers">
                                                         {
-                                                            this.state.users.map(user => <option value={user.firstname + ' ' + user.lastname} />)
+                                                            this.state.users.map( (user,i) => <option key={i} value={user.firstname + ' ' + user.lastname} />)
                                                         }
                                                     </datalist>
 

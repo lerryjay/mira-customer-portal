@@ -115,9 +115,9 @@ class CreateClient extends Component {
 
     render() {
         return (
-            <div className="container mx-auto row mt-4">
+            <div className="container justify-content-center row mt-4">
 
-                <div className="col-md-8 offset-2">
+                <div className="col-md-8 ">
 
                         <form onSubmit={this.handleSubmit} id="createclient">
 
@@ -224,8 +224,9 @@ class CreateClient extends Component {
                                             name="gender"
                                             id="gender"
                                             className=" form-control form-select form-select-sm"
+                                            defaultValue=""
                                             >
-                                            <option value="" selected disabled> Gender</option>
+                                            <option value=""> Gender</option>
                                             <option value="male">Male</option>
                                             <option value="female">Female</option>
 
@@ -243,13 +244,13 @@ class CreateClient extends Component {
                                             id="companycountryid"
                                             className=" form-control form-select form-select-sm"
                                             >
-                                            <option value="" selected disabled>
+                                            <option value=""  >
                                                 Company&nbsp;Country&nbsp;
                                             </option>
 
-                                            {this.state.countries.map((country) => {
+                                            {this.state.countries.map((country,i) => {
                                                 return (
-                                                <option value={country.country_id}>{country.name}</option>
+                                                <option key={i} value={country.country_id}>{country.name}</option>
                                                 );
                                             })}
                                             </select>
@@ -264,13 +265,13 @@ class CreateClient extends Component {
                                             id="companystateid"
                                             className=" form-control form-select form-select-sm"
                                             >
-                                            <option value="" selected disabled>
+                                            <option value=""  >
                                                 Company&nbsp;State&nbsp;
                                             </option>
 
-                                            {this.state.states.map((state) => {
+                                            {this.state.states.map((state,i) => {
                                                 return (
-                                                <option value={state.states_id}>{state.name}</option>
+                                                <option key={i} value={state.states_id}>{state.name}</option>
                                                 );
                                             })}
                                             </select>

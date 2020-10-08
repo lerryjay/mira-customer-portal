@@ -28,26 +28,26 @@ const Sidebar = (props) => {
             <div className="sidemenu pt-5" id="sidebar">
                 <ul className="list-unstyled components pl-2">
                     {
-                        menu.map(item=>{
+                        menu.map((item,i)=>{
                             return(
                                 item.isDivider ? 
                                
-                                <div className="nav-item px-0">
+                                <div className="nav-item px-0" key={i}>
                                     <li className="nav-item font-weight-bold text-uppercase mt-2"><b>{ item.name ? item.name : '' }</b></li>
                                     <hr className="bg-white mt-0 mb-0" />
                                 </div> 
                                 : 
                                 item.sub && item.sub.length > 1 ? 
-                                    <div>
+                                    <div key={i}>
                                         <div className="dropdown-btn nav-item" to={ item.route } onClick={()=>toggleDropdown(item)}>
                                             <li className={`"nav-item  ${props.location.pathname === item.route ? "active" : ""}`}>
                                                 <i className={`${ item.icon } float-right pr-3 `}></i>&nbsp;{item.name }
                                             </li>
                                         </div> 
                                         <div className="dropdown-container" style={item.isActive ?  {display: 'block'} : { display : 'none'}}>
-                                            { item.sub.map((sub)=>{
+                                            { item.sub.map((sub,i)=>{
                                                     return(
-                                                        <NavLink key={sub} className="nav-item" to={ sub.route } onClick={toggle2}>
+                                                        <NavLink key={i} className="nav-item" to={ sub.route } onClick={toggle2}>
                                                             <li className={`nav-item ${props.location.pathname === sub.route ? "active" : ""}`}>
                                                                 <i className={`${ sub.icon } mr-1`}></i>{ sub.name }
                                                             </li>
@@ -58,7 +58,7 @@ const Sidebar = (props) => {
                                         </div> 
                                     </div> 
                                 :
-                                <NavLink className="nav-item" to={ item.route } onClick={toggle2}>
+                                <NavLink key={i} className="nav-item" to={ item.route } onClick={toggle2}>
                                     <li className={`nav-item  text-white ${props.location.pathname === item.route ? "active" : ""}`}>
                                         <i className={`${item.icon } float-right pr-3 `}></i>{item.name }
                                     </li>

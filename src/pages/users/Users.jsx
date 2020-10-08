@@ -59,7 +59,7 @@ class Users extends Component {
                                         }} />
                                     <datalist id="name">
                                         {
-                                            this.state.users.map(user => <option value={user.lastname + user.firstname} />)
+                                            this.state.users.map( (user,i) => <option key={i} value={user.lastname + user.firstname} />)
                                         }
                                     </datalist>
 

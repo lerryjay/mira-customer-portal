@@ -184,7 +184,7 @@ class transaction extends Component {
                       <tbody>
                         {this.state.currentLists.map((transaction, index) => {
                           return (
-                            <tr>
+                            <tr key={index}>
                             <td className="table-padding">
                               {transaction.tdate}
                             </td>
@@ -222,8 +222,9 @@ class transaction extends Component {
                         name="page"
                         id="page"
                         className=" form-control form-select form-select-sm"
+                        defaultValue="10"
                       >
-                        <option value="10" selected>
+                        <option value="10" >
                           10
                         </option>
                         <option value="20">20</option>
@@ -254,7 +255,7 @@ class transaction extends Component {
           <div className="col-md-3 col-sm-12 box2 mt-3 mb-3">
             <div className="card">
                 <div className="card-header bg-medium font-weight-bold text-dark">
-                <i class="fa fa-filter"></i> FILTER BY
+                <i className="fa fa-filter"></i> FILTER BY
                 </div>
                 <div className="p-3">
               <label
@@ -273,11 +274,11 @@ class transaction extends Component {
                 className="form-control"
               />
               <datalist id="customers">
-                {this.state.users.map((user) => (
-                  <option value={user.firstname + " " + user.lastname} />
+                {this.state.users.map((user,i) => (
+                  <option key={i} value={user.firstname + " " + user.lastname} />
                 ))}
-                {this.state.clients.map((client) => (
-                  <option value={client.businessname} />
+                {this.state.clients.map((client,i) => (
+                  <option key={i} value={client.businessname} />
                 ))}
               </datalist>
 
@@ -384,7 +385,7 @@ class transaction extends Component {
                     id="type"
                     className=" form-control form-select form-select-sm"
                   >
-                    <option value="" disabled selected>
+                    <option value="">
                       -- Select --
                     </option>
                     <option value="successful">Successful</option>

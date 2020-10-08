@@ -158,9 +158,9 @@ class Profile extends Component {
             <div className="container mx-auto">
                   {this.state.loader && (
             <div className="spin-center">
-              <span class="text-primary ">
+              <span className="text-primary ">
                 <span
-                  class="spinner-grow spinner-grow-sm mr-2"
+                  className="spinner-grow spinner-grow-sm mr-2"
                   role="status"
                   aria-hidden="true"
                 ></span>
@@ -259,7 +259,7 @@ class Profile extends Component {
                                 <form id="imageForm">
                                 <img src={ avatar} alt="" className="image_sidebar"  height="170px" width="170px" style={{ marginTop: '-80px' }}/>
 
-                                <label htmlFor="file" ><i class="fas fa-2x text-purple fa-camera-retro"></i> </label> 
+                                <label htmlFor="file" ><i className="fas fa-2x text-purple fa-camera-retro"></i> </label> 
                                 <input style={{display:'none'}} type={"file"}  id="file" 
                                 className="form-file form-file-sm" name="file"  placeholder=""
                                 onChange={(e)=>this.handleImageChange(e)}
@@ -269,7 +269,7 @@ class Profile extends Component {
                             : <div className="card-body position-relative mb-5">
                             <form id="imageForm">
                                 <img className="image_sidebar" height="170px" width="170px"  style={{ marginTop: '-80px' }} src={FILEURL + this.props.user.imageurl} />
-                            <label htmlFor="file" ><i class="fas fa-2x text-purple fa-camera-retro"></i> </label> 
+                            <label htmlFor="file" ><i className="fas fa-2x text-purple fa-camera-retro"></i> </label> 
                                 <input style={{display:'none'}} type={"file"}  id="file" 
                                 className="form-file form-file-sm" name="file"  placeholder=""
                                 onChange={(e)=>this.handleImageChange(e)} 

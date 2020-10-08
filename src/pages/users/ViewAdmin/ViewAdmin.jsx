@@ -277,8 +277,8 @@ class Profile extends Component {
                     </div>
                   </div>
                 }
-                {this.state.selectedUser.permissions !== null && this.state.selectedUser.permissions.map((permission) => (
-                  <div className="col-md-3">
+                {this.state.selectedUser.permissions !== null && this.state.selectedUser.permissions.map((permission,i) => (
+                  <div className="col-md-3" key={i}>
                     <p className="list-group-item px-2" style={{ fontSize: "12px" }}>
                       {permission}
                     </p>

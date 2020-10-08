@@ -78,7 +78,7 @@ class viewcourse extends Component {
     
     render() {
         return (
-            <div className="container-fluid mx-auto">
+            <div className="container-fluid row mx-auto">
                 
                 <div className="row">
                <div className="col-md-12 mb-3 mt-4" id="profile">
@@ -88,7 +88,7 @@ class viewcourse extends Component {
 
           </div>
         
-   <div className="col-md-4">
+   <div className="col-md-4 mb-3">
           <div className="card">
           {this.state.imageurl 
                   ?<img
@@ -116,7 +116,7 @@ class viewcourse extends Component {
           </div>
         </div>
 
-          <div className="col-md-8">
+          <div className="col-md-8 mb-3">
                 <div className="card pb-4">
                   <div className="card-body">
                     <h4>Course Description</h4>
@@ -142,14 +142,12 @@ class viewcourse extends Component {
                           </small>
                         </button>
                       </Link>
-                      <Link
+                      <button
                         onClick={() =>
                           this.showdeleteModal(
                             this.state.courseid
                           )
                         }
-                      >
-                      <button
                         type="button"
                         className="btn mt-3 m-2 btn-danger mb-2"
                       >
@@ -160,7 +158,6 @@ class viewcourse extends Component {
                           &nbsp;Delete Course&nbsp;
                         </small>
                       </button>
-                      </Link>
                 </div>
 
                 </div>
@@ -172,14 +169,14 @@ class viewcourse extends Component {
 
                 {/* Delete Course */}
               {this.state.showmodal ? (
-                <div id="suspendModal" class="modal">
+                <div id="suspendModal" className="modal">
                   {/* Modal content  */}
-                  <div class="modal-content modal-del text-center p-5">
+                  <div className="modal-content modal-del text-center p-5">
                     {/* <div className="delete-icon">
                           &times;
                       </div> */}
                     <i
-                      class="fa fa-exclamation-triangle fa-3x dark-red mb-2"
+                      className="fa fa-exclamation-triangle fa-3x dark-red mb-2"
                       aria-hidden="true"
                     ></i>
                     <h3>Are you sure?</h3>

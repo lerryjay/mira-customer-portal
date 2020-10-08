@@ -69,7 +69,7 @@ class CreateClient extends Component {
         return (
             <div className="container">
                 <div className="row justify-content-center  mt-4">
-                <div className="col-md-10">
+                <div className="col-md-8">
 
                         <form onSubmit={this.handleSubmit} id="createclient">
 

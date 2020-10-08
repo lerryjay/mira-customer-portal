@@ -121,11 +121,11 @@ class viewcourse extends Component {
             </div>
 
             <div id="accordion">
-            <div class="card">
-              <div class="" id="headingOne">
-                <h5 class="mb-0">
+            <div className="card">
+              <div className="" id="headingOne">
+                <h5 className="mb-0">
                   <button 
-                   class="btn btn-primary custom-show rounded-0 btn-block text-left " 
+                   className="btn btn-primary custom-show rounded-0 btn-block text-left " 
                    data-toggle="collapse" 
                    data-target="#collapseOne" 
                    aria-expanded="true" 
@@ -138,8 +138,8 @@ class viewcourse extends Component {
                 </h5>
               </div>
 
-              <div id="profiledetails" class="collapse custom-show" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body ">
+              <div id="profiledetails" className="collapse custom-show" aria-labelledby="headingOne" data-parent="#accordion">
+                <div className="card-body ">
                   <div className="text-left">
                     <p><i className="fa fa-envelope text-purple mr-3"></i>  {this.state.email} </p>
                     <p><i className="fa fa-phone text-purple mr-3"></i> {this.state.telephone} </p>
@@ -173,11 +173,11 @@ class viewcourse extends Component {
               <table className="table d-flex">
 
            
-                  <div>
+              
                           {this.state.courses.map((course, i) => {
                           return (
         
-                            <div className="col-md-4">
+                            <div className="col-md-4" key={i}>
                   <div className="card">
                     {this.state.imageurl
                       ? <img
@@ -205,7 +205,7 @@ class viewcourse extends Component {
                   </div>
                 </div>
                   )})}
-                  </div>
+           
   
               
               </table>
@@ -224,14 +224,12 @@ class viewcourse extends Component {
     </small>
                 </button>
               </Link>
-              <Link
+                <button
                 onClick={() =>
                   this.showdeleteModal(
                     this.state.studentid
                   )
                 }
-              >
-                <button
                   type="button"
                   className="btn mt-3 m-2 btn-danger mb-2"
                 >
@@ -242,7 +240,6 @@ class viewcourse extends Component {
                     &nbsp;Suspend Student&nbsp;
   </small>
                 </button>
-              </Link>
             </div>
           </div>
 
@@ -251,11 +248,11 @@ class viewcourse extends Component {
 
         {/* Suspend Student */}
         {this.state.showmodal ? (
-          <div id="suspendModal" class="modal">
+          <div id="suspendModal" className="modal">
             {/* Modal content  */}
-            <div class="modal-content modal-del text-center p-5">
+            <div className="modal-content modal-del text-center p-5">
               <i
-                class="fa fa-exclamation-triangle fa-3x dark-red mb-2"
+                className="fa fa-exclamation-triangle fa-3x dark-red mb-2"
                 aria-hidden="true"
               ></i>
               <h3>Are you sure?</h3>

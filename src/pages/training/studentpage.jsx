@@ -21,7 +21,7 @@ class StudentPage extends Component {
                                     <h5 className="card-title">Add New Student</h5>
                                 <img src={image} className="image_product" alt="" />
                                     <Link to='/addstudent'>
-                                        <span class="btn btn-primary" style={{ cursor: "pointer", fontSize: 'medium' }}>Continue</span>
+                                        <span className="btn btn-primary" style={{ cursor: "pointer", fontSize: 'medium' }}>Continue</span>
                                     </Link>
                                 </div>
                             </div>
@@ -33,7 +33,7 @@ class StudentPage extends Component {
                                     <h5 className="card-title">All Students</h5>
                                 <img src={profile} className="image_product" alt="" />
                                     <Link to='/students'>
-                                        <span class="btn  btn-primary" style={{ cursor: "pointer", fontSize: 'medium' }}>Continue</span>
+                                        <span className="btn  btn-primary" style={{ cursor: "pointer", fontSize: 'medium' }}>Continue</span>
                                     </Link>
                                 </div>
                             </div>

@@ -34,7 +34,7 @@ class VerifyLinkToken extends Component {
                     <div className="row form">
                         <div className=" col-lg-5 col-md-8 col-sm-10 col-xs-12 mx-auto">
 
-                            <div className="card bg-light shadow py-3 border-top-green">
+                            <div className={`card bg-light shadow py-3 ${this.state.valid ? `border-top-green` : `border-top-red`}`}>
                                 <div className="card-body py-lg-5 text-muted text-center ">
                                     <div className="mb-3">
                                         {

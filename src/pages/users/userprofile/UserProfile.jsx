@@ -125,9 +125,9 @@ class Profile extends Component {
       <div className="container mx-auto row">
           {this.state.loader && (
             <div className="spin-center">
-              <span class="text-primary ">
+              <span className="text-primary ">
                 <span
-                  class="spinner-grow spinner-grow-sm mr-2"
+                  className="spinner-grow spinner-grow-sm mr-2"
                   role="status"
                   aria-hidden="true"
                 ></span>
@@ -248,7 +248,7 @@ class Profile extends Component {
                         </small>
                       </button>
                     </Link>
-                          <Link
+                          <span
                             onClick={() =>
                               this.showsuspendModal(
                                 this.state.selectedUser.userid
@@ -266,7 +266,7 @@ class Profile extends Component {
                               &nbsp;Suspend&nbsp;Account&nbsp;
                             </small>
                           </button>
-                          </Link>
+                          </span>
                   </div>
                 </div>
               </div>
@@ -280,14 +280,14 @@ class Profile extends Component {
       
               {/* Suspend Account */}
               {this.state.showmodal ? (
-                <div id="suspendModal" class="modal">
+                <div id="suspendModal" className="modal">
                   {/* Modal content  */}
-                  <div class="modal-content modal-del text-center p-5">
+                  <div className="modal-content modal-del text-center p-5">
                     {/* <div className="delete-icon">
                           &times;
                       </div> */}
                     <i
-                      class="fa fa-exclamation-triangle fa-3x dark-red mb-2"
+                      className="fa fa-exclamation-triangle fa-3x dark-red mb-2"
                       aria-hidden="true"
                     ></i>
                     <h3>Are you sure?</h3>

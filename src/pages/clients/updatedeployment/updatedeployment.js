@@ -212,13 +212,13 @@ class UpdateClientProduct extends Component {
                     className=" form-control form-select form-select-sm"
                     disabled
                   >
-                    <option value="" selected disabled>
+                    <option value="" >
                       ---Select&nbsp;product---&nbsp;
                         </option>
 
-                    {this.state.products.map((product) => {
+                    {this.state.products.map((product,i) => {
                       return (
-                        <option value={product.id}>{product.name}</option>
+                        <option key={i} value={product.id}>{product.name}</option>
                       );
                     })}
                   </select>
@@ -286,7 +286,7 @@ class UpdateClientProduct extends Component {
                         id="paymentstatus"
                         style={{ height: '35px' }}
                       >
-                        <option value="" selected disabled>
+                        <option value="" >
                           Payment&nbsp;Status&nbsp;
                           </option>
                         <option value="pending">Pending</option>
@@ -314,7 +314,7 @@ class UpdateClientProduct extends Component {
                         id="deploymentstatus"
                         style={{ height: '35px' }}
                       >
-                        <option value="" selected disabled>
+                        <option value="" >
                           Deployment&nbsp;Status&nbsp;
                           </option>
                         <option value="pending">Pending</option>
@@ -360,7 +360,7 @@ class UpdateClientProduct extends Component {
                         id="trainingstatus"
                         style={{ height: '35px' }}
                       >
-                        <option value="" selected disabled>
+                        <option value="" >
                           Training&nbsp;Status&nbsp;
                           </option>
                         <option value="pending">Pending</option>
@@ -406,7 +406,7 @@ class UpdateClientProduct extends Component {
                         value={this.state.licenseduration}
                         style={{ height: '35px' }}
                       >
-                        <option value="" selected disabled>
+                        <option value="" >
                           License&nbsp;Duration
                           </option>
                         <option value="monthly">Monthly</option>
@@ -462,8 +462,8 @@ class UpdateClientProduct extends Component {
 
                 <div className="row">
                   {this.state.modules.length > 0 ? (
-                    this.state.modules.map((module) => (
-                      <div className="col-md-4">
+                    this.state.modules.map((module,i) => (
+                      <div className="col-md-4" key={i}>
                         <p className="list-group-item">
                           {module.name}
                           <label className="switch float-right">

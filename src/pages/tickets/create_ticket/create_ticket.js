@@ -155,8 +155,9 @@ class create_ticket extends Component {
 
                                         <div className="col-md-12 mb-3">
                                             <div className="form-group">
-                                                <select onChange={this.handleInputChange} name="type" id="type" className=" form-control form-select form-select-sm"
-                                                       defaultValue=""
+                                                <select onChange={this.handleInputChange} name="type" id="type" 
+                    className="custom-select custom-select-md"
+                    defaultValue=""
                                                        >
                                                          <option value="">-- Select&nbsp;Ticket&nbsp;Type --</option>
                                                     <option value="complaint" >Complaint</option>
@@ -183,7 +184,7 @@ class create_ticket extends Component {
 
                                         <div className="col-md-12 mb-3">
                                             <div className="form-group">
-                                                <input type="text" className="form-control form-control-sm" name="title"
+                                                <input type="text" className="form-control form-control-md" name="title"
                                                     id="title" placeholder="Title"
                                                     value={this.state.title} 
                                                     onChange={this.handleInputChange} />

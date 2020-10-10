@@ -200,7 +200,7 @@ class UpdateClientProduct extends Component {
               </div>
 
               <div className="card-body px-5">
-                <div className="form-group row mb-3">
+                <div className="form-group  mb-3">
                   <select
                     // onChange={(e) => {
                     //   this.getModule(e.target.value);
@@ -209,10 +209,10 @@ class UpdateClientProduct extends Component {
                     value={this.state.productid}
                     name="productid"
                     id="productid"
-                    className=" form-control form-select form-select-sm"
+                    className="custom-select custom-select-sm"
                     disabled
                   >
-                    <option value="" >
+                    <option value="" disabled >
                       ---Select&nbsp;product---&nbsp;
                         </option>
 
@@ -237,7 +237,7 @@ class UpdateClientProduct extends Component {
 
                         <input
                           type=""
-                          className="form-control form-control-sm py-3"
+                          className="form-control form-control-sm py-3 border-left-0"
                           name="cost"
                           id="cost"
                           placeholder="Total Cost"
@@ -262,7 +262,6 @@ class UpdateClientProduct extends Component {
                         onBlur={this.paymentDate}
                         onFocus={this.onFocus}
                         value={this.state.paymentdate}
-                        style={{ height: '35px' }}
                         onChange={(e) => {
                           this.paymentDate(e.target.value, this.state.licensecoverage);
                           this.setState({ paymentdate: e.target.value });
@@ -277,16 +276,15 @@ class UpdateClientProduct extends Component {
                         Payment Status
                       </label>
                       <select
-                        className=" form-control form-select form-select-sm"
-                        onChange={(e) => {
+                  className="custom-select custom-select-sm"
+                  onChange={(e) => {
                           this.setState({ paymentstatus: e.target.value });
                         }}
                         value={this.state.paymentstatus}
                         name="paymentstatus"
                         id="paymentstatus"
-                        style={{ height: '35px' }}
                       >
-                        <option value="" >
+                        <option value="" disabled>
                           Payment&nbsp;Status&nbsp;
                           </option>
                         <option value="pending">Pending</option>
@@ -305,16 +303,15 @@ class UpdateClientProduct extends Component {
                         Deployment Status
                       </label>
                       <select
-                        className=" form-control form-select form-select-sm"
-                        onChange={(e) => {
+                  className="custom-select custom-select-sm"
+                  onChange={(e) => {
                           this.setState({ deploymentstatus: e.target.value });
                         }}
                         value={this.state.deploymentstatus}
                         name="deploymentstatus"
                         id="deploymentstatus"
-                        style={{ height: '35px' }}
                       >
-                        <option value="" >
+                        <option value="" disabled >
                           Deployment&nbsp;Status&nbsp;
                           </option>
                         <option value="pending">Pending</option>
@@ -339,7 +336,6 @@ class UpdateClientProduct extends Component {
                         onFocus={this.onFocus}
                         value={this.state.deploymentdate}
                         onChange={this.handleInputChange}
-                        style={{ height: '35px' }}
                       />
                     </div>
                   </div>
@@ -351,16 +347,15 @@ class UpdateClientProduct extends Component {
                         Training Status
                       </label>
                       <select
-                        className=" form-control form-select form-select-sm"
-                        onChange={(e) => {
+                  className="custom-select custom-select-sm"
+                  onChange={(e) => {
                           this.setState({ trainingstatus: e.target.value });
                         }}
                         value={this.state.trainingstatus}
                         name="trainingstatus"
                         id="trainingstatus"
-                        style={{ height: '35px' }}
                       >
-                        <option value="" >
+                        <option value="" disabled>
                           Training&nbsp;Status&nbsp;
                           </option>
                         <option value="pending">Pending</option>
@@ -385,7 +380,6 @@ class UpdateClientProduct extends Component {
                         onFocus={this.onFocus}
                         value={this.state.trainingdate}
                         onChange={this.handleInputChange}
-                        style={{ height: '35px' }}
                       />
                     </div>
                   </div>
@@ -397,16 +391,15 @@ class UpdateClientProduct extends Component {
                         License Coverage
                         </label>
                       <select
-                        className=" form-control form-select form-select-sm"
-                        onChange={(e) => {
+                  className="custom-select custom-select-sm"
+                  onChange={(e) => {
                           this.setState({ licenseduration: e.target.value });
                         }}
                         id="licenseduration"
                         name="licenseduration"
                         value={this.state.licenseduration}
-                        style={{ height: '35px' }}
                       >
-                        <option value="" >
+                        <option value="" disabled>
                           License&nbsp;Duration
                           </option>
                         <option value="monthly">Monthly</option>
@@ -423,7 +416,6 @@ class UpdateClientProduct extends Component {
                         Expiration Date
                       </label>
                       <input
-                         style={{ height: '35px' }}
                         className="form-control form-control-sm"
                         name="expirationdate"
                         id="expirationdate"

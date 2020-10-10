@@ -277,9 +277,10 @@ class EditClient extends Component {
                                             value={this.state.companycountryid}
                                             name="companycountryid"
                                             id="companycountryid"
-                                            className=" form-control form-select form-select-sm"
+                                            className=" custom-select custom-select-sm"
+                                            defaultValue=""
                                             >
-                                            <option value="" >
+                                            <option value="" disabled>
                                                 Company&nbsp;Country&nbsp;
                                             </option>
 
@@ -298,7 +299,7 @@ class EditClient extends Component {
                                             value={this.state.companystateid}
                                             name="companystateid"
                                             id="companystateid"
-                                            className=" form-control form-select form-select-sm"
+                                            className=" custom-select custom-select-sm"
                                             >
                                             <option value="" >
                                                 Company&nbsp;State&nbsp;

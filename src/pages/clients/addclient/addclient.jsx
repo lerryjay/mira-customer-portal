@@ -11,8 +11,8 @@ class AddClient extends Component {
     render() {
         return (
             <div className="container ">
-                <div className="row justify-content-center">
-                        <div className="pt-3">
+                <div className="row mx-auto justify-content-center">
+                        <div className="row mx-auto mt-3">
                             
                             <div className="col pt-3">
                             <div className="card text-center products">

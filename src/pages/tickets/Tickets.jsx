@@ -283,8 +283,8 @@ class Tickets extends Component {
                         style={{ maxWidth: "180px" }}
                         name="page"
                         id="page"
-                        className=" form-control form-select form-select-sm"
-                      >
+                        className="custom-select custom-select-md"
+                        >
                         <option value="10" defaultValue>
                           10
                         </option>
@@ -439,7 +439,7 @@ class Tickets extends Component {
                     onChange={this.handleInputChange}
                     name="type"
                     id="type"
-                    className=" form-control form-select form-select-sm"
+                    className="custom-select custom-select-md"
                     defaultValue=""
                     >
                       <option value="">

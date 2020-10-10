@@ -158,8 +158,9 @@ class create_ticket extends Component {
                                     
                                 <div className="col-md-12 mb-3">
                                     <div className="form-group">
-                                        <select onChange={this.handleInputChange} name="type" id="type" className=" form-control form-select form-select-sm">
-                                            <option value="" >-- Select&nbsp;Ticket&nbsp;Type --</option>
+                                        <select onChange={this.handleInputChange} name="type" id="type" 
+                                        className=" custom-select custom-select-sm" defaultValue="">
+                                            <option value="" disabled>-- Select&nbsp;Ticket&nbsp;Type --</option>
                                             <option value="complaint" >Complaint</option>
                                             <option value="enquiry">Enquiry</option>
                                             <option value="support">Support</option>
@@ -170,7 +171,7 @@ class create_ticket extends Component {
                                     this.state.user.role == 'admin' && 
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
-                                            <input list="customers" value={this.state.selectedUser.lastname + " " + this.state.selectedUser.firstname} name="customerid" id="customerid" onChange={this.handleInputChange} name="customerid" placeholder="Enter customer name" className="form-control" disabled/>
+                                            <input list="customers" value={this.state.selectedUser.lastname + " " + this.state.selectedUser.firstname} name="customerid" id="customerid" onChange={this.handleInputChange} name="customerid" placeholder="Enter customer name" className="form-control form-control-sm" disabled/>
                                         </div>
                                     </div>
                                 }

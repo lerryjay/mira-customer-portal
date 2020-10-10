@@ -31,6 +31,7 @@ class api_logs extends Component {
       componentDidMount() {
         this.getLogs();
         this.getApiStatistics();
+        this.getPageNumbers();
       }
 
       handleInputChange = (e) => {
@@ -46,6 +47,21 @@ class api_logs extends Component {
         this.setState({ [name]: value });
       };
     
+      async getPageNumbers() {
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+                
+        const res = await fetch(
+          HTTPURL + `log/list?userid=${this.state.user.userid}&pageNumbers`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        ).then((response) => response.json());
+    
+        if (res["status"]) this.setState({ pageNumbers: res["data"] });
+      
+      }
     
       handleClick(event) {
         const paginatedbuttons = document.querySelectorAll("a");
@@ -262,8 +278,8 @@ class api_logs extends Component {
                         style={{ maxWidth: "180px" }}
                         name="page"
                         id="page"
-                        className=" form-control form-select form-select-sm"
-                      >
+                        className="custom-select custom-select-md"
+                        >
                         <option value="10" defaultValue>
                           10
                         </option>
@@ -424,7 +440,7 @@ class api_logs extends Component {
                     onChange={this.handleInputChange}
                     name="type"
                     id="type"
-                    className=" form-control form-select form-select-sm"
+                    className="custom-select custom-select-md"
                     defaultValue=""
                   >
                     <option value="">

@@ -418,9 +418,11 @@ class App extends Component {
                       <AdminPrivateRoute path="/userprofile" permission="VIEWUSER" component={UserProfile} />
                   
                   {<Route path="/forgot-password" component={ForgotPassword} />}
-                  {<Route path="/verify-token" component={(props)=> this.state.accepttoken ?  <VerifyToken {...props} /> : <Redirect to="/login" /> } />}
+                      {<Route path="/verify-token" component={VerifyToken} />}
+                      {<Route path="/reset-password" component={ResetPassword} />}
+                  {/* {<Route path="/verify-token" component={(props)=> this.state.accepttoken ?  <VerifyToken {...props} /> : <Redirect to="/login" /> } />} */}
                   {<Route path="/vlt" component={VerifyLinkToken} />}
-                  {<Route path="/reset-password" component={(props)=> this.state.enablereset ? <ResetPassword {...props} /> : <Redirect to="/login" /> } />}
+                  {/* {<Route path="/reset-password" component={(props)=> this.state.enablereset ? <ResetPassword {...props} /> : <Redirect to="/login" /> } />} */}
                   {<Route path="/signup" component={SignUp} />}
                   {<NotLoggedInRoute path="/login" component={Login} />}
                   {<Route path="/forbidden" component={Forbidden} />}

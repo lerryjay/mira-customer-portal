@@ -221,7 +221,7 @@ class transaction extends Component {
                         style={{ maxWidth: "180px" }}
                         name="page"
                         id="page"
-                        className=" form-control form-select form-select-sm"
+                        className="custom-select custom-select-sm"
                         defaultValue="10"
                       >
                         <option value="10" >
@@ -383,9 +383,10 @@ class transaction extends Component {
                     onChange={this.handleInputChange}
                     name="type"
                     id="type"
-                    className=" form-control form-select form-select-sm"
-                  >
-                    <option value="">
+                    className="custom-select custom-select-sm"
+                    defaultValue=""
+                    >
+                    <option value="" disabled>
                       -- Select --
                     </option>
                     <option value="successful">Successful</option>

@@ -178,7 +178,7 @@ class viewcourse extends Component {
                           return (
         
                             <div className="col-md-4" key={i}>
-                  <div className="card">
+                  <div className="card bg-secondary">
                     {this.state.imageurl
                       ? <img
                         src={FILEURL + course.imageurl}
@@ -197,7 +197,7 @@ class viewcourse extends Component {
                       // style={{ marginTop: "-80px" }}
                       />
                     }
-                    <div className="card-body bg-secondary hover btn-link">
+                    <div className="card-body hover btn-link">
                       <Link to={() => `/viewstudentcourse/${course.id}/${this.state.studentid}`} className="text-white">
                       <h6 className="card-title text-white" style={{cursor: 'pointer'}}>{course.title}</h6>
                       </Link>

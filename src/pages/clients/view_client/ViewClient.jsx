@@ -355,11 +355,11 @@ class ViewClient extends Component {
       imagePreview = (
         <img
           src={imagePreviewUrl}
-          className="imagePreview image_sidebar"
+          className=" image_sidebar"
           height="170px"
           width="170px"
           alt="Preview"
-          style={{ marginTop: "-80px" }}
+          style={{ marginTop: "-80px", objectFit:'cover' }}
         />
       );
     } else {
@@ -374,7 +374,7 @@ class ViewClient extends Component {
           height="170px"
           width="170px"
           alt="Preview"
-          style={{ marginTop: "-80px" }}
+          style={{ marginTop: "-80px", objectFit:'cover'}}
         />
       );
     }

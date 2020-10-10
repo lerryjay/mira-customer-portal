@@ -144,7 +144,9 @@ class CreateClientById extends Component {
                                    <div className="col-md-12 mb-3">
                                         <div className="form-group">
                                             <label htmlFor="" className="sr-only">Client&nbsp;ID</label>
-                                            <select  onChange={this.handleInputChange} className="form-control form-control-sm" name="clientid" defaultValue="">
+                                            <select  onChange={this.handleInputChange} 
+                    className="custom-select custom-select-sm"
+                    name="clientid" defaultValue="">
                                                <option value="">Please select User</option>
                                                 {this.state.users.length > 0 ? this.state.users.map( (client,i) => <option key={i} value={client.user_id} >{client.lastname} {client.firstname}</option>) : null}
                                             </select>
@@ -192,7 +194,7 @@ class CreateClientById extends Component {
                                             value={this.state.companycountryid}
                                             name="companycountryid"
                                             id="companycountryid"
-                                            className=" form-control form-select form-select-sm"
+                                            className="custom-select custom-select-sm"
                                             >
                                             <option value="" >
                                                 Company&nbsp;Country&nbsp;
@@ -213,7 +215,7 @@ class CreateClientById extends Component {
                                             value={this.state.companystateid}
                                             name="companystateid"
                                             id="companystateid"
-                                            className=" form-control form-select form-select-sm"
+                                            className="custom-select custom-select-sm"
                                             >
                                             <option value="" >
                                                 Company&nbsp;State&nbsp;
@@ -232,7 +234,6 @@ class CreateClientById extends Component {
                                                 <input type="text" className="form-control form-control-sm" name="companylga"
                                                     id="companylga" placeholder="Local Government Area"
                                                     value={this.state.companylga}  
-                                                    style={{ height: '35px' }}
                                                     onChange={this.handleInputChange} />
                                             </div>
                                         </div>

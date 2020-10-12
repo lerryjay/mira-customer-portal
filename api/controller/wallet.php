@@ -61,6 +61,7 @@
       extract($_POST);
       loadModel('service');
       loadModel('deployment');
+      loadModel('wallet');
 
       $error        = false;
       $debit        = false;
@@ -83,6 +84,7 @@
         $clientUserId = $deployment['user_id'];
         $tlog         = $tlog ?? date('Y-m-d H:i:s').'|'.$clientUserId;
         $description  = $description ?? $service['title'];
+        $this->walletModel = new WalletModel();
         $balance = $this->walletModel->getUserWalletBalance($clientUserId);
         $tAmount = $service['cost'] + $extraCharge;
         
@@ -129,7 +131,7 @@
 
       $invalidAmount = Validate::float($amount);
       if($invalidAmount) $error = 'Invalid fund amount';
-
+      $this->walletModel = new WalletModel();
       $balance = $this->walletModel->getUserWalletBalance($clientUserId);
       if($amount > $balance) $error = 'Insufficient Funds';
 

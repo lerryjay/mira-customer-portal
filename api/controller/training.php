@@ -78,12 +78,49 @@
       $this->setOutput($res);
     }
 
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
+    public function getcourse()
+    {
+      $get = $_GET;
+      $get['userid'] = $this->appUser;
+      $res = $this->do_get($this->url.'course/getcourse',$get,$this->headers);
+
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput($res);
+    }
+
 
  
 
 
     /** Student */
     
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
+    public function addstudent()
+    {
+      $post = $_POST;
+      $post['userid'] = $this->appUser;
+      $res = $this->do_post($this->url.'user/register',$post,$this->headers);
+
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput($res);
+    }
 
     /**
      * undocumented function summary
@@ -162,6 +199,39 @@
       $post = $_POST;
       $post['userid'] = $this->appUser;
       $res = $this->do_get($this->url.'training/add',$post,$this->headers);
+
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput($res);
+    }
+
+
+
+    /**Training Payment */
+
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
+    public function updatepaymentstatus()
+    {
+      $post = $_POST;
+      $post['userid'] = $this->appUser;
+      $res = $this->do_post($this->url.'training/updatepaymentstatus',$post,$this->headers);
+
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput($res);
+    }
+
+    public function sendreciept()
+    {
+      $post = $_POST;
+      $post['userid'] = $this->appUser;
+      $res = $this->do_post($this->url.'training/sendpaymentreciept',$post,$this->headers);
 
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput($res);

@@ -379,7 +379,7 @@ deleteModal(e) {
                                       className="fa fa-edit mr-1 text-primary"></i>
                                   </span>
                                   <span onClick={() => this.showdeleteInfoModule(module.id)}>
-                                    <i className="fa fa-trash mr text-danger"></i>
+                                    <i className="fa fa-trash mr text-danger" style={{cursor: "pointer"}}></i>
                                   </span>
                                 </span>
                                 }

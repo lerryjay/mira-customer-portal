@@ -202,6 +202,12 @@ export const adminMenu = [
     isActive: false
   },
   {
+    name: 'Web Analytics',
+    route: '/webanalytics',
+    icon: 'fa fa-chart-bar',
+    isActive: false
+  },
+  {
     name: 'Account',
     isDivider: true
   },

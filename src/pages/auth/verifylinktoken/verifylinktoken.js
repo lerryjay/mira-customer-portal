@@ -15,12 +15,12 @@ class VerifyLinkToken extends Component {
     }
 
     verifytoken = async ()=>{
-        // const token = this.props.location.pathname.split("/")[2];
-        // if(token != null && token.length > 0){
-        //     const res = await this.state.verifyLinkToken(token);
-        //     if(res.status) this.setState({ loading : false, valid : true });
-        //     else  this.setState({ loading : false, valid : false });
-        // }else this.setState({ loading : false, valid : false,token : 'Invalid reset token' });
+        const token = this.props.location.pathname.split("/")[2];
+        if(token != null && token.length > 0){
+            const res = await this.state.verifyLinkToken(token);
+            if(res.status) this.setState({ loading : false, valid : true });
+            else  this.setState({ loading : false, valid : false });
+        }else this.setState({ loading : false, valid : false,token : 'Invalid reset token' });
     }
 
      componentDidMount(){

@@ -17,12 +17,16 @@ class CreateClient extends Component {
             gender: '',
             experience:'',
             organization: '',
-            companyrole: '',
+            role: '',
             age: '',
             country: '',
             state: '',
             countries:[],
             states:[],
+            course: [],
+            address: '',
+            password: '',
+            courses: [],
 
             errormessage: '',
             loading: false,
@@ -35,6 +39,7 @@ class CreateClient extends Component {
         this.setState({ loading : false  });
         this.state.hideLoader();
         this.getCountries();
+        this.getCourses();
     }
 
       
@@ -63,7 +68,16 @@ class CreateClient extends Component {
         })
     }
 
-
+    async getCourses() {
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+        const res = await fetch(HTTPURL + `training/listcourses`, {
+          headers: headers,
+        }).then((response) => response.json());
+        if (res["status"]) {
+          this.setState({ courses: res["data"] });
+        }
+      }
 
     handleInputChange = e => {
         const { name, value } = e.target
@@ -80,19 +94,23 @@ class CreateClient extends Component {
             const studentid = this.props.location.pathname.split("/")[2];
 
             let formdata = new FormData();
-            formdata.append("lastname", this.state.lastname);
-            formdata.append("firstname", this.state.firstname);
-            formdata.append("othername", this.state.othername);
-            formdata.append("telephone", this.state.telephone);
+            formdata.append("userid", this.state.user.userid);
             formdata.append("email", this.state.email);
-            formdata.append("studentid", studentid);
-            formdata.append("age", this.state.age);
-            formdata.append("gender", this.state.gender);
-            formdata.append("companyrole", this.state.companyrole);
+            formdata.append("firstname", this.state.firstname);
+            formdata.append("lastname", this.state.lastname);
+            formdata.append("othername", this.state.othername);
+            formdata.append("address", this.state.address);
             formdata.append("organization", this.state.organization);
-            formdata.append("experience", this.state.experience);
-            formdata.append("state", this.state.state);
+            formdata.append("role", this.state.role);
+            formdata.append("gender", this.state.gender);
             formdata.append("country", this.state.country);
+            formdata.append("state", this.state.state);
+            formdata.append("experience", this.state.experience);
+            formdata.append("age", this.state.age);
+            formdata.append("courseid", this.state.course);
+            formdata.append("telephone", this.state.telephone);
+            formdata.append("password", this.state.password);
+            
 
             fetch(`${HTTPURL}training/addstudent`, {
                 method: "POST",
@@ -158,7 +176,7 @@ class CreateClient extends Component {
                                             </div>
                                         </div>
                                         
-                                        <div className="col-md-12 mb-3">
+                                        <div className="col-md-4 mb-3">
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Email</label>
                                                 <input type="text" className="form-control form-control-sm" name="email"
@@ -167,7 +185,7 @@ class CreateClient extends Component {
                                                     onChange={this.handleInputChange} />
                                             </div>
                                         </div>
-                                        <div className="col-md-6 mb-3">
+                                        <div className="col-md-4 mb-3">
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Telephone</label>
                                                 <input type="text" className="form-control form-control-sm" name="telephone"
@@ -177,7 +195,7 @@ class CreateClient extends Component {
                                             </div>
                                         </div>
                                         
-                                        <div className="col-md-6 mb-3">
+                                        <div className="col-md-4 mb-3">
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Age</label>
                                                 <input type="number" className="form-control form-control-sm" name="age"
@@ -187,30 +205,74 @@ class CreateClient extends Component {
                                             </div>
                                         </div>
 
+                                        <div className="col-md-12 mb-3">
+                                            <div className="form-group">
+                                                <label htmlFor="" className="sr-only">Address</label>
+                                                <input type="text" className="form-control form-control-sm" name="address"
+                                                    id="address" placeholder="Address"
+                                                    value={this.state.address} 
+                                                    onChange={this.handleInputChange} />
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6 mb-3">
+                                            <div className="form-group">
+                                                <label htmlFor="" className="sr-only">Password</label>
+                                                <input type="text" className="form-control form-control-sm" name="password"
+                                                    id="password" placeholder="Password" 
+                                                    value={this.state.password}
+                                                    onChange={this.handleInputChange} />
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="col-md-6 mb-3">
+                                            <div className="form-group">
+                                                <label htmlFor="" className="sr-only">Course</label>
+                                            <select
+                                            name="course"
+                                            id="course"
+                                            className=" custom-select custom-select-sm"
+                                            defaultValue=""
+                                            value={this.state.course}
+                                            onChange={(e) => {
+                                                this.setState({ course: e.target.value });
+                                            }}
+                                            >
+                                            <option value="" disabled> -- Select Course --</option>
+                                            
+                                            {this.state.courses.map((course,i) => {
+                                                return (
+                                                <option key={i} value={course.id}>{course.title}</option>
+                                                );
+                                            })}
+
+                                            </select>
+                                            </div>
+                                        </div>
+
                                         <div className="col-md-4 mb-3">
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Organization</label>
-                                                <input type="text" className="form-control form-control-sm" name="businessname"
-                                                    id="businesname" placeholder="Business Name" 
-                                                    value={this.state.businessname}
+                                                <input type="text" className="form-control form-control-sm" name="organization"
+                                                    id="organization" placeholder="Organization" 
+                                                    value={this.state.organization}
                                                     onChange={this.handleInputChange} />
                                             </div>
                                         </div>
                                         <div className="col-md-4 mb-3">
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Company Role</label>
-                                                <input type="text" className="form-control form-control-sm" name="companyemail"
-                                                    id="companyemail" placeholder="Company Email"
-                                                    value={this.state.companyemail} 
+                                                <input type="text" className="form-control form-control-sm" name="role"
+                                                    id="role" placeholder="Company Role"
+                                                    value={this.state.companyrole} 
                                                     onChange={this.handleInputChange} />
                                             </div>
                                         </div>
                                         <div className="col-md-4 mb-3">
                                             <div className="form-group">
                                                 <label htmlFor="" className="sr-only">Experience</label>
-                                                <input type="text" className="form-control form-control-sm" name="companytelephone"
-                                                    id="companytelephone" placeholder="Company Telephone" 
-                                                    value={this.state.companytelephone}
+                                                <input type="text" className="form-control form-control-sm" name="experience"
+                                                    id="experience" placeholder="Experience " 
+                                                    value={this.state.experience}
                                                     onChange={this.handleInputChange} />
                                             </div>
                                         </div>
@@ -223,10 +285,14 @@ class CreateClient extends Component {
                                             <select
                                             name="gender"
                                             id="gender"
-                                            className=" form-control form-select form-select-sm"
+                                            className=" custom-select custom-select-sm"
                                             defaultValue=""
+                                            value={this.state.gender}
+                                            onChange={(e) => {
+                                                this.setState({ gender: e.target.value });
+                                            }}
                                             >
-                                            <option value=""> Gender</option>
+                                            <option value="" disabled> Gender</option>
                                             <option value="male">Male</option>
                                             <option value="female">Female</option>
 
@@ -237,14 +303,15 @@ class CreateClient extends Component {
                                             <select
                                             onChange={(e) => {
                                                 this.getStates(e.target.value);
-                                                this.setState({ companycountryid: e.target.value });
+                                                this.setState({ country: e.target.value });
                                             }}
-                                            value={this.state.companycountryid}
-                                            name="companycountryid"
-                                            id="companycountryid"
-                                            className=" form-control form-select form-select-sm"
+                                            value={this.state.country}
+                                            name="country"
+                                            id="country"
+                                            className=" custom-select custom-select-sm"
+                                            defaultValue=""
                                             >
-                                            <option value=""  >
+                                            <option value="" disabled >
                                                 Company&nbsp;Country&nbsp;
                                             </option>
 
@@ -258,14 +325,15 @@ class CreateClient extends Component {
                                         <div className="col-md-4 mb-3">
                                             <select
                                             onChange={(e) => {
-                                                this.setState({ companystateid: e.target.value });
+                                                this.setState({ state: e.target.value });
                                             }}
-                                            value={this.state.companystateid}
-                                            name="companystateid"
-                                            id="companystateid"
-                                            className=" form-control form-select form-select-sm"
+                                            value={this.state.state}
+                                            name="state"
+                                            id="state"
+                                            className=" custom-select custom-select-sm"
+                                            defaultValue=""
                                             >
-                                            <option value=""  >
+                                            <option value="" disabled >
                                                 Company&nbsp;State&nbsp;
                                             </option>
 

@@ -48,18 +48,18 @@ class api_logs extends Component {
       };
     
       async getPageNumbers() {
-        const headers = new Headers();
-        headers.append("API-KEY", APIKEY);
+        // const headers = new Headers();
+        // headers.append("API-KEY", APIKEY);
                 
-        const res = await fetch(
-          HTTPURL + `log/list?userid=${this.state.user.userid}&pageNumbers`,
-          {
-            method: "GET",
-            headers: headers,
-          }
-        ).then((response) => response.json());
+        // const res = await fetch(
+        //   HTTPURL + `log/list?userid=${this.state.user.userid}&pageNumbers`,
+        //   {
+        //     method: "GET",
+        //     headers: headers,
+        //   }
+        // ).then((response) => response.json());
     
-        if (res["status"]) this.setState({ pageNumbers: res["data"] });
+        // if (res["status"]) this.setState({ pageNumbers: res["data"] });
       
       }
     
@@ -278,9 +278,10 @@ class api_logs extends Component {
                         style={{ maxWidth: "180px" }}
                         name="page"
                         id="page"
-                        className="custom-select custom-select-md"
+                        className="custom-select custom-select-sm"
+                        defaultValue="10"
                         >
-                        <option value="10" defaultValue>
+                        <option value="10" >
                           10
                         </option>
                         <option value="20">20</option>
@@ -443,7 +444,7 @@ class api_logs extends Component {
                     className="custom-select custom-select-md"
                     defaultValue=""
                   >
-                    <option value="">
+                    <option value="" disabled>
                       -- Select --
                     </option>
                     <option value="successful">Successful</option>

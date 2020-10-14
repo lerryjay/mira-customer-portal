@@ -85,6 +85,10 @@ class Students extends Component {
     this.setState({ currentPage: newPage });
   };
 
+  exportData() {
+    console.log(this.state.totalLists.join())
+    // this.createDataObject('output.csv', this.state.totalLists.join());
+  }
   render() {
     const { numberPerPage, currentPage, totalLists ,user} = this.state;
 
@@ -102,10 +106,15 @@ class Students extends Component {
 
           {user.role === "admin"
          ? <div className="row mt-4 d-flex justify-content-end mb-3 mr-2" >
+            <button onClick={this.exportData()} id="exportButton" className="btn btn-sm btn-danger new_product mr-2">
+              <i className="fa fa-file-excel"></i> 
+              <small>Export to Excel</small>
+            </button>
+
               <Link to="/addstudent">
-                <button type="button" className="btn btn-sm btn-primary new_product">
+                <button type="button" className="btn btn-sm btn-primary new_product mr-2">
                     <i className="fas fa-plus" aria-hidden="true">
-                        <small className="newproduct" style={{ color: '#fff' }}>&nbsp;Add&nbsp;Student</small>
+                        <small style={{ color: '#fff' }}>&nbsp;Add&nbsp;Student</small>
                     </i>
                 </button>
               </Link>
@@ -123,6 +132,7 @@ class Students extends Component {
                 <div id="table" className="card pt-2 mt-3 justify-content-center shadow px-2">
                   <div className="table-responsive">
                     <table
+                      data-show-export="true"
                       className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart"
                       id="myTable"
                     >
@@ -188,7 +198,7 @@ class Students extends Component {
                         style={{ maxWidth: "180px" }}
                         name="page"
                         id="page"
-                        className=" form-control form-select form-select-sm"
+                        className="custom-select custom-select-sm "
                         defaultValue="10"
                       >
                         <option value="10" >

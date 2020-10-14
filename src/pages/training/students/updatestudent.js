@@ -256,7 +256,7 @@ class UpdateCourse extends Component {
                                             <select
                                             name="gender"
                                             id="gender"
-                                            className=" form-control form-select form-select-sm"
+                                            className=" custom-select custom-select-sm"
                                             defaultValue=""
                                             >
                                             <option value=""  disabled> Gender</option>
@@ -275,16 +275,16 @@ class UpdateCourse extends Component {
                                             value={this.state.companycountryid}
                                             name="companycountryid"
                                             id="companycountryid"
-                                            className=" form-control form-select form-select-sm"
+                                            className=" custom-select custom-select-sm"
                                             defaultValue=""
                                             >
                                             <option value=""  disabled>
                                                 Company&nbsp;Country&nbsp;
                                             </option>
 
-                                            {this.state.countries.map((country) => {
+                                            {this.state.countries.map((country,i) => {
                                                 return (
-                                                <option value={country.country_id}>{country.name}</option>
+                                                <option key={i} value={country.country_id}>{country.name}</option>
                                                 );
                                             })}
                                             </select>
@@ -297,7 +297,7 @@ class UpdateCourse extends Component {
                                             value={this.state.companystateid}
                                             name="companystateid"
                                             id="companystateid"
-                                            className=" form-control form-select form-select-sm"
+                                            className="custom-select custom-select-sm"
                                             defaultValue=""
                                             >
                                             <option value=""  disabled>

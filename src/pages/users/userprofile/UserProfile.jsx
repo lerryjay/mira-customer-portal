@@ -136,7 +136,7 @@ class Profile extends Component {
             </div>
           )}
           
-          {!this.state.loader &&  <div className="col-md-12 mb-3 mt-4" id="profile">
+          {!this.state.loader &&  <div className="col-md-12 mb-3 mt-5" id="profile">
           <div className="w-100 text-center">
             <h3>PROFILE INFORMATION </h3>
           </div>

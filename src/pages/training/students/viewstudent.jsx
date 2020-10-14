@@ -9,6 +9,7 @@ import avatar from "../../../assets/images/avatar.png";
 class viewcourse extends Component {
   state = {
     students: [],
+    imageurl: '',
     lastname: '',
     firstname: '',
     othername: '',
@@ -86,16 +87,31 @@ class viewcourse extends Component {
 
   render() {
     return (
-      <div className="container-fluid mx-auto">
-
-        <div className="row">
-          <div className="col-md-12 mb-3 mt-4" id="profile">
+      <div className="container mx-auto">
+        
+        <div className="col-md-12 mb-3 mt-4" id="profile">
             <div className="w-100 text-center">
               <h3>STUDENT INFORMATION </h3>
             </div>
           </div>
 
-          <div className="col-md-4 text-center mb-3" id="studentPix">
+          <div className="co-md-12">
+         <nav aria-label="breadcrumb">
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                        <Link to="/students">
+                          All Students
+                          </Link>
+              </li>
+              <li className="breadcrumb-item" aria-current="page">Student profile</li>
+            </ol>
+          </nav>
+         </div>
+
+        <div className="row">
+          
+
+          <div className="col-md-3 text-center mb-3" id="studentPix">
             <div className="card">
               <div className="card-header"></div>
               <div className="card-body">
@@ -120,9 +136,7 @@ class viewcourse extends Component {
               </div>
             </div>
 
-            <div id="accordion">
-            <div className="card">
-              <div className="" id="headingOne">
+            <div className="" id="headingOne">
                 <h5 className="mb-0">
                   <button 
                    className="btn btn-primary custom-show rounded-0 btn-block text-left " 
@@ -130,18 +144,27 @@ class viewcourse extends Component {
                    data-target="#collapseOne" 
                    aria-expanded="true" 
                    aria-controls="collapseOne"
-                   onClick={this.show}
                    >
                      {this.state.lastname}&nbsp;{this.state.firstname}&nbsp;{this.state.othername}
-                    <i className="fa fa-caret-down text-right mt-1"></i>
         </button>
                 </h5>
               </div>
+              
+          
 
-              <div id="profiledetails" className="collapse custom-show" aria-labelledby="headingOne" data-parent="#accordion">
+          </div>
+
+
+
+          <div className="col-md-9">
+          <div className="card">
+          <div className="row">
+<div className="col-md-7">
+  
+<div id="profiledetails" aria-labelledby="headingOne" >
                 <div className="card-body ">
                   <div className="text-left">
-                    <p><i className="fa fa-envelope text-purple mr-3"></i>  {this.state.email} </p>
+                    <p><i className="fa fa-envelope text-purple mr-3"></i>  {this.state.email}  </p>
                     <p><i className="fa fa-phone text-purple mr-3"></i> {this.state.telephone} </p>
                     <p><i className="fa fa-child text-purple mr-3"></i> {this.state.age} Years</p>
                     <p><i className="fa fa-user text-purple mr-3"></i>  {this.state.gender} </p>
@@ -150,99 +173,109 @@ class viewcourse extends Component {
                     <p><i className="fa fa-map-marker-alt text-purple mr-3"></i> {this.state.state}, {this.state.country}</p>
 
                   </div>
+
+
                 </div>
               </div>
+            
+</div>
+            <div className="col-md-5">
+                                
+<div className="col-md-12">
+
+<Link to={() => `/editstudent/${this.state.studentid}`}>
+  <button
+    type="button"
+    className="btn mt-3 m-2 btn-primary mb-2"
+  >
+    <small className="newproduct" style={{ color: "#fff" }}>
+      &nbsp;Edit&nbsp;Student&nbsp;
+</small>
+  </button>
+</Link>
+  <button
+  onClick={() =>
+    this.showdeleteModal(
+      this.state.studentid
+    )
+  }
+    type="button"
+    className="btn mt-3 m-2 btn-danger mb-2"
+  >
+    <small
+      className="newproduct"
+      style={{ color: "#fff" }}
+    >
+      &nbsp;Suspend Student&nbsp;
+</small>
+  </button>
+</div>
             </div>
-          </div>
-
-          </div>
-
-
-
-          <div className="col-md-8">
-            <div className="">
-              <h4>Courses</h4>
-
-
-              {this.state.courses.length === 0 
-                        ? <div className="col-md-12 w-100 h-50 alert alert-warning mt-5" role="alert">
-                            <h6 className="text-center">No courses has been registered yet</h6>
-                        </div>
-                        :
-              <div className="table-responsive">
-              <table className="table d-flex">
-
-           
-              
-                          {this.state.courses.map((course, i) => {
-                          return (
+            </div>
         
-                            <div className="col-md-4" key={i}>
-                  <div className="card bg-secondary">
-                    {this.state.imageurl
-                      ? <img
-                        src={FILEURL + course.imageurl}
-                        alt=""
-                        className="image_sidebar"
-                        height="170px"
-                        width="170px"
-                        style={{ marginTop: "-80px" }}
-                      />
-                      : <img
-                        src={placeholder}
-                        alt=""
-                        className="card-img-top"
-                      // height="170px"
-                      // width="170px"
-                      // style={{ marginTop: "-80px" }}
-                      />
-                    }
-                    <div className="card-body hover btn-link">
-                      <Link to={() => `/viewstudentcourse/${course.id}/${this.state.studentid}`} className="text-white">
-                      <h6 className="card-title text-white" style={{cursor: 'pointer'}}>{course.title}</h6>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                  )})}
-           
-  
-              
-              </table>
-              </div>
-              }
-            </div>
-            <div className="col-md-12">
 
-              <Link to={() => `/editstudent/${this.state.studentid}`}>
-                <button
-                  type="button"
-                  className="btn mt-3 m-2 btn-primary mb-2"
-                >
-                  <small className="newproduct" style={{ color: "#fff" }}>
-                    &nbsp;Edit&nbsp;Student&nbsp;
-    </small>
-                </button>
-              </Link>
-                <button
-                onClick={() =>
-                  this.showdeleteModal(
-                    this.state.studentid
-                  )
-                }
-                  type="button"
-                  className="btn mt-3 m-2 btn-danger mb-2"
-                >
-                  <small
-                    className="newproduct"
-                    style={{ color: "#fff" }}
-                  >
-                    &nbsp;Suspend Student&nbsp;
-  </small>
-                </button>
-            </div>
+          </div>
+         
           </div>
 
+<div className="col-md-12">
+<div className="mt-4">
+
+  <h3> Course</h3>
+
+
+{this.state.courses.length === 0 
+          ? <div className="col-md-12 w-100 h-50 alert alert-warning mt-4" role="alert">
+              <h6 className="text-center">No courses has been registered yet</h6>
+          </div>
+          :
+<div className="table-responsive mt-4">
+{/* <table className="table d-flex"> */}
+
+
+
+            {this.state.courses.map((course, i) => {
+            return (
+
+              <div className="col-md-4" key={i}>
+    <div className="card bg-white">
+      {this.state.imageurl
+        ? <img
+          src={FILEURL + course.imageurl}
+          alt=""
+          className="image_sidebar"
+          height="120px"
+          width="120px"
+          style={{ marginTop: "-80px" }}
+        />
+        : <img
+          src={placeholder}
+          alt=""
+          className="card-img-top"
+          height="120px"
+          width="120px"
+          style={{objectFit: 'cover'}}
+        // height="170px"
+        // width="170px"
+        // style={{ marginTop: "-80px" }}
+        />
+      }
+      <div className="card-body hover btn-link">
+        <Link to={() => `/viewstudentcourse/${course.id}/${course.course_id}/${this.state.studentid}`} className="text-white">
+        <h6 className="card-title text-secondary font-weight-bold text-center" style={{cursor: 'pointer'}}>{course.title}</h6>
+        </Link>
+      </div>
+    </div>
+  </div>
+    )})}
+
+
+{/* 
+</table> */}
+</div>
+}
+</div>
+</div>
         
         </div>
 

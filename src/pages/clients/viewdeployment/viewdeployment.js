@@ -251,7 +251,7 @@ class viewclientproduct extends Component {
               />
             </div>
             <div className="col-md-7 offset-md-1">
-              <h3 className="text-dark">{this.state.productname}</h3>
+              <h3 className="text-dark">{this.state.productname} &nbsp; <span style={{color: '#7b7373', fontSize: '1.4rem'}}> #{this.state.clientproductid} </span></h3>
               <h6>{this.state.productdescription}</h6>
 
               <div className="row mt-5">
@@ -413,9 +413,9 @@ class viewclientproduct extends Component {
                             }}
                             alt="Product"
                           />
-                          <Link onClick={() => this.deleteFiles(index, item)}>
+                          <span onClick={() => this.deleteFiles(index, item)}>
                               <i className="fa fa-trash text-danger"></i>
-                          </Link>
+                          </span>
                         </div>
                       ) : (
                           <div className="attached_files">

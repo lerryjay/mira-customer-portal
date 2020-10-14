@@ -60,6 +60,7 @@ import ScrollToTop from "./common/components/ScrollToTop";
 import UserApiLogs from "./pages/api_logs/UserApi/api_logs";
 import Transactions from "./pages/transactions/transaction"
 import Services from "./pages/services/services"
+import WebAnalytics from "./pages/webanalytics/webanalytics"
 
 import CoursePage from "./pages/training/coursepage"
 import AddCourse from "./pages/training/courses/addcourse"
@@ -376,6 +377,7 @@ class App extends Component {
                       <PrivateRoute path="/apilogs"  component={UserApiLogs} />
                       <PrivateRoute path="/transactions"  component={Transactions} />
                       <PrivateRoute path="/services"  component={Services} />
+                      <PrivateRoute path="/webanalytics" component={WebAnalytics} />
 
                       <PrivateRoute path="/coursepage"  component={CoursePage} />
                       <PrivateRoute path="/addcourse"  component={AddCourse} />
@@ -418,11 +420,9 @@ class App extends Component {
                       <AdminPrivateRoute path="/userprofile" permission="VIEWUSER" component={UserProfile} />
                   
                   {<Route path="/forgot-password" component={ForgotPassword} />}
-                      {<Route path="/verify-token" component={VerifyToken} />}
-                      {<Route path="/reset-password" component={ResetPassword} />}
-                  {/* {<Route path="/verify-token" component={(props)=> this.state.accepttoken ?  <VerifyToken {...props} /> : <Redirect to="/login" /> } />} */}
+                  {<Route path="/verify-token" component={(props)=> this.state.accepttoken ?  <VerifyToken {...props} /> : <Redirect to="/login" /> } />}
                   {<Route path="/vlt" component={VerifyLinkToken} />}
-                  {/* {<Route path="/reset-password" component={(props)=> this.state.enablereset ? <ResetPassword {...props} /> : <Redirect to="/login" /> } />} */}
+                  {<Route path="/reset-password" component={(props)=> this.state.enablereset ? <ResetPassword {...props} /> : <Redirect to="/login" /> } />}
                   {<Route path="/signup" component={SignUp} />}
                   {<NotLoggedInRoute path="/login" component={Login} />}
                   {<Route path="/forbidden" component={Forbidden} />}

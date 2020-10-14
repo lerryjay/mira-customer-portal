@@ -39,7 +39,7 @@ const Pagination = ( {numberPerPage, currentPage, totalLists, pageNumbers, updat
             } else {
 
               return (
-            <a href="#" id={index + 1} key={index}   onClick={(e) => handleClick(e, index + 1)}>{pageNumber}</a>
+            <a href="#" id={index + 1} key={index} onClick={(e) => handleClick(e, index + 1)}>{pageNumber}</a>
               )}
             }
           )}

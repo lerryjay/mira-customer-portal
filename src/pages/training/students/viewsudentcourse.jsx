@@ -121,7 +121,8 @@ class viewstudentcourse extends Component {
       headers: headers,
     }).then((response) => response.json())
     this.setState({ loading: false });
-    if (res.status) {
+    if (res.status) {  
+      this.getCourse();
       this.state.showAlert('success', res.message);
       let modal = document.getElementById("updateModal");
       modal.style.display = "none";
@@ -144,39 +145,7 @@ class viewstudentcourse extends Component {
     modal.style.display = "none";
   }
   
-  // sendReceipt = async (e) => {
-  //   e.preventDefault();
-  //   this.setState({ loading: true });
 
-  //   const trainingid = this.props.location.pathname.split("/")[2];
-
-  //   const headers = new Headers();
-  //   headers.append("API-KEY", APIKEY);
-
-  //   let form = new FormData();
-  //   form.append("userid", this.state.user.userid);
-  //   form.append("paymentstatus", this.state.rpaymentstatus);
-  //   form.append("amount", this.state.ramount);
-  //   form.append("trainingid", trainingid);
-
-  //   const res = await fetch(HTTPURL + "training/sendreciept", {
-  //     method: "POST",
-  //     body: form,
-  //     headers: headers,
-  //   }).then((response) => response.json())
-  //   this.setState({ loading: false });
-  //   console.log(res.status, res.message)
-  //   if (res.status) {
-  //     this.state.showAlert('success', res.message);
-  //     let modal = document.getElementById("myModal");
-  //     modal.style.display = "none";
-  //   }
-  //   else{
-  //     this.state.showAlert('danger', res.message);
-  //   }
-  //   this.setState({ updateData: true });
-  //   return res;
-  // };
   sendReceipt = async (e) => {
     e.preventDefault();
     this.setState({ loading: true });
@@ -198,7 +167,9 @@ class viewstudentcourse extends Component {
       headers: headers,
     }).then((response) => response.json())
     this.setState({ loading: false });
-    if (res.status) {
+
+    if (res.status) {        
+      this.getCourse();
       this.state.showAlert('success', res.message);
       let modal = document.getElementById("myModal");
       modal.style.display = "none";

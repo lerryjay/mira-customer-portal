@@ -186,20 +186,18 @@ class EditClient extends Component {
             formdata.append("userid", this.state.user.userid);
             formdata.append("clientid", clientid);
 
-            fetch(`${HTTPURL}clients/update`, {
+           const res = await fetch(`${HTTPURL}clients/update`, {
                 method: "POST",
                 headers: myHeaders,
                 body: formdata
-            }).then(response => response.json()).
-                then(data => {
-                        this.setState({ loading: false });
-                        if(data.status === true) {
-                            this.state.showAlert("success", data.message)
-                        } else{
-                            this.state.showAlert("danger",  data.message)
-                        }
-                })
-
+            }).then(response => response.json())
+            
+            this.setState({ loading: false });
+            if(res.status) {
+                this.state.showAlert("success", res.message)
+            } else{
+                this.state.showAlert("danger",  res.message)
+            }
 
         }
     }

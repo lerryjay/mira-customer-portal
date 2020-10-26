@@ -22,35 +22,28 @@ class viewstudentcourse extends Component {
     }
 
     componentDidMount() {
-        this.props.user.role === "admin" && this.getCourse();
+        this.props.user.role === "admin" && this.getStudentCourse();
+        
     }
     
+    async getStudentCourse() {
+      const headers = new Headers();
+      headers.append("API-KEY", APIKEY);
+
+      const id = this.props.location.pathname.split("/")[2];
+
+      const res = await fetch(HTTPURL + `training/studentcourse?trainingid=${id}`, {
+        headers: headers,
+      }).then((response) => response.json());
+      if (res["status"]) {
+        this.setState({ course: res["data"]});
+      }
+    }
+
     handleInputChange = e => {
       const { name, value } = e.target
       this.setState({ [name]: value, errormessage: '' });
   }
-
-    async getCourse() {
-       
-    const headers = new Headers();
-    headers.append("API-KEY", APIKEY);
-
-    const studentid = this.props.location.pathname.split("/")[4];
-    const id = this.props.location.pathname.split("/")[2];
-
-    const res = await fetch(HTTPURL + `training/studentprofile?studentid=${studentid}&userid=${this.props.user.userid}`, {
-      headers: headers,
-    }).then((response) => response.json());
-    if (res["status"]) {
-         const courses = res["data"].courses
-         const selectedCourse = courses.find(
-          (course) => course.id === id
-        );
-        this.setState({
-          course : selectedCourse
-        });
-  }
-    }
 
     closedeleteModal() {
       let modal = document.getElementById("deleteModal");

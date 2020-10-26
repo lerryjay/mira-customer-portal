@@ -300,7 +300,7 @@ class viewcourse extends Component {
         />
       }
       <div className="card-body hover btn-link">
-        <Link to={() => `/viewstudentcourse/${course.id}/${course.course_id}/${this.state.studentid}`} className="text-white">
+        <Link to={() => `/viewstudentcourse/${course.id}`} className="text-white">
         <h6 className="card-title text-secondary font-weight-bold text-center" style={{cursor: 'pointer'}}>{course.title}</h6>
         </Link>
       </div>

@@ -8,53 +8,16 @@ class webanalytics extends Component {
         super(props);
         this.state = {
           ...this.props,
-          userid: "",
+          limit: "",
           startdate: "",
           enddate: "",
-          type: "",
+          pageno: "",
           on: "",
           searchUser: "",
           clients: [],
           currentPage: 1,
           numberPerPage: 10,
-          totalLists: [
-            // {
-            //     date: '2020-09-29 12:04PM',
-            //     location: 'Lagos',
-            //     device: 'Infinix Smart 3 Plus',
-            //     IP: '172.16.234.23'
-            // },
-            // {
-            //     date: '2020-09-29 12:04PM',
-            //     location: 'Lagos',
-            //     device: 'Infinix Smart 3 Plus',
-            //     IP: '172.16.234.23'
-            // },
-            // {
-            //     date: '2020-09-29 12:04PM',
-            //     location: 'Lagos',
-            //     device: 'Infinix Smart 3 Plus',
-            //     IP: '172.16.234.23'
-            // },
-            // {
-            //     date: '2020-09-29 12:04PM',
-            //     location: 'Lagos',
-            //     device: 'Infinix Smart 3 Plus',
-            //     IP: '172.16.234.23'
-            // },
-            // {
-            //     date: '2020-09-29 12:04PM',
-            //     location: 'Lagos',
-            //     device: 'Infinix Smart 3 Plus',
-            //     IP: '172.16.234.23'
-            // },
-            // {
-            //     date: '2020-09-29 12:04PM',
-            //     location: 'Lagos',
-            //     device: 'Infinix Smart 3 Plus',
-            //     IP: '172.16.234.23'
-            // },
-          ],
+          totalLists: [],
           pageNumbers: [],
           currentLists: [],
         };
@@ -83,15 +46,28 @@ class webanalytics extends Component {
 
       handleInputChange = (e) => {
         const { name, value } = e.target;
-        if (name === "searchUser") {
-          let client = this.state.users.find(
-            (item) => item.firstname + " " + item.lastname == value
-          );
-          if (client == null)
-            client = this.state.clients.find((item) => item.businessname == value);
-          if (client) this.state.userid = client.userid || client.user_id;
-        }
         this.setState({ [name]: value });
+      };
+    
+      handleSearch = async (e) => {
+        e.preventDefault();
+    
+        const { user, pageno, limit, startdate, enddate, on } = this.state;
+    
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+         await fetch(
+          HTTPURL +
+            `weblog/fliter?userid=${user.userid}&on=${on}&startdate=${startdate}&enddate=${enddate}&pageno=${pageno}&limit=${limit}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status) this.setState({ course: data.data });
+          });
       };
     
     
@@ -296,7 +272,7 @@ class webanalytics extends Component {
                           return (
                             <tr key={index}>
                             <td className="table-padding">
-                              {analytic.date}
+                              {analytic.created_at}
                             </td>
                               <td className="table-padding">{analytic.url}</td>
                               <td className="table-padding">{analytic.page}</td>
@@ -309,7 +285,7 @@ class webanalytics extends Component {
                                   {analytic.location}
                                 </td>
                               )}
-                              <td className="table-padding">{analytic.IP}</td>
+                              <td className="table-padding">{analytic.ip}</td>
                               </tr>
                           );
                         })}

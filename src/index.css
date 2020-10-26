@@ -69,6 +69,11 @@ body{
   text-decoration: underline;
 }
 
+.image-fit{
+  height: 70px;
+  object-fit: cover;
+}
+
 @media (prefers-color-scheme: dark) {
   /* defaults to dark theme */
   div.home {

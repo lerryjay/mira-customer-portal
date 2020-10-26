@@ -18,48 +18,68 @@ class webanalytics extends Component {
           currentPage: 1,
           numberPerPage: 10,
           totalLists: [
-            {
-                date: '2020-09-29 12:04PM',
-                location: 'Lagos',
-                device: 'Infinix Smart 3 Plus',
-                IP: '172.16.234.23'
-            },
-            {
-                date: '2020-09-29 12:04PM',
-                location: 'Lagos',
-                device: 'Infinix Smart 3 Plus',
-                IP: '172.16.234.23'
-            },
-            {
-                date: '2020-09-29 12:04PM',
-                location: 'Lagos',
-                device: 'Infinix Smart 3 Plus',
-                IP: '172.16.234.23'
-            },
-            {
-                date: '2020-09-29 12:04PM',
-                location: 'Lagos',
-                device: 'Infinix Smart 3 Plus',
-                IP: '172.16.234.23'
-            },
-            {
-                date: '2020-09-29 12:04PM',
-                location: 'Lagos',
-                device: 'Infinix Smart 3 Plus',
-                IP: '172.16.234.23'
-            },
-            {
-                date: '2020-09-29 12:04PM',
-                location: 'Lagos',
-                device: 'Infinix Smart 3 Plus',
-                IP: '172.16.234.23'
-            },
+            // {
+            //     date: '2020-09-29 12:04PM',
+            //     location: 'Lagos',
+            //     device: 'Infinix Smart 3 Plus',
+            //     IP: '172.16.234.23'
+            // },
+            // {
+            //     date: '2020-09-29 12:04PM',
+            //     location: 'Lagos',
+            //     device: 'Infinix Smart 3 Plus',
+            //     IP: '172.16.234.23'
+            // },
+            // {
+            //     date: '2020-09-29 12:04PM',
+            //     location: 'Lagos',
+            //     device: 'Infinix Smart 3 Plus',
+            //     IP: '172.16.234.23'
+            // },
+            // {
+            //     date: '2020-09-29 12:04PM',
+            //     location: 'Lagos',
+            //     device: 'Infinix Smart 3 Plus',
+            //     IP: '172.16.234.23'
+            // },
+            // {
+            //     date: '2020-09-29 12:04PM',
+            //     location: 'Lagos',
+            //     device: 'Infinix Smart 3 Plus',
+            //     IP: '172.16.234.23'
+            // },
+            // {
+            //     date: '2020-09-29 12:04PM',
+            //     location: 'Lagos',
+            //     device: 'Infinix Smart 3 Plus',
+            //     IP: '172.16.234.23'
+            // },
           ],
           pageNumbers: [],
           currentLists: [],
         };
       }
 
+      
+      componentDidMount() {
+        this.getAnalytics();
+      }
+
+      async getAnalytics() {
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+                
+        const res = await fetch(
+          HTTPURL + `weblog/filter?userid=${this.state.user.userid}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        ).then((response) => response.json());
+    
+        if (res["status"]) this.setState({ totalLists: res["data"] });
+      
+      }
 
       handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -109,17 +129,17 @@ class webanalytics extends Component {
     return (
       <div className="container">
           
+          <div className="w-100 text-center">
+                <h3  className="text-uppercase">Web Analytics </h3>
+              </div>
         <div className="row">
         <div className="col-md-12 col-sm-12 box1 mb-3" id="profile">
             {this.state.totalLists.length === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
-                <h6 className="text-center">No web analytic records!</h6>
+                <h6 className="text-center">There are currently no logs available!</h6>
               </div>
             ) : (
               <div>
-              <div className="w-100 text-center">
-                <h3  className="text-uppercase">Web Analytics </h3>
-              </div>
                   <div className="row">
                   <div className="col-md-12 col-sm-12 mt-3 mb-3">
             {/* <div className="card"> */}
@@ -262,8 +282,12 @@ class webanalytics extends Component {
                       <thead>
                         <tr>
                           <th className="table-padding">Date & Time</th>
-                          <th>Location</th>
+                          <th>URL</th>
+                          <th>Page</th>
+                          <th>Session ID</th>
                           <th>Device</th>
+                          <th>Browser</th>
+                          <th>Location</th>
                           <th>IP Address</th>
                         </tr>
                       </thead>
@@ -274,13 +298,17 @@ class webanalytics extends Component {
                             <td className="table-padding">
                               {analytic.date}
                             </td>
+                              <td className="table-padding">{analytic.url}</td>
+                              <td className="table-padding">{analytic.page}</td>
+                              <td className="table-padding">{analytic.sessionid}</td>
+                              <td className="table-padding">{analytic.device}</td>
+                              <td className="table-padding">{analytic.browser}</td>
                               {this.state.user.role == "admin" && (
                                 <td
                                 className="table-padding">
                                   {analytic.location}
                                 </td>
                               )}
-                              <td className="table-padding">{analytic.device}</td>
                               <td className="table-padding">{analytic.IP}</td>
                               </tr>
                           );

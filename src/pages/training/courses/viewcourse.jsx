@@ -7,6 +7,7 @@ import avatar from "../../../assets/images/addstudent.png";
 
 class viewcourse extends Component {
     state = {
+      ...this.props,
       courses: [],
       title: '',
       description: '',
@@ -56,12 +57,6 @@ class viewcourse extends Component {
         (course) => course.id === courseid
       );
       this.setState({
-        title: selectedCourse.title,
-        description: selectedCourse.description,
-        cost: selectedCourse.cost,
-        date: selectedCourse.createdat,
-        durations: selectedCourse.durations,
-        imageurl: selectedCourse.imageurl,
         courseid: selectedCourse.id
       });
 
@@ -71,6 +66,25 @@ class viewcourse extends Component {
   
     deleteCourse = async () => {
      
+    const headers = new Headers();
+    headers.append('API-KEY', APIKEY);
+
+    fetch(HTTPURL + `training/deletecourse?userid=${this.state.user.userid}&courseid=${this.state.courseid}`, {
+        method: 'GET',
+        headers: headers
+    })
+        .then(response => response.json())
+        .then(async data => {
+            if(data.status === true) {
+                this.state.showAlert("success", data.message);
+                let modal = document.getElementById("suspendModal")
+                modal.style.display = "none";
+                this.props.history.push('/courses');
+
+            } else{
+                this.state.showAlert("danger",  data.message)
+            }
+        });
           
     }
   

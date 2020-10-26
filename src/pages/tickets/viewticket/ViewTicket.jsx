@@ -3,6 +3,8 @@ import { withContext } from "../../../common/context";
 import { HTTPURL, APIKEY, FILEURL } from "../../../common/global_constant";
 import placeholder from "../../../assets/images/product-placeholder.gif";
 import pdf_placeholder from "../../../assets/images/pdf.png";
+import avatar from "../../../assets/images/avatar.svg";
+
 
 class ViewTicket extends Component {
   constructor(props) {
@@ -148,8 +150,8 @@ class ViewTicket extends Component {
     });
     return (
       <div className="container mx-auto mt-md-5" id="profile">
-          <div className="card home-chart mt-4">
-            <div className="card-header bg-medium font-weight-bold text-dark">
+          <div className="card bg-white  mt-4">
+            <div className="card-header bg-white font-weight-bold text-dark">
               <span className="font-weight-bolder mr-4 ticket-title">
                 TICKET ID: #{this.state.id}
               </span>
@@ -232,40 +234,53 @@ class ViewTicket extends Component {
                     <div key={i}>
                       {chat.role === "admin" ? (
                         <div className="row mb-4" id="client">
-                          <div className="col-md-7 col-sm-12 ">
-                            <div
-                              className="chatbox"
-                              style={{ background: "#a8afb5" }}
-                            >
-                              {chat.message}
-                              <br />
-                              <small>{chat.role}</small>
-                            </div>
-                            {JSON.parse(chat.files).map((file,i) => {
-                              return (
-                                <div
-                                key={i}
-                                className="mt-2 ml-3">
-                                  <img src={FILEURL + file} height="50px" alt={file}/>
+                          <div className="col-md-7">
+                            <div className="row">
+                              <div className="col-md-2">
+                                <img src={avatar} alt="admin-pic" className="image-fit" />
+                              </div>
+                              <div className="col-md-10">
+                                <div className="card shadow p-3 bg-white">
+                                  <p className="font-weight-bold capitalize"> {chat.role} <span className="msg_time ml-3">{chat.createdat}</span></p>
+                                  <p>{chat.message} </p>   
+                                  {JSON.parse(chat.files).map((file,i) => {
+                                      return (
+                                        <div
+                                        key={i}>
+                                          <img src={FILEURL + file} height="50px" alt={file}/>
+                                        </div>
+                                      );
+                                    })}                     
                                 </div>
-                              );
-                            })}
-                            <span className="msg_time">{chat.createdat}</span>
+                              </div>
+                            </div>
                           </div>
                           <div className="col-md-5 col-sm-12 "></div>
                         </div>
                       ) : (
-                        <div className="row my-2" id="admin">
-                          <div className="col-md-5 col-sm-12"></div>
-                          <div className="col-md-7 col-sm-12 p-2 text-right text-white">
-                            {chat.files}
-                            <div className="chatbox bg-secondary">
-                              {chat.message}
-                              <br />
-                              <small>{chat.role}</small>
+                        <div className="row mb-4" id="admin">
+                        <div className="col-md-5 col-sm-12 "></div>
+                        <div className="col-md-7">
+                          <div className="row">
+                            <div className="col-md-10">
+                              <div className="card shadow p-3 bg-white">
+                                <p className="font-weight-bold capitalize"> {chat.role} <span className="msg_time ml-3">{chat.createdat}</span></p>
+                                <p>{chat.message} </p>   
+                                {JSON.parse(chat.files).map((file,i) => {
+                                    return (
+                                      <div
+                                      key={i}>
+                                        <img src={FILEURL + file} height="50px" alt={file}/>
+                                      </div>
+                                    );
+                                  })}                     
+                              </div>
                             </div>
-                            <span className="msg_time">{chat.createdat}</span>
+                            <div className="col-md-2">
+                              <img src={avatar} alt="client-pic" className="image-fit" />
+                            </div>
                           </div>
+                        </div>
                         </div>
                       )}
                     </div>
@@ -274,7 +289,9 @@ class ViewTicket extends Component {
               </div>
             </div>
 
-            <div className="card-footer p-0 pb-3">
+          </div>
+          
+          <div className="card bg-white py-3 mt-3">
               <form onSubmit={this.handleSubmit} encType="multipart/form-data">
                 <div className="container">
                   <div className="row">
@@ -286,7 +303,7 @@ class ViewTicket extends Component {
                         rows="4"
                         placeholder="Message"
                         type="text"
-                        className="form-control my-3"
+                        className="form-control mb-2"
                         value={this.state.chat}
                         onChange={this.handleInputChange}
                       ></textarea>
@@ -329,7 +346,6 @@ class ViewTicket extends Component {
 
               </form>
             </div>
-          </div>
       </div>
     );
   }

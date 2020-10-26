@@ -148,7 +148,7 @@ class CreateClientById extends Component {
                     className="custom-select custom-select-sm"
                     name="clientid" defaultValue="">
                                                <option value="">Please select User</option>
-                                                {this.state.users.length > 0 ? this.state.users.map( (client,i) => <option key={i} value={client.user_id} >{client.lastname} {client.firstname}</option>) : null}
+                                                {this.state.users.length > 0 ? this.state.users.map( (client,i) => <option key={i} value={client.userid} >{client.lastname} {client.firstname}</option>) : null}
                                             </select>
                                             
                                         </div>
@@ -156,7 +156,7 @@ class CreateClientById extends Component {
 
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
-                                            <label htmlFor="" className="sr-only">Business Nmae</label>
+                                            <label htmlFor="" className="sr-only">Business Name</label>
                                             <input type="text" className="form-control form-control-sm" name="businessname"
                                                 id="businesname" placeholder="Business Name" 
                                                 value={this.state.businessname}

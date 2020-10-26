@@ -70,6 +70,7 @@ import Courses from "./pages/training/courses/courses"
 
 import StudentPage from "./pages/training/studentpage"
 import AddStudent from "./pages/training/students/addstudent"
+import AddStudentCourse from "./pages/training/students/addstudentcourse"
 import Students from "./pages/training/students/students"
 import ViewStudent from "./pages/training/students/viewstudent"
 import UpdateStudent from "./pages/training/students/updatestudent"
@@ -390,6 +391,7 @@ class App extends Component {
                       <PrivateRoute path="/viewstudent"  component={ViewStudent} />
                       <PrivateRoute path="/editstudent"  component={UpdateStudent} />
                       <PrivateRoute path="/students"  component={Students} />
+                      <PrivateRoute path="/addstudentcourse"  component={AddStudentCourse} />
                       <PrivateRoute path="/viewstudentcourse"  component={ViewStudentCourse} />
                       
 

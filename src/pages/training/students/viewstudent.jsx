@@ -7,20 +7,37 @@ import avatar from "../../../assets/images/avatar.png";
 
 
 class viewcourse extends Component {
-  state = {
-    students: [],
-    imageurl: '',
-    lastname: '',
-    firstname: '',
-    othername: '',
-    telephone: '',
-    email: '',
-    courses: [],
-    showmodal: true
-  }
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      ...props,
+      students: [],
+      imageurl: '',
+      lastname: '',
+      firstname: '',
+      othername: '',
+      telephone: '',
+      email: '',
+      courses: [],
+      showmodal: true
+    }
+}
 
   componentDidMount() {
     this.props.user.role === "admin" && this.getStudent();
+    this.getStudents();
+  }
+
+  async getStudents() {
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    const res = await fetch(HTTPURL + `training/liststudents`, {
+      headers: headers,
+    }).then((response) => response.json());
+    if (res["status"]) {
+      this.setState({ students: res["data"], totalLists: res["data"] });
+    }
   }
 
   async getStudent() {
@@ -59,7 +76,7 @@ class viewcourse extends Component {
     modal.style.display = "none";
   }
 
-  showdeleteModal(studentid) {
+  showsuspendStudent(studentid) {
     const selectedStudent = this.state.students.find(
       (student) => student.userid === studentid
     );
@@ -77,6 +94,28 @@ class viewcourse extends Component {
 
   suspendStudent = async () => {
 
+    this.setState({ loading: true });
+
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+        const res = await fetch(
+          `${HTTPURL}training/suspendstudent?studentid=${this.state.studentid}&userid=${this.state.user.userid}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        );
+        if (res.status) {
+          this.setState({ loading: false });
+          this.state.showAlert("success", 'Suspend Successfully!')
+          let modal = document.getElementById("suspendModal");
+          modal.style.display = "none";
+        } 
+        else{
+          this.setState({ loading: false });
+          let modal = document.getElementById("suspendModal");
+          modal.style.display = "none";
+        }
 
   }
 
@@ -183,19 +222,19 @@ class viewcourse extends Component {
                                 
 <div className="col-md-12">
 
-<Link to={() => `/editstudent/${this.state.studentid}`}>
+<Link to={() => `/addstudentcourse/${this.state.studentid}`}>
   <button
     type="button"
     className="btn mt-3 m-2 btn-primary mb-2"
   >
     <small className="newproduct" style={{ color: "#fff" }}>
-      &nbsp;Edit&nbsp;Student&nbsp;
+      &nbsp;Add&nbsp;Course&nbsp;
 </small>
   </button>
 </Link>
   <button
   onClick={() =>
-    this.showdeleteModal(
+    this.showsuspendStudent(
       this.state.studentid
     )
   }
@@ -229,7 +268,7 @@ class viewcourse extends Component {
               <h6 className="text-center">No courses has been registered yet</h6>
           </div>
           :
-<div className="table-responsive mt-4">
+<div className="row mt-4">
 {/* <table className="table d-flex"> */}
 
 

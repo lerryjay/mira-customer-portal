@@ -12,8 +12,10 @@ class viewstudentcourse extends Component {
       ...this.props,
       course: [],
       paymentstatus: '',
+      paymentoption: '',
       amount: '',
       rpaymentstatus: '',
+      rpaymentoption: '',
       ramount: '',
       trainingid: '',
       showmodal: true
@@ -66,12 +68,12 @@ class viewstudentcourse extends Component {
   
     deleteCourse = async () => {
      
-    const courseid = this.props.location.pathname.split("/")[3];
+    const courseid = this.props.location.pathname.split("/")[2];
 
       const headers = new Headers();
       headers.append('API-KEY', APIKEY);
   
-      fetch(HTTPURL + `training/deletecourse?userid=${this.state.user.userid}&courseid=${courseid}`, {
+      fetch(HTTPURL + `training/deletestudentcourse?userid=${this.state.user.userid}&trainingid=${courseid}`, {
           method: 'GET',
           headers: headers
       })
@@ -79,7 +81,7 @@ class viewstudentcourse extends Component {
           .then(async data => {
               if(data.status === true) {
                   this.state.showAlert("success", data.message);
-                  let modal = document.getElementById("myModal")
+                  let modal = document.getElementById("deleteModal")
                   modal.style.display = "none";
                   this.props.history.push('/students');
   
@@ -112,6 +114,7 @@ class viewstudentcourse extends Component {
     let form = new FormData();
     form.append("userid", this.state.user.userid);
     form.append("paymentstatus", this.state.paymentstatus);
+    form.append("paymentoption", this.state.paymentoption);
     form.append("amount", this.state.amount);
     form.append("trainingid", trainingid);
 
@@ -158,6 +161,7 @@ class viewstudentcourse extends Component {
     let form = new FormData();
     form.append("userid", this.state.user.userid);
     form.append("paymentstatus", this.state.rpaymentstatus);
+    form.append("paymentoption", this.state.rpaymentoption);
     form.append("amount", this.state.ramount);
     form.append("trainingid", trainingid);
 
@@ -236,21 +240,11 @@ class viewstudentcourse extends Component {
                        </span> 
                     </li>
                     <li className="list-group-item"><i className="fab fa-cc-paypal text-purple mr-3"></i>Pay Option <span className="float-right">{this.state.course.payoption}</span> </li>
-                    <li className="list-group-item"><i className="fa fa-calendar-alt text-purple mr-3"></i> Payment Date <span className="float-right">{this.state.course.paymentdate}</span> </li>
+                    <li className="list-group-item"><i className="fa fa-calendar-alt text-purple mr-3"></i> Payment Date <span className="float-right">{this.state.course.paymentdate || this.state.course.created_at}</span> </li>
                   
             </ul>
             </div>
                   <div className="col-md-12">
-
-
-                  <button
-                          type="button"
-                          className="btn mt-3 m-2 btn-primary mb-2"
-                        >
-                          <small className="newproduct" style={{ color: "#fff" }}>
-                            &nbsp;Edit&nbsp;Course&nbsp;
-                          </small>
-                        </button>
 
                         <button
                           type="button"
@@ -388,42 +382,80 @@ class viewstudentcourse extends Component {
                      
 <div className="col-md-12 mb-4">
   
+  <label
+                  style={{ display: "block" }}
+                  className="font-weight-bold"
+                >
+                  Payment Status
+                </label>
+  <select
+                            className="custom-select custom-select-sm"
+                            value={this.state.paymentstatus}onChange={(e) => {
+                              this.setState({ paymentstatus: e.target.value });
+                          }}
+                          >
+                            <option value="" disabled>-- Select --</option>
+                            <option
+                              className="btn btn-sm text-success"
+                              value="complete"
+                            >
+                              {" "}
+                              &#10003;&nbsp;&nbsp;Complete{" "}
+                            </option>
+                            <option
+                              className="btn btn-sm text-warning"
+                              value="incomplete"
+                            >
+                              &#1008;&nbsp;&nbsp;Incomplete
+                            </option>
+                            <option
+                              className="btn btn-sm btn-light text-danger"
+                              value="pending"
+                            >
+                              &#10070;&nbsp;&nbsp;Pending
+                            </option>
+                          </select>
+                      
+              </div>
+                 
+<div className="col-md-12 mb-4">
+  
 <label
                 style={{ display: "block" }}
                 className="font-weight-bold"
               >
-                Payment Status
+                Payment Option
               </label>
 <select
                           className="custom-select custom-select-sm"
-                          value={this.state.paymentstatus}onChange={(e) => {
-                            this.setState({ paymentstatus: e.target.value });
+                          value={this.state.paymentoption}onChange={(e) => {
+                            this.setState({ paymentoption: e.target.value });
                         }}
                         >
                           <option value="" disabled>-- Select --</option>
                           <option
-                            className="btn btn-sm text-success"
-                            value="complete"
+                            className="btn btn-sm"
+                            value="paystack"
                           >
                             {" "}
-                            &#10003;&nbsp;&nbsp;Complete{" "}
+                            Paystack{" "}
                           </option>
                           <option
-                            className="btn btn-sm text-warning"
-                            value="incomplete"
+                            className="btn btn-sm"
+                            value="banktransfer"
                           >
-                            &#1008;&nbsp;&nbsp;Incomplete
+                            Bank Transfer
                           </option>
                           <option
-                            className="btn btn-sm btn-light text-danger"
-                            value="pending"
+                            className="btn btn-sm"
+                            value="offline"
                           >
-                            &#10070;&nbsp;&nbsp;Pending
+                           Offline
                           </option>
                         </select>
                     
-</div>
-
+            </div>
+  
                         </div>
 
                         <div className="d-flex justify-content-center">
@@ -541,7 +573,44 @@ class viewstudentcourse extends Component {
                         </select>
                     
 </div>
-
+<div className="col-md-12 mb-4">
+  
+<label
+                style={{ display: "block" }}
+                className="font-weight-bold"
+              >
+                Payment Option
+              </label>
+<select
+                          className="custom-select custom-select-sm"
+                          value={this.state.rpaymentoption}onChange={(e) => {
+                            this.setState({ rpaymentoption: e.target.value });
+                        }}
+                        >
+                          <option value="" disabled>-- Select --</option>
+                          <option
+                            className="btn btn-sm"
+                            value="paystack"
+                          >
+                            {" "}
+                            Paystack{" "}
+                          </option>
+                          <option
+                            className="btn btn-sm"
+                            value="banktransfer"
+                          >
+                            Bank Transfer
+                          </option>
+                          <option
+                            className="btn btn-sm"
+                            value="offline"
+                          >
+                           Offline
+                          </option>
+                        </select>
+                    
+            </div>
+  
                         </div>
 
                         <div className="d-flex justify-content-center">

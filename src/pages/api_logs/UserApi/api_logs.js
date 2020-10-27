@@ -31,7 +31,6 @@ class api_logs extends Component {
       componentDidMount() {
         this.getLogs();
         this.getApiStatistics();
-        this.getPageNumbers();
       }
 
       handleInputChange = (e) => {
@@ -46,38 +45,6 @@ class api_logs extends Component {
         }
         this.setState({ [name]: value });
       };
-    
-      async getPageNumbers() {
-        // const headers = new Headers();
-        // headers.append("API-KEY", APIKEY);
-                
-        // const res = await fetch(
-        //   HTTPURL + `log/list?userid=${this.state.user.userid}&pageNumbers`,
-        //   {
-        //     method: "GET",
-        //     headers: headers,
-        //   }
-        // ).then((response) => response.json());
-    
-        // if (res["status"]) this.setState({ pageNumbers: res["data"] });
-      
-      }
-    
-      handleClick(event) {
-        const paginatedbuttons = document.querySelectorAll("a");
-    
-        this.setState({
-          currentPage: event.target.id,
-        });
-    
-        paginatedbuttons.forEach((btn) => {
-          if (btn.id == event.target.id) {
-            btn.classList.add("active");
-          } else {
-            btn.classList.remove("active");
-          }
-        });
-      }
 
       async getLogs() {
         const headers = new Headers();
@@ -91,9 +58,73 @@ class api_logs extends Component {
           }
         ).then((response) => response.json());
     
-        if (res["status"]) this.setState({ totalLists: res["data"] });
+        if (res["status"]){
+           this.setState({ totalLists: res["data"] });
+           this.getPageNo();
+          }
+        }
       
-      }
+        async getPageNo() {
+          const { currentPage, numberPerPage } = this.state;
+      
+          const headers = new Headers();
+          headers.append("API-KEY", APIKEY);
+          await fetch(
+            HTTPURL +
+              `log/list?userid=${this.state.user.userid}&pageno=${currentPage}&limit=${numberPerPage}`,
+            {
+              method: "GET",
+              headers: headers,
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              this.setState({currentLists: data.data})
+            });
+        }
+      
+      
+        update = (newPage) => {   
+            // Update page number
+       
+          const {numberPerPage} = this.state;
+      
+          const headers = new Headers();
+          headers.append("API-KEY", APIKEY);
+           fetch(
+            HTTPURL +
+              `log/list?userid=${this.state.user.userid}&pageno=${newPage}&limit=${numberPerPage}`,
+            {
+              method: "GET",
+              headers: headers,
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              this.setState({currentLists: data.data})
+            });
+      
+        };
+      
+        getpageLimit (pagelimit) {  
+      
+          this.setState({numberPerPage: pagelimit});
+      
+          const headers = new Headers();
+          headers.append("API-KEY", APIKEY);
+          fetch(
+            HTTPURL +
+              `log/list?userid=${this.state.user.userid}&limit=${pagelimit}`,
+            {
+              method: "GET",
+              headers: headers,
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              this.setState({currentLists: data.data})
+            });
+        };
 
       async getApiStatistics()
 {
@@ -129,19 +160,8 @@ class api_logs extends Component {
       };
        
 
-      update = (newPage) => {
-        this.setState({ currentPage: newPage });
-      };
     
       render() {
-        const { numberPerPage, currentPage, totalLists } = this.state;
-    
-        // Logic for displaying current lists
-        const indexOfLastList = currentPage * numberPerPage;
-        const indexOfFirstList = indexOfLastList - numberPerPage;
-        const currentLists = totalLists.slice(indexOfFirstList, indexOfLastList);
-        this.state.currentLists = currentLists;
-
     return (
       <div className="container">
       <div className="row my-4 d-flex justify-content-end ">
@@ -272,9 +292,9 @@ class api_logs extends Component {
                   <div className="form-group mt-1">
                     {this.state.totalLists.length > 0 && (
                       <select
-                        onChange={(e) => {
-                          this.setState({ numberPerPage: e.target.value });
-                        }}
+                      onChange={(e) => {
+                        this.getpageLimit(e.target.value);
+                      }}
                         style={{ maxWidth: "180px" }}
                         name="page"
                         id="page"

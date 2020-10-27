@@ -40,24 +40,10 @@ class transaction extends Component {
         this.setState({ [name]: value });
       };
     
-    
-      handleClick(event) {
-        const paginatedbuttons = document.querySelectorAll("a");
-    
-        this.setState({
-          currentPage: event.target.id,
-        });
-    
-        paginatedbuttons.forEach((btn) => {
-          if (btn.id == event.target.id) {
-            btn.classList.add("active");
-          } else {
-            btn.classList.remove("active");
-          }
-        });
-      }
-    
       async getTransactions() {
+        
+        this.state.showLoader();
+
         const headers = new Headers();
         headers.append("API-KEY", APIKEY);
         
@@ -71,23 +57,80 @@ class transaction extends Component {
           }
         ).then((response) => response.json());
     
-        if (res["status"]) this.setState({ totalLists: res["data"] });
-      
+        if (res["status"]) {
+          this.setState({ totalLists: res["data"] });
+          this.getPageNo();
+          
+          this.state.hideLoader();
+        }
+        
+        this.state.hideLoader();
       }
-
-
-      update = (newPage) => {
-        this.setState({ currentPage: newPage });
+    
+      async getPageNo() {
+        const { currentPage, numberPerPage } = this.state;
+    
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+        await fetch(
+          HTTPURL +
+            `wallet/transactions?userid=${this.state.user.userid}&pageno=${currentPage}&limit=${numberPerPage}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            this.setState({currentLists: data.data})
+          });
+      }
+    
+    
+      update = (newPage) => {   
+          // Update page number
+     
+        const {numberPerPage} = this.state;
+    
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+         fetch(
+          HTTPURL +
+            `wallet/transactions?userid=${this.state.user.userid}&pageno=${newPage}&limit=${numberPerPage}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            this.setState({currentLists: data.data})
+          });
+    
       };
     
-      render() {
-        const { numberPerPage, currentPage, totalLists } = this.state;
+      getpageLimit (pagelimit) {  
     
-        // Logic for displaying current lists
-        const indexOfLastList = currentPage * numberPerPage;
-        const indexOfFirstList = indexOfLastList - numberPerPage;
-        const currentLists = totalLists.slice(indexOfFirstList, indexOfLastList);
-        this.state.currentLists = currentLists;
+        this.setState({numberPerPage: pagelimit});
+    
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+        fetch(
+          HTTPURL +
+            `wallet/transactions?userid=${this.state.user.userid}&limit=${pagelimit}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            this.setState({currentLists: data.data})
+          });
+      };
+    
+    
+      render() {
 
     return (
       <div className="container">
@@ -115,7 +158,7 @@ class transaction extends Component {
               <div className="col font-card text-right">
                 <span className=" ">Successful<br/> Transactions</span>
                 <br />
-                <span className="text-large">230</span>
+                <span className="text-large">0</span>
               </div>
             </div>
           </div>
@@ -129,7 +172,7 @@ class transaction extends Component {
               <div className="col font-card text-right">
                 <span className=" ">Cancelled<br/> Transactions</span>
                 <br />
-                <span className="text-large">230</span>
+                <span className="text-large">0</span>
               </div>
             </div>
           </div>
@@ -143,7 +186,7 @@ class transaction extends Component {
               <div className="col font-card text-right">
                 <span className=" ">Failed <br/> Transactions</span>
                 <br />
-                <span className="text-large">230</span>
+                <span className="text-large">0</span>
               </div>
             </div>
           </div>
@@ -215,9 +258,9 @@ class transaction extends Component {
                   <div className="form-group mt-1">
                     {this.state.totalLists.length > 0 && (
                       <select
-                        onChange={(e) => {
-                          this.setState({ numberPerPage: e.target.value });
-                        }}
+                      onChange={(e) => {
+                        this.getpageLimit(e.target.value);
+                      }}
                         style={{ maxWidth: "180px" }}
                         name="page"
                         id="page"

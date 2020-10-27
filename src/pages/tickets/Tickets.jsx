@@ -80,12 +80,73 @@ class Tickets extends Component {
     ).then((response) => response.json());
     if (res["status"]) {
       let tickets = res["data"];
-      // for (let i = 0; i < this.state.tickets.length; i++) {
-      //   tickets.push(this.state.tickets[i]);
-      // }
       this.setState({ tickets });
+      this.getPageNo();
     }
   }
+
+  async getPageNo() {
+    const { currentPage, numberPerPage } = this.state;
+
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    await fetch(
+      HTTPURL +
+        `ticket?userid=${this.state.user.userid}&pageno=${currentPage}&limit=${numberPerPage}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({currentLists: data.data})
+      });
+  }
+
+
+  update = (newPage) => {   
+      // Update page number
+ 
+    const {numberPerPage} = this.state;
+
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+     fetch(
+      HTTPURL +
+        `ticket?userid=${this.state.user.userid}&pageno=${newPage}&limit=${numberPerPage}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({currentLists: data.data})
+      });
+
+  };
+
+  getpageLimit (pagelimit) {  
+    const {numberPerPage} = this.state;
+
+    this.setState({numberPerPage: pagelimit});
+
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    fetch(
+      HTTPURL +
+        `ticket?userid=${this.state.user.userid}&limit=${numberPerPage}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({currentLists: data.data})
+      });
+  };
 
   ticketStatusUpdated(e, ticket) {
     const tickets = this.state.tickets.map((item) => {
@@ -107,12 +168,11 @@ class Tickets extends Component {
     form.append("ticketid", ticketid);
     form.append("status", status);
     form.append("userid", this.state.user.userid);
-    const res = await fetch(HTTPURL + `ticket/updatestatus`, {
+    await fetch(HTTPURL + `ticket/updatestatus`, {
       method: "POST",
       headers: headers,
       body: form,
     }).then((response) => response.json());
-    // res.status && this.state.getTickets() && this.getTickets();
   }
 
   handleSearch = async (e) => {
@@ -122,7 +182,7 @@ class Tickets extends Component {
 
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
-    const res = await fetch(
+    await fetch(
       HTTPURL +
         `ticket?userid=${user.userid}&clientid=${userid}&on=${on}&startdate=${startdate}&enddate=${enddate}&type=${type}`,
       {
@@ -136,35 +196,9 @@ class Tickets extends Component {
       });
   };
 
-  handleClick(event) {
-    const paginatedbuttons = document.querySelectorAll("a");
 
-    this.setState({
-      currentPage: event.target.id,
-    });
-
-    paginatedbuttons.forEach((btn) => {
-      if (btn.id == event.target.id) {
-        btn.classList.add("active");
-      } else {
-        btn.classList.remove("active");
-      }
-    });
-  }
-
-  update = (newPage) => {
-    this.setState({ currentPage: newPage });
-  };
 
   render() {
-    const { numberPerPage, currentPage, totalLists } = this.state;
-
-    // Logic for displaying current lists
-    const indexOfLastList = currentPage * numberPerPage;
-    const indexOfFirstList = indexOfLastList - numberPerPage;
-    const currentLists = totalLists.slice(indexOfFirstList, indexOfLastList);
-    this.state.currentLists = currentLists;
-
     return (
       <div className="container-fluid px-5">
         <div className="row mt-4">
@@ -278,7 +312,7 @@ class Tickets extends Component {
                     {this.state.tickets.length > 0 && (
                       <select
                         onChange={(e) => {
-                          this.setState({ numberPerPage: e.target.value });
+                          this.getpageLimit(e.target.value);
                         }}
                         style={{ maxWidth: "180px" }}
                         name="page"

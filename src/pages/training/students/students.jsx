@@ -42,8 +42,71 @@ class Students extends Component {
     }).then((response) => response.json());
     if (res["status"]) {
       this.setState({ students: res["data"], totalLists: res["data"] });
+      this.getPageNo();
     }
   }
+
+  async getPageNo() {
+    const { currentPage, numberPerPage } = this.state;
+
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    await fetch(
+      HTTPURL +
+        `training/liststudents?userid=${this.state.user.userid}&pageno=${currentPage}&limit=${numberPerPage}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({currentLists: data.data})
+      });
+  }
+
+
+  update = (newPage) => {   
+      // Update page number
+ 
+    const {numberPerPage} = this.state;
+
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+     fetch(
+      HTTPURL +
+        `training/liststudents?userid=${this.state.user.userid}&pageno=${newPage}&limit=${numberPerPage}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({currentLists: data.data})
+      });
+
+  };
+
+  getpageLimit (pagelimit) {  
+    const {numberPerPage} = this.state;
+
+    this.setState({numberPerPage: pagelimit})
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    fetch(
+      HTTPURL +
+        `training/liststudents?userid=${this.state.user.userid}&limit=${numberPerPage}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({currentLists: data.data})
+      });
+  };
 
   async updateModal(id) {
 
@@ -63,40 +126,12 @@ class Students extends Component {
     modal.style.display = "none";
   }
 
-
-  handleClick(event) {
-    const paginatedbuttons = document.querySelectorAll("a");
-
-    this.setState({
-      currentPage: event.target.id,
-    });
-
-    paginatedbuttons.forEach((btn) => {
-      if (btn.id == event.target.id) {
-        btn.classList.add("active");
-      } else {
-        btn.classList.remove("active");
-      }
-    });
-  }
-
-
-  update = (newPage) => {
-    this.setState({ currentPage: newPage });
-  };
-
   exportData() {
     console.log(this.state.totalLists.join())
     // this.createDataObject('output.csv', this.state.totalLists.join());
   }
   render() {
-    const { numberPerPage, currentPage, totalLists ,user} = this.state;
-
-    // Logic for displaying current lists
-    const indexOfLastList = currentPage * numberPerPage;
-    const indexOfFirstList = indexOfLastList - numberPerPage;
-    const currentLists = totalLists.slice(indexOfFirstList, indexOfLastList);
-    this.state.currentLists = currentLists;
+   const {user} = this.state;
 
     return (
       <div className="container-fluid">
@@ -123,7 +158,7 @@ class Students extends Component {
         }
 
           <div className="col-md-12 box1 mb-3" id="profile">
-            {this.state.tickets.length === 0 ? (
+            {this.state.totalLists.length === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No student records!</h6>
               </div>
@@ -192,9 +227,9 @@ class Students extends Component {
                   <div className="form-group mt-1">
                     {this.state.totalLists.length > 0 && (
                       <select
-                        onChange={(e) => {
-                          this.setState({ numberPerPage: e.target.value });
-                        }}
+                      onChange={(e) => {
+                        this.getpageLimit(e.target.value);
+                      }}
                         style={{ maxWidth: "180px" }}
                         name="page"
                         id="page"

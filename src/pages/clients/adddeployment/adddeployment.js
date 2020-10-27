@@ -273,10 +273,7 @@ class AddClientProduct extends Component {
                         onFocus={this.onFocus}
                         value={this.state.paymentdate}
                         style={{ height: '35px' }}
-                        onChange={(e) => {
-                          this.paymentDate(e.target.value, this.state.licensecoverage);
-                          this.setState({ paymentdate: e.target.value });
-                        }}
+                        onChange={this.handleInputChange}
                       />
                     </div>
                   </div>

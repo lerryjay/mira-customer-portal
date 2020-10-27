@@ -262,10 +262,7 @@ class UpdateClientProduct extends Component {
                         onBlur={this.paymentDate}
                         onFocus={this.onFocus}
                         value={this.state.paymentdate}
-                        onChange={(e) => {
-                          this.paymentDate(e.target.value, this.state.licensecoverage);
-                          this.setState({ paymentdate: e.target.value });
-                        }}
+                        onChange={this.handleInputChange}
                       />
                     </div>
                   </div>

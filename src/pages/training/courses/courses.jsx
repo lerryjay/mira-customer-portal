@@ -42,8 +42,71 @@ class Tickets extends Component {
     }).then((response) => response.json());
     if (res["status"]) {
       this.setState({ courses: res["data"], totalLists: res["data"] });
+      this.getPageNo();
     }
   }
+
+  async getPageNo() {
+    const { currentPage, numberPerPage } = this.state;
+
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    await fetch(
+      HTTPURL +
+        `training/listcourses?userid=${this.state.user.userid}&pageno=${currentPage}&limit=${numberPerPage}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({currentLists: data.data})
+      });
+  }
+
+
+  update = (newPage) => {   
+      // Update page number
+ 
+    const {numberPerPage} = this.state;
+
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+     fetch(
+      HTTPURL +
+        `training/listcourses?userid=${this.state.user.userid}&pageno=${newPage}&limit=${numberPerPage}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({currentLists: data.data})
+      });
+
+  };
+
+  getpageLimit (pagelimit) {  
+
+    this.setState({numberPerPage: pagelimit});
+
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    fetch(
+      HTTPURL +
+        `training/listcourses?userid=${this.state.user.userid}&limit=${pagelimit}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({currentLists: data.data})
+      });
+  };
 
   async updateModal(id) {
 
@@ -96,35 +159,8 @@ class Tickets extends Component {
   };
 
 
-  handleClick(event) {
-    const paginatedbuttons = document.querySelectorAll("a");
-
-    this.setState({
-      currentPage: event.target.id,
-    });
-
-    paginatedbuttons.forEach((btn) => {
-      if (btn.id == event.target.id) {
-        btn.classList.add("active");
-      } else {
-        btn.classList.remove("active");
-      }
-    });
-  }
-
-
-  update = (newPage) => {
-    this.setState({ currentPage: newPage });
-  };
-
   render() {
-    const { numberPerPage, currentPage, totalLists ,user} = this.state;
-
-    // Logic for displaying current lists
-    const indexOfLastList = currentPage * numberPerPage;
-    const indexOfFirstList = indexOfLastList - numberPerPage;
-    const currentLists = totalLists.slice(indexOfFirstList, indexOfLastList);
-    this.state.currentLists = currentLists;
+    const {user} = this.state;
 
     return (
       <div className="container-fluid px-5">
@@ -216,9 +252,9 @@ class Tickets extends Component {
                   <div className="form-group mt-1">
                     {this.state.totalLists.length > 0 && (
                       <select
-                        onChange={(e) => {
-                          this.setState({ numberPerPage: e.target.value });
-                        }}
+                      onChange={(e) => {
+                        this.getpageLimit(e.target.value);
+                      }}
                         style={{ maxWidth: "180px" }}
                         name="page"
                         id="page"

@@ -128,7 +128,6 @@ class Tickets extends Component {
   };
 
   getpageLimit (pagelimit) {  
-    const {numberPerPage} = this.state;
 
     this.setState({numberPerPage: pagelimit});
 
@@ -136,7 +135,7 @@ class Tickets extends Component {
     headers.append("API-KEY", APIKEY);
     fetch(
       HTTPURL +
-        `ticket?userid=${this.state.user.userid}&limit=${numberPerPage}`,
+        `ticket?userid=${this.state.user.userid}&limit=${pagelimit}`,
       {
         method: "GET",
         headers: headers,

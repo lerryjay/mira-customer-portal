@@ -12,6 +12,7 @@ class Students extends Component {
     this.state = {
       ...this.props,
       showmodal: true,
+      loader: true,
       title:'',
       description: '',
       cost: '',
@@ -35,15 +36,25 @@ class Students extends Component {
   }
 
   async getStudents() {
+    this.state.showLoader();
+
+    if(this.state.showLoader()){
+      this.setState({loader: true});
+    } else {
+      this.setState({loader: false});
+    }
+    
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
     const res = await fetch(HTTPURL + `training/liststudents`, {
       headers: headers,
     }).then((response) => response.json());
     if (res["status"]) {
-      this.setState({ students: res["data"], totalLists: res["data"] });
+      this.setState({ students: res["data"].students, totalLists: res["data"].total });
       this.getPageNo();
+      this.state.hideLoader();
     }
+    this.state.hideLoader();
   }
 
   async getPageNo() {
@@ -61,7 +72,8 @@ class Students extends Component {
     )
       .then((response) => response.json())
       .then((data) => {
-        this.setState({currentLists: data.data})
+        console.log(data);
+        this.setState({currentLists: data.data["students"]})
       });
   }
 
@@ -83,20 +95,19 @@ class Students extends Component {
     )
       .then((response) => response.json())
       .then((data) => {
-        this.setState({currentLists: data.data})
+        this.setState({currentLists: data.data["students"]})
       });
 
   };
 
   getpageLimit (pagelimit) {  
-    const {numberPerPage} = this.state;
 
     this.setState({numberPerPage: pagelimit})
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
     fetch(
       HTTPURL +
-        `training/liststudents?userid=${this.state.user.userid}&limit=${numberPerPage}`,
+        `training/liststudents?userid=${this.state.user.userid}&limit=${pagelimit}`,
       {
         method: "GET",
         headers: headers,
@@ -104,7 +115,7 @@ class Students extends Component {
     )
       .then((response) => response.json())
       .then((data) => {
-        this.setState({currentLists: data.data})
+        this.setState({currentLists: data.data["students"]})
       });
   };
 
@@ -127,9 +138,9 @@ class Students extends Component {
   }
 
   exportData() {
-    console.log(this.state.totalLists.join())
-    // this.createDataObject('output.csv', this.state.totalLists.join());
-  }
+    let data = JSON.stringify(this.state.totalLists);
+}
+
   render() {
    const {user} = this.state;
 
@@ -158,7 +169,7 @@ class Students extends Component {
         }
 
           <div className="col-md-12 box1 mb-3" id="profile">
-            {this.state.totalLists.length === 0 ? (
+            {this.state.totalLists === 0 && this.state.loader ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No student records!</h6>
               </div>
@@ -225,7 +236,7 @@ class Students extends Component {
               <div className="row mt-5">
                 <div className="col-md-4">
                   <div className="form-group mt-1">
-                    {this.state.totalLists.length > 0 && (
+                    {this.state.totalLists > 0 && (
                       <select
                       onChange={(e) => {
                         this.getpageLimit(e.target.value);
@@ -248,7 +259,7 @@ class Students extends Component {
                   </div>
                 </div>
 
-                <div className="col-md-8 ">
+                <div className="col ">
                   <div className="row  justify-content-center text-center">
                     <Pagination
                       numberPerPage={this.state.numberPerPage}
@@ -260,6 +271,9 @@ class Students extends Component {
                     />
                   </div>
                 </div>
+                    <div className="col text-dark font-weight-bold text-right">
+                      <span>Showing 1 of 3 entries</span>
+                    </div>
               </div>
             )}
 

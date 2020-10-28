@@ -5,10 +5,13 @@ const Pagination = ( {numberPerPage, currentPage, totalLists, pageNumbers, updat
   // Logic for displaying page numbers
       const pageNumber = [];
 
-      for (let i = 1; i <= Math.ceil(totalLists.length / numberPerPage); i++) {
+      for (let i = 1; i <= Math.ceil(totalLists / numberPerPage); i++) {
         pageNumber.push(i);
         pageNumbers = pageNumber
       }
+      // let firstNum = currentPage;
+      // let lastNum = pageNumber.length;
+      // console.log(firstNum, lastNum );
     
     const handleClick = (e) => {
        

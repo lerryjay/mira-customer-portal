@@ -91,6 +91,7 @@ class App extends Component {
       products : [],
       users : [],
       tickets : [],
+      ticketslength: '',
       user : {
         role : 'user',
         permissions : []
@@ -339,7 +340,7 @@ class App extends Component {
     const headers = new Headers();
     headers.append('API-KEY', APIKEY);
     const res = await fetch(HTTPURL + `ticket?userid=${ this.state.user.userid }`, { method: 'GET', headers: headers}).then(response => response.json())
-    if(res['status']) this.setState({ tickets: res.data.tickets })
+    if(res['status']) this.setState({ tickets: res.data.tickets, ticketslength: res.data.total})
   }
 
   async getUsers()

@@ -468,10 +468,11 @@ class AddClientProduct extends Component {
                         <option value="" disabled >
                           License&nbsp;Coverage
                           </option>
+                          <option value="weekly">Monthly</option>
                         <option value="monthly">Monthly</option>
                         <option value="quaterly">Quarterly</option>
-                        <option value="biannually">Bianually</option>
-                        <option value="annually">Annually</option>
+                        <option value="bi-annual">Bianually</option>
+                        <option value="annual">Annually</option>
                         <option value="indefinite">Indefinite</option>
                       </select>
                     </div>

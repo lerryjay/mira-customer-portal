@@ -71,22 +71,12 @@ class viewcourse extends Component {
     })
   }
   }
-  closedeleteModal() {
+  closesuspendModal() {
     let modal = document.getElementById("suspendModal");
     modal.style.display = "none";
   }
 
   showsuspendStudent(studentid) {
-    // const selectedStudent = this.state.students.find(
-    //   (student) => student.userid === studentid
-    // );
-    // this.setState({
-    //   lastname: selectedStudent.lastname,
-    //   firstname: selectedStudent.firstname,
-    //   othername: selectedStudent.othername,
-    //   telephone: selectedStudent.telephone,
-    //   email: selectedStudent.email
-    // });
 
     let modal = document.getElementById("suspendModal")
     modal.style.display = "block";
@@ -114,6 +104,45 @@ class viewcourse extends Component {
         else{
           this.setState({ loading: false });
           let modal = document.getElementById("suspendModal");
+          modal.style.display = "none";
+        }
+
+  }
+
+  closedeleteModal() {
+    let modal = document.getElementById("deleteModal");
+    modal.style.display = "none";
+  }
+
+  showdeleteStudent(studentid) {
+
+    let modal = document.getElementById("deleteModal")
+    modal.style.display = "block";
+  }
+
+  deleteStudent = async () => {
+
+    this.setState({ loading: true });
+
+        const headers = new Headers();
+        headers.append("API-KEY", APIKEY);
+        const res = await fetch(
+          `${HTTPURL}training/deletestudent?studentid=${this.state.studentid}&userid=${this.state.user.userid}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        );
+        if (res.status) {
+          this.setState({ loading: false });
+          this.state.showAlert("success", 'Deleted Successfully!')
+          let modal = document.getElementById("deleteModal");
+          modal.style.display = "none";
+          this.props.history.push("/students");
+        } 
+        else{
+          this.setState({ loading: false });
+          let modal = document.getElementById("deleteModal");
           modal.style.display = "none";
         }
 
@@ -198,7 +227,7 @@ class viewcourse extends Component {
           <div className="col-md-9">
           <div className="card">
           <div className="row">
-<div className="col-md-7">
+<div className="col-md-6">
   
 <div id="profiledetails" aria-labelledby="headingOne" >
                 <div className="card-body ">
@@ -218,14 +247,14 @@ class viewcourse extends Component {
               </div>
             
 </div>
-            <div className="col-md-5">
+            <div className="col-md-6">
                                 
 <div className="col-md-12">
 
 <Link to={() => `/addstudentcourse/${this.state.studentid}`}>
   <button
     type="button"
-    className="btn mt-3 m-2 btn-primary mb-2"
+    className="btn btn-sm mt-3 m-2 btn-primary mb-2"
   >
     <small className="newproduct" style={{ color: "#fff" }}>
       &nbsp;Add&nbsp;Course&nbsp;
@@ -239,13 +268,29 @@ class viewcourse extends Component {
     )
   }
     type="button"
-    className="btn mt-3 m-2 btn-danger mb-2"
+    className="btn btn-sm mt-3 m-2 btn-danger mb-2"
   >
     <small
       className="newproduct"
       style={{ color: "#fff" }}
     >
       &nbsp;Suspend Student&nbsp;
+</small>
+  </button>
+  <button
+  onClick={() =>
+    this.showdeleteStudent(
+      this.state.studentid
+    )
+  }
+    type="button"
+    className="btn btn-sm mt-3 m-2 btn-danger mb-2"
+  >
+    <small
+      className="newproduct"
+      style={{ color: "#fff" }}
+    >
+      &nbsp;Delete Student&nbsp;
 </small>
   </button>
 </div>
@@ -332,7 +377,7 @@ class viewcourse extends Component {
               <div className="row">
                 <div className="col-md-6">
                   <button
-                    onClick={this.closedeleteModal}
+                    onClick={this.closesuspendModal}
                     className="btn-block btn btn-outline-secondary mb-2"
                   >
                     Cancel
@@ -360,6 +405,59 @@ class viewcourse extends Component {
                         className="btn btn-danger btn-block"
                       >
                         Suspend
+                      </button>
+                    )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+            <span></span>
+          )}
+
+
+          {/* Delete Student */}
+        {this.state.showmodal ? (
+          <div id="deleteModal" className="modal">
+            {/* Modal content  */}
+            <div className="modal-content modal-del text-center p-5">
+              <i
+                className="fa fa-exclamation-triangle fa-3x dark-red mb-2"
+                aria-hidden="true"
+              ></i>
+              <h3>Are you sure?</h3>
+              <p> Do you really want to delete this account?</p>
+              <div className="row">
+                <div className="col-md-6">
+                  <button
+                    onClick={this.closedeleteModal}
+                    className="btn-block btn btn-outline-secondary mb-2"
+                  >
+                    Cancel
+                        </button>
+                </div>
+                <div className="col-md-6">
+                  {this.state.loading ? (
+                    <button
+                      type="submit"
+                      className="btn btn-block btn-danger"
+                    >
+                      <div
+                        className="spinner-border text-white"
+                        role="status"
+                        id="loader"
+                      >
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    </button>
+                  ) : (
+                      <button
+                        onClick={() =>
+                          this.deleteStudent(this.state.studentid)
+                        }
+                        className="btn btn-danger btn-block"
+                      >
+                        Delete
                       </button>
                     )}
                 </div>

@@ -53,8 +53,6 @@ class viewcourse extends Component {
     }
   
      showdeleteModal(courseid) {
-      
-
       let modal = document.getElementById("suspendModal")
       modal.style.display = "block";
     }

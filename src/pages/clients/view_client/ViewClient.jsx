@@ -76,8 +76,8 @@ class ViewClient extends Component {
             businessname: result.data.businessname,
             companyemail: result.data.companyemail,
             companytelephone: result.data.companytelephone,
-            companycoutryid: result.data.companycoutryid,
-            companystateid: result.data.companystateid,
+            companycoutry: result.data.companycoutry,
+            companystate: result.data.companystate,
             companylga: result.data.companylga,
             companyaddress: result.data.companyaddress,
             userid: result.data.user_id,
@@ -439,8 +439,8 @@ class ViewClient extends Component {
                         <h6>{this.state.companytelephone}</h6>
                         <h6>{this.state.companyaddress}</h6>
                         <h6>
-                          {this.state.companylga}, {this.state.companystateid},{" "}
-                          {this.state.companycoutryid}
+                          {this.state.companylga}, {this.state.companystate},{" "}
+                          {this.state.companycoutry}
                         </h6>
                         </div>
                         <div className="col-md-5">

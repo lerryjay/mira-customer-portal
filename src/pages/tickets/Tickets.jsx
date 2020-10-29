@@ -345,7 +345,7 @@ class Tickets extends Component {
                     <Pagination
                       numberPerPage={this.state.numberPerPage}
                       currentPage={this.state.currentPage}
-                      totalLists={this.state.tickets}
+                      totalLists={this.state.totalLists}
                       pageNumbers={this.state.pageNumbers}
                       currentLists={this.state.currentLists}
                       update={this.update}

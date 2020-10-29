@@ -19,7 +19,7 @@ class Tickets extends Component {
       clients: [],
       currentPage: 1,
       numberPerPage: 10,
-      totalLists: this.props.tickets,
+      totalLists: [],
       pageNumbers: [],
       currentLists: [],
     };
@@ -82,7 +82,7 @@ class Tickets extends Component {
     ).then((response) => response.json());
     if (res["status"]) {
       let tickets = res["data"];
-      this.setState({ tickets });
+      this.setState({tickets , totalLists: res["data"].total });
       this.getPageNo();
       
       this.state.hideLoader();
@@ -104,7 +104,7 @@ class Tickets extends Component {
     )
       .then((response) => response.json())
       .then((data) => {
-        this.setState({currentLists: data.data})
+        this.setState({currentLists: data.data["tickets"]})
       });
   }
 
@@ -126,7 +126,7 @@ class Tickets extends Component {
     )
       .then((response) => response.json())
       .then((data) => {
-        this.setState({currentLists: data.data})
+        this.setState({currentLists: data.data["tickets"]})
       });
 
   };
@@ -200,7 +200,7 @@ class Tickets extends Component {
     )
       .then((response) => response.json())
       .then((data) => {
-        if (data.status) this.setState({ tickets: data.data });
+        if (data.status) this.setState({ tickets: data.data.tickets });
       });
   };
 
@@ -215,7 +215,7 @@ class Tickets extends Component {
           </div>
 
           <div className="col-md-9 col-sm-12 box1 mb-3" id="profile">
-            {  !this.state.loaderActive && this.state.tickets.length === 0 ? (
+            {  !this.state.loaderActive && this.state.totalLists === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No ticket records!</h6>
               </div>
@@ -318,7 +318,7 @@ class Tickets extends Component {
               <div className="row mt-5">
                 <div className="col-md-4">
                   <div className="form-group mt-1">
-                    {this.state.tickets.length > 0 && (
+                    {this.state.totalLists > 0 && (
                       <select
                         onChange={(e) => {
                           this.getpageLimit(e.target.value);

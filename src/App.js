@@ -339,7 +339,7 @@ class App extends Component {
     const headers = new Headers();
     headers.append('API-KEY', APIKEY);
     const res = await fetch(HTTPURL + `ticket?userid=${ this.state.user.userid }`, { method: 'GET', headers: headers}).then(response => response.json())
-    if(res['status']) this.setState({ tickets: res.data })
+    if(res['status']) this.setState({ tickets: res.data.tickets })
   }
 
   async getUsers()

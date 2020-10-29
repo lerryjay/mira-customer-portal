@@ -194,7 +194,8 @@ class EditClient extends Component {
             
             this.setState({ loading: false });
             if(res.status) {
-                this.state.showAlert("success", res.message)
+                this.state.showAlert("success", res.message);
+                this.props.history.goBack();
             } else{
                 this.state.showAlert("danger",  res.message)
             }
@@ -377,7 +378,7 @@ class EditClient extends Component {
                                     <div className="text-center">
                                         {this.state.loading ?
                                             <button type="submit" className="btn btn-sm btn-primary px-4">
-                                                <div className="spinner-border text-secondary" role="status" id="loader">
+                                                <div className="spinner-border text-white" role="status" id="loader">
                                                     <span className="sr-only">Loading...</span>
                                                 </div>
                                             </button>

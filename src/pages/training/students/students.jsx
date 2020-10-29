@@ -12,7 +12,6 @@ class Students extends Component {
     this.state = {
       ...this.props,
       showmodal: true,
-      loader: true,
       title:'',
       description: '',
       cost: '',
@@ -38,23 +37,18 @@ class Students extends Component {
   async getStudents() {
     this.state.showLoader();
 
-    if(this.state.showLoader()){
-      this.setState({loader: true});
-    } else {
-      this.setState({loader: false});
-    }
-    
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
     const res = await fetch(HTTPURL + `training/liststudents`, {
       headers: headers,
     }).then((response) => response.json());
+    this.state.hideLoader();
+    
     if (res["status"]) {
       this.setState({ students: res["data"].students, totalLists: res["data"].total });
       this.getPageNo();
-      this.state.hideLoader();
+      
     }
-    this.state.hideLoader();
   }
 
   async getPageNo() {
@@ -72,7 +66,7 @@ class Students extends Component {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log(data.data["students"]);
         this.setState({currentLists: data.data["students"]})
       });
   }
@@ -136,7 +130,102 @@ class Students extends Component {
     let modal = document.getElementById("updateModal");
     modal.style.display = "none";
   }
-
+  convertToCSV(objArray) {
+    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    var str = '';
+  
+    for (var i = 0; i < array.length; i++) {
+        var line = '';
+        for (var index in array[i]) {
+            if (line != '') line += ','
+  
+            line += array[i][index];
+        }
+  
+        str += line + '\r\n';
+    }
+  
+    return str;
+  }
+  
+  exportCSVFile(headers, items, fileTitle) {
+    if (headers) {
+        items.unshift(headers);
+    }
+  
+    // Convert Object to JSON
+    var jsonObject = JSON.stringify(items);
+  
+    var csv = this.convertToCSV(jsonObject);
+  
+    var exportedFilenmae = fileTitle + '.csv' || 'export.csv';
+  
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    if (navigator.msSaveBlob) { // IE 10+
+        navigator.msSaveBlob(blob, exportedFilenmae);
+    } else {
+        var link = document.createElement("a");
+        if (link.download !== undefined) { // feature detection
+            // Browsers that support HTML5 download attribute
+            var url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", exportedFilenmae);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+  }
+  
+  exportData(){
+  var headers = {
+      model: 'Phone Model'.replace(/,/g, ''), // remove commas to avoid errors
+      chargers: "Chargers",
+      cases: "Cases",
+      earphones: "Earphones"
+  };
+  
+  let itemsNotFormatted = [
+      {
+          model: 'Samsung S7',
+          chargers: '55',
+          cases: '56',
+          earphones: '57',
+          scratched: '2'
+      },
+      {
+          model: 'Pixel XL',
+          chargers: '77',
+          cases: '78',
+          earphones: '79',
+          scratched: '4'
+      },
+      {
+          model: 'iPhone 7',
+          chargers: '88',
+          cases: '89',
+          earphones: '90',
+          scratched: '6'
+      }
+  ];
+  
+  var itemsFormatted = [];
+  
+  // format the data
+  this.state.currentLists.forEach((item) => {
+      itemsFormatted.push({
+        Name: item.lastname + item.firstname,  //.replace(/,/g, ''), // remove commas to avoid errors,
+        Email: item.email,
+        Telephone: item.telephone,
+        Gender: item.gender
+      });
+  });
+  
+  var fileTitle = 'orders'; // or 'my-unique-title'
+  
+  this.exportCSVFile(headers, itemsFormatted, fileTitle); // call the exportCSVFile() function to process the JSON and trigger the download
+  }
   exportData() {
     let data = JSON.stringify(this.state.totalLists);
 }
@@ -169,7 +258,7 @@ class Students extends Component {
         }
 
           <div className="col-md-12 box1 mb-3" id="profile">
-            {this.state.totalLists === 0 && this.state.loader ? (
+            {!this.state.loaderActive && this.state.totalLists === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No student records!</h6>
               </div>
@@ -272,7 +361,7 @@ class Students extends Component {
                   </div>
                 </div>
                     <div className="col text-dark font-weight-bold text-right">
-                      <span>Showing 1 of 3 entries</span>
+                      {/* <span>Showing 1 of 3 entries</span> */}
                     </div>
               </div>
             )}

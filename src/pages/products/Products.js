@@ -12,7 +12,6 @@ class Products extends Component {
             ...this.props,
             showmodal: true,
             id: '',
-            loading: false,
             updateData: false
         }
     }
@@ -68,19 +67,6 @@ class Products extends Component {
     render() {
         return (
             <div className="container-fluid">
-
-                {this.state.loader && (
-                    <div className="spin-center">
-                        <span className="text-primary ">
-                            <span
-                                className="spinner-grow spinner-grow-sm mr-2"
-                                role="status"
-                                aria-hidden="true"
-                            ></span>
-                            <span style={{ fontSize: "14px" }}>Loading...</span>
-                        </span>
-                    </div>
-                )}
 
                {this.state.user.role == "admin" &&  
                 <div className="row mt-4 d-flex justify-content-end mr-3" >

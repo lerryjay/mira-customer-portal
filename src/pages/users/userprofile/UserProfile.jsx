@@ -125,14 +125,7 @@ class Profile extends Component {
       <div className="container mx-auto row">
           {this.state.loader && (
             <div className="spin-center">
-              <span className="text-primary ">
-                <span
-                  className="spinner-grow spinner-grow-sm mr-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                <span style={{ fontSize: "14px" }}>Loading...</span>
-              </span>
+              <div className="loader"></div> 
             </div>
           )}
           

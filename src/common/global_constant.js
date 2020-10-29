@@ -335,4 +335,49 @@ export const ADMINPERMISSIONS =  [
   {
       name: "VIEWUSER"
   },
+  {
+      name: "LISTAPILOGS"
+  },
+  {
+      name: "LISTTRANSACTIONS"
+  },
+  {
+      name: "LISTSERVICES"
+  },
+  {
+      name: "LISTWEBANALYTICS"
+  },
+  {
+      name: "ADDCOURSE"
+  },
+  {
+      name: "VIEWCORSE"
+  },
+  {
+      name: "UPDATECOURSE"
+  },
+  {
+      name: "LISTCOURSE"
+  },
+  {
+      name: "ADDSTUDENT"
+  },
+  {
+      name: "VIEWSTUDENT"
+  },
+  {
+      name: "LISTSTUDENT"
+  },
+  {
+      name: "ADDSTUDENTCOURSE"
+  },
+  {
+      name: "VIEWSTUDENTCOURSE"
+  },
+  {
+      name: "SUSPENDSTUDENT"
+  },
+  {
+      name: "ADDSERVICE"
+  },
 ];

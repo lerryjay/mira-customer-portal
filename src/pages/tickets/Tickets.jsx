@@ -39,6 +39,7 @@ class Tickets extends Component {
   };
 
   componentDidMount() {
+    this.state.showLoader();
     this.props.user.role === "admin" && this.getClients();
     this.getTickets();
   }
@@ -69,6 +70,7 @@ class Tickets extends Component {
   }
 
   async getTickets() {
+
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
     const res = await fetch(
@@ -82,6 +84,8 @@ class Tickets extends Component {
       let tickets = res["data"];
       this.setState({ tickets });
       this.getPageNo();
+      
+      this.state.hideLoader();
     }
   }
 
@@ -157,6 +161,7 @@ class Tickets extends Component {
     });
 
     this.setState({ tickets });
+
   }
 
   async updateTicketStatus(ticketid, status) {
@@ -171,7 +176,11 @@ class Tickets extends Component {
       method: "POST",
       headers: headers,
       body: form,
-    }).then((response) => response.json());
+    }).then((response) => response.json())
+    .then(data => {
+      this.getTickets();
+      this.state.showAlert("success", data.message)
+    })
   }
 
   handleSearch = async (e) => {
@@ -206,11 +215,12 @@ class Tickets extends Component {
           </div>
 
           <div className="col-md-9 col-sm-12 box1 mb-3" id="profile">
-            {this.state.tickets.length === 0 ? (
+            {  !this.state.loaderActive && this.state.tickets.length === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No ticket records!</h6>
               </div>
             ) : (
+              !this.state.loaderActive && 
               <div>
                 <div id="table" className="card pt-2 mt-3 justify-content-center shadow px-2">
                   <div className="table-responsive">

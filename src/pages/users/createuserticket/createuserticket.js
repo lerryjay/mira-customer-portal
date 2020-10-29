@@ -22,9 +22,6 @@ class create_ticket extends Component {
         };
     }
 
-    componentDidMount() {
-        
-    }
     handleInputChange = e => {
         let { name, value } = e.target
         if(name == 'customerid'){
@@ -55,11 +52,12 @@ class create_ticket extends Component {
         if (res.status) {
             document.getElementById("createticket").reset()
             this.setState({loading : false,title : '', type: '', message: ''})
-            this.state.showAlert("success", res['message'])
+            this.state.showAlert("success", res['message']);
+            this.props.history.goBack();
           }
           else{
             this.setState({loading : false})
-            this.state.showAlert("danger",  res['message'])
+            this.state.showAlert("danger",  res['message']);
           }
     }
     

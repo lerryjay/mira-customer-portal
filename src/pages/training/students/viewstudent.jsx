@@ -77,16 +77,16 @@ class viewcourse extends Component {
   }
 
   showsuspendStudent(studentid) {
-    const selectedStudent = this.state.students.find(
-      (student) => student.userid === studentid
-    );
-    this.setState({
-      lastname: selectedStudent.lastname,
-      firstname: selectedStudent.firstname,
-      othername: selectedStudent.othername,
-      telephone: selectedStudent.telephone,
-      email: selectedStudent.email
-    });
+    // const selectedStudent = this.state.students.find(
+    //   (student) => student.userid === studentid
+    // );
+    // this.setState({
+    //   lastname: selectedStudent.lastname,
+    //   firstname: selectedStudent.firstname,
+    //   othername: selectedStudent.othername,
+    //   telephone: selectedStudent.telephone,
+    //   email: selectedStudent.email
+    // });
 
     let modal = document.getElementById("suspendModal")
     modal.style.display = "block";

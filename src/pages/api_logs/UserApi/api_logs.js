@@ -47,6 +47,8 @@ class api_logs extends Component {
       };
 
       async getLogs() {
+        this.state.showLoader();
+
         const headers = new Headers();
         headers.append("API-KEY", APIKEY);
                 
@@ -61,6 +63,8 @@ class api_logs extends Component {
         if (res["status"]){
            this.setState({ totalLists: res["data"] });
            this.getPageNo();
+
+            this.state.hideLoader();
           }
         }
       

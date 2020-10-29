@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { HTTPURL, APIKEY } from "../../../common/global_constant";
 import { withContext } from "../../../common/context";
+import pdf_placeholder from "../../../assets/images/pdf.png";
 
 
 class AddClientProduct extends Component {
@@ -183,20 +184,34 @@ class AddClientProduct extends Component {
 
   render() {
     let files = this.state.files.map((file,i) => {
-      return file.name.match(/\.(jpg|jpeg|png)$/) ? (
-        <div className="imgPreview m-2" id="files" key={i}>
-          <i className="fa fa-trash" onClick={(e) => this.removeImage(e)}></i>
-          <img src={this.state.imagePreviewUrl} alt="Preview" className="imagePreview" />
-        </div>
-      ) : (
-        <div className="other_files m-2" id="otherfiles" key={i}>
-          <i
-            className="fa fa-trash"
-            onClick={(e) => this.removeOtherImage(e)}
-          ></i>
-          {file.name}
-        </div>
-      );
+      return (
+        file.name.match(/\.(jpg|jpeg|png)$/) 
+             ?  <img src={URL.createObjectURL(file)} className="col-md-3" alt="attachment"/>
+             : <span>
+                    <img
+                        alt="pdf placeholder"
+                        src={pdf_placeholder}
+                        style={{ width: "100px", height: "100px" }}
+                        className="m-2"
+                    />
+                    <br/>
+                    {file.name}
+                </span>
+    )
+      // return file.name.match(/\.(jpg|jpeg|png)$/) ? (
+      //   <div className="imgPreview m-2" id="files" key={i}>
+      //     <i className="fa fa-trash" onClick={(e) => this.removeImage(e)}></i>
+      //     <img src={this.state.imagePreviewUrl} alt="Preview" className="imagePreview" />
+      //   </div>
+      // ) : (
+      //   <div className="other_files m-2" id="otherfiles" key={i}>
+      //     <i
+      //       className="fa fa-trash"
+      //       onClick={(e) => this.removeOtherImage(e)}
+      //     ></i>
+      //     {file.name}
+      //   </div>
+      // );
     });
     return (
       <div className="container mx-auto row">

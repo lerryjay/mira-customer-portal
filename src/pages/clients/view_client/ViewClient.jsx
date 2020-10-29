@@ -76,7 +76,7 @@ class ViewClient extends Component {
             businessname: result.data.businessname,
             companyemail: result.data.companyemail,
             companytelephone: result.data.companytelephone,
-            companycountryid: result.data.companycountryid,
+            companycoutryid: result.data.companycoutryid,
             companystateid: result.data.companystateid,
             companylga: result.data.companylga,
             companyaddress: result.data.companyaddress,
@@ -251,6 +251,7 @@ class ViewClient extends Component {
       this.state.showAlert("success", "Suspend Successfully!");
       let modal = document.getElementById("suspendModal");
       modal.style.display = "none";
+      this.props.history.goBack();
     } else {
       this.setState({ loading: false });
       let modal = document.getElementById("suspendModal");
@@ -289,6 +290,7 @@ class ViewClient extends Component {
       this.state.showAlert("success", "Deleted Successfully!");
       let modal = document.getElementById("deleteClient");
       modal.style.display = "none";
+      this.props.history.goBack();
     } else {
       this.setState({ loading: false });
       let modal = document.getElementById("deleteClient");
@@ -438,7 +440,7 @@ class ViewClient extends Component {
                         <h6>{this.state.companyaddress}</h6>
                         <h6>
                           {this.state.companylga}, {this.state.companystateid},{" "}
-                          {this.state.companycountryid}
+                          {this.state.companycoutryid}
                         </h6>
                         </div>
                         <div className="col-md-5">
@@ -451,7 +453,7 @@ class ViewClient extends Component {
                                 <div className="col font-card text-right">
                                   <span className=" ">Wallet Balance</span>
                                   <br />
-                                  <span className="text-large">{this.state.walletBalance}</span>
+                                  <span className="text-large">&#8358;{this.state.walletBalance}</span>
                                 </div>
                               </div>
                             </div>
@@ -642,7 +644,7 @@ class ViewClient extends Component {
                                             <td>{product.name}</td>
                                             <td>{product.deploymentstatus}</td>
                                             <td>{product.paymentstatus}</td>
-                                            <td>{product.cost}</td>
+                                            <td>&#8358;{product.cost}</td>
                                             <td
                                               style={{ minWidth: "70px" }}
                                               className="d-flex justify-content-center"

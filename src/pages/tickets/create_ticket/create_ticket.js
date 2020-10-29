@@ -63,7 +63,9 @@ class create_ticket extends Component {
                 if(result.status === true) {
                     this.setState({ loading: false });
                     this.state.showAlert("success", result.message)
-                    this.setState({ imagePreviewUrl: '', title: '', type: '', message: '', customerid: '', file: []})
+                    this.setState({ imagePreviewUrl: '', title: '', type: '', message: '', customerid: '', file: []});
+                    this.props.history.push('/tickets')
+
                 } else{
                     this.setState({ loading: false });
                     this.state.showAlert("danger",  result.message)

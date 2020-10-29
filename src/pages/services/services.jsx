@@ -39,6 +39,8 @@ class Services extends Component {
   }
 
   async getServices() {
+    this.state.showLoader();
+
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
     const res = await fetch(
@@ -48,6 +50,8 @@ class Services extends Component {
         headers: headers,
       }
     ).then((response) => response.json());
+    this.state.hideLoader();
+
     if (res["status"]) {
       this.setState({ totalLists: res['data'] });
     }
@@ -230,7 +234,7 @@ class Services extends Component {
           <div className="col-md-12 col-sm-12 box1 mb-3" id="profile">
             {this.state.totalLists.length === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
-                <h6 className="text-center">No ticket records!</h6>
+                <h6 className="text-center">Unable to retrieve services no records found!</h6>
               </div>
             ) : (
               <div>

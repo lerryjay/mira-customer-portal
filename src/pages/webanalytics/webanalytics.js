@@ -29,6 +29,8 @@ class webanalytics extends Component {
       }
 
       async getAnalytics() {
+        this.state.showLoader();
+        
         const headers = new Headers();
         headers.append("API-KEY", APIKEY);
                 
@@ -43,6 +45,8 @@ class webanalytics extends Component {
         if (res["status"]) {
         this.setState({ totalLists: res["data"] });
         this.getPageNo();
+
+        this.state.hideLoader();
       }
     }
   
@@ -144,7 +148,7 @@ class webanalytics extends Component {
               </div>
         <div className="row">
         <div className="col-md-12 col-sm-12 box1 mb-3" id="profile">
-            {this.state.totalLists.length === 0 ? (
+        {!this.state.loaderActive && this.state.totalLists.length === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">There are currently no logs available!</h6>
               </div>

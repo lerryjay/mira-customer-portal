@@ -20,10 +20,7 @@ class Clients extends Component {
     }
 
     async componentDidMount() {
-        this.state.showLoader();
         await this.getClients();
-        this.setState({ loading: false });
-        this.state.hideLoader();
     }
 
     getClient(businessname) {

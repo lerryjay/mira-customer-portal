@@ -117,7 +117,6 @@ class viewclientproduct extends Component {
             // modal.style.display = "none";
             // window.history.go("-1");
             this.props.history.goBack();
-            this.props.history.goBack();
           }else{
             this.setState({ loading: false });
             this.state.showAlert("danger", result.message)
@@ -324,7 +323,7 @@ class viewclientproduct extends Component {
                       <th className="text-left bg-light py-2">Total</th>
                       <td></td>
                       <td></td>
-                      <td className="bg-light py-2">{this.state.cost}</td>
+                      <td className="bg-light py-2">&#8358;{this.state.cost}</td>
                     </tr>
                   </tfoot>
                 : <span></span>

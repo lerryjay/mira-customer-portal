@@ -113,6 +113,7 @@ class ViewTicket extends Component {
         this.setState({ loading: false });
         if(result.status === true) {
             this.state.showAlert("success", result.message)
+            this.getChat();
         } else{
             this.state.showAlert("danger",  result.message)
         }      

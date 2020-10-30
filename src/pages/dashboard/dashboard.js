@@ -261,7 +261,7 @@ async getClients() {
         <div title="General">
           <div className="row mt-3 mx-3 text-white">
             <Maincards title="Products" total={this.state.products.length} icon="fa fa-database" iconBackground="btn-primary" />
-            <Maincards title="Tickets" total={this.state.ticketslength} icon="fab fa-buffer" iconBackground="bg-primary" />
+            <Maincards title="Tickets" total={this.state.ticketslength || 0} icon="fab fa-buffer" iconBackground="bg-primary" />
             <Maincards title="Clients" total={this.state.clients.length} icon="fa fa-users" iconBackground="bg-orangered" />
             <Maincards title="API" total={this.state.totalapi} icon="fa fa-chart-line" iconBackground="bg-success" />
           </div>

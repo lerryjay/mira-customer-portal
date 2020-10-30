@@ -118,7 +118,7 @@ class viewstudentcourse extends Component {
     }).then((response) => response.json())
     this.setState({ loading: false });
     if (res.status) {  
-      this.getCourse();
+      this.getStudentCourse();
       this.state.showAlert('success', res.message);
       let modal = document.getElementById("updateModal");
       modal.style.display = "none";
@@ -166,7 +166,7 @@ class viewstudentcourse extends Component {
     this.setState({ loading: false });
 
     if (res.status) {        
-      this.getCourse();
+      this.getStudentCourse();
       this.state.showAlert('success', res.message);
       let modal = document.getElementById("myModal");
       modal.style.display = "none";

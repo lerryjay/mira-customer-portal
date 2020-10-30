@@ -428,6 +428,26 @@ class Services extends Component {
                       <div className="card-body">
                         <div className="row">
 
+
+                        <div className="col-md-12 mb-1">
+                            <div className="form-group">
+                              <label htmlFor="" className="sr-only">
+                                Code
+                            </label>
+                              <input
+                                type="text"
+                                className="form-control form-control-sm"
+                                name="editcode"
+                                id="editcode"
+                                placeholder="Code"
+                                value={this.state.editcode}
+                                onChange={this.handleInputChange}
+                                disabled
+                              />
+                            </div>
+                          </div>
+
+                          
                         <div className="col-md-12 mb-1">
                             <div className="form-group">
                               <label htmlFor="" className="sr-only">
@@ -446,22 +466,7 @@ class Services extends Component {
                           </div>
 
                           
-                          <div className="col-md-12 mb-1">
-                            <div className="form-group">
-                              <label htmlFor="" className="sr-only">
-                                Code
-                            </label>
-                              <input
-                                type="text"
-                                className="form-control form-control-sm"
-                                name="editcode"
-                                id="editcode"
-                                placeholder="Code"
-                                value={this.state.editcode}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
+                          
 
                           
                           <div className="col-md-12 mb-1">

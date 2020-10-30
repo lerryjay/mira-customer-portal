@@ -72,6 +72,7 @@ class UpdateCourse extends Component {
         formdata.append("cost", this.state.cost);
         formdata.append("userid", this.state.user.userid);
         formdata.append("courseid", this.state.courseid);
+        formdata.append('image', this.state.file);
     
         const res = await fetch(HTTPURL + "training/updatecourse", {
           method: "POST",
@@ -91,6 +92,43 @@ class UpdateCourse extends Component {
         return res;
       };
 
+      handleImageChange(e) {
+        e.preventDefault();
+
+        let reader = new FileReader();
+        let file = e.target.files[0];
+
+        let images = []
+        for (var i = 0; i < e.target.files.length; i++) {
+            images[i] = e.target.files.item(i);
+        }
+        images = images.filter(file => file.name.match(/\.(jpg|jpeg|png|gif)$/))
+        
+        if (images.length === 0){
+
+            reader.onloadend = () => {
+                this.setState({
+                    file: file,
+                    imagePreviewUrl: '',
+                    imageError: "Upload a valid Image"
+                });
+                
+                
+            }
+            
+            
+        } else {
+            this.setState({imageError: false})
+                reader.onloadend = () => {
+                    this.setState({
+                        file: file,
+                        imagePreviewUrl: reader.result
+                    });
+                }
+            }
+
+        reader.readAsDataURL(file)
+    }
 
     render() {
         let {imagePreviewUrl} = this.state;
@@ -105,7 +143,13 @@ class UpdateCourse extends Component {
             <div className="container justify-content-center mt-4 row">
                                 
                 <div className="col-md-8">
-
+                <div className="row">
+                                <div className="col-md-12">
+                                    {this.state.imageError !== false ?
+                                        <div className="alert alert-warning"> { this.state.imageError } </div>
+                                        : <span></span> }
+                                </div>
+                            </div>
                         <form onSubmit={this.handleSubmit} id="createclient">
 
                             <div className="card">
@@ -172,6 +216,24 @@ class UpdateCourse extends Component {
                             </div>
                         </form>
                     </div>
+
+                    <div className="col-md-4 text-center box2" id='img-avatar'>
+                <div className="card">
+                 <div className="card-body">
+                                <div className="imgPreview mb-2" style={{height:'260px'}}>
+                                    {/* <i className="fa fa-trash" onClick={(e) => this.removeImage(e)}></i> */}
+                                        {imagePreview}
+                                </div>
+                            </div>
+
+                            <label htmlFor="file" className="btn btn-sm btn-primary py-2 px-3">Attach Image</label>
+                                <input style={{display:'none'}} type={"file"}  id="file" 
+                                className="form-file form-file-sm" name="file"  placeholder=""
+                                onChange={(e)=>this.handleImageChange(e)} />
+                                
+                        </div>
+                </div>
+
 
             </div>
 

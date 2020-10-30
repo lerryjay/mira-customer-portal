@@ -130,7 +130,7 @@ class viewclientproduct extends Component {
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
     var formdata = new FormData();
-    formdata.append("clientproductid", this.props.location.pathname.split("/")[2]);
+    formdata.append("deploymentid", this.props.location.pathname.split("/")[2]);
     formdata.append("modules", this.state.modules.map(item=>item.id).toString() );
     formdata.append("cost", this.state.cost);
     formdata.append("userid", this.state.user.userid);
@@ -142,7 +142,7 @@ class viewclientproduct extends Component {
     formdata.append("trainingdate", this.state.trainingdate);
     formdata.append("deploymentdate", this.state.deploymentdate);
     formdata.append("remarks", this.state.remarks);
-    const res = await fetch(`${HTTPURL}clients/updateproduct`,{ headers,method : 'POST',body : formdata });
+    const res = await fetch(`${HTTPURL}deployment/update`,{ headers,method : 'POST',body : formdata });
     if(res['status']){
       this.closeModal('moduleModal');
     }

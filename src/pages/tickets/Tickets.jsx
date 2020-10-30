@@ -22,6 +22,9 @@ class Tickets extends Component {
       totalLists: [],
       pageNumbers: [],
       currentLists: [],
+      tickets: [],
+      showmodal: true,
+      selectedTicket: {},
     };
   }
 
@@ -204,6 +207,40 @@ class Tickets extends Component {
       });
   };
 
+  closedeleteModal() {
+    let modal = document.getElementById("deleteModal");
+    modal.style.display = "none";
+  }
+
+  async showdeleteModal(ticketid) {
+    const selectedTicket = this.state.tickets.tickets.find(item => item.id === ticketid);
+    await this.setState({ selectedTicket });
+    let modal = document.getElementById("deleteModal");
+    modal.style.display = "block";
+  }
+
+  async deleteModal() {
+    this.setState({ loading: true });
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+
+    const res = await fetch(HTTPURL + `ticket/delete?userid=${this.state.user.userid}&ticketid=${this.state.selectedTicket.id}`, {
+      method: "GET",
+      headers: headers,
+    }).then((response) => response.json())
+    this.setState({ loading: false });
+    if (res.status) {
+      this.getTickets();
+      this.state.showAlert('success', "Deleted Successfully!");
+      let modal = document.getElementById("deleteModal");
+      modal.style.display = "none";
+    }
+    else{
+      this.state.showAlert('danger', res.message);
+    }
+    this.setState({ updateData: true });
+    return res;
+  }
 
 
   render() {
@@ -303,6 +340,13 @@ class Tickets extends Component {
                                     <i className="fas fa-eye fa-fw "></i>
                                   </span>
                                 </Link>
+                                
+                              <span                                     
+                              className="btn btn-sm ml-2 btn-danger"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => this.showdeleteModal(ticket.id)}>
+                                <i className="fa fa-trash  text-white"></i>
+                              </span>
                               </td>
                             </tr>
                           );
@@ -501,6 +545,46 @@ class Tickets extends Component {
             </div>
           </div>
         </div>
+        
+            {/* Delete Module Info */}
+            {this.state.showmodal ?
+              <div id="deleteModal" className="modal">
+                {/* Modal content  */}
+                <div className="modal-content modal-del text-center p-5">
+                  {/* <div className="delete-icon">
+                          &times;
+                      </div> */}
+                  <i className="fa fa-exclamation-triangle fa-3x dark-red mb-2" aria-hidden="true"></i>
+                  <h3>Are you sure?</h3>
+                  <p> Do you really want to delete this ticket?</p>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <button onClick={this.closedeleteModal} className="btn-block btn btn-outline-secondary mb-2">Cancel</button>
+                    </div>
+                    <div className="col-md-6">
+                      {this.state.loading ? (
+                        <button
+                          type="submit"
+                          className="btn btn-block btn-danger"
+                        >
+                          <div
+                            className="spinner-border "
+                            role="status"
+                            id="loader"
+                          >
+                            <span className="sr-only">Loading...</span>
+                          </div>
+                        </button>
+                      ) : (
+                          <button onClick={() => this.deleteModal(this.state.selectedTicket.id)} className="btn btn-danger btn-block">Delete</button>
+                        )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              :
+              <span></span>
+            }
       </div>
     );
   }

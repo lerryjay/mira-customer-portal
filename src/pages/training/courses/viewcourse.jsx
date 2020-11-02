@@ -101,11 +101,8 @@ class viewcourse extends Component {
                   ?<img
                   src={FILEURL + this.state.imageurl }
                   alt=""
-                  className="image_sidebar"
-                  height="170px"
-                  width="170px"
-                  style={{ marginTop: "-80px" }}
-                />
+                  className="card-img-top"
+                  />
                 :<img
                 src={avatar}
                 alt=""

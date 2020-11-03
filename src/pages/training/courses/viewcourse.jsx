@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import { HTTPURL, APIKEY, FILEURL } from "../../../common/global_constant";
+import { HTTPURL, APIKEY } from "../../../common/global_constant";
 import { withContext } from "../../../common/context";
 import avatar from "../../../assets/images/addstudent.png";
+
+const FILEURL = "https://www.miratechnologies.com.ng/training-portal/public";
 
 
 class viewcourse extends Component {

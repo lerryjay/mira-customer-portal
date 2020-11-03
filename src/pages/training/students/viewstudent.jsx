@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import { HTTPURL, APIKEY, FILEURL } from "../../../common/global_constant";
+import { HTTPURL, APIKEY } from "../../../common/global_constant";
 import { withContext } from "../../../common/context";
 import placeholder from "../../../assets/images/addstudent.png";
 import avatar from "../../../assets/images/avatar.png";
+
+const FILEURL = "https://www.miratechnologies.com.ng/training-portal/public";
 
 
 class viewcourse extends Component {
@@ -322,15 +324,15 @@ class viewcourse extends Component {
             return (
 
               <div className="col-md-4" key={i}>
-    <div className="card bg-white">
-      {this.state.imageurl
+    <div className="card bg-white pt-3">
+      {course.imageurl
         ? <img
           src={FILEURL + course.imageurl}
           alt=""
-          className="image_sidebar"
+          className="card-img-top"
           height="120px"
           width="120px"
-          style={{ marginTop: "-80px" }}
+          style={{objectFit: 'cover'}}
         />
         : <img
           src={placeholder}

@@ -274,7 +274,8 @@ class Students extends Component {
                       {/* <caption>Hello World!</caption> */}
                       <thead>
                         <tr>
-                          <th>Image</th>
+                        <th>Image</th>
+                          <th>Date</th>
                           <th>Name</th>
                           <th>Email</th>
                           <th>Telephone</th>
@@ -290,6 +291,7 @@ class Students extends Component {
                               <td>
                                   <img style={{width: '50px'}} src={FILEURL + student.imageurl} onError={(e) => { e.target.onerror = null; e.target.src = placeholder }} />
                               </td>
+                              <td>{student.createdat}</td>
                               <td>{student.lastname} {student.firstname}</td>
                               <td>{student.email}</td>
                               <td>{student.telephone}</td>

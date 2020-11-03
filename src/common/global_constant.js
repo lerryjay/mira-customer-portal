@@ -5,8 +5,8 @@
 // export const FILEURL = 'http://localhost/ticketapp/';
 
 export const HTTPURL =  "https://www.miratechnologies.com.ng/customer-portal/api/"; 
-// export const FILEURL = "https://www.miratechnologies.com.ng/customer-portal/";
-export const FILEURL = "https://www.miratechnologies.com.ng/training-portal/public";
+export const FILEURL = "https://www.miratechnologies.com.ng/customer-portal/";
+// export const FILEURL = "https://www.miratechnologies.com.ng/training-portal/public";
 export const APIKEY = "97899c-7d0420-1273f0-901d29-84e2f8";
 
 

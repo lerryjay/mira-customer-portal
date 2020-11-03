@@ -1,10 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
-import { HTTPURL, APIKEY, FILEURL } from "../../../common/global_constant";
+import { HTTPURL, APIKEY } from "../../../common/global_constant";
 import { withContext } from "../../../common/context";
 import { Link } from "react-router-dom";
 import Pagination from "../../../common/components/Pagination";
 import placeholder from '../../../assets/images/product-placeholder.gif'
+
+const FILEURL = "https://www.miratechnologies.com.ng/training-portal/public";
+
 
 class Tickets extends Component {
   constructor(props) {

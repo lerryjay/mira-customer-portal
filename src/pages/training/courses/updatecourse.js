@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import {withContext} from '../../../common/context';
-import { HTTPURL, APIKEY, FILEURL } from '../../../common/global_constant';
+import { HTTPURL, APIKEY } from '../../../common/global_constant';
 import placeholder from "../../../assets/images/product-placeholder.gif";
+
+const FILEURL = "https://www.miratechnologies.com.ng/training-portal/public";
+
 
 class UpdateCourse extends Component {
     constructor(props){

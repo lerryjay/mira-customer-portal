@@ -66,7 +66,6 @@ class Students extends Component {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.data["students"]);
         this.setState({currentLists: data.data["students"]})
       });
   }

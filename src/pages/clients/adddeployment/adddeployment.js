@@ -313,7 +313,7 @@ class AddClientProduct extends Component {
                           </option>
                         <option value="pending">Pending</option>
                         <option value="incomplete">Incomplete</option>
-                        <option value="completed">Completed</option>
+                        <option value="complete">Complete</option>
                       </select>
                     </div>
                   </div>
@@ -341,7 +341,7 @@ class AddClientProduct extends Component {
                           </option>
                         <option value="pending">Pending</option>
                         <option value="ongoing">Ongoing</option>
-                        <option value="completed">Completed</option>
+                        <option value="complete">Complete</option>
                       </select>
                     </div>
                   </div>
@@ -386,7 +386,7 @@ class AddClientProduct extends Component {
                           </option>
                         <option value="pending">Pending</option>
                         <option value="ongoing">Ongoing</option>
-                        <option value="completed">Completed</option>
+                        <option value="complete">Complete</option>
                       </select>
                     </div>
                   </div>
@@ -429,7 +429,7 @@ class AddClientProduct extends Component {
                           Expiration&nbsp;Status&nbsp;
                           </option>
                               <option value="pending">Pending</option>
-                              <option value="completed">Completed</option>
+                              <option value="complete">Complete</option>
                         </select>
                     </div>
                   </div>
@@ -468,7 +468,7 @@ class AddClientProduct extends Component {
                         <option value="" disabled >
                           License&nbsp;Coverage
                           </option>
-                          <option value="weekly">Monthly</option>
+                          <option value="weekly">Weekly</option>
                         <option value="monthly">Monthly</option>
                         <option value="quaterly">Quarterly</option>
                         <option value="bi-annual">Bianually</option>

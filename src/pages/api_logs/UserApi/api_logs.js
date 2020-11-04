@@ -138,7 +138,6 @@ class api_logs extends Component {
       method: 'GET',
       headers: headers
   }).then(response => response.json());
-  console.log(  res['data']  )
   if (res['status']) this.setState({ totalapi: res['data']['total'],errorapi: res['data']['error'],cancelledapi :  res['data']['cancelled'],sucessapi : res['data']['success']});
 }
 

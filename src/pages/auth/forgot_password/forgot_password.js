@@ -34,7 +34,6 @@ class ForgotPassword extends Component {
             }
             return;
         } 
-        console.log('login id', loginid)
         const res = await this.state.forgotpassword(loginid);
         this.setState({ loading: false });
         if(res.status){

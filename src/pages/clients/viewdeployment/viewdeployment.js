@@ -110,7 +110,6 @@ class viewclientproduct extends Component {
           }
         ).then((response) => response.json());
           if(result.status === true){
-            console.log(result.message)
             this.setState({ loading: false });
             this.state.showAlert("success", result.message)
             // let modal = document.getElementById("deleteModal");

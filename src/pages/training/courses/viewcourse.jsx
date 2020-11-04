@@ -104,11 +104,13 @@ class viewcourse extends Component {
                   src={FILEURL + this.state.imageurl }
                   alt=""
                   className="card-img-top"
+                  style={{height:'250px', objectFit:'cover'}}
                   />
                 :<img
                 src={avatar}
                 alt=""
                 className="card-img-top"
+                style={{height:'250px', objectFit:'cover'}}
                 // height="170px"
                 // width="170px"
                 // style={{ marginTop: "-80px" }}

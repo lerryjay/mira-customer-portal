@@ -277,7 +277,6 @@ class EditClient extends Component {
                                             name="companycountryid"
                                             id="companycountryid"
                                             className=" custom-select custom-select-sm"
-                                            defaultValue=""
                                             >
                                             <option value="" disabled>
                                                 Company&nbsp;Country&nbsp;

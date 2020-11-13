@@ -52,6 +52,7 @@ import ViewAdmin from "./pages/users/ViewAdmin/ViewAdmin"
 import Nav from "./common/components/Nav";
 import Sidebar from "./common/components/Sidebar";
 import PageLoader from "./common/components/PageLoader";
+import Loader from "./common/components/Loader";
 import Alert from "./common/components/Alert";
 import NotFound from "./common/components/NotFound";
 import Forbidden from "./common/components/Forbidden";
@@ -86,6 +87,7 @@ class App extends Component {
       loggedIn: false,
       admin: false, 
       loaderActive : false,
+      isloading : false,
       alertType : '',
       alertMessage : '',
       products : [],
@@ -105,6 +107,8 @@ class App extends Component {
     this.showAlert  = this.showAlert.bind(this);
     this.showLoader = this.showLoader.bind(this);
     this.hideLoader = this.hideLoader.bind(this);
+    this.showbtmLoader = this.showbtmLoader.bind(this);
+    this.hidebtmLoader = this.hidebtmLoader.bind(this);
     this.getProducts = this.getProducts.bind(this);
     this.getTickets = this.getTickets.bind(this);
     this.getUsers = this.getUsers.bind(this);
@@ -227,6 +231,15 @@ class App extends Component {
     this.setState({ loaderActive : false });
   }
 
+  
+  showbtmLoader = () =>{
+    this.setState({ isloading : true });
+  }
+  
+  hidebtmLoader = ()=>{
+    this.setState({ isloading : false });
+  }
+
   showAlert = (type, messsage)=>{  
     this.setState({ alertType : type, alertMessage: messsage });
      this.setState({ alertActive : true });
@@ -318,6 +331,8 @@ class App extends Component {
       changepassword: this.changePassword,
       showLoader : this.showLoader,
       hideLoader : this.hideLoader,
+      showbtmLoader : this.showbtmLoader,
+      hidebtmLoader : this.hidebtmLoader,
       showAlert : this.showAlert,
       getProducts : this.getProducts,
       getTickets : this.getTickets,
@@ -356,8 +371,6 @@ class App extends Component {
     return (
       <Provider value={this.getContext()}>
         <div className="home">
-          { this.state.alertActive  && <Alert type={ this.state.alertType } message={ this.state.alertMessage } />}
-          { this.state.loaderActive && <PageLoader />}
           <Fragment>
             <Router basename="/customer-portal" > 
             <ScrollToTop />
@@ -435,6 +448,10 @@ class App extends Component {
               </div>
             </Router>
           </Fragment>
+       
+          { this.state.alertActive  && <Alert type={ this.state.alertType } message={ this.state.alertMessage } />}
+          { this.state.loaderActive && <PageLoader />}
+          { this.state.isloading && <Loader />}
         </div>
       </Provider>
     );

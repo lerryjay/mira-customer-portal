@@ -158,6 +158,10 @@ class AddClientProduct extends Component {
     e.currentTarget.type = "text";
     e.currentTarget.placeholder = "Training Date";
   }
+  expirationDate(e) {
+    e.currentTarget.type = "text";
+    e.currentTarget.placeholder = "Expiration Date";
+  }
   paymentDate(e) {
     e.currentTarget.type = "text";
     e.currentTarget.placeholder = "Payment Date";
@@ -436,9 +440,10 @@ class AddClientProduct extends Component {
                   <div className="col-md-6 mb-1">
                     <div className="form-group">
                       <label htmlFor="expirationdate" className="font-weight-bold">
-                        Expiration Date
+                      Expiration Date
                       </label>
                       <input
+                        type="expirationdate"
                         className="form-control form-control-sm"
                         name="expirationdate"
                         id="expirationdate"

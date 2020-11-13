@@ -22,6 +22,10 @@ class Students extends Component {
       totalLists: [],
       pageNumbers: [],
       currentLists: [],
+      courses: [],
+      startdate: "",
+      enddate: "",
+      on: "",
     };
   }
 
@@ -32,6 +36,18 @@ class Students extends Component {
 
   componentDidMount() {
     this.props.user.role === "admin" && this.getStudents();
+    this.getCourses();
+  }
+
+  async getCourses() {
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    const res = await fetch(HTTPURL + `training/listcourses`, {
+      headers: headers,
+    }).then((response) => response.json());
+    if (res["status"]) {
+      this.setState({ courses: res["data"], totalLists: res["data"] });
+    }
   }
 
   async getStudents() {
@@ -70,6 +86,24 @@ class Students extends Component {
       });
   }
 
+  async getPageNoFilter() {
+    const { currentPage, numberPerPage } = this.state;
+
+    const headers = new Headers();
+    headers.append("API-KEY", APIKEY);
+    await fetch(
+      HTTPURL +
+        `training/filter?userid=${this.state.user.userid}&pageno=${currentPage}&limit=${numberPerPage}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({currentLists: data.data["students"]})
+      });
+  }
 
   update = (newPage) => {   
       // Update page number
@@ -129,105 +163,50 @@ class Students extends Component {
     let modal = document.getElementById("updateModal");
     modal.style.display = "none";
   }
-  convertToCSV(objArray) {
-    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-    var str = '';
-  
-    for (var i = 0; i < array.length; i++) {
-        var line = '';
-        for (var index in array[i]) {
-            if (line != '') line += ','
-  
-            line += array[i][index];
-        }
-  
-        str += line + '\r\n';
-    }
-  
-    return str;
-  }
-  
-  exportCSVFile(headers, items, fileTitle) {
-    if (headers) {
-        items.unshift(headers);
-    }
-  
-    // Convert Object to JSON
-    var jsonObject = JSON.stringify(items);
-  
-    var csv = this.convertToCSV(jsonObject);
-  
-    var exportedFilenmae = fileTitle + '.csv' || 'export.csv';
-  
-    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    if (navigator.msSaveBlob) { // IE 10+
-        navigator.msSaveBlob(blob, exportedFilenmae);
-    } else {
-        var link = document.createElement("a");
-        if (link.download !== undefined) { // feature detection
-            // Browsers that support HTML5 download attribute
-            var url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", exportedFilenmae);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    }
-  }
-  
-  exportData(){
-  var headers = {
-      model: 'Phone Model'.replace(/,/g, ''), // remove commas to avoid errors
-      chargers: "Chargers",
-      cases: "Cases",
-      earphones: "Earphones"
-  };
-  
-  let itemsNotFormatted = [
-      {
-          model: 'Samsung S7',
-          chargers: '55',
-          cases: '56',
-          earphones: '57',
-          scratched: '2'
-      },
-      {
-          model: 'Pixel XL',
-          chargers: '77',
-          cases: '78',
-          earphones: '79',
-          scratched: '4'
-      },
-      {
-          model: 'iPhone 7',
-          chargers: '88',
-          cases: '89',
-          earphones: '90',
-          scratched: '6'
-      }
-  ];
-  
-  var itemsFormatted = [];
-  
-  // format the data
-  this.state.currentLists.forEach((item) => {
-      itemsFormatted.push({
-        Name: item.lastname + item.firstname,  //.replace(/,/g, ''), // remove commas to avoid errors,
-        Email: item.email,
-        Telephone: item.telephone,
-        Gender: item.gender
-      });
-  });
-  
-  var fileTitle = 'orders'; // or 'my-unique-title'
-  
-  this.exportCSVFile(headers, itemsFormatted, fileTitle); // call the exportCSVFile() function to process the JSON and trigger the download
-  }
   exportData() {
     let data = JSON.stringify(this.state.totalLists);
 }
+
+showFilter() {
+  var filter = document.getElementById("filter-modal")
+  var element = document.getElementsByClassName("main-table")
+
+  if (filter.style.display === "none") {
+    console.log("opening sidebar");
+    filter.style.display = "block";
+    // console.log(element[0].classList, element);
+      element[0].classList.remove("col-md-12");
+       element[0].classList.add("col-md-9")
+  } else {
+    console.log("closing sidebar");
+       element[0].classList.remove("col-md-9")
+      element[0].classList.add("col-md-12");
+    filter.style.display = "none";
+  }
+}
+
+handleSearch = async (e) => {
+  e.preventDefault();
+
+  const { user, courseid, startdate, enddate, on } = this.state;
+
+  const headers = new Headers();
+  headers.append("API-KEY", APIKEY);
+  await fetch(
+    HTTPURL +
+      `training/filter?userid=${user.userid}&on=${on}&startdate=${startdate}&enddate=${enddate}&courseid=${courseid}`,
+    {
+      method: "GET",
+      headers: headers,
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status) this.setState({ currentLists: data.data });
+      // else this.setState({totalLists: "",currentLists: [] })
+    });
+    
+};
 
   render() {
    const {user} = this.state;
@@ -237,9 +216,9 @@ class Students extends Component {
           <div className="w-100 text-center">
             <h3>Students </h3>
           </div>
-
           {user.role === "admin"
-         ? <div className="row mt-4 d-flex justify-content-end mb-3 mr-2" >
+         ? <div className="row mt-4 mb-3 mr-2 ml-2" >
+            <div className="col-md-6 d-flex justify-content-start">
             <button onClick={this.exportData()} id="exportButton" className="btn btn-sm btn-danger new_product mr-2">
               <i className="fa fa-file-excel"></i> 
               <small>Export to Excel</small>
@@ -252,11 +231,19 @@ class Students extends Component {
                     </i>
                 </button>
               </Link>
+            </div>
+            <div className="col-md-6 d-flex justify-content-end">
+          <button onClick={this.showFilter} type="button" className="btn btn-sm btn-primary  mr-2">
+            <i className="fas fa-search" id="search-icon" aria-hidden="true">
+            </i>
+          </button>
+            </div>
           </div> 
           : <span></span>
         }
-
-          <div className="col-md-12 box1 mb-3" id="profile">
+<div className="row">
+  
+<div className="col-md-12 box1 mb-3 main-table" id="profile main-table">
             {!this.state.loaderActive && this.state.totalLists === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No student records!</h6>
@@ -280,6 +267,8 @@ class Students extends Component {
                           <th>Telephone</th>
                           <th>Gender</th>
                           <th>Company Role</th>
+                          <th>Source</th>
+                          <th>Availability</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -297,6 +286,12 @@ class Students extends Component {
                               <td>{student.gender}</td>
                               <td>
                                 {student.companyrole}
+                              </td>
+                              <td>
+                                {student.source}
+                              </td>
+                              <td>
+                                {student.availability}
                               </td>
                               <td
                                 className="align-middle"
@@ -368,6 +363,131 @@ class Students extends Component {
             )}
 
           </div>
+      
+      
+        
+        
+          <div className="col-md-3 col-sm-12 box2 mt-3 mb-3  filter-modal" id="filter-modal">
+            <div className="card">
+                <div className="card-header bg-medium font-weight-bold text-dark">
+                <i className="fa fa-filter"></i> FILTER BY
+                </div>
+                <div className="p-3">
+
+              <form onSubmit={this.handleSearch}>
+                <div className="form-group mt-3">
+                  <label
+                    htmlFor="startdate"
+                    style={{ display: "block" }}
+                    className="font-weight-bold"
+                  >
+                    Start Date
+                  </label>
+                  <div className="input-group">
+                    <input
+                      type="date"
+                      className="form-control alt alt_right"
+                      name="startdate"
+                      id="startdate"
+                      placeholder="Start Date"
+                      value={this.state.startdate}
+                      onChange={this.handleInputChange}
+                    />
+                    <span className="input-group-text bg-white alt">
+                      <i className="fas fa-calendar fa-fw"></i>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="form-group mt-1">
+                  <label
+                    htmlFor="startdate"
+                    style={{ display: "block" }}
+                    className="font-weight-bold"
+                  >
+                    End Date
+                  </label>
+                  <div className="input-group">
+                    <input
+                      type="date"
+                      className="form-control alt alt_right"
+                      name="enddate"
+                      id="enddate"
+                      placeholder="End Date"
+                      value={this.state.enddate}
+                      onChange={this.handleInputChange}
+                    />
+                    <span className="input-group-text bg-white alt">
+                      <i className="fas fa-calendar fa-fw"></i>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="form-group mt-1">
+                  <label
+                    htmlFor="exactdate"
+                    style={{ display: "block" }}
+                    className="font-weight-bold"
+                  >
+                    Created On
+                  </label>
+                  <div className="input-group">
+                    <input
+                      type="date"
+                      className="form-control alt alt_right"
+                      name="on"
+                      id="on"
+                      placeholder="Exact Date"
+                      value={this.state.on}
+                      onChange={this.handleInputChange}
+                    />
+                    <span className="input-group-text bg-white alt">
+                      <i className="fas fa-calendar fa-fw"></i>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="form-group mt-1">
+                  <label
+                    htmlFor="type"
+                    style={{ display: "block" }}
+                    className="font-weight-bold"
+                  >
+                    Course
+                  </label>
+                  <select
+                    onChange={this.handleInputChange}
+                    name="courseid"
+                    id="courseid"
+                    className="custom-select custom-select-sm"
+                    defaultValue=""
+                    >
+                    <option value="" disabled>
+                      -- Select --
+                    </option>
+                  {this.state.courses.map((course,i) => {
+                    return (
+                      <option key={i} value={course.id}>{course.title}</option>
+                    );
+                  })}
+                  </select>
+                </div>
+
+                <div className="form-group mt-1 text-right">
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-md"
+                    style={{ cursor: "pointer", fontSize: "16px" }}
+                  >
+                    Search
+                  </button>
+                </div>
+              </form>
+              </div>
+            </div>
+          </div>
+      
+</div>
       </div>
     );
   }

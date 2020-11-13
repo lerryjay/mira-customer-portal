@@ -38,6 +38,8 @@ class Tickets extends Component {
   }
 
   async getCourses() {
+    this.state.showLoader();
+
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
     const res = await fetch(HTTPURL + `training/listcourses`, {
@@ -47,6 +49,8 @@ class Tickets extends Component {
       this.setState({ courses: res["data"], totalLists: res["data"] });
       this.getPageNo();
     }
+    
+    this.state.hideLoader();
   }
 
   async getPageNo() {
@@ -185,7 +189,7 @@ class Tickets extends Component {
         }
 
           <div className="col-md-12 col-sm-12 box1 mb-3" id="profile">
-            {this.state.totalLists.length === 0 ? (
+            {!this.state.loaderActive && this.state.totalLists.length === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No course records!</h6>
               </div>

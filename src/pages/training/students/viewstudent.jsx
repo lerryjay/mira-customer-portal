@@ -32,18 +32,20 @@ class viewcourse extends Component {
   }
 
   async getStudents() {
+
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
     const res = await fetch(HTTPURL + `training/liststudents`, {
       headers: headers,
     }).then((response) => response.json());
+
     if (res["status"]) {
       this.setState({ students: res["data"], totalLists: res["data"] });
     }
   }
 
   async getStudent() {
-    
+    this.state.showbtmLoader();
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
 
@@ -52,6 +54,7 @@ class viewcourse extends Component {
     const res = await fetch(HTTPURL + `training/studentprofile?studentid=${studentid}&userid=${this.props.user.userid}`, {
       headers: headers,
     }).then((response) => response.json());
+
     if (res["status"]) {
          const selectedStudent = res["data"]
       await this.setState({
@@ -63,6 +66,9 @@ class viewcourse extends Component {
         age: selectedStudent.age,
         gender: selectedStudent.gender,
         companyrole: selectedStudent.companyrole,
+        source: selectedStudent.source,
+        availability: selectedStudent.availability,
+        purpose: selectedStudent.purpose,
         organization: selectedStudent.organization,
         experience: selectedStudent.experience,
         state: selectedStudent.state,
@@ -72,6 +78,7 @@ class viewcourse extends Component {
       
     })
   }
+    this.state.hidebtmLoader();
   }
   closesuspendModal() {
     let modal = document.getElementById("suspendModal");
@@ -178,9 +185,10 @@ class viewcourse extends Component {
           </nav>
          </div>
 
-        <div className="row">
-          
 
+         {!this.state.isloading &&
+         <div className="row">
+          
           <div className="col-md-3 text-center mb-3" id="studentPix">
             <div className="card">
               <div className="card-header"></div>
@@ -225,7 +233,6 @@ class viewcourse extends Component {
           </div>
 
 
-
           <div className="col-md-9">
           <div className="card">
           <div className="row">
@@ -241,6 +248,9 @@ class viewcourse extends Component {
                     <p><i className="fa fa-building text-purple mr-3"></i> {this.state.companyrole}, {this.state.organization} </p>
                     <p><i className="fa fa-arrow-up text-purple mr-3"></i> {this.state.experience} experience </p>
                     <p><i className="fa fa-map-marker-alt text-purple mr-3"></i> {this.state.state}, {this.state.country}</p>
+                    <p><i className="fa fa-snowflake text-purple mr-3"></i> {this.state.source}</p>
+                    <p><i className="fab fa-bandcamp text-purple mr-3"></i> {this.state.availability}</p>
+                    <p><i className="fa fa-bookmark text-purple mr-3"></i> {this.state.purpose}</p>
 
                   </div>
 
@@ -362,8 +372,10 @@ class viewcourse extends Component {
 }
 </div>
 </div>
-        
-        </div>
+   
+        </div>     
+}
+          
 
         {/* Suspend Student */}
         {this.state.showmodal ? (

@@ -29,6 +29,8 @@ class viewstudentcourse extends Component {
     }
     
     async getStudentCourse() {
+      this.state.showbtmLoader();
+
       const headers = new Headers();
       headers.append("API-KEY", APIKEY);
 
@@ -40,6 +42,7 @@ class viewstudentcourse extends Component {
       if (res["status"]) {
         this.setState({ course: res["data"]});
       }
+      this.state.hidebtmLoader();
     }
 
     handleInputChange = e => {
@@ -186,12 +189,12 @@ class viewstudentcourse extends Component {
                 
                 <div className="row">
                <div className="col-md-12 mb-3 mt-4" id="profile">
-          <div className="w-100 text-center">
-            <h3>COURSE INFORMATION </h3>
+          <div className="w-100 ">
+          <h4>COURSE INFORMATION </h4>
           </div>
 
           </div>
-        
+         {!this.state.isloading && 
    <div className="col-md-4">
           <div className="card">
           {this.state.course.imageurl 
@@ -216,7 +219,9 @@ class viewstudentcourse extends Component {
             </div>
           </div>
         </div>
+    }
 
+{!this.state.isloading &&
           <div className="col-md-8">
                 <div className="card pb-4">
                   <div className="card-body">
@@ -276,7 +281,7 @@ class viewstudentcourse extends Component {
                 </div>
           </div>
 
-
+              }
                 
                 </div>
 

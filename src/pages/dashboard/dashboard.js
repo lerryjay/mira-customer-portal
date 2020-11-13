@@ -270,7 +270,7 @@ async getClients() {
           <div className="row  mt-3 mx-4 justify-content-center mx-2">
           <div className="col-md-8  box1 mt-2 card-body shadow home-chart">
               {/* <progress max="100"  value="100"></progress> */}
-            <Chart chartTitle="Ticket Statistics"/>
+            <Chart chartTitle="Ticket Statistics" />
           </div>
             <div className="col-md-4 box2">
               <div className="row">

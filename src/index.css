@@ -84,6 +84,16 @@ body{
   -webkit-animation: spin 2s linear infinite; /* Safari */
   animation: spin 2s linear infinite;
 }
+/* Bottom Loader */
+.btmloader {
+  border: 12px solid #e9ecef;
+  border-radius: 50%;
+  border-top: 12px solid #28166f;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
 
 /* Safari */
 @-webkit-keyframes spin {
@@ -237,6 +247,11 @@ div.card {
 @keyframes zoom {
   from {transform:scale(0)} 
   to {transform:scale(1)}
+}
+.spin-bottom {
+  right: 2%;
+  bottom: 2%;
+  position: fixed;
 }
 .spin-center {
   top: 50%;
@@ -504,6 +519,25 @@ div.home {
 div.home a {
   text-decoration: none;
 }
+
+#search-icon{
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate{
+  from{
+      transform: rotateZ(0deg);
+  }
+  to{
+      transform: rotateZ(360deg);
+  }
+}
+
+#filter-modal{
+  display: none;
+  transition: all 0.5s ease-in-out;
+}
+
 
 .home-chart {
   background-color: whitesmoke;

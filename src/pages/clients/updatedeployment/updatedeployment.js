@@ -168,6 +168,10 @@ class UpdateClientProduct extends Component {
     e.currentTarget.type = "text";
     e.currentTarget.placeholder = "Payment Date";
   }
+  expirationDate(e) {
+    e.currentTarget.type = "text";
+    e.currentTarget.placeholder = "Expiration Date";
+  }
   removeImage(e) {
     this.setState({ imagePreviewUrl: "" });
   }

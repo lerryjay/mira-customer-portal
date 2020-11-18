@@ -38,10 +38,10 @@
      * @param String $files attached files.
      * @return Array [ status : boolean,message:string, data ?: Array['insertId':integer ] ]
      **/
-    public function addChat($ticketId,$message,$files,$senderId,$senderRole)
+    public function addChat($ticketId,$message,$files,$senderId,$senderRole,$sender,$senderEmail)
     {
       $id = uniqid();
-      $insert =  $this->insert('ticketchat',['id'=>$id,'ticket_id'=>$ticketId,'sender_id'=>$senderId,'role'=>$senderRole,'message'=>$message,'files'=>$files,'createdat'=>date("Y-m-d H:i:s")]);
+      $insert =  $this->insert('ticketchat',['id'=>$id,'ticket_id'=>$ticketId,'sender_id'=>$senderId,'role'=>$senderRole,'sender'=>$sender,'senderemail'=>$senderEmail,'message'=>$message,'files'=>$files,'createdat'=>date("Y-m-d H:i:s")]);
       if($insert['status']) return $id;
       else return false;
     }
@@ -106,15 +106,15 @@
     public function searchTicket($filter = [],$status = 1)
     {
       $conditions  = '';
-      $conditions .= isset($filter['ticketId']) && $filter['ticketId'] != NULL ? "AND ticket_id = '".$filter['ticketId']."'" : "";
-      $conditions .= isset($filter['type']) && $filter['type'] != NULL  ? "AND type = '".$filter['type']."'" : "";
-      $conditions .= isset($filter['userId']) && $filter['userId'] != NULL  ? "AND customer_id = '".$filter['userId']."'" : "";
-      $conditions .= isset($filter['deploymentId']) && $filter['deploymentId'] != NULL  ? "AND deploymentid = '".$filter['deploymentId']."'" : "";
-      $conditions .= isset($filter['senderEmail']) && $filter['senderEmail'] != NULL  ? "AND senderemail = '".$filter['senderEmail']."'" : "";
-      $conditions .= isset($filter['companyId']) && $filter['companyId'] != NULL  ? "AND company_id = '".$filter['companyId']."'" : "";
-      $conditions .= isset($filter['on'])  && $filter['on'] != NULL ? "AND createdat LIKE '%".$filter['on']."%'" : "";
-      $conditions .= isset($filter['startDate'])  && $filter['startDate'] != NULL ? "AND createdat >= '".$filter['startDate']."'" : "";
-      $conditions .= isset($filter['endDate']) && $filter['endDate'] != NULL  ? "AND createdat <= '".$filter['endDate']."'" : "";
+      $conditions .= isset($filter['ticketId']) && $filter['ticketId'] != NULL ? " AND ticket_id = '".$filter['ticketId']."'" : "";
+      $conditions .= isset($filter['type']) && $filter['type'] != NULL  ? " AND type = '".$filter['type']."'" : "";
+      $conditions .= isset($filter['userId']) && $filter['userId'] != NULL  ? " AND customer_id = '".$filter['userId']."'" : "";
+      $conditions .= isset($filter['deploymentId']) && $filter['deploymentId'] != NULL  ? " AND deployment_id = '".$filter['deploymentId']."'" : "";
+      $conditions .= isset($filter['senderEmail']) && $filter['senderEmail'] != NULL  ? " AND senderemail = '".$filter['senderEmail']."'" : "";
+      $conditions .= isset($filter['companyId']) && $filter['companyId'] != NULL  ? " AND company_id = '".$filter['companyId']."'" : "";
+      $conditions .= isset($filter['on'])  && $filter['on'] != NULL ? " AND createdat LIKE '%".$filter['on']."%'" : "";
+      $conditions .= isset($filter['startDate'])  && $filter['startDate'] != NULL ? " AND createdat >= '".$filter['startDate']."'" : "";
+      $conditions .= isset($filter['endDate']) && $filter['endDate'] != NULL  ? " AND createdat <= '".$filter['endDate']."'" : "";
 
       $conditions .= isset($filter['order_by']) ? " ORDER BY ".$filter['order_by'] : " ORDER BY createdat";
       $conditions .= isset($filter['order']) ? " ".$filter['order'] : " DESC";
@@ -123,21 +123,23 @@
       $pageno      = (string) isset($filter['pageno']) ? $filter['pageno'] : 1;
       $conditions .= ' LIMIT '.(string) $limit;
       $conditions .= ' OFFSET '.(string) (($pageno - 1 ) * $limit);
-      $conditions  = ltrim($conditions,'AND');
+      // $conditions  = ltrim($conditions,'AND');
       return $this->getTickets('WHERE status = ? '.$conditions,'i',[$status]);
     }
     
     
     public function getTicketFilterTotal($filter = [],$status = 1)
     {
-        $conditions  = '';
-      $conditions .= isset($filter['ticketId']) && $filter['ticketId'] != NULL ? "AND ticket_id = '".$filter['ticketId']."'" : "";
-      $conditions .= isset($filter['type']) && $filter['type'] != NULL  ? "AND type = '".$filter['type']."'" : "";
-      $conditions .= isset($filter['userId']) && $filter['userId'] != NULL  ? "AND customer_id = '".$filter['userId']."'" : "";
-      $conditions .= isset($filter['companyId']) && $filter['companyId'] != NULL  ? "AND company_id = '".$filter['companyId']."'" : "";
-      $conditions .= isset($filter['on'])  && $filter['on'] != NULL ? "AND createdat LIKE '%".$filter['on']."%'" : "";
-      $conditions .= isset($filter['startDate'])  && $filter['startDate'] != NULL ? "AND createdat >= '".$filter['startDate']."'" : "";
-      $conditions .= isset($filter['endDate']) && $filter['endDate'] != NULL  ? "AND createdat <= '".$filter['endDate']."'" : "";
+      $conditions  = '';
+      $conditions .= isset($filter['ticketId']) && $filter['ticketId'] != NULL ? " AND ticket_id = '".$filter['ticketId']."'" : "";
+      $conditions .= isset($filter['type']) && $filter['type'] != NULL  ? " AND type = '".$filter['type']."'" : "";
+      $conditions .= isset($filter['deploymentId']) && $filter['deploymentId'] != NULL  ? " AND deployment_id = '".$filter['deploymentId']."'" : "";
+      $conditions .= isset($filter['senderEmail']) && $filter['senderEmail'] != NULL  ?  "AND senderemail = '".$filter['senderEmail']."'" : "";
+      $conditions .= isset($filter['userId']) && $filter['userId'] != NULL  ? " AND customer_id = '".$filter['userId']."'" : "";
+      $conditions .= isset($filter['companyId']) && $filter['companyId'] != NULL  ? " AND company_id = '".$filter['companyId']."'" : "";
+      $conditions .= isset($filter['on'])  && $filter['on'] != NULL ? " AND createdat LIKE '%".$filter['on']."%'" : "";
+      $conditions .= isset($filter['startDate'])  && $filter['startDate'] != NULL ? " AND createdat >= '".$filter['startDate']."'" : "";
+      $conditions .= isset($filter['endDate']) && $filter['endDate'] != NULL  ? " AND createdat <= '".$filter['endDate']."'" : "";
 
       $conditions .= isset($filter['order_by']) ? " ORDER BY ".$filter['order_by'] : " ORDER BY createdat";
       $conditions .= isset($filter['order']) ? " ".$filter['order'] : " DESC";
@@ -145,7 +147,7 @@
       $limit       = (int) isset($filter['limit']) ? $filter['limit'] : 20;
       $pageno      = (string) isset($filter['pageno']) ? $filter['pageno'] : 1;
       
-      return $this->getTickets('WHERE status = ?'.$conditions,'i',[$status]);
+      return $this->getTickets('WHERE status = ? '.$conditions,'i',[$status]);
     }
 
     /**
@@ -203,6 +205,30 @@
     public function getChatByChatId($chatId,$status = 1)
     {
       return $this->getChat('WHERE id = ? AND status =  ?','si',[$chatId,$status]);
+    }
+
+
+    /**
+     * Retrieves all the chat for a ticket
+     *
+     * @param UUID $chatId primary key if the chat table for the requested ticket
+     * @param Int $status 
+     * @return bool or @return DATABASETICKETCHATOBJECT 
+     **/
+    public function getChatByFilter($filter,$status = 1)
+    {
+      $conditions  = '';
+      $conditions .= isset($filter['ticketId']) && $filter['ticketId'] != NULL ? " AND ticket_id = '".$filter['ticketId']."'" : "";
+      $conditions .= isset($filter['type']) && $filter['type'] != NULL  ? " AND type = '".$filter['type']."'" : "";
+      $conditions .= isset($filter['senderEmail']) && $filter['senderEmail'] != NULL  ? " AND senderemail = '".$filter['senderEmail']."'" : "";
+      $conditions .= isset($filter['on'])  && $filter['on'] != NULL ? " AND createdat LIKE '%".$filter['on']."%'" : "";
+      $conditions .= isset($filter['startDate'])  && $filter['startDate'] != NULL ? " AND createdat >= '".$filter['startDate']."'" : "";
+      $conditions .= isset($filter['endDate']) && $filter['endDate'] != NULL  ? " AND createdat <= '".$filter['endDate']."'" : "";
+
+      $conditions .= isset($filter['order_by']) ? " ORDER BY ".$filter['order_by'] : " ORDER BY createdat";
+      $conditions .= isset($filter['order']) ? " ".$filter['order'] : " ASC";
+
+      return $this->getChat("WHERE status =  ? $conditions",'i',[$status]);
     }
   }
 ?>

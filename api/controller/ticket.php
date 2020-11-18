@@ -25,7 +25,7 @@
       loadController('user');
       $this->ticketModel = new TicketModel();
 
-      $userId     = isset($userid) ? $userid : $this->userId;
+      $userId     = isset($userid) ? $userid : $this->userId ?? '';
       $on         = isset($on) ? $on : '';
       $type       = isset($type) ? $type : '';
       $limit      = isset($limit) ? $limit : 25;
@@ -35,12 +35,33 @@
       $clientid     = isset($clientid) ? $clientid : null;
       $deploymentId = isset($deploymentid) ? $deploymentid : null;
       $senderEmail  = isset($senderemail) ? $senderemail : null;
+      $sender       = isset($sender) ? $sender : null;
       
-      $user = User::validateUser($userId);
-      $clientid = $user['role'] == 'admin' ? $clientid : $userid;
+    
+      if(strlen($userId)  < 1 && strlen($deploymentId) > 0){
+
+        loadModel('user');
+        loadModel('deployment');
+        $this->deploymentModel = new DeploymentModel();
+        $deployment = $this->deploymentModel->getDeploymentById($deploymentId);
+        if($deployment){
+          $this->userModel = new UserModel();
+          $user        = $this->userModel->getUser($deployment['user_id']);
+          $customerId  = $user['id'];
+          $sender      = $sender ?? '';  
+          $senderEmail = $senderemail ?? '';  
+        }else{
+          $this->setOutputHeader(['Content-type:application/json']);
+          $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid Deployment', 'data'=>['field'=>'deploymentid']]));
+        }
+      }else{
+        $user = User::validateUser($userId);
+        $clientid = $user['role'] == 'admin' ? $clientid : $userid;
+      }
       $filters = [
         "companyId"=>$user['company_id'],
         "limit"=>$limit,
+        "sender"=>$sender,
         "senderEmail"=>$senderEmail,
         "deploymentId"=>$deploymentId,
         "pageno"=>$pageno,
@@ -52,6 +73,7 @@
       ];
       $hasTickets = $this->ticketModel->searchTicket($filters);
       $total      = $this->ticketModel->getTicketFilterTotal($filters) ;
+
       if($hasTickets){
         $response['data'] = ['tickets'=>$hasTickets,'total'=>count($total)];
         $response['message'] = "Ticket records found";
@@ -128,12 +150,14 @@
       
       
       if(isset($deploymentId) && strlen($deploymentId)  > 0){
+        loadModel('user');
         loadModel('deployment');
         $this->deploymentModel = new DeploymentModel();
-
         $deployment = $this->deploymentModel->getDeploymentById($deploymentId);
         if($deployment){
+          $this->userModel = new UserModel();
           $customer    = $this->userModel->getUser($deployment['user_id']);
+          $customerId  = $user['id'];
           $senderEmail = $senderemail ?? '';  
           $sender      = $sender ?? '';  
         }else{
@@ -205,7 +229,7 @@
           if($files['status']) $files = json_encode($files['data']);
           else $files   = "[]";
         }else $files   = "[]";
-        $saved = $this->ticketModel->addChat($ticketid,$message,$files,$userId,$user['role']);
+        $saved = $this->ticketModel->addChat($ticketid,$message,$files,$userId,$user['role'],$sender,$senderEmail);
         if($saved){
           $response['status']  = true;
           $response['message'] = 'Ticket reply success';
@@ -233,18 +257,21 @@
     public function validateTicketReply()
     {
       extract($_POST);
-      $userId      = isset($userid) ? $userid : '';
-      $ticketId    = isset($ticketid) ? $ticketid : '';
-      $message     = isset($message) ? $message : '';
-      $files       = isset($files) ? $files : '';
-
+      $userId       = isset($userid) ? $userid : '';
+      $ticketId     = isset($ticketid) ? $ticketid : '';
+      $message      = isset($message) ? $message : '';
+      $files        = isset($files) ? $files : '';
+      $deploymentId = isset($deploymentid) ? $deploymentid : '';
+      
       if(isset($deploymentId) && strlen($deploymentId)  > 0){
+        loadModel('user');
         loadModel('deployment');
+        $this->userModel = new UserModel();
         $this->deploymentModel = new DeploymentModel();
-
         $deployment = $this->deploymentModel->getDeploymentById($deploymentId);
         if($deployment){
-          $customer    = $this->userModel->getUser($deployment['user_id']);
+          $user   = $this->userModel->getUser($deployment['user_id']);
+          $userId = $deployment['user_id'];
           $senderEmail = $senderemail ?? '';  
           $sender      = $sender ?? '';  
         }else{
@@ -273,6 +300,7 @@
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>$message]));
       }
+
       if($user['company_id'] !== $ticket['company_id']){
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>"You do not have the permission to perform this action!"]));
@@ -297,8 +325,11 @@
       $data = $this->validateUserTicketPermission();
       extract($data);
 
-      
-      $data = $this->ticketModel->getChatsByTicketId($ticketId);
+      $filters = [
+        'ticketId'=>$ticketId,
+        'senderEmail'=>$senderEmail
+      ];
+      $data    = $this->ticketModel->getChatsByTicketId($ticketId);
       if($data){
         $response['status'] = true;
         $response['data'] = $data;
@@ -442,10 +473,29 @@
       
       $userId   = isset($userid) ? $userid : '';
       $ticketId = isset($ticketid) ? $ticketid : '';
-      $user     = User::validateUser($userId);
+      $senderEmail = $senderemail ?? '';  
+      $sender      = $sender ?? '';  
+      if(isset($deploymentid) && strlen($deploymentid) > 0){
+        loadModel('user');
+        loadModel('deployment');
+        $this->userModel = new UserModel();
+        $this->deploymentModel = new DeploymentModel();
+        $deployment = $this->deploymentModel->getDeploymentById($deploymentid);
+        if($deployment){
+          $user   = $this->userModel->getUser($deployment['user_id']);
+          $userId = $deployment['user_id'];
+          
+        }else{
+          $this->setOutputHeader(['Content-type:application/json']);
+          $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid Deployment', 'data'=>['field'=>'deploymentid']]));
+        }
+      }else{
+        $user     = User::validateUser($userId);
+      }
 
       $this->ticketModel = new TicketModel();
       $ticket   = $this->ticketModel->getTicketById($ticketId);
+      
       
       if(!$ticket){
         $this->setOutputHeader(['Content-type:application/json']);
@@ -453,7 +503,7 @@
       }elseif($user['company_id'] !== $ticket['company_id']){
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>"You do not have the permission to perform this action!"]));
-      }elseif($user['role'] == 'admin' || $user['id'] == $ticket['customer_id']) return ['user'=> $user,'ticket'=>$ticket,'ticketId'=>$ticketId,'userId'=>$userId];
+      }elseif($user['role'] == 'admin' || $user['id'] == $ticket['customer_id']) return ['user'=> $user,'ticket'=>$ticket,'ticketId'=>$ticketId,'userId'=>$userId,'sender'=>$sender, 'senderEmail'=>$senderEmail];
     }
 
     /**

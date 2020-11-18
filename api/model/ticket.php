@@ -21,10 +21,10 @@
      * @param String $files Registered company Id ticket belongs to.
      * @return Array [ status : boolean,message:string, data ?: Array['insertId':integer ] ]
      **/
-    public function addTicket($companyId,$productId,$customerId,$title,$type,$message,$files,$status = 'pending'){
+    public function addTicket($companyId,$deploymentId,$customerId,$title,$type,$message,$sender,$senderEmail,$files,$status = 'pending'){
   
       $id = rand(10000,99999999);
-      $insert =  $this->insert('tickets',['id'=>$id,'product_id'=>$productId,'customer_id'=>$customerId,'title'=>$title,'createdat'=>date("Y-m-d H:i:s"),'message'=>$message,'company_id'=>$companyId,'type'=>$type,'files'=>$files,'ticketstatus'=>$status]);
+      $insert =  $this->insert('tickets',['id'=>$id,'deployment_id'=>$deploymentId,'customer_id'=>$customerId,'title'=>$title,'createdat'=>date("Y-m-d H:i:s"),'message'=>$message,'company_id'=>$companyId,'type'=>$type,'files'=>$files,'ticketstatus'=>$status, 'sender'=>$sender,'senderemail'=>$senderEmail]);
       if($insert) return $id;
       else false;
     }
@@ -57,7 +57,10 @@
     {
       return $this->update('tickets',['ticketstatus'=>$status],['id'=>$ticketId]);
     }
-
+    public function deleteTicket($ticketId)
+    {
+         return $this->update('tickets',['status'=>0],['id'=>$ticketId]);
+    }
       /**
      * Retrieve tickets .
      *
@@ -100,12 +103,14 @@
     {
       return $this->getTicket('WHERE id = ? AND status = ? ','si',[$ticketId,$status]);
     }
-    public function searchTicket($filter = [])
+    public function searchTicket($filter = [],$status = 1)
     {
       $conditions  = '';
       $conditions .= isset($filter['ticketId']) && $filter['ticketId'] != NULL ? "AND ticket_id = '".$filter['ticketId']."'" : "";
       $conditions .= isset($filter['type']) && $filter['type'] != NULL  ? "AND type = '".$filter['type']."'" : "";
       $conditions .= isset($filter['userId']) && $filter['userId'] != NULL  ? "AND customer_id = '".$filter['userId']."'" : "";
+      $conditions .= isset($filter['deploymentId']) && $filter['deploymentId'] != NULL  ? "AND deploymentid = '".$filter['deploymentId']."'" : "";
+      $conditions .= isset($filter['senderEmail']) && $filter['senderEmail'] != NULL  ? "AND senderemail = '".$filter['senderEmail']."'" : "";
       $conditions .= isset($filter['companyId']) && $filter['companyId'] != NULL  ? "AND company_id = '".$filter['companyId']."'" : "";
       $conditions .= isset($filter['on'])  && $filter['on'] != NULL ? "AND createdat LIKE '%".$filter['on']."%'" : "";
       $conditions .= isset($filter['startDate'])  && $filter['startDate'] != NULL ? "AND createdat >= '".$filter['startDate']."'" : "";
@@ -119,7 +124,28 @@
       $conditions .= ' LIMIT '.(string) $limit;
       $conditions .= ' OFFSET '.(string) (($pageno - 1 ) * $limit);
       $conditions  = ltrim($conditions,'AND');
-      return $this->getTickets('WHERE '.$conditions,'',[]);
+      return $this->getTickets('WHERE status = ? '.$conditions,'i',[$status]);
+    }
+    
+    
+    public function getTicketFilterTotal($filter = [],$status = 1)
+    {
+        $conditions  = '';
+      $conditions .= isset($filter['ticketId']) && $filter['ticketId'] != NULL ? "AND ticket_id = '".$filter['ticketId']."'" : "";
+      $conditions .= isset($filter['type']) && $filter['type'] != NULL  ? "AND type = '".$filter['type']."'" : "";
+      $conditions .= isset($filter['userId']) && $filter['userId'] != NULL  ? "AND customer_id = '".$filter['userId']."'" : "";
+      $conditions .= isset($filter['companyId']) && $filter['companyId'] != NULL  ? "AND company_id = '".$filter['companyId']."'" : "";
+      $conditions .= isset($filter['on'])  && $filter['on'] != NULL ? "AND createdat LIKE '%".$filter['on']."%'" : "";
+      $conditions .= isset($filter['startDate'])  && $filter['startDate'] != NULL ? "AND createdat >= '".$filter['startDate']."'" : "";
+      $conditions .= isset($filter['endDate']) && $filter['endDate'] != NULL  ? "AND createdat <= '".$filter['endDate']."'" : "";
+
+      $conditions .= isset($filter['order_by']) ? " ORDER BY ".$filter['order_by'] : " ORDER BY createdat";
+      $conditions .= isset($filter['order']) ? " ".$filter['order'] : " DESC";
+
+      $limit       = (int) isset($filter['limit']) ? $filter['limit'] : 20;
+      $pageno      = (string) isset($filter['pageno']) ? $filter['pageno'] : 1;
+      
+      return $this->getTickets('WHERE status = ?'.$conditions,'i',[$status]);
     }
 
     /**

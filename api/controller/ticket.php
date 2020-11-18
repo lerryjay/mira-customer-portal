@@ -32,13 +32,17 @@
       $pageno     = isset($pageno) ? $pageno : 1;
       $enddate    = isset($enddate) ? $enddate : '';
       $startdate  = isset($startdate) ? $startdate : '';
-      $clientid = isset($clientid) ? $clientid : null;
+      $clientid     = isset($clientid) ? $clientid : null;
+      $deploymentId = isset($deploymentid) ? $deploymentid : null;
+      $senderEmail  = isset($senderemail) ? $senderemail : null;
       
       $user = User::validateUser($userId);
       $clientid = $user['role'] == 'admin' ? $clientid : $userid;
       $filters = [
         "companyId"=>$user['company_id'],
         "limit"=>$limit,
+        "senderEmail"=>$senderEmail,
+        "deploymentId"=>$deploymentId,
         "pageno"=>$pageno,
         "userId"=>$clientid, 
         "on"=>$on,
@@ -46,9 +50,10 @@
         "endDate"=>$enddate,
         "type"=>$type
       ];
-      $hasTickets =   $this->ticketModel->searchTicket($filters);
+      $hasTickets = $this->ticketModel->searchTicket($filters);
+      $total      = $this->ticketModel->getTicketFilterTotal($filters) ;
       if($hasTickets){
-        $response['data'] = $hasTickets;
+        $response['data'] = ['tickets'=>$hasTickets,'total'=>count($total)];
         $response['message'] = "Ticket records found";
       }
       $this->setOutputHeader(['Content-type:application/json']);
@@ -76,10 +81,10 @@
       if(isset($_FILES['files']) && count($_FILES['files']) > 0){
         $files = File::upload("files",'ticket',true);
         if($files['data']) $files = json_encode($files['data']);
-        else $files   = json_encode([]);
-      }else $files   = json_encode([]);
+        else $files = json_encode([]);
+      }else $files  = json_encode([]);
       
-      $add = $this->ticketModel->addTicket($user['company_id'],$productId,$customerId,$title,$type,$message,$files,'pending');
+      $add = $this->ticketModel->addTicket($user['company_id'],$deploymentId,$customerId,$title,$type,$message,$sender,$senderEmail,$files,'pending');
       if($add){
         $response['status'] = true;
         $response['message'] = "Ticket created successfully";
@@ -101,12 +106,13 @@
     public function validateNewTicket()
     {
       extract($_POST);
-      $userId      = $this->userId ?? $userid ??  '';
-      $title       = isset($title) ? $title : '';
-      $message     = isset($message) ? $message : '';
-      $type        = isset($type) ? $type : '';
-      $customerId  = $customerid ?? '';
-      $productId   = $productid ?? '';
+      $userId       = $this->userId ?? $userid ??  '';
+      $title        = isset($title) ? $title : '';
+      $message      = isset($message) ? $message : '';
+      $type         = isset($type) ? $type : '';
+      $customerId   = $customerid ?? '';
+      $productId    = $productid ?? '';
+      $deploymentId = $deploymentid ?? '';
       $typeError   = Validate::select($type,['support','complaint','enquiry']);
       if($typeError){
         $this->setOutputHeader(['Content-type:application/json']);
@@ -119,22 +125,43 @@
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Please enter a breif description of the issue', 'data'=>['field'=>'message']]));
       } 
 
-      loadController('user');
-      $user = User::validateUser($userId);
-      $customerId = $user['role'] == 'user' ? $userId : $customerId;
-      if($user['role'] == 'admin')
-      {
-        $this->userModel = new UserModel();
-        $customer = $this->userModel->getUser($customerId);
-        if(!$customer){
+      
+      
+      if(isset($deploymentId) && strlen($deploymentId)  > 0){
+        loadModel('deployment');
+        $this->deploymentModel = new DeploymentModel();
+
+        $deployment = $this->deploymentModel->getDeploymentById($deploymentId);
+        if($deployment){
+          $customer    = $this->userModel->getUser($deployment['user_id']);
+          $senderEmail = $senderemail ?? '';  
+          $sender      = $sender ?? '';  
+        }else{
           $this->setOutputHeader(['Content-type:application/json']);
-          $this->setOutput(json_encode(['status'=>false, 'message'=>'Please enter a customerid', 'data'=>['field'=>'customerid']]));
+          $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid Deployment', 'data'=>['field'=>'deploymentid']]));
         }
-      }else $customer = $user;
+      }else{
+        loadController('user');
+        $user = User::validateUser($userId);
+        $customerId = $user['role'] == 'user' ? $userId : $customerId;
+        if($user['role'] == 'admin')
+        {
+          $this->userModel = new UserModel();
+          $customer = $this->userModel->getUser($customerId);
+          if(!$customer){
+            $this->setOutputHeader(['Content-type:application/json']);
+            $this->setOutput(json_encode(['status'=>false, 'message'=>'Please enter a customerid', 'data'=>['field'=>'customerid']]));
+          }
+        }else $customer = $user;
+
+        $senderEmail = $user['email'];  
+        $sender      = $user['firstname'].' '.$user['lastname'];  
+      }
+      
 
       loadModel('ticket');
       $this->ticketModel = new TicketModel();
-      return ['title'=>$title,'message'=>$message,'type'=>$type,'customerId'=>$customerId,'userId'=>$userId,'productId'=>$productId,'user'=>$user,'customer'=>$customer];
+      return ['title'=>$title,'message'=>$message,'type'=>$type,'customerId'=>$customerId,'userId'=>$userId,'deploymentId'=>$deploymentId,'user'=>$user,'customer'=>$customer, 'sender'=>$sender,'senderEmail'=>$senderEmail];
     }
 
     /**
@@ -207,11 +234,31 @@
     {
       extract($_POST);
       $userId      = isset($userid) ? $userid : '';
-      $ticketId      = isset($ticketid) ? $ticketid : '';
+      $ticketId    = isset($ticketid) ? $ticketid : '';
       $message     = isset($message) ? $message : '';
       $files       = isset($files) ? $files : '';
-      loadController('user');
-      $user = User::validateUser($userId); 
+
+      if(isset($deploymentId) && strlen($deploymentId)  > 0){
+        loadModel('deployment');
+        $this->deploymentModel = new DeploymentModel();
+
+        $deployment = $this->deploymentModel->getDeploymentById($deploymentId);
+        if($deployment){
+          $customer    = $this->userModel->getUser($deployment['user_id']);
+          $senderEmail = $senderemail ?? '';  
+          $sender      = $sender ?? '';  
+        }else{
+          $this->setOutputHeader(['Content-type:application/json']);
+          $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid Deployment', 'data'=>['field'=>'deploymentid']]));
+        }
+      }else{
+        loadController('user');
+        $user = User::validateUser($userId);
+        $customerId = $user['role'] == 'user' ? $userId : $customerId;
+
+        $senderEmail = $user['email'];  
+        $sender      = $user['firstname'].' '.$user['lastname'];  
+      }
 
       $messageError =  Validate::string($message,false,false,1);
       if($messageError){
@@ -231,7 +278,7 @@
         $this->setOutput(json_encode(['status'=>false, 'message'=>"You do not have the permission to perform this action!"]));
       }
 
-      return ['message'=>$message,'files'=>$files,'user'=>$user,'userId'=>$userId,'ticket'=>$ticket,'ticketid'=>$ticketId];
+      return ['message'=>$message,'files'=>$files,'user'=>$user,'userId'=>$userId,'ticket'=>$ticket,'ticketid'=>$ticketId,'sender'=>$sender,'senderEmail'=>$senderEmail];
     }
 
     /**
@@ -296,6 +343,35 @@
           $customer = $this->userModel->getUser($ticket['customer_id']);
           $this->sendTicketStatusUpdateMail(TICKET_PREFIX.$ticketId,$customer['email']);
         }
+      }else $response['message'] = "An unexpected error occured. Please try again later";
+      
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
+    }
+
+    /**
+     * Update the status of a ticket
+     *
+     * @param HTTPPOSTPARAMS  - ticketId,status
+     * @return JSONRESPONSE
+     **/
+    public function delete()
+    {
+      $response =  [
+        "status"=>false,
+        "data"=>[],
+        "message"=>"Error fetching replys!"
+      ];
+      $data = $this->validateUserTicketPermission();
+      extract($data);
+      extract($_GET);
+
+
+
+      $updated = $this->ticketModel->deleteTicket($ticketId);
+      if($updated){
+        $response['status'] = true;
+        $response['message'] = ['Ticket deleted successfully'];
       }else $response['message'] = "An unexpected error occured. Please try again later";
       
       $this->setOutputHeader(['Content-type:application/json']);

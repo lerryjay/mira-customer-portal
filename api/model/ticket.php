@@ -123,7 +123,7 @@
       $pageno      = (string) isset($filter['pageno']) ? $filter['pageno'] : 1;
       $conditions .= ' LIMIT '.(string) $limit;
       $conditions .= ' OFFSET '.(string) (($pageno - 1 ) * $limit);
-      // $conditions  = ltrim($conditions,'AND');
+
       return $this->getTickets('WHERE status = ? '.$conditions,'i',[$status]);
     }
     
@@ -219,16 +219,25 @@
     {
       $conditions  = '';
       $conditions .= isset($filter['ticketId']) && $filter['ticketId'] != NULL ? " AND ticket_id = '".$filter['ticketId']."'" : "";
-      $conditions .= isset($filter['type']) && $filter['type'] != NULL  ? " AND type = '".$filter['type']."'" : "";
-      $conditions .= isset($filter['senderEmail']) && $filter['senderEmail'] != NULL  ? " AND senderemail = '".$filter['senderEmail']."'" : "";
-      $conditions .= isset($filter['on'])  && $filter['on'] != NULL ? " AND createdat LIKE '%".$filter['on']."%'" : "";
-      $conditions .= isset($filter['startDate'])  && $filter['startDate'] != NULL ? " AND createdat >= '".$filter['startDate']."'" : "";
-      $conditions .= isset($filter['endDate']) && $filter['endDate'] != NULL  ? " AND createdat <= '".$filter['endDate']."'" : "";
+      $conditions .= isset($filter['type']) && $filter['type'] != NULL  ? " AND ticket.type = '".$filter['type']."'" : "";
+      $conditions .= isset($filter['senderEmail']) && $filter['senderEmail'] != NULL  ? " AND ticketchat.senderemail = '".$filter['senderEmail']."'" : "";
+      $conditions .= isset($filter['ticketOwner']) && $filter['ticketOwner'] != NULL  ? " AND ticket.senderemail = '".$filter['ticketOwner']."'" : "";
+      $conditions .= isset($filter['deploymentId']) && $filter['deploymentId'] != NULL  ? " AND ticket.deployment_id = '".$filter['deploymentId']."'" : "";
+      $conditions .= isset($filter['messagestatus']) && $filter['messagestatus'] != NULL  ? " AND ticketchat.messagestatus = '".$filter['messagestatus']."'" : "";
 
-      $conditions .= isset($filter['order_by']) ? " ORDER BY ".$filter['order_by'] : " ORDER BY createdat";
+      $conditions .= isset($filter['on'])  && $filter['on'] != NULL ? " AND ticketchat.createdat LIKE '%".$filter['on']."%'" : "";
+      $conditions .= isset($filter['startDate'])  && $filter['startDate'] != NULL ? " AND ticketchat.createdat >= '".$filter['startDate']."'" : "";
+      $conditions .= isset($filter['endDate']) && $filter['endDate'] != NULL  ? " AND ticketchat.createdat <= '".$filter['endDate']."'" : "";
+
+      $conditions .= isset($filter['order_by']) ? " ORDER BY ".$filter['order_by'] : " ORDER BY ticketchat.createdat";
       $conditions .= isset($filter['order']) ? " ".$filter['order'] : " ASC";
 
-      return $this->getChat("WHERE status =  ? $conditions",'i',[$status]);
+      return $this->getChat("INNER JOIN tickets ON ticket.id = ticketchat.ticket_id WHERE ticketchat.status =  ? $conditions",'i',[$status]);
+    }
+
+    public  function updateChatReadStatus($chatId,$status)
+    {
+      return $this->update('ticketchat', ['status'=>$status], ['id'=>$chatId]);
     }
   }
 ?>

@@ -262,7 +262,8 @@
       $message      = isset($message) ? $message : '';
       $files        = isset($files) ? $files : '';
       $deploymentId = isset($deploymentid) ? $deploymentid : '';
-      
+      $sender       = $sender ?? '';  
+      $senderEmail  = $senderemail ?? '';  
       if(isset($deploymentId) && strlen($deploymentId)  > 0){
         loadModel('user');
         loadModel('deployment');
@@ -272,8 +273,7 @@
         if($deployment){
           $user   = $this->userModel->getUser($deployment['user_id']);
           $userId = $deployment['user_id'];
-          $senderEmail = $senderemail ?? '';  
-          $sender      = $sender ?? '';  
+          
         }else{
           $this->setOutputHeader(['Content-type:application/json']);
           $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid Deployment', 'data'=>['field'=>'deploymentid']]));
@@ -329,12 +329,50 @@
         'ticketId'=>$ticketId,
         'senderEmail'=>$senderEmail
       ];
-      $data    = $this->ticketModel->getChatsByTicketId($ticketId);
+      $data    = $this->ticketModel->getChatByFilter($filters);
       if($data){
         $response['status'] = true;
         $response['data'] = $data;
         $response['message'] = 'Ticket replys fetched successfully';
       }else $response['message'] = 'Ticket has no reply\'s yet';
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
+    }
+
+    public function unreadchat()
+    {
+      $response =  [
+        "status"=>false,
+        "data"=>[],
+        "message"=>"Error fetching tickets replys!"
+      ];
+      $data = $this->validateUserTicketPermission();
+      $filter = [
+        'ticketOwner'=>$senderEmail,
+        'ticketId'=>$ticketId,
+        'messagestatus'=>'unread'
+      ];
+      $data    = $this->ticketModel->getChatByFilter($filters);
+      f($data){
+        $response['status'] = true;
+        $response['data'] = $data;
+        $response['message'] = 'Ticket unread replys fetched successfully';
+      }else $response['message'] = 'Ticket has no reply\'s yet';
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
+    }
+
+    public function readchat(){
+      $response =  [
+        "status"=>false,
+        "data"=>[],
+        "message"=>"Please provide chatid"
+      ];
+      extract($_GET);
+      if(isset($chatid)){
+        $this->ticketModel = updateChatReadStatus($chatId,'read');
+        $response = ['status'=>true,'message'=>'Chat updated successfully'];
+      }else $response['data'] = ['field'=>'chatid'];
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     }
@@ -357,7 +395,7 @@
       $data = $this->validateUserTicketPermission();
       extract($_POST);
       $status = $status ?? ''; 
-      if(!in_array($status,['resolved','pending','cancelled'])){
+      if(!in_array($status,['resolved','pending','cancelled','closed'])){
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false,'message'=>'Status can only be pending,resolved,cancelled','data'=>['field'=>'status']]));
       }
@@ -379,6 +417,8 @@
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     }
+
+
 
     /**
      * Update the status of a ticket

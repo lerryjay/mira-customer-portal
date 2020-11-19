@@ -156,7 +156,7 @@
         $deployment = $this->deploymentModel->getDeploymentById($deploymentId);
         if($deployment){
           $this->userModel = new UserModel();
-          $customer    = $this->userModel->getUser($deployment['user_id']);
+          $customer    = $user = $this->userModel->getUser($deployment['user_id']);
           $customerId  = $user['id'];
           $senderEmail = $senderemail ?? '';  
           $sender      = $sender ?? '';  
@@ -237,8 +237,7 @@
           if($user['role'] == 'admin'){
             loadModel('user');
             $this->userModel = new UserModel();
-            $customer = $this->userModel->getUser($ticket['user_id']);
-            $this->sendTicketStatusUpdateMail(TICKET_PREFIX.$ticketId,$customer['email']);
+            $this->sendTicketStatusUpdateMail(TICKET_PREFIX.$ticketid,$ticket['senderemail']);
           }
         }else $response['message'] = "Unexpected error saving ticket reply!";
       }else $response['message'] = "You do not have the authority to perform this action!";
@@ -281,7 +280,7 @@
       }else{
         loadController('user');
         $user = User::validateUser($userId);
-        $customerId = $user['role'] == 'user' ? $userId : $customerId;
+        // $customerId = $user['role'] == 'user' ? $userId : $customerId;
 
         $senderEmail = $user['email'];  
         $sender      = $user['firstname'].' '.$user['lastname'];  
@@ -300,7 +299,6 @@
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>$message]));
       }
-
       if($user['company_id'] !== $ticket['company_id']){
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>"You do not have the permission to perform this action!"]));
@@ -341,23 +339,29 @@
 
     public function unreadchat()
     {
+      extract($_GET);
+      $ticketId = isset($ticketid) ? $ticketid : '';
+      $senderEmail = $senderemail ?? '';  
       $response =  [
         "status"=>false,
         "data"=>[],
         "message"=>"Error fetching tickets replys!"
       ];
-      $data = $this->validateUserTicketPermission();
+      loadModel('ticket');
+      $this->ticketModel = new TicketModel();
       $filter = [
         'ticketOwner'=>$senderEmail,
         'ticketId'=>$ticketId,
-        'messagestatus'=>'unread'
+        'deploymentid'=>$deploymentid,
+        'messagestatus'=>'unread',
+        'notsender'=>$senderEmail,
       ];
-      $data    = $this->ticketModel->getChatByFilter($filters);
-      f($data){
+      $data    = $this->ticketModel->getChatByFilter($filter);
+      if($data){
         $response['status'] = true;
         $response['data'] = $data;
         $response['message'] = 'Ticket unread replys fetched successfully';
-      }else $response['message'] = 'Ticket has no reply\'s yet';
+      }else $response['message'] = 'Ticket has no unread chat messages yet';
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     }

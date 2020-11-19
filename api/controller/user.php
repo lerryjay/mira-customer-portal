@@ -100,7 +100,7 @@
       $othername = $othername ?? '';
       $lastname = $lastname ?? '';
       $password = $password ?? '';
-     $telephone = $telephone ?? '';
+      $telephone = $telephone ?? '';
       $companyId  = isset($companyid) ? $companyid : '';
 
       $emailInvalid      = Validate::email($email);

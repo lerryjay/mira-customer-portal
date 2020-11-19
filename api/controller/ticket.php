@@ -46,7 +46,7 @@
         $deployment = $this->deploymentModel->getDeploymentById($deploymentId);
         if($deployment){
           $this->userModel = new UserModel();
-          $user        = $this->userModel->getUser($deployment['user_id']);
+          $user        = $this->userModel->getUserById($deployment['user_id']);
           $customerId  = $user['id'];
           $sender      = $sender ?? '';  
           $senderEmail = $senderemail ?? '';  
@@ -156,7 +156,8 @@
         $deployment = $this->deploymentModel->getDeploymentById($deploymentId);
         if($deployment){
           $this->userModel = new UserModel();
-          $customer    = $user = $this->userModel->getUser($deployment['user_id']);
+         
+          $customer    = $user = $this->userModel->getUserById($deployment['user_id']);
           $customerId  = $user['id'];
           $senderEmail = $senderemail ?? '';  
           $sender      = $sender ?? '';  
@@ -171,7 +172,7 @@
         if($user['role'] == 'admin')
         {
           $this->userModel = new UserModel();
-          $customer = $this->userModel->getUser($customerId);
+          $customer = $this->userModel->getUserById($customerId);
           if(!$customer){
             $this->setOutputHeader(['Content-type:application/json']);
             $this->setOutput(json_encode(['status'=>false, 'message'=>'Please enter a customerid', 'data'=>['field'=>'customerid']]));
@@ -223,6 +224,7 @@
       $data   = $this->validateTicketReply();
       extract($data);   
       loadModel('file');
+      // var_dump($userId, $ticket['customer_id']);
       if($userId == $ticket['customer_id'] || $user['role'] == 'admin'){
         if(isset($_FILES['files'])){
           $files = File::upload("files",'ticket',true);
@@ -270,7 +272,7 @@
         $this->deploymentModel = new DeploymentModel();
         $deployment = $this->deploymentModel->getDeploymentById($deploymentId);
         if($deployment){
-          $user   = $this->userModel->getUser($deployment['user_id']);
+          $user   = $this->userModel->getUserById($deployment['user_id']);
           $userId = $deployment['user_id'];
           
         }else{
@@ -299,6 +301,8 @@
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>$message]));
       }
+
+      
       if($user['company_id'] !== $ticket['company_id']){
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>"You do not have the permission to perform this action!"]));
@@ -413,7 +417,7 @@
         if($user['role'] == 'admin'){
           loadModel('user');
           $this->userModel = new UserModel();
-          $customer = $this->userModel->getUser($ticket['customer_id']);
+          $customer = $this->userModel->getUserById($ticket['customer_id']);
           $this->sendTicketStatusUpdateMail(TICKET_PREFIX.$ticketId,$customer['email']);
         }
       }else $response['message'] = "An unexpected error occured. Please try again later";
@@ -526,7 +530,7 @@
         $this->deploymentModel = new DeploymentModel();
         $deployment = $this->deploymentModel->getDeploymentById($deploymentid);
         if($deployment){
-          $user   = $this->userModel->getUser($deployment['user_id']);
+          $user   = $this->userModel->getUserById($deployment['user_id']);
           $userId = $deployment['user_id'];
           
         }else{

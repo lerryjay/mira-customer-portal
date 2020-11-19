@@ -92,6 +92,7 @@ class Clients extends Controller
     $companystateid   = $companystateid ?? '';
     $companycountryid = $companycountryid ?? '';
 
+
     $userId       =  $userid ?? '';
     $clientUserId =  $clientid ?? '';
     $companyId    =  $companyId ?? '';
@@ -102,9 +103,7 @@ class Clients extends Controller
     if($emailInvalid && strlen ($clientUserId) < 1){ 
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>$emailInvalid, 'data'=>['field'=>'email']]));
-    }
-
-    
+    }  
 
     $telephoneInvalid  = Validate::telephone($telephone);
     if($telephoneInvalid && strlen ($clientUserId) < 1){ 
@@ -113,7 +112,7 @@ class Clients extends Controller
         return ;
     }
 
-    $businessNameInvalid       = Validate::string($businessName,false,false,4);
+    $businessNameInvalid   = Validate::string($businessName,false,false,4);
     if($businessNameInvalid && strlen ($clientUserId) < 1){
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>$businessNameInvalid, 'data'=>['field'=>'businessname']]));
@@ -164,19 +163,22 @@ class Clients extends Controller
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid company address', 'data'=>['field'=>'companyaddress']]));
     }
 
-    $companycountryInvalid      = Validate::string($companycountryid,false,true,4,20);
-    if($companycountryInvalid){ 
+    loadModel('region');
+
+    $this->region_model         = new RegionModel();
+    $companycountryInvalid      = Validate::integar($companycountryid,false,true,1,20);
+    if($companycountryInvalid  && $this->region_model->getCountryById($companycountryid)){ 
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid company country', 'data'=>['field'=>'companycountryid']]));
     }
 
-    $companystateInvalid      = Validate::string($companystateid,false,true,4,20);;
-    if($companystateInvalid){ 
+    $companystateInvalid      = Validate::integar($companystateid);;
+    if($companystateInvalid && $this->region_model->getStateById($companystateid)){ 
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid company state', 'data'=>['field'=>'companystateid']]));
     }
 
-    $companylgaInvalid      = Validate::string($companylga,false,true,4,20);;
+    $companylgaInvalid      = Validate::string($companylga,false,true,2,20);;
     if($companylgaInvalid){ 
         $this->setOutputHeader(['Content-type:application/json']);
         $this->setOutput(json_encode(['status'=>false, 'message'=>'Please provide company lga', 'data'=>['field'=>'companylga']]));
@@ -205,11 +207,11 @@ class Clients extends Controller
       $this->setOutput(json_encode(['status'=>false, 'message'=>'Telephone is associated with another account!', 'data'=>['field'=>'telephone']]));
     }
 
-    if(strlen ($userid) > 0){
+    if(strlen($clientUserId) > 0){
       $clientExists = $this->clientModel->getClientByUserId($clientUserId);
       if($clientExists){
         $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>'Userid is associated with another client!', 'data'=>['field'=>'userid']]));
+        $this->setOutput(json_encode(['status'=>false, 'message'=>'A client account already been created for this user!', 'data'=>['field'=>'userid']]));
       }
     }
     // no errors

@@ -32,6 +32,7 @@ class WalletModel extends Model
   public function getTransactions($condition = '',$string = '',$values = [])
   {
     $sql = 'SELECT *, (SELECT businessname FROM clients WHERE user_id = wallet.user_id) AS businssname, (SELECT firstname FROM users WHERE id = wallet.user_id) AS clientname,  (SELECT email FROM users WHERE id = wallet.user_id) AS email FROM wallet '.$condition;
+    
     $query = $this->query($sql,$string,$values); 
     if($query) return $this->rows;
     else return false;
@@ -46,7 +47,7 @@ class WalletModel extends Model
    * @return type
    * @throws conditon
    **/
-  public function searchTransactions($filters,$status = 1)
+  public function searchTransactions($filter,$status = 1)
   {
       $conditions  = '';
       $conditions .= isset($filter['transactionId']) && $filter['transactionId'] != NULL ? "AND transaction_id = '".$filter['transactionId']."'" : "";
@@ -62,9 +63,10 @@ class WalletModel extends Model
 
       $limit       = (int) isset($filter['limit']) ? $filter['limit'] : 20;
       $pageno      = (string) isset($filter['pageno']) ? $filter['pageno'] : 1;
+
       $conditions .= ' LIMIT '.(string) $limit;
       $conditions .= ' OFFSET '.(string) (($pageno - 1 ) * $limit);
-      $conditions  = ltrim($conditions,'AND');
+
       return $this->getTransactions('WHERE status = ? '.$conditions,'i',[$status]);
   }
 

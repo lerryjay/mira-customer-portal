@@ -48,6 +48,20 @@ class RegionModel extends Model
       else return false;
     }
 
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
+    public function getCountryById($countryId,$status = 1)
+    {
+      return $this->getCountry('WHERE status = ? AND country_id = ? ','is',[$status,$countryId]);
+    }
+
   /**
    * undocumented function summary
    *
@@ -117,6 +131,18 @@ class RegionModel extends Model
   public function getCountryStates($countryId,$status = 1)
   {
     return $this->getStates('WHERE country_id = ? AND status = ?','si',[$countryId,$status]);
+  }
+
+   /**
+   *
+   * Undocumented function long description
+   *
+   * @param string $countryId Id of country whose state is to be retireved
+   * @returnArray OR @return bool - false
+   **/
+  public function getStateById($stateId,$status = 1)
+  {
+    return $this->getState('WHERE states_id = ? AND status = ?','si',[$stateId,$status]);
   }
 }
 

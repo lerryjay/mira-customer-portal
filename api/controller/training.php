@@ -1,6 +1,6 @@
 <?php
   class Training extends Controller {
-    private $url     = 'http://localhost/training_portal/api/';// = 'https://www.miratechologies.com.ng/training-portal/api/';
+    private $url     = 'http://192.168.1.4:8080/training_portal/api/';// = 'https://www.miratechologies.com.ng/training-portal/api/';
     private $appUser = '5f7487f8691f8';
     private $headers   = ['API-KEY: 97899c-7d0420-1273f0-901d29-84e2f8'];
 
@@ -166,9 +166,24 @@
       $this->setOutput(json_encode($res));
     }
 
-    /**
-     * undocumented function summary
+      /**
+     * Undocumented function long description
      *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
+    public function suspendstudent()
+    {
+      $get = $_GET;
+      $get['userid'] = $this->appUser;
+      $res = $this->do_get($this->url.'user/suspend',$get,$this->headers);
+
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput($res);
+    }
+
+    /**
      * Undocumented function long description
      *
      * @param Type $var Description
@@ -186,24 +201,55 @@
     }
 
     /**
-     * undocumented function summary
-     *
      * Undocumented function long description
      *
      * @param Type $var Description
      * @return type
      * @throws conditon
      **/
-    public function addstudentcourses()
+    public function studentcourse()
     {
-      $post = $_POST;
-      $post['userid'] = $this->appUser;
-      $res = $this->do_get($this->url.'training/add',$post,$this->headers);
+      $get = $_GET;
+      $get['userid'] = $this->appUser;
+      $res = $this->do_get($this->url.'training/info',$get,$this->headers);
 
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput($res);
     }
 
+    /**
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
+    public function addstudentcourse()
+    {
+      $post = $_POST;
+      $post['userid'] = $this->appUser;
+      $res = $this->do_post($this->url.'training/add',$post,$this->headers);
+
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput($res);
+    }
+
+    /**
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
+    public function deletestudentcourse()
+    {
+      $get = $_GET;
+      $get['userid'] = $this->appUser;
+      $res = $this->do_get($this->url.'training/delete',$get,$this->headers);
+
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput($res);
+    }
 
 
     /**Training Payment */

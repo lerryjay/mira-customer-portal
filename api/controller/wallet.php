@@ -157,6 +157,7 @@
     {
       loadController('user');
       extract($_GET);
+      
       $userid       = $userid ?? '';
       $error  = false;
       $user = User::validateUser($userid);
@@ -172,9 +173,8 @@
       $enddate    = isset($enddate) ? $enddate : '';
       $startdate  = isset($startdate) ? $startdate : '';
       $clientid   = isset($clientid) ? $clientid : null;
-
-
       $user = User::validateUser($userId);
+
       $filters = ($user['role'] == 'user') ? 
       [
         "userId"=>$userid,

@@ -290,8 +290,10 @@
 
       $messageError =  Validate::string($message,false,false,1);
       if($messageError){
-        $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid ticket message', 'data'=>['field'=>'message']]));
+        if((strlen($message) < 1) && !isset($_FILES['files'])){
+          $this->setOutputHeader(['Content-type:application/json']);
+          $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid ticket message', 'data'=>['field'=>'message']]));
+        }
       } 
       loadModel('ticket');
       $this->ticketModel = new TicketModel();

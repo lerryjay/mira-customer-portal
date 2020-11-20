@@ -36,7 +36,6 @@
       $deploymentId = isset($deploymentid) ? $deploymentid : null;
       $senderEmail  = isset($senderemail) ? $senderemail : null;
       $sender       = isset($sender) ? $sender : null;
-      
     
       if(strlen($userId)  < 1 && strlen($deploymentId) > 0){
 
@@ -226,6 +225,7 @@
       loadModel('file');
       // var_dump($userId, $ticket['customer_id']);
       if($userId == $ticket['customer_id'] || $user['role'] == 'admin'){
+        var_dump($_FILES['files']);
         if(isset($_FILES['files'])){
           $files = File::upload("files",'ticket',true);
           if($files['status']) $files = json_encode($files['data']);
@@ -380,7 +380,10 @@
       ];
       extract($_GET);
       if(isset($chatid)){
-        $this->ticketModel = updateChatReadStatus($chatId,'read');
+        $chats = explode(',',$chatid);
+        foreach ($chats as $chatid) {
+          $this->ticketModel = updateChatReadStatus( $chatid,'read');
+        }
         $response = ['status'=>true,'message'=>'Chat updated successfully'];
       }else $response['data'] = ['field'=>'chatid'];
       $this->setOutputHeader(['Content-type:application/json']);

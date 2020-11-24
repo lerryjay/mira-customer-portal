@@ -54,6 +54,10 @@ class ViewClient extends Component {
 
   componentWillMount() {
     this.state.showLoader();
+    this.getClients();
+    this.getWalletBalance();
+    this.getProducts();
+
     const clienId = this.props.location.pathname.split("/")[2];
     fetch(
       `${HTTPURL}clients/getclient?clientid=${clienId}&userid=${this.state.user.userid}`,
@@ -64,9 +68,8 @@ class ViewClient extends Component {
     )
       .then((res) => res.json())
       .then((result) => {
-        this.state.hideLoader();
         if (result.status === true) {
-          this.getProducts();
+          this.state.hideLoader();
           this.setState({
             lastname: result.data.lastname,
             firstname: result.data.firstname,
@@ -92,11 +95,6 @@ class ViewClient extends Component {
     const { name, value } = e.target;
     this.setState({ [name]: value, errormessage: "" });
   };
-
-  async componentDidMount() {
-    this.getClients();
-    this.getWalletBalance();
-  }
 
   async getClients() {
     const headers = new Headers();
@@ -396,7 +394,7 @@ class ViewClient extends Component {
         )}
 
         <div className="col-md-12 mb-3 mt-4" id="profile">
-          {!this.state.loader && (
+          {!this.state.isloading && (
             <div>
               <div className="w-100 text-center">
                 <h3>CLIENT INFORMATION </h3>
@@ -453,7 +451,7 @@ class ViewClient extends Component {
                                 <div className="col font-card text-right">
                                   <span className=" ">Wallet Balance</span>
                                   <br />
-                                  <span className="text-large">&#8358;{this.state.walletBalance}</span>
+                                  <span className="text-large">&#8358;{this.state.walletBalance.toLocaleString()}</span>
                                 </div>
                               </div>
                             </div>
@@ -607,93 +605,98 @@ class ViewClient extends Component {
                         </div>
                       </div>
                     </div>
-                    <div className="col-md-12">
-                      {this.state.products.length === 0 ? (
-                        <div className="alert alert-warning" role="alert">
-                          No product has been added for this client!
-                        </div>
-                      ) : (
-                        <div className="row">
-                          <div className="col-md-12">
-                            <div
-                              id="table"
-                              className=" pt-2 mt-3 justify-content-center"
-                            >
-                              <div className="table-responsive">
-                                <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
-                                  <thead>
-                                    <tr>
-                                      <th className="py-2">S/N</th>
-                                      <th className="py-2">
-                                        Product&nbsp;Name
-                                      </th>
-                                      <th className="py-2">
-                                        Deployment status
-                                      </th>
-                                      <th className="py-2">Payment status</th>
-                                      <th className="py-2">Cost</th>
-                                      <th className="py-2">Action</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {this.state.products.map(
-                                      (product, index) => {
-                                        return (
-                                          <tr key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>{product.name}</td>
-                                            <td>{product.deploymentstatus}</td>
-                                            <td>{product.paymentstatus}</td>
-                                            <td>&#8358;{product.cost}</td>
-                                            <td
-                                              style={{ minWidth: "70px" }}
-                                              className="d-flex justify-content-center"
-                                            >
-                                              <Link
-                                                to={() =>
-                                                  `/updatedeployment/${product.id}`
-                                                }
-                                              >
-                                                <button className="btn-primary m-1">
-                                                  <i className="fa fa-edit"></i>{" "}
-                                                  Edit
-                                                </button>
-                                              </Link>
-                                              <Link
-                                                to={() =>
-                                                  `/viewdeployment/${product.id}`
-                                                }
-                                              >
-                                                <button className="btn-primary m-1">
-                                                  <i className="fa fa-eye"></i>{" "}
-                                                  View
-                                                </button>
-                                              </Link>
-                                                <button
-                                                onClick={() =>
-                                                  this.showdeleteModal(
-                                                    product.id
-                                                  )
-                                                }
-                                                 className="btn-danger m-1">
-                                                  {" "}
-                                                  <i className="fa fa-trash text-white"></i>{" "}
-                                                  Delete
-                                                </button>
-                                            </td>
-                                          </tr>
-                                        );
-                                      }
-                                    )}
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
+                    {!this.state.isloading && (
+
+<div className="col-md-12">
+{this.state.products.length === 0 ? (
+  <div className="alert alert-warning" role="alert">
+    No product has been added for this client!
+  </div>
+) : (
+  <div className="row">
+    <div className="col-md-12">
+      <div
+        id="table"
+        className=" pt-2 mt-3 justify-content-center"
+      >
+        <div className="table-responsive">
+          <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
+            <thead>
+              <tr>
+                <th className="py-2">S/N</th>
+                <th className="py-2">
+                  Product&nbsp;Name
+                </th>
+                <th className="py-2">
+                  Deployment status
+                </th>
+                <th className="py-2">Payment status</th>
+                <th className="py-2">Cost</th>
+                <th className="py-2">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.products.map(
+                (product, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{product.name}</td>
+                      <td>{product.deploymentstatus}</td>
+                      <td>{product.paymentstatus}</td>
+                      <td>&#8358;{product.cost.toLocaleString()}</td>
+                      <td
+                        style={{ minWidth: "70px" }}
+                        className="d-flex justify-content-center"
+                      >
+                        <Link
+                          to={() =>
+                            `/updatedeployment/${product.id}`
+                          }
+                        >
+                          <button className="btn-primary m-1">
+                            <i className="fa fa-edit"></i>{" "}
+                            Edit
+                          </button>
+                        </Link>
+                        <Link
+                          to={() =>
+                            `/viewdeployment/${product.id}`
+                          }
+                        >
+                          <button className="btn-primary m-1">
+                            <i className="fa fa-eye"></i>{" "}
+                            View
+                          </button>
+                        </Link>
+                          <button
+                          onClick={() =>
+                            this.showdeleteModal(
+                              product.id
+                            )
+                          }
+                           className="btn-danger m-1">
+                            {" "}
+                            <i className="fa fa-trash text-white"></i>{" "}
+                            Delete
+                          </button>
+                      </td>
+                    </tr>
+                  );
+                }
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+</div>
+
+                    )}
+                    
                     </div>
-                  </div>
                 </div>
               </div>
 

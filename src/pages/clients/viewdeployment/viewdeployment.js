@@ -18,6 +18,7 @@ class viewclientproduct extends Component {
       productmodules: [],
       cost: "",
       imageurl: "",
+      expirydate:"",
       paymentdate: "",
       trainingdate: "",
       deploymentdate: "",
@@ -30,6 +31,9 @@ class viewclientproduct extends Component {
       product_id: '',
       files: [],
       showmodal: true,
+      isloading: true,
+      loading: false,
+      deleting: false,
     };
   }
 
@@ -45,9 +49,11 @@ class viewclientproduct extends Component {
       }
     ).then((res) => res.json());
     if (res["status"]) {
+      this.state.hideLoader();
       const {
         name,
         description,
+        expirydate,
         paymentstatus,
         paymentdate,
         licenseduration,
@@ -67,6 +73,7 @@ class viewclientproduct extends Component {
         productdescription: description,
         paymentstatus,
         paymentdate,
+        expirydate,
         licenseduration,
         deploymentdate,
         deploymentstatus,
@@ -77,7 +84,8 @@ class viewclientproduct extends Component {
         imageurl,
         remarks,
         modules,
-        product_id
+        product_id,
+        isloading: false,
       });
       this.getModule(product_id);
     }
@@ -138,6 +146,7 @@ class viewclientproduct extends Component {
     formdata.append("deploymentstatus", this.state.deploymentstatus);
     formdata.append("trainingstatus", this.state.trainingstatus);
     formdata.append("paymentdate", this.state.paymentdate);
+    formdata.append("expirydate", this.state.expirydate);
     formdata.append("trainingdate", this.state.trainingdate);
     formdata.append("deploymentdate", this.state.deploymentdate);
     formdata.append("remarks", this.state.remarks);
@@ -170,6 +179,7 @@ class viewclientproduct extends Component {
 
 
   async componentDidMount() {
+    this.state.showLoader();
     const clientproductid = this.props.location.pathname.split("/")[2];
     await this.setState({ clientproductid });
     this.getClientProduct();
@@ -195,6 +205,8 @@ class viewclientproduct extends Component {
   };
 
   async handleFileAttachment(e) {
+    this.setState({loading : true});
+
     const { user, clientproductid } = this.state;
     const form = new FormData(document.getElementById('fileForm'));
     form.append('userid', user.userid);
@@ -206,25 +218,31 @@ class viewclientproduct extends Component {
       headers: headers,
       body: form
     }).then(res => res.json());
+      this.setState({ loading: false });
     if (res['status']) {
       this.setState({ files: res.data });
     }
   }
 
-  deleteFiles(index, item) {
+  async deleteFiles(index, item) {
+    this.setState({ deleting: true });;
+    
     const clientproductid = this.props.location.pathname.split("/")[2]; 
 
     const headers = new Headers();
     headers.append('API-KEY', APIKEY);
 
-    fetch(HTTPURL + `deployment/deletefile?deploymentid=${clientproductid}&userid=${this.state.user.userid}&fileindex=${index}`, {
+    const res = await fetch(HTTPURL + `deployment/deletefile?deploymentid=${clientproductid}&userid=${this.state.user.userid}&fileindex=${index}`, {
         method: 'GET',
         headers: headers
-    })
-        .then(response => response.json())
-        .then(data => {
-        });
+    }).then(response => response.json())
+      if (res['status']) {
         this.getClientProduct();
+        this.setState({ deleting: false });
+      }
+      
+
+        
   }
 
   render() {
@@ -236,7 +254,9 @@ class viewclientproduct extends Component {
             <h3>DEPLOYMENT DETAILS </h3>
           </div>
 
-          <div className="row mt-4">
+          {!this.state.isloading && (
+              <div>
+                <div className="row mt-4">
             <div className="col-md-4">
               <img
                 className="img-product"
@@ -298,12 +318,6 @@ class viewclientproduct extends Component {
                   <td></td>
                 </tr>
                 <tr>
-                  <th className="text-left">License</th>
-                  <td>{this.state.licenseduration}</td>
-                  <td>{this.state.paymentdate}</td>
-                  <td></td>
-                </tr>
-                <tr>
                   <th className="text-left">Deployment</th>
                   <td> {this.state.deploymentdate} </td>
                   <td>{this.state.deploymentstatus}</td>
@@ -315,6 +329,18 @@ class viewclientproduct extends Component {
                   <td>{this.state.trainingstatus}</td>
                   <td></td>
                 </tr>
+                <tr>
+                  <th className="text-left">License</th>
+                  <td>{this.state.licenseduration}</td>
+                  <td>___</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th className="text-left">Expiration</th>
+                  <td>{this.state.expirydate}</td>
+                  <td>___</td>
+                  <td></td>
+                </tr>
               </tbody>
               {this.state.user.permissions.findIndex(permission => permission === "VIEWDEPLOYMENTCOST")
                 ? <tfoot>
@@ -322,7 +348,7 @@ class viewclientproduct extends Component {
                       <th className="text-left bg-light py-2">Total</th>
                       <td></td>
                       <td></td>
-                      <td className="bg-light py-2">&#8358;{this.state.cost}</td>
+                      <td className="bg-light py-2">&#8358;{this.state.cost.toLocaleString()}</td>
                     </tr>
                   </tfoot>
                 : <span></span>
@@ -342,7 +368,7 @@ class viewclientproduct extends Component {
                   </h6>
                 </div>
               ) : (
-                  this.state.remarks
+                  this.state.remarks.split("</br>").join("\n")
                 )}
             </div>
           </div>
@@ -382,15 +408,50 @@ class viewclientproduct extends Component {
             </div>
             {this.state.user.permissions.findIndex(permission => permission === "UPDATEDEPLOYMENTFILE")
             ? <div className="col-md-4 text-right">
-                <form id="fileForm">
+               
+               {this.state.loading ? 
+                      <button type="submit" className="btn btn-sm btn-primary">
+                      Uploading &nbsp;&nbsp;
+                      <div class="spinner-grow spinner-grow-sm text-white" role="status">
+                        <span class="sr-only">Loading...</span>
+                      </div>
+                          <div class="spinner-grow spinner-grow-sm text-whitw" role="status">
+                            <span class="sr-only">Loading...</span>
+                          </div>
+                          <div class="spinner-grow spinner-grow-sm text-white" role="status">
+                            <span class="sr-only">Loading...</span>
+                          </div>
+                    </button>
+                    : <form id="fileForm">
                   <label htmlFor="file" className="btn btn-sm btn-primary py-1 px-3">Attach Files</label>
                   <input style={{ display: 'none' }} type={"file"} id="file"
                     className="form-file form-file-sm" name="files[]" multiple placeholder=""
                     onChange={(e) => this.handleFileAttachment(e)} />
-                </form>
+                
+                </form>}
               </div>
               : <span></span>
             }     
+          </div>
+          
+          <div class="row">
+            <div class="col-md-12 text-right">
+              {this.state.deleting ? 
+                    <button type="submit" className="btn btn-sm btn-danger">
+                    Deleting &nbsp;&nbsp;
+                    <div class="spinner-grow spinner-grow-sm text-white" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                        <div class="spinner-grow spinner-grow-sm text-whitw" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                        <div class="spinner-grow spinner-grow-sm text-white" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                  </button>
+                  : <span></span>
+              }
+                </div>
           </div>
             {this.state.user.permissions.findIndex(permission => permission === "VIEWDEPLOYMENTFILE")
             ? <div className="row">
@@ -411,9 +472,10 @@ class viewclientproduct extends Component {
                             }}
                             alt="Product"
                           />
-                          <span onClick={() => this.deleteFiles(index, item)}>
+                         <span onClick={() => this.deleteFiles(index, item)}>
                               <i className="fa fa-trash text-danger"></i>
                           </span>
+  
                         </div>
                       ) : (
                           <div className="attached_files">
@@ -446,6 +508,8 @@ class viewclientproduct extends Component {
         </div>
           : <span></span>
             }
+              </div>
+          )}
           </div>
 
           {/* Delete Product */}

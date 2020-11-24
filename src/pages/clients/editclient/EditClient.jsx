@@ -37,9 +37,8 @@ class EditClient extends Component {
 
     async componentDidMount(){
         this.state.showLoader();
-        this.setState({ loading : false  });
-        this.state.hideLoader();
         this.getCountries();
+        this.state.hideLoader();
     }
 
     getCountries() {

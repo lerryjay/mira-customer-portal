@@ -431,7 +431,7 @@ class UpdateClientProduct extends Component {
                     </div>
                   </div>
                   <div className="col-md-4 text-center">
-                    <button className="btn bg-orangered text-light btn-sm mt-4">Renew</button>
+                    {/* <button className="btn bg-orangered text-light btn-sm mt-4">Renew</button> */}
                   </div>
                 </div>
                 <div className="row">

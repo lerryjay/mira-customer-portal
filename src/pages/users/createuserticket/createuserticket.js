@@ -13,6 +13,7 @@ class create_ticket extends Component {
             type: '',
             message: '',
             loading: false, 
+            isloading: true,
             files: [],
             users : [],
             selectedUser: '',
@@ -83,17 +84,20 @@ class create_ticket extends Component {
 
 
     async getUsers(){
+        this.state.showLoader();
         const headers = new Headers();
         headers.append('API-KEY',APIKEY);
         const res = await fetch(HTTPURL + `user?userid=${ this.props.user.userid }`, {
             headers: headers
         })
         .then(response => response.json());
+        this.state.hideLoader();
         if(res['status']){
             this.setState({ users : res['data']});
             const clientid = this.props.location.pathname.split("/")[2];
             const selectedUser = this.state.users.find(item=>item.userid == clientid);
-            this.setState({selectedUser})
+            this.setState({selectedUser,
+                isloading: false,})
         }
     }
 
@@ -129,6 +133,7 @@ class create_ticket extends Component {
                 </div>
                 :   <span></span>
             }
+        {!this.state.isloading &&
             <div className="row justify-content-center">
                 <div className="col-md-10 " id="profile">
                     <form onSubmit={this.handleSubmit} id="createticket" encType="multipart/form-data">
@@ -225,7 +230,7 @@ class create_ticket extends Component {
                     </form>
                 </div>
             </div>
-
+    }
             </div>
         )
     }

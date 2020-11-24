@@ -46,7 +46,7 @@ class Tickets extends Component {
       headers: headers,
     }).then((response) => response.json());
     if (res["status"]) {
-      this.setState({ courses: res["data"], totalLists: res["data"] });
+      this.setState({ courses: res["data"], totalLists: res["data"].length });
       this.getPageNo();
     }
     
@@ -189,7 +189,7 @@ class Tickets extends Component {
         }
 
           <div className="col-md-12 col-sm-12 box1 mb-3" id="profile">
-            {!this.state.loaderActive && this.state.totalLists.length === 0 ? (
+            {!this.state.loaderActive && this.state.totalLists === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No course records!</h6>
               </div>
@@ -257,7 +257,7 @@ class Tickets extends Component {
               <div className="row mt-5">
                 <div className="col-md-4">
                   <div className="form-group mt-1">
-                    {this.state.totalLists.length > 0 && (
+                    {this.state.totalLists > 0 && (
                       <select
                       onChange={(e) => {
                         this.getpageLimit(e.target.value);

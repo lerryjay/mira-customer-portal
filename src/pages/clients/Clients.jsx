@@ -12,6 +12,7 @@ class Clients extends Component {
             ...this.props,
             showmodal: true,
             loading: true,
+            isloading: true,
             clients: [],
             id: '',
             user_id: ''
@@ -20,7 +21,9 @@ class Clients extends Component {
     }
 
     async componentDidMount() {
+        this.state.showLoader();
         await this.getClients();
+        this.state.hideLoader();
     }
 
     getClient(businessname) {
@@ -40,7 +43,7 @@ class Clients extends Component {
             headers: headers
         }).then(response => response.json());
 
-        if (res['status']) this.setState({ clients: res['data'] })
+        if (res['status']) this.setState({ clients: res['data'] , isloading: false})
     }
 
     showdeleteModal(e) {
@@ -88,6 +91,7 @@ class Clients extends Component {
 
         return (
             <div className="container-fluid">
+                {!this.state.isloading &&
                 <div className="row d-flex align-items-center justify-content-center form">
 
                     <div className="col-md-6 ">
@@ -136,7 +140,7 @@ class Clients extends Component {
                     </div>
                 </div>
 
-
+                                    }
 
 
                 {/* <div className="col-md-12" >

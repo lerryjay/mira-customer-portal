@@ -84,14 +84,21 @@ class create_ticket extends Component {
 
     handleImageChange(e) {
         e.preventDefault();
+        const { files } = this.state;
+        const index = files.findIndex(item=> item === e.target.files);
 
-        let files = [];
+        // let files = [];
 
+       
         for (let i = 0; i < e.target.files.length; i++) {
-            files.push(e.target.files[i])
+            if (index > -1) {
+                files.splice(index,1);
+              } else {
+                files.push(e.target.files[i])
+              }
         }
 
-        this.setState({ files: files });
+        this.setState({ files });
     }
 
 
@@ -117,7 +124,9 @@ class create_ticket extends Component {
             // this.setState({imagePreviewUrl: URL.createObjectURL(file) })
             return (
                 file.name.match(/\.(jpg|jpeg|png)$/) 
-                     ?  <img src={URL.createObjectURL(file)} className="col-md-3" alt="attachment"/>
+                     ?  <img src={URL.createObjectURL(file)} key={index} 
+                            style={{ height: "100px", objectFit: "cover" }}
+                            className="col-md-2 mt-2" alt="attachment"/>
                      : <span>
                             <img
                                 alt="pdf placeholder"

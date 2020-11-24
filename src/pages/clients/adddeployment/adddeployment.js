@@ -3,6 +3,16 @@ import { HTTPURL, APIKEY } from "../../../common/global_constant";
 import { withContext } from "../../../common/context";
 import pdf_placeholder from "../../../assets/images/pdf.png";
 
+// import ReactSummernote from 'react-summernote';
+// import 'react-summernote/dist/react-summernote.css'; // import styles
+// import 'react-summernote/lang/summernote-ru-RU'; // you can import any other locale
+ 
+// Import bootstrap(v3 or v4) dependencies
+// import 'bootstrap/js/modal';
+// import 'bootstrap/js/dropdown';
+// import 'bootstrap/js/tooltip';
+// import 'bootstrap/dist/css/bootstrap.css';
+
 
 class AddClientProduct extends Component {
   constructor(props) {
@@ -34,6 +44,19 @@ class AddClientProduct extends Component {
 
   componentWillMount() {
   }
+  componentDidMount() {
+    // document.getElementById('#summernote')
+    // .summernote({
+    //   placeholder: 'Hello Bootstrap 4',
+    //   tabsize: 2,
+    //   height: 100
+    // });
+  }
+
+  onChange(content) {
+    console.log('onChange', content);
+  }
+
   getModule(productId) {
     const headers = new Headers();
     headers.append("API-KEY",APIKEY);
@@ -61,6 +84,12 @@ class AddClientProduct extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     this.setState({ loading: true });
+
+    var txt;
+    txt = document.getElementById('remarks').value;
+    var text = txt.split("\n");
+    var str = text.join('</br>');
+
     const mod = this.state.selectedModules.toString();
     // this.state.selectedModules.forEach((module) => {
     //   mod += module + ",";
@@ -75,6 +104,7 @@ class AddClientProduct extends Component {
     formdata.append("modules", mod);
     formdata.append("userid", this.state.user.userid);
     formdata.append("productid", this.state.type);
+    formdata.append("remarks", str);
     // formdata.append("cost", this.state.cost);
     // formdata.append("liscenseduration", this.state.liscenseduration);
     // formdata.append("paymentstatus", this.state.paymentstatus);
@@ -176,27 +206,39 @@ class AddClientProduct extends Component {
 
   handleImageChange(e) {
     e.preventDefault();
+    const { files } = this.state;
+    const index = files.findIndex(item=> item === e.target.files);
 
-    let files = [];
+    // let files = [];
 
+   
     for (let i = 0; i < e.target.files.length; i++) {
-      files.push(e.target.files[i]);
+        if (index > -1) {
+            files.splice(index,1);
+          } else {
+            files.push(e.target.files[i])
+          }
     }
 
-    this.setState({ files: files });
+    this.setState({ files });
+    
+
   }
 
   render() {
     let files = this.state.files.map((file,i) => {
       return (
         file.name.match(/\.(jpg|jpeg|png)$/) 
-             ?  <img src={URL.createObjectURL(file)} className="col-md-3" alt="attachment"/>
+             ?  <img src={URL.createObjectURL(file)} key={i} 
+                  style={{ height: "100px", objectFit: "cover" }}
+                  className="col-md-2 mt-2"  alt="attachment"/>
              : <span>
                     <img
                         alt="pdf placeholder"
                         src={pdf_placeholder}
-                        style={{ width: "100px", height: "100px" }}
+                        style={{ width: "100px", height: "100px", objectFit: "cover" }}
                         className="m-2"
+                        key={i}
                     />
                     <br/>
                     {file.name}
@@ -483,11 +525,32 @@ class AddClientProduct extends Component {
                     </div>
                   </div> </div>
                 <div className="row">
+
+                {/* <ReactSummernote
+        value="Default value"
+        options={{
+          lang: 'ru-RU',
+          height: 350,
+          dialogsInBody: true,
+          toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview']]
+          ]
+        }}
+        onChange={this.onChange}
+      /> */}
+
                   <div className="col-md-12">
                     <div className="form-group">
                       <label htmlFor="remarks" className="font-weight-bold">
                         Deployment Remarks
                       </label>
+                      {/* <div id="summernote"></div> */}
                       <textarea
                         type="text"
                         className="form-control form-control-sm"
@@ -521,16 +584,17 @@ class AddClientProduct extends Component {
                       </div>
                     ))
                   ) : (
-                      <div>
-                        <div className="container-fluid">
-                          <div
-                            className="alert alert-warning text-center"
-                            role="alert"
-                          >
-                            Select a product!
-                        </div>
-                        </div>
-                      </div>
+                    <span></span>
+                      // <div>
+                      //   <div className="container-fluid">
+                      //     <div
+                      //       className="alert alert-warning text-center"
+                      //       role="alert"
+                      //     >
+                      //       Select a product!
+                      //   </div>
+                      //   </div>
+                      // </div>
                     )}
                 </div>
                 <div className="row justify-content-center" id="preview">

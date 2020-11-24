@@ -20,7 +20,7 @@ class product_details extends Component {
       pkgdescription: "",
       id: "",
       errormessage: "",
-      loading: false,
+      loading: true,
       successmessage: "",
       showmodal: true,
       showdeletemodal: true,
@@ -34,13 +34,14 @@ class product_details extends Component {
   }
 
   async componentDidMount() {
-    this.setState({ loader: true });
+    // this.setState({ loader: true });
     await this.getProduct();
     this.getModules();
-    this.setState({ loader: false });
+    // this.setState({ loader: false });
   }
 
   async getProduct() {
+    this.state.showLoader();
     const productid = this.props.location.pathname.split("/")[2];
 
     const headers = new Headers();
@@ -53,12 +54,14 @@ class product_details extends Component {
         headers: headers,
       }
     ).then((res) => res.json())
+      this.state.hideLoader();
     if (result['status']) {
       this.setState({
         name: result.data.name,
         description: result.data.description,
         id: result.data.id,
-        imageurl: result.data.imageurl
+        imageurl: result.data.imageurl,
+        isloading: false
       });
     }
   }
@@ -272,7 +275,7 @@ deleteModal(e) {
     return (
       <div className="container-fluid mx-auto">
 
-        {this.state.loader && (
+        {/* {this.state.loader && (
           <div className="spin-center">
             <span className="text-primary ">
               <span
@@ -283,7 +286,7 @@ deleteModal(e) {
               <span style={{ fontSize: "14px" }}>Loading...</span>
             </span>
           </div>
-        )}
+        )} */}
 
         {!this.state.loader && (
           <div>

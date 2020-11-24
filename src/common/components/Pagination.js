@@ -11,6 +11,7 @@ const Pagination = ({
 
    // calculate total pages
    let totalPages = Math.ceil(totalLists / numberPerPage);
+console.log(totalPages,totalLists,numberPerPage);
 
    // ensure current page isn't out of range
    if (currentPage < 1) {

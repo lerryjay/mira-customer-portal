@@ -25,6 +25,7 @@ class Tickets extends Component {
       tickets: [],
       showmodal: true,
       selectedTicket: {},
+      isloading: true,
     };
   }
 
@@ -83,12 +84,13 @@ class Tickets extends Component {
         headers: headers,
       }
     ).then((response) => response.json());
+    this.state.hideLoader();
     if (res["status"]) {
       let tickets = res["data"];
-      this.setState({tickets , totalLists: res["data"].total });
+      this.setState({tickets , totalLists: res["data"].total,
+      isloading: false });
       this.getPageNo();
       
-      this.state.hideLoader();
     }
   }
 
@@ -251,15 +253,18 @@ class Tickets extends Component {
             <h3>TICKETS </h3>
           </div>
 
-          <div className="col-md-9 col-sm-12 box1 mb-3" id="profile">
-            {  !this.state.loaderActive && this.state.totalLists === 0 ? (
+         { !this.state.isloading && 
+         (
+         <div className="row w-100 ">
+            <div className="col-md-9 col-sm-12 box1 mb-3" id="profile">
+            { this.state.totalLists === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No ticket records!</h6>
               </div>
             ) : (
-              !this.state.loaderActive && 
+             
               <div>
-                <div id="table" className="card pt-2 mt-3 justify-content-center shadow px-2">
+                <div id="table" className=" mt-3 justify-content-center shadow">
                   <div className="table-responsive">
                     <table
                       className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart"
@@ -399,6 +404,8 @@ class Tickets extends Component {
               </div>
             )}
           </div>
+         
+         
           <div className="col-md-3 col-sm-12 box2 mt-3 mb-3">
             <div className="card p-3">
               <label
@@ -539,13 +546,15 @@ class Tickets extends Component {
                 </div>
 
             <div className="form-group mt-1 text-right">
-              <button type="submit" className="btn btn-outline-dark btn-sm rounded-0 btn-md" style={{cursor:"pointer", fontSize:'16px'}}>Search</button>
+              <button type="submit" className="btn btn-primary btn-md" style={{cursor:"pointer", fontSize:'16px'}}>Search</button>
             </div>
             </form>                  
             </div>
           </div>
-        </div>
-        
+
+      </div> 
+         )}</div>
+                
             {/* Delete Module Info */}
             {this.state.showmodal ?
               <div id="deleteModal" className="modal">

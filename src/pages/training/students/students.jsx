@@ -46,7 +46,7 @@ class Students extends Component {
       headers: headers,
     }).then((response) => response.json());
     if (res["status"]) {
-      this.setState({ courses: res["data"], totalLists: res["data"] });
+      this.setState({ courses: res["data"]});
     }
   }
 
@@ -202,7 +202,7 @@ handleSearch = async (e) => {
   )
     .then((response) => response.json())
     .then((data) => {
-      if (data.status) this.setState({ currentLists: data.data });
+      if (data.status) this.setState({ currentLists: data.data["students"] });
       // else this.setState({totalLists: "",currentLists: [] })
     });
     
@@ -320,7 +320,7 @@ handleSearch = async (e) => {
             {this.state.pageNumbers && (
               <div className="row mt-5">
                 <div className="col-md-4">
-                  <div className="form-group mt-1">
+                  <div className="form-group mt-totalLists1">
                     {this.state.totalLists > 0 && (
                       <select
                       onChange={(e) => {

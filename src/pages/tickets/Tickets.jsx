@@ -157,6 +157,8 @@ class Tickets extends Component {
   };
 
   ticketStatusUpdated(e, ticket) {
+    console.log(this.state.tickets);
+    
     const tickets = this.state.tickets.map((item) => {
       if (item.id == ticket.id) {
         item.ticketstatus = e.target.value;

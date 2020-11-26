@@ -368,7 +368,8 @@ class viewclientproduct extends Component {
                   </h6>
                 </div>
               ) : (
-                  this.state.remarks.split("</br>").join("\n")
+                <div dangerouslySetInnerHTML={{__html: this.state.remarks}} />
+                // new DOMParser().parseFromString(this.state.remarks, 'text/html').body.innerHTML
                 )}
             </div>
           </div>
@@ -434,19 +435,19 @@ class viewclientproduct extends Component {
             }     
           </div>
           
-          <div class="row">
-            <div class="col-md-12 text-right">
+          <div className="row">
+            <div className="col-md-12 text-right">
               {this.state.deleting ? 
                     <button type="submit" className="btn btn-sm btn-danger">
                     Deleting &nbsp;&nbsp;
-                    <div class="spinner-grow spinner-grow-sm text-white" role="status">
-                      <span class="sr-only">Loading...</span>
+                    <div className="spinner-grow spinner-grow-sm text-white" role="status">
+                      <span className="sr-only">Loading...</span>
                     </div>
-                        <div class="spinner-grow spinner-grow-sm text-whitw" role="status">
-                          <span class="sr-only">Loading...</span>
+                        <div className="spinner-grow spinner-grow-sm text-whitw" role="status">
+                          <span className="sr-only">Loading...</span>
                         </div>
-                        <div class="spinner-grow spinner-grow-sm text-white" role="status">
-                          <span class="sr-only">Loading...</span>
+                        <div className="spinner-grow spinner-grow-sm text-white" role="status">
+                          <span className="sr-only">Loading...</span>
                         </div>
                   </button>
                   : <span></span>
@@ -539,7 +540,7 @@ class viewclientproduct extends Component {
                         {this.state.loading ? (
                           <button
                             type="submit"
-                            className="btn btn-block btn-primary"
+                            className="btn btn-block btn-outline-danger"
                           >
                             <div
                               className="spinner-border text-danger"

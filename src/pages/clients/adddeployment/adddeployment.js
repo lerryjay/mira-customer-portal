@@ -3,15 +3,8 @@ import { HTTPURL, APIKEY } from "../../../common/global_constant";
 import { withContext } from "../../../common/context";
 import pdf_placeholder from "../../../assets/images/pdf.png";
 
-// import ReactSummernote from 'react-summernote';
-// import 'react-summernote/dist/react-summernote.css'; // import styles
-// import 'react-summernote/lang/summernote-ru-RU'; // you can import any other locale
- 
-// Import bootstrap(v3 or v4) dependencies
-// import 'bootstrap/js/modal';
-// import 'bootstrap/js/dropdown';
-// import 'bootstrap/js/tooltip';
-// import 'bootstrap/dist/css/bootstrap.css';
+import 'react-trumbowyg/dist/trumbowyg.min.css'
+import Trumbowyg from 'react-trumbowyg'
 
 
 class AddClientProduct extends Component {
@@ -45,17 +38,9 @@ class AddClientProduct extends Component {
   componentWillMount() {
   }
   componentDidMount() {
-    // document.getElementById('#summernote')
-    // .summernote({
-    //   placeholder: 'Hello Bootstrap 4',
-    //   tabsize: 2,
-    //   height: 100
-    // });
   }
 
-  onChange(content) {
-    console.log('onChange', content);
-  }
+  // onChange = (editorState) =>{ this.setState({editorState})}
 
   getModule(productId) {
     const headers = new Headers();
@@ -85,10 +70,10 @@ class AddClientProduct extends Component {
     e.preventDefault();
     this.setState({ loading: true });
 
-    var txt;
-    txt = document.getElementById('remarks').value;
-    var text = txt.split("\n");
-    var str = text.join('</br>');
+    // var txt;
+    // txt = document.getElementById('remarks').value;
+    // var text = txt.split("\n");
+    // var str = text.join('</br>');
 
     const mod = this.state.selectedModules.toString();
     // this.state.selectedModules.forEach((module) => {
@@ -104,7 +89,6 @@ class AddClientProduct extends Component {
     formdata.append("modules", mod);
     formdata.append("userid", this.state.user.userid);
     formdata.append("productid", this.state.type);
-    formdata.append("remarks", str);
     // formdata.append("cost", this.state.cost);
     // formdata.append("liscenseduration", this.state.liscenseduration);
     // formdata.append("paymentstatus", this.state.paymentstatus);
@@ -526,32 +510,21 @@ class AddClientProduct extends Component {
                   </div> </div>
                 <div className="row">
 
-                {/* <ReactSummernote
-        value="Default value"
-        options={{
-          lang: 'ru-RU',
-          height: 350,
-          dialogsInBody: true,
-          toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['table', ['table']],
-            ['insert', ['link', 'picture', 'video']],
-            ['view', ['fullscreen', 'codeview']]
-          ]
-        }}
-        onChange={this.onChange}
-      /> */}
-
                   <div className="col-md-12">
+
                     <div className="form-group">
                       <label htmlFor="remarks" className="font-weight-bold">
                         Deployment Remarks
-                      </label>
-                      {/* <div id="summernote"></div> */}
-                      <textarea
+                      </label>    
+                      
+                       <Trumbowyg 
+                        //  id='react-trumbowyg' 
+                        id="remarks"
+                        placeholder="Remarks"
+                        value={this.state.remarks}
+                        onChange={this.handleInputChange}/>
+                      
+                      {/* <textarea
                         type="text"
                         className="form-control form-control-sm"
                         name="remarks"
@@ -560,8 +533,9 @@ class AddClientProduct extends Component {
                         placeholder="Remarks"
                         value={this.state.remarks}
                         onChange={this.handleInputChange}
-                      />
+                      /> */}
                     </div>
+                    
                   </div>
                 </div>
 
@@ -655,5 +629,6 @@ class AddClientProduct extends Component {
       </div>
     );
   }
-}
+  
+};
 export default withContext(AddClientProduct);

@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { HTTPURL, APIKEY } from "../../../common/global_constant";
 import { withContext } from "../../../common/context";
 
+import 'react-trumbowyg/dist/trumbowyg.min.css'
+import Trumbowyg from 'react-trumbowyg'
+
 const headers = new Headers();
 class UpdateClientProduct extends Component {
   constructor(props) {
@@ -440,7 +443,14 @@ class UpdateClientProduct extends Component {
                       <label htmlFor="remarks" className="font-weight-bold">
                         Deployment Remarks
                       </label>
-                      <textarea
+                      <div />
+                      
+                      <Trumbowyg 
+                        id="remarks"
+                        placeholder="Remarks"
+                        data={this.state.remarks}
+                        onChange={this.handleInputChange}/>
+                      {/* <textarea
                         type="text"
                         className="form-control form-control-sm"
                         name="remarks"
@@ -449,7 +459,7 @@ class UpdateClientProduct extends Component {
                         placeholder="Remarks"
                         value={this.state.remarks}
                         onChange={this.handleInputChange}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>
@@ -473,16 +483,17 @@ class UpdateClientProduct extends Component {
                       </div>
                     ))
                   ) : (
-                      <div>
-                        <div className="container-fluid">
-                          <div
-                            className="alert alert-warning text-center"
-                            role="alert"
-                          >
-                            Select a product!
-                        </div>
-                        </div>
-                      </div>
+                    <span></span>
+                      // <div>
+                      //   <div className="container-fluid">
+                      //     <div
+                      //       className="alert alert-warning text-center"
+                      //       role="alert"
+                      //     >
+                      //       Select a product!
+                      //   </div>
+                      //   </div>
+                      // </div>
                     )}
                 </div>
               </div>

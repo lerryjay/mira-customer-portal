@@ -25,12 +25,15 @@ class api_logs extends Component {
           errorapi : 0,
           sucessapi : 0,
           cancelledapi : 0,
+          isloading: true,
         };
       }
     
-      componentDidMount() {
-        this.getLogs();
-        this.getApiStatistics();
+      async componentDidMount() {
+        this.state.showLoader();
+        await this.getLogs();
+        await this.getApiStatistics();
+        this.state.hideLoader();
       }
 
       handleInputChange = (e) => {
@@ -47,7 +50,6 @@ class api_logs extends Component {
       };
 
       async getLogs() {
-        this.state.showLoader();
 
         const headers = new Headers();
         headers.append("API-KEY", APIKEY);
@@ -61,10 +63,10 @@ class api_logs extends Component {
         ).then((response) => response.json());
     
         if (res["status"]){
-           this.setState({ totalLists: res["data"] });
+           this.setState({ totalLists: res["data"], 
+           isloading: false });
            this.getPageNo();
 
-            this.state.hideLoader();
           }
         }
       
@@ -167,7 +169,9 @@ class api_logs extends Component {
       render() {
     return (
       <div className="container">
-      <div className="row my-4 d-flex justify-content-end ">
+      {!this.state.isloading &&
+      <div>
+          <div className="row my-4 d-flex justify-content-end ">
           <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3  hover-effect">
             <div className="px-3 card py-4">
               <div className="row align-items-center">
@@ -237,14 +241,14 @@ class api_logs extends Component {
               <div>
                 <div
                   id="table"
-                  className="card pt-2 mt-3 justify-content-center shadow px-2"
+                  className="mt-3 justify-content-center shadow"
                 >      
                 <div className="card-header bg-medium font-weight-bold text-dark">
                     API USAGE STATISTICS
                 </div>
                   <div className="table-responsive">
                     <table
-                      className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart"
+                      className="table table-hover table-bordered table-md text-center align-middle mb-0 text-dark home-chart"
                       id="myTable"
                     >
                       {/* <caption>Hello World!</caption> */}
@@ -493,7 +497,9 @@ class api_logs extends Component {
           </div>
       
       </div>
-     
+           
+           </div>
+    }
       </div>
     );
   }

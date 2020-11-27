@@ -269,7 +269,7 @@ class Tickets extends Component {
                 <div id="table" className=" mt-3 justify-content-center shadow">
                   <div className="table-responsive">
                     <table
-                      className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart"
+                      className="table table-hover table-bordered table-md text-center align-middle mb-0 text-dark home-chart"
                       id="myTable"
                     >
                       {/* <caption>Hello World!</caption> */}

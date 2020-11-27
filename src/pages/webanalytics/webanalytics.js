@@ -19,18 +19,19 @@ class webanalytics extends Component {
           numberPerPage: 10,
           totalLists: [],
           pageNumbers: [],
+          isloading: true,
           currentLists: [],
         };
       }
 
       
-      componentDidMount() {
-        this.getAnalytics();
+      async  componentDidMount() {
+        this.state.showLoader();
+        await this.getAnalytics();
+        this.state.hideLoader();
       }
 
       async getAnalytics() {
-        this.state.showLoader();
-        
         const headers = new Headers();
         headers.append("API-KEY", APIKEY);
                 
@@ -43,10 +44,9 @@ class webanalytics extends Component {
         ).then((response) => response.json());
     
         if (res["status"]) {
-        this.setState({ totalLists: res["data"] });
+        this.setState({ totalLists: res["data"], isloading: false });
         this.getPageNo();
 
-        this.state.hideLoader();
       }
     }
   
@@ -142,13 +142,14 @@ class webanalytics extends Component {
       render() {
     return (
       <div className="container">
-          
           <div className="w-100 text-center">
                 <h3  className="text-uppercase">Web Analytics </h3>
               </div>
+              
+           {!this.state.isloading &&
         <div className="row">
         <div className="col-md-12 col-sm-12 box1 mb-3" id="profile">
-        {!this.state.loaderActive && this.state.totalLists.length === 0 ? (
+        {this.state.totalLists.length === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">There are currently no logs available!</h6>
               </div>
@@ -378,7 +379,7 @@ class webanalytics extends Component {
           </div>
 
         </div>
-     
+      }
       </div>
     );
   }

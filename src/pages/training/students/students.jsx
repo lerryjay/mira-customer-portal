@@ -26,6 +26,7 @@ class Students extends Component {
       startdate: "",
       enddate: "",
       on: "",
+      isloading: true,
     };
   }
 
@@ -34,9 +35,12 @@ class Students extends Component {
     this.setState({ [name]: value });
   };
 
-  componentDidMount() {
-    this.props.user.role === "admin" && this.getStudents();
-    this.getCourses();
+  async componentDidMount() {
+    this.state.showLoader();
+    this.props.user.role === "admin" && await this.getStudents();
+    await this.getCourses();
+    this.state.hideLoader();
+    
   }
 
   async getCourses() {
@@ -51,17 +55,15 @@ class Students extends Component {
   }
 
   async getStudents() {
-    this.state.showLoader();
 
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
     const res = await fetch(HTTPURL + `training/liststudents`, {
       headers: headers,
     }).then((response) => response.json());
-    this.state.hideLoader();
-    
     if (res["status"]) {
-      this.setState({ students: res["data"].students, totalLists: res["data"].total });
+      this.setState({ students: res["data"].students, totalLists: res["data"].total, 
+      isloading: false });
       this.getPageNo();
       
     }
@@ -213,7 +215,9 @@ handleSearch = async (e) => {
 
     return (
       <div className="container-fluid">
-          <div className="w-100 text-center">
+        {!this.state.isloading && 
+          <div>
+            <div className="w-100 text-center">
             <h3>Students </h3>
           </div>
           {user.role === "admin"
@@ -244,17 +248,17 @@ handleSearch = async (e) => {
 <div className="row">
   
 <div className="col-md-12 box1 mb-3 main-table" id="profile main-table">
-            {!this.state.loaderActive && this.state.totalLists === 0 ? (
+            {this.state.totalLists === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No student records!</h6>
               </div>
             ) : (
               <div>
-                <div id="table" className="card pt-2 mt-3 justify-content-center shadow px-2">
+                <div id="table" className="mt-3 justify-content-center shadow">
                   <div className="table-responsive">
                     <table
                       data-show-export="true"
-                      className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart"
+                      className="table table-hover table-bordered table-md text-center align-middle mb-0 text-dark home-chart"
                       id="myTable"
                     >
                       {/* <caption>Hello World!</caption> */}
@@ -488,6 +492,10 @@ handleSearch = async (e) => {
           </div>
       
 </div>
+      
+            </div>
+        }
+          
       </div>
     );
   }

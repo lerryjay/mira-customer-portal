@@ -25,6 +25,7 @@ class Services extends Component {
       edittitle: '',
       editcode: '',
       editcost: '',
+      isloading: true,
     };
   }
   
@@ -34,12 +35,13 @@ class Services extends Component {
     this.setState({ [name]: value, errormessage: "" });
   };
 
-  componentDidMount() {
-    this.getServices();
+  async componentDidMount() {
+    this.state.showLoader();
+    await this.getServices();
+    this.state.hideLoader();
   }
 
   async getServices() {
-    this.state.showLoader();
 
     const headers = new Headers();
     headers.append("API-KEY", APIKEY);
@@ -53,7 +55,8 @@ class Services extends Component {
     this.state.hideLoader();
 
     if (res["status"]) {
-      this.setState({ totalLists: res['data'] });
+      this.setState({ totalLists: res['data'], 
+      isloading: true });
     }
   }
 
@@ -214,6 +217,7 @@ class Services extends Component {
 
     return (
       <div className="container-fluid px-5">
+        {!this.state.isloading &&
         <div className="row mt-4">
           <div className="w-100 text-center">
             <h3>SERVICES </h3>
@@ -574,6 +578,7 @@ class Services extends Component {
               <span></span>
             }
          </div>
+      }
       </div>
     );
   }

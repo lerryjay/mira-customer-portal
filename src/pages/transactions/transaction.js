@@ -239,7 +239,7 @@ class transaction extends Component {
                                 </td>
                               )}
                               <td className="table-padding">{transaction.description}</td>
-                              <td className="table-padding">&#8358;{transaction.credit}</td>
+                              <td className="table-padding">&#8358;{transaction.credit.toLocaleString()}</td>
                               <td className="table-padding">
                                 <span className={transaction.status == 'Successful' ? 'text-success' : 'text-danger'} >{transaction.tlog}</span>
                               </td>

@@ -321,13 +321,13 @@ class viewclientproduct extends Component {
                   <th className="text-left">Deployment</th>
                   <td> {this.state.deploymentdate} </td>
                   <td>{this.state.deploymentstatus}</td>
-                  <td></td>
+                  <td>{this.state.deploymentcost}</td>
                 </tr>
                 <tr>
                   <th className="text-left">Training</th>
                   <td>{this.state.trainingdate}</td>
                   <td>{this.state.trainingstatus}</td>
-                  <td></td>
+                  <td>{this.state.trainingcost}</td>
                 </tr>
                 <tr>
                   <th className="text-left">License</th>

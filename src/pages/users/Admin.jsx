@@ -6,14 +6,15 @@ import { HTTPURL,FILEURL,APIKEY } from '../../common/global_constant'
 class Admin extends Component {
   constructor(props) {
     super(props);
-    this.state = { ...this.props, users : [] }
+    this.state = { ...this.props, users : [],
+      isloading: true, }
   }
 
   async componentDidMount()
   {
-    this.setState({ loader: true });
+    this.state.showLoader();
     await this.getUsers();
-    this.setState({ loader: false });
+    this.state.hideLoader();
   }
 
   async getUsers()
@@ -25,7 +26,8 @@ class Admin extends Component {
     })
     .then(response => response.json());
     if(res['status']){
-        this.setState({ users : res['data']});
+        this.setState({ users : res['data'], 
+        isloading: false});
     }
   }
 
@@ -46,13 +48,9 @@ class Admin extends Component {
         <div className="w-100 text-center">
           <h3  className="text-uppercase">Administrators </h3>
         </div>
-          {this.state.loader && (
-            <div className="spin-center">
-              <div className="loader"></div> 
-            </div>
-          )}
-        
-         {user.role === "admin"
+       
+        {!this.state.isloading && <div>
+          {user.role === "admin"
          ? <div className="row mt-4 d-flex justify-content-end mb-3 mr-2" >
               <Link to="/addadmin">
                 <button type="button" className="btn btn-sm btn-primary new_product">
@@ -65,17 +63,22 @@ class Admin extends Component {
           : <span></span>
         }
 
-          {!this.state.loader && this.state.users.length === 0 ?
+          {this.state.users.length === 0 ?
             <div className="card-body">
                 <div className="alert alert-warning" role="alert">
                     <h6 className="text-center">No Administrator records!</h6>
                 </div>
                 </div>
                 :
-                !this.state.loader && 
+              
                 
       <div className="table-responsive" style={{minHeight: '100vh'}}>
-                <table className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart">
+                
+                    <table
+                      data-show-export="true"
+                      className="table table-hover table-bordered table-md text-center align-middle mb-0 text-dark home-chart shadow" style={{boxShadow: "0"}}
+                      id="myTable"
+                    >
           <thead>
             <tr>
               <th>S/N</th>
@@ -116,7 +119,10 @@ class Admin extends Component {
           </tbody>
         </table>
 </div>
+ 
  }
+        </div>}
+     
       </div>
     )
   }

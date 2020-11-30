@@ -20,11 +20,14 @@ class transaction extends Component {
           totalLists: [],
           pageNumbers: [],
           currentLists: [],
+          isloading: true,
         };
       }
 
-      componentDidMount() {
-        this.getTransactions();
+     async componentDidMount() {
+        this.state.showLoader();
+        await this.getTransactions();
+         this.state.hideLoader();
       }
     
       handleInputChange = (e) => {
@@ -42,8 +45,6 @@ class transaction extends Component {
     
       async getTransactions() {
         
-        this.state.showLoader();
-        
         const headers = new Headers();
         headers.append("API-KEY", APIKEY);
         
@@ -56,10 +57,10 @@ class transaction extends Component {
             headers: headers,
           }
         ).then((response) => response.json());
-        this.state.hideLoader();
         if (res["status"]) {
           this.setState({ 
-            totalLists: res["data"].total,
+            totalLists: res["data"].total, 
+            isloading: false,
         });
           this.getPageNo();
         }
@@ -132,7 +133,9 @@ class transaction extends Component {
 
     return (
       <div className="container">
-      <div className="row my-4 d-flex justify-content-end ">
+        {!this.state.isloading && (
+          <div>
+              <div className="row my-4 d-flex justify-content-end ">
         <div className="col-lg-3 col-md-6 col-sm-12 col-xs-12 mb-3  hover-effect">
           <div className="px-3 card py-4">
             <div className="row align-items-center">
@@ -191,7 +194,7 @@ class transaction extends Component {
         </div>
       </div>
         
-      { (
+  
         <div className="row">
         <div className="col-md-9 col-sm-12 box1 mb-3" id="profile">
             {!this.state.loaderActive && this.state.totalLists === 0 ?  (
@@ -202,14 +205,14 @@ class transaction extends Component {
               <div>
                 <div
                   id="table"
-                  className="card pt-2 mt-3 justify-content-center shadow px-2"
+                  className=" mt-3 justify-content-center shadow "
                 >
                 <div className="card-header bg-medium font-weight-bold text-dark">
                     TRANSACTION HISTORY
                 </div>
                   <div className="table-responsive">
                     <table
-                      className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart"
+                      className="table table-hover table-bordered table-md text-center align-middle mb-0 text-dark home-chart"
                       id="myTable"
                     >
                       {/* <caption>Hello World!</caption> */}
@@ -236,7 +239,7 @@ class transaction extends Component {
                                 </td>
                               )}
                               <td className="table-padding">{transaction.description}</td>
-                              <td className="table-padding">&#8358;{transaction.credit}</td>
+                              <td className="table-padding">&#8358;{transaction.credit.toLocaleString()}</td>
                               <td className="table-padding">
                                 <span className={transaction.status == 'Successful' ? 'text-success' : 'text-danger'} >{transaction.tlog}</span>
                               </td>
@@ -451,7 +454,9 @@ class transaction extends Component {
           </div>
       
         </div>
-      )}
+        
+            </div>
+        )}
       </div>
     );
   }

@@ -52,11 +52,11 @@ class ViewClient extends Component {
       });
   }
 
-  componentWillMount() {
+ async componentWillMount() {
     this.state.showLoader();
-    this.getClients();
-    this.getWalletBalance();
-    this.getProducts();
+    await this.getClients();
+    await this.getWalletBalance();
+    await this.getProducts();
 
     const clienId = this.props.location.pathname.split("/")[2];
     fetch(
@@ -69,7 +69,6 @@ class ViewClient extends Component {
       .then((res) => res.json())
       .then((result) => {
         if (result.status === true) {
-          this.state.hideLoader();
           this.setState({
             lastname: result.data.lastname,
             firstname: result.data.firstname,
@@ -89,6 +88,8 @@ class ViewClient extends Component {
           });
         }
       });
+      
+      this.state.hideLoader();
   }
 
   handleInputChange = (e) => {
@@ -380,19 +381,7 @@ class ViewClient extends Component {
     }
     return (
       <div className="container-fluid mx-auto row">
-        {this.state.loader && (
-          <div className="spin-center">
-            <span className="text-primary ">
-              <span
-                className="spinner-grow spinner-grow-sm mr-2"
-                role="status"
-                aria-hidden="true"
-              ></span>
-              <span style={{ fontSize: "14px" }}>Loading...</span>
-            </span>
-          </div>
-        )}
-
+     
         <div className="col-md-12 mb-3 mt-4" id="profile">
           {!this.state.isloading && (
             <div>

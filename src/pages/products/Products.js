@@ -54,7 +54,7 @@ componentDidMount(){
             .then(async data => {
                 if(data.status === true) {
                     this.state.showAlert("success", data.message);
-                    await this.state.getProducts();
+                    await this.getProducts();
                     let modal = document.getElementById("myModal")
                     modal.style.display = "none";
                     this.props.history.push('/products');

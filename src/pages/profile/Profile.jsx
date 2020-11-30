@@ -15,11 +15,13 @@ class Profile extends Component {
             telephone: '',
             country: '',
             state:'',
-            imageurl: ''
+            imageurl: '',
+            isloading: true,
         }
     }
 
     componentDidMount() {
+        this.state.showLoader();
         this.setState({
             firstname: this.props.user.firstname,
             lastname: this.props.user.lastname,
@@ -27,8 +29,10 @@ class Profile extends Component {
             telephone: this.props.user.telephone,
             country: this.props.user.country,
             state: this.props.user.state,
-            imageurl:this.props.user.imageurl
+            imageurl:this.props.user.imageurl,
+            isloading: false,
         })
+        this.state.hideLoader();
     }
     editp() {
         // Make Form Editable
@@ -156,22 +160,8 @@ class Profile extends Component {
             } 
         return (
             <div className="container mx-auto">
-                  {this.state.loader && (
-            <div className="spin-center">
-              <span className="text-primary ">
-                <span
-                  className="spinner-grow spinner-grow-sm mr-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                <span style={{ fontSize: "14px" }}>Loading...</span>
-              </span>
-            </div>
-          )}
-           <div>
-           </div>
-           
-           {!this.state.loader &&
+          
+           {!this.state.isloading &&
                 <div className="row mt-4">
 
                     <div className="col-md-8 box1 mb-3" id="profile">

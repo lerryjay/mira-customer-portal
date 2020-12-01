@@ -101,7 +101,7 @@
       
       if(isset($_FILES['files']) && count($_FILES['files']) > 0){
         $files = File::upload("files",'ticket',true);
-        if($files['data']) $files = json_encode($files['data']);
+        if($files['status']) $files = json_encode($files['data']);
         else $files = json_encode([]);
       }else $files  = json_encode([]);
       
@@ -142,8 +142,10 @@
       
       $messageError =  Validate::string($message,false,false,1);
       if($messageError){
-        $this->setOutputHeader(['Content-type:application/json']);
-        $this->setOutput(json_encode(['status'=>false, 'message'=>'Please enter a breif description of the issue', 'data'=>['field'=>'message']]));
+        if((strlen($message) < 1) && !isset($_FILES['files'])){
+          $this->setOutputHeader(['Content-type:application/json']);
+          $this->setOutput(json_encode(['status'=>false, 'message'=>'Please enter a brief description of your ticket or attach a file', 'data'=>['field'=>'message']]));
+        }
       } 
 
       
@@ -223,9 +225,7 @@
       $data   = $this->validateTicketReply();
       extract($data);   
       loadModel('file');
-      // var_dump($userId, $ticket['customer_id']);
       if($userId == $ticket['customer_id'] || $user['role'] == 'admin'){
-        var_dump($_FILES['files']);
         if(isset($_FILES['files'])){
           $files = File::upload("files",'ticket',true);
           if($files['status']) $files = json_encode($files['data']);
@@ -292,7 +292,7 @@
       if($messageError){
         if((strlen($message) < 1) && !isset($_FILES['files'])){
           $this->setOutputHeader(['Content-type:application/json']);
-          $this->setOutput(json_encode(['status'=>false, 'message'=>'Invalid ticket message', 'data'=>['field'=>'message']]));
+          $this->setOutput(json_encode(['status'=>false, 'message'=>'Please enter a brief description of your ticket or attach a file', 'data'=>['field'=>'message']]));
         }
       } 
       loadModel('ticket');

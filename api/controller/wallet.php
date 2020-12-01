@@ -155,17 +155,33 @@
      **/
     public function transactions()
     {
-      loadController('user');
       extract($_GET);
       
-      $userid       = $userid ?? '';
       $error  = false;
-      $user = User::validateUser($userid);
+      $userid = $userid ?? '';
+
+      if(isset($deploymentid)){
+        loadModel('user');
+        loadModel('deployment');
+        $this->deploymentModel = new DeploymentModel();
+        $deployment = $this->deploymentModel->getDeploymentById($deploymentid);
+        if($deployment){
+          $this->userModel = new UserModel();
+          $user        = $this->userModel->getUserById($deployment['user_id']);
+          $customerId  = $user['id'];
+          $sender      = $sender ?? '';  
+          $senderEmail = $senderemail ?? ''; 
+        }
+        }else{
+          loadController('user');
+          $user = User::validateUser($userid);
+        }
+      
 
       loadModel('client');
       loadModel('wallet');
 
-      $userId     = isset($userid) ? $userid : $this->userId;
+      $userId     = isset($userid) ? $userid : $this->userId ?? '';
       $on         = isset($on) ? $on : '';
       $type       = isset($type) ? $type : '';
       $limit      = isset($limit) ? $limit : 25;
@@ -235,12 +251,48 @@
       else $user = User::validateUser($deployment['user_id']);
       if(!$deployment && !$user) $error = 'Request could not be authenticated';
 
-      $clientUserId = $user['role'] == 'admin' ? $clientid ??  '' : $userid;
-
+      $clientUserId = $user['role'] == 'admin' ? ($clientid ??  '') : $userid;
       if(!$error){
         $balance = $this->walletModel->getUserWalletBalance($clientUserId) ?: 0;
         $response = ['status'=>true,'message'=>'Your wallet balance is '.$balance, 'data'=>$balance];
       }else ['status'=>true,'message'=>'Error fetching balance: '.$error, 'data'=>$balance];
+
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
+    }
+
+    public function report()
+    {
+      extract($_GET);
+      $on           = $on ?? '';
+      $enddate      = $enddate ?? '';
+      $startdate    = $startdate ?? '';
+      $description  = $description ?? '';
+      $deploymentid = $deploymentid ?? '';
+      $debit        = $debit ?? '';
+      $credit       = $credit ?? '';
+      $order        = $order ?? '';
+      $groupby      = $group ?? '';
+      $sort         = $sort ?? '';
+      $filters = [
+        'on'=>$on,
+        'enddate'=>$enddate,
+        'startdate'=>$startdate,
+        'description'=>$description,
+        'servicecode'=>$servicecode,
+        'deploymentId'=>$deploymentid,
+        'debit'=>$debit,
+        'credit'=>$credit,
+        'orderby'=>$order,
+        'sort'=>$sort,
+        'groupby'=> $groupby // 'servicecode, w.tdate'
+      ];
+      loadModel('wallet');
+      $this->walletModel = new WalletModel();
+      $transactions      = $this->walletModel->whatever($filters);
+      if($transactions){
+        $response = ['status'=>true,'message'=>'Wallet report retrieved successfuly', 'data'=>$transactions];
+      }else $response = ['status'=>false,'message'=>'Error fetching report'];
 
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));

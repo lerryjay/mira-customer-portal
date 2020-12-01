@@ -172,7 +172,7 @@
           break;
       }
 
-      $updated = $this->deploymentModel->updateDeployment($deploymentId,['modules'=>$modules,'deploymentdate'=>$deploymentDate,'deploymentstatus'=>$deploymentStatus,'trainingdate'=>$trainingDate,'trainingstatus'=>$trainingStatus,'expirydate'=>$expiryDate,'licenseduration'=>$licenseDuration,'remarks'=>$remarks]);
+      $updated = $this->deploymentModel->updateDeployment($deploymentId,['modules'=>$modules,'deploymentdate'=>$deploymentDate,'deploymentstatus'=>$deploymentStatus,'trainingdate'=>$trainingDate,'trainingstatus'=>$trainingStatus,'expirydate'=>$expiryDate,'licenseduration'=>$licenseDuration,'remarks'=>$remarks, 'cost'=>$cost]);
       
       if($updated) $response = ['status'=>true,'message'=>'Client product update sucessfully!'];
       else $response = ['status'=>false,'message'=>'Client product update failed due to an expected error!'];

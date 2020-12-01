@@ -10,36 +10,44 @@
       extract($_POST);
       loadController('user');
       
-      // $userId       = $userid ?? '';
-      // $user         = User::validateUser($userid);
-      $type         = $type ?? '';
+      $userId       = $userid ?? '';
       $count        = $count ?? 1;
       $status       = $status ?? '00';
+      $amount       = $amount ?? 0.00;
       $deploymentId = $deploymentid ?? '';
+      $servicecode  = $servicecode ?? '';
+      $description  = $description ?? '';
+      $tdate        = $tdate ?? date('Y-m-d');
+      $tlog         = $tlog ?? date('Y-m-d H:i:s').'|'.$amount.'|'.$deploymentid;
       
       $ip    = $ip ?? $_SERVER['REMOTE_ADDR'] ?? '';
       $error = Validate::string($deploymentid,false,true,3,16);
 
       loadModel('deployment');
-      loadModel('service');
-
       $this->deploymentModel = new DeploymentModel();
-
       $deployment  = $this->deploymentModel->getDeploymentById($deploymentId);
       if(!$deployment  && !$error) $error = 'Invalid deploymentid provided';
 
+      loadModel('service');
       $this->serviceModel = new ServiceModel();
-      $services = $this->serviceModel->getAllServiceCodes();
-      $services = $services ?: [];
-      if(!in_array($type,array_values($services)) && !$error) $error = 'Invalid service code';
+      $service = $this->serviceModel->getServiceByCode($servicecode);
+      if(!$service && !$error) $error = 'Invalid service code';
 
+      loadModel('wallet');
+      $this->walletModel = new WalletModel();
+      $balance = $this->walletModel->getUserWalletBalance($deployment['user_id']);
+      if(!$error  && $service['cost'] != 0 && $service['cost'] > $balance)  $error = 'Insufficient funds';
       if(!$error){
         loadModel('log');
-        $this->logModel = new LogModel();
-        $add = $this->logModel->add($this->companyId,$deploymentId,$type,$status,$count,$ip);
-        if($add)$response = ['status'=>true,'message'=>"Log succsessful"];
+        $userId = $deployment['user_id'];
+        $this->logModel    = new LogModel();
+        $credit    = $servicecode == 'FUND' ? $amount : 0.00;
+        $debit     = $servicecode != 'FUND' ? $amount : 0.00;
+        $addWallet = $this->walletModel->addTransaction($this->companyId,$userId,$credit,$debit,$description,$tlog,$tdate);
+        $addLog    = $this->logModel->add($this->companyId,$addWallet,$deploymentId,$servicecode,$status,$count,$ip);
+        if($addLog)$response = ['status'=>true,'message'=>"Log succsessful"];
         else $response = ['status'=>false,'message'=>'Error saving log'];
-      }else  $response = ['status'=>false,'message'=>'Error saving log: '.$error];
+      }else  $response = ['status'=>false,'message'=>'Error adding log: '.$error];
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
       
@@ -184,6 +192,89 @@
         $statistics[] = ['date'=>$on,'value'=>$data['total']];
       }
       $response = ['status'=>true,'message'=>'Daily usage statistics retrieved successfully','data'=>$statistics];
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
+    }
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
+    public function report()
+    {
+      extract($_GET);
+      $on           = $on ?? '';
+      $enddate      = $enddate ?? '';
+      $startdate    = $startdate ?? '';
+      $description  = $description ?? '';
+      $deploymentid = $deploymentid ?? '';
+      $debit        = $debit ?? '';
+      $credit       = $credit ?? '';
+      $order        = $order ?? '';
+      $groupby      = $group ?? '';
+      $sort         = $sort ?? '';
+      $servicecode  = $servicecode ?? '';
+      $filters = [
+        'on'=>$on,
+        'enddate'=>$enddate,
+        'startdate'=>$startdate,
+        'description'=>$description,
+        'servicecode'=>$servicecode,
+        'deploymentId'=>$deploymentid,
+        'debit'=>$debit,
+        'credit'=>$credit,
+        'orderby'=>$order,
+        'sort'=>$sort,
+        'groupby'=> $groupby
+      ];
+      loadModel('log');
+      $this->logModel = new LogModel();
+      $transactions      = $this->logModel->aggregateReport($filters);
+      if($transactions){
+        $response = ['status'=>true,'message'=>'Log report retrieved successfuly', 'data'=>$transactions];
+      }else $response = ['status'=>false,'message'=>'Error fetching report'];
+
+      $this->setOutputHeader(['Content-type:application/json']);
+      $this->setOutput(json_encode($response));
+    }
+
+    public function reportInfo()
+    {
+      extract($_GET);
+      $on           = $on ?? '';
+      $enddate      = $enddate ?? '';
+      $startdate    = $startdate ?? '';
+      $description  = $description ?? '';
+      $deploymentid = $deploymentid ?? '';
+      $debit        = $debit ?? '';
+      $credit       = $credit ?? '';
+      $order        = $order ?? '';
+      $groupby      = $group ?? '';
+      $sort         = $sort ?? '';
+      $servicecode  = $servicecode ?? '';
+      $filters = [
+        'startdate'=>$startdate,
+        'on'=>$on,
+        'description'=>$description,
+        'servicecode'=>$servicecode,
+        'deploymentId'=>$deploymentid,
+        'debit'=>$debit,
+        'credit'=>$credit,
+        'orderby'=>$order,
+        'sort'=>$sort,
+        'groupby'=> $groupby
+      ];
+      loadModel('log');
+      $this->logModel = new LogModel();
+      $transactions   = $this->logModel->logReport($filters);
+      if($transactions){
+        $response = ['status'=>true,'message'=>'Wallet report retrieved successfuly', 'data'=>$transactions];
+      }else $response = ['status'=>false,'message'=>'Error fetching report'];
+
       $this->setOutputHeader(['Content-type:application/json']);
       $this->setOutput(json_encode($response));
     }

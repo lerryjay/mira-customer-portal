@@ -29,7 +29,7 @@
      **/
     public function getClient($condition = '',$bindString='',$bindValues=[])
     {
-      $sql = 'SELECT clients.user_id,clients.businessname,clients.address,clients.telephone AS companytelephone,clients.email AS companyemail,clients.lga AS companylga,clients.address AS companyaddress,clients.country_id AS companycoutryid,clients.state_id AS companystateid, firstname,lastname,othername,users.email,users.telephone,username,users.imageurl FROM clients INNER JOIN users ON users.id = clients.user_id '.$condition;
+      $sql = 'SELECT clients.user_id,clients.businessname,clients.address,clients.telephone AS companytelephone,clients.email AS companyemail,clients.lga AS companylga,clients.address AS companyaddress,clients.country_id AS companycoutryid,clients.state_id AS companystateid,(SELECT name FROM countries WHERE country_id = clients.country_id) AS companycountry,(SELECT name FROM states WHERE states_id = clients.state_id) AS companystate, firstname,lastname,othername,users.email,users.telephone,username,users.imageurl FROM clients INNER JOIN users ON users.id = clients.user_id '.$condition;
       $query = $this->query($sql,$bindString,$bindValues); 
       if($query) return $this->row;
       else return false;

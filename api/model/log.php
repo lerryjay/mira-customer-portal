@@ -14,10 +14,10 @@
      * @return type
      * @throws conditon
      **/
-    public function add($companyId,$deploymentId,$servicecode,$statuscode,$count,$ip)
+    public function add($companyId,$transactionId,$deploymentId,$servicecode,$statuscode,$count,$ip)
     {
       $id = rand(10000,99999999);
-      $insert =  $this->insert('apilogs',['id'=>$id,'company_id'=>$companyId,'deployment_id'=>$deploymentId,'statuscode'=>$statuscode,'servicecode'=>$servicecode,'count'=>$count,'ip'=>$ip ]);
+      $insert =  $this->insert('apilogs',['transaction_id'=>$transactionId,'id'=>$id,'company_id'=>$companyId,'deployment_id'=>$deploymentId,'statuscode'=>$statuscode,'servicecode'=>$servicecode,'count'=>$count,'ip'=>$ip ]);
       if($insert) return $id;
       else false;
     }
@@ -115,5 +115,56 @@
       $conditions = strlen($conditions) > 1 ? 'WHERE '.$conditions : '';
       return $this->getStatistics($conditions,[]);
     }
+
+  public function aggregateReport($filter,$status = 1)
+  {
+    $conditions   = '';
+    $conditions .= isset($filter['transactionId']) && $filter['transactionId'] != NULL ? " AND  w.transaction_id = '".$filter['transactionId']."'" : "";
+    $conditions .= isset($filter['debit']) && $filter['debit'] != NULL  ? " AND  w.debit = '".$filter['debit']."'" : "";
+    $conditions .= isset($filter['credit']) && $filter['credit'] != NULL  ? " AND  w.credit = '".$filter['credit']."'" : "";
+    $conditions .= isset($filter['companyId']) && $filter['companyId'] != NULL  ? " AND  a.company_id = '".$filter['companyId']."'" : "";
+    $conditions .= isset($filter['deploymentId']) && $filter['deploymentId'] != NULL  ? " AND  a.deployment_id = '".$filter['deploymentId']."'" : "";
+    $conditions .= isset($filter['servicecode'])  && $filter['servicecode'] != NULL ? " AND  servicecode = '".$filter['servicecode']."'" : "";
+
+    $conditions .= isset($filter['on'])  && $filter['on'] != NULL ? " AND  w.tdate = '".$filter['on']."'" : "";
+    $conditions .= isset($filter['startDate'])  && $filter['startDate'] != NULL ? " AND  w.tdate >= '".$filter['startDate']."'" : "";
+    $conditions .= isset($filter['endDate']) && $filter['endDate'] != NULL  ? " AND w.tdate <= '".$filter['endDate']."'" : "";
+
+    $conditions .= isset($filter['groupby']) && strlen($filter['groupby']) > 0  ? " GROUP BY ".$filter['groupby'] : "";
+    $conditions .= isset($filter['orderby']) && strlen($filter['orderby']) > 0 ? " ORDER BY ".$filter['orderby'] : " ORDER BY w.tdate";
+    $conditions .= isset($filter['order']) ? " ".$filter['order'] : " DESC";
+    $conditions   = 'WHERE a.status = ? '.$conditions;
+
+    $sql  = "SELECT w.tdate,(SELECT title FROM services WHERE code = a.servicecode) AS description,SUM(credit) AS creditsum,SUM(debit) AS debitsum,SUM(count) AS countsum FROM apilogs a INNER JOIN wallet w ON w.transaction_id = a.transaction_id $conditions ";
+
+    $query = $this->query($sql,'i',[$status]); 
+    if($query) return $this->rows;
+    else return false;
   }
+  public function logReport($filter,$status = 1)
+  {
+    $conditions   = '';
+    $conditions .= isset($filter['transactionId']) && $filter['transactionId'] != NULL ? " AND  w.transaction_id = '".$filter['transactionId']."'" : "";
+    $conditions .= isset($filter['debit']) && $filter['debit'] != NULL  ? " AND  w.debit = '".$filter['debit']."'" : "";
+    $conditions .= isset($filter['credit']) && $filter['credit'] != NULL  ? " AND  w.credit = '".$filter['credit']."'" : "";
+    $conditions .= isset($filter['companyId']) && $filter['companyId'] != NULL  ? " AND  a.company_id = '".$filter['companyId']."'" : "";
+    $conditions .= isset($filter['deploymentId']) && $filter['deploymentId'] != NULL  ? " AND  a.deployment_id = '".$filter['deploymentId']."'" : "";
+    $conditions .= isset($filter['servicecode'])  && $filter['servicecode'] != NULL ? " AND  servicecode = '".$filter['servicecode']."'" : "";
+
+    $conditions .= isset($filter['on'])  && $filter['on'] != NULL ? " AND  w.tdate = '".$filter['on']."'" : "";
+    $conditions .= isset($filter['startDate'])  && $filter['startDate'] != NULL ? " AND  w.tdate >= '".$filter['startDate']."'" : "";
+    $conditions .= isset($filter['endDate']) && $filter['endDate'] != NULL  ? " AND w.tdate <= '".$filter['endDate']."'" : "";
+
+    $conditions .= isset($filter['groupby']) && strlen($filter['groupby']) > 0  ? " GROUP BY ".$filter['groupby'] : "";
+    $conditions .= isset($filter['orderby']) && strlen($filter['orderby']) > 0 ? " ORDER BY ".$filter['orderby'] : " ORDER BY w.tdate";
+    $conditions .= isset($filter['order']) ? " ".$filter['order'] : " DESC";
+    $conditions   = 'WHERE a.status = ? '.$conditions;
+
+    $sql  = "SELECT tdate,tlog,w.description, (SELECT title FROM services WHERE code = a.servicecode) AS service,credit ,debit ,count FROM apilogs a INNER JOIN wallet w ON w.transaction_id = a.transaction_id $conditions ";
+
+    $query = $this->query($sql,'i',[$status]); 
+    if($query) return $this->rows;
+    else return false;
+  }
+}
 ?>

@@ -5,7 +5,7 @@
   class UserModel extends Model{
     public function getUser($condition = '',$string = '',$values = [])
     {
-      $sql = "SELECT *, id As userid, FROM users $condition";
+      $sql = "SELECT *,id AS userid FROM users $condition";
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->row;
       else return false;
@@ -13,7 +13,7 @@
 
     public function getUsers($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT *, id As userid, IFNULL((SELECT businessname FROM clients WHERE user_id = users.id ),"") AS businessname,IF((SELECT count(businessname) FROM clients WHERE user_id = users.id ) > 0,1,0) AS isclient FROM users '.$condition;
+      $sql = 'SELECT *, id AS userid, IFNULL((SELECT businessname FROM clients WHERE user_id = users.id ),"") AS businessname,IF((SELECT count(businessname) FROM clients WHERE user_id = users.id ) > 0,1,0) AS isclient FROM users '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->rows;
       else return false;

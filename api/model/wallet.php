@@ -30,7 +30,7 @@ class WalletModel extends Model
    **/
   public function getTransactions($condition = '',$string = '',$values = [])
   {
-    $sql = 'SELECT *, (SELECT businessname FROM clients WHERE user_id = wallet.user_id) AS businssname, (SELECT firstname FROM users WHERE id = wallet.user_id) AS clientname,  (SELECT email FROM users WHERE id = wallet.user_id) AS email FROM wallet '.$condition;
+    $sql = 'SELECT *, (SELECT businessname FROM clients WHERE user_id = wallet.user_id) AS businessname, (SELECT firstname FROM users WHERE id = wallet.user_id) AS clientname,  (SELECT email FROM users WHERE id = wallet.user_id) AS email FROM wallet '.$condition;
     
     $query = $this->query($sql,$string,$values); 
     if($query) return $this->rows;

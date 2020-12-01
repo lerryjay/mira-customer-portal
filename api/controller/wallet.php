@@ -214,7 +214,7 @@
       $this->walletModel = new WalletModel();
       $transactions = $this->walletModel->searchTransactions($filters);
       if($transactions){
-        $response = ['status'=>true,'message'=>'Wallet transactions retrieved successfuly', 'data'=>$transactions];
+        $response = ['status'=>true,'message'=>'Wallet transactions retrieved successfuly', 'data'=>['transactions'=>$transactions]];
       }else $response = ['status'=>false,'message'=>'Error fetching transactions'.$error];
 
       $this->setOutputHeader(['Content-type:application/json']);
@@ -251,7 +251,7 @@
       else $user = User::validateUser($deployment['user_id']);
       if(!$deployment && !$user) $error = 'Request could not be authenticated';
 
-      $clientUserId = $user['role'] == 'admin' ? ($clientid ??  '') : $userid;
+      $clientUserId = $user['role'] == 'admin' ? ($clientid ??  '') : $userId;
       if(!$error){
         $balance = $this->walletModel->getUserWalletBalance($clientUserId) ?: 0;
         $response = ['status'=>true,'message'=>'Your wallet balance is '.$balance, 'data'=>$balance];

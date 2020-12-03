@@ -31,7 +31,7 @@ componentDidMount(){
     headers.append('API-KEY', APIKEY);
     const res = await fetch(HTTPURL + `product?userid=${ this.state.user.userid }`, { method: 'GET', headers: headers}).then(response => response.json())
     this.state.hideLoader();
-    if(res['status']) this.setState({ products: res.data , isloading: false})
+    if(res['status']) this.setState({ products: res .data , isloading: false})
   }
 
     showDeleteModal(e) {

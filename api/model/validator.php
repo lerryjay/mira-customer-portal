@@ -55,7 +55,7 @@ class Validate{
 		}
 		$check = in_array($value, $array);
 		if(empty($check)){
-			return 'Invalid select option';
+			return 'Invalid option';
 		}
 		return null;
 
@@ -103,7 +103,7 @@ class Validate{
 	public static function telephone($telephone){
 		#88002345675 | +7 (960) 000 00 00 | +7(4855)23-34-56
 		$reg_num ='([+]?\d[ ]?[(]?\d{3}[)]?[ ]?\d{2,3}[- ]?\d{2}[- ]?\d{2})';
-		if(!preg_match($reg_num, $phone)){
+		if(!preg_match($reg_num, $telephone)){
 			return 'Invalid phone, e.g( 88002345675 | +7 (960) 000 00 00 | +7(4855)23-34-56 )';
 		}
 		return null;

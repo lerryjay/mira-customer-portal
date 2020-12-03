@@ -196,7 +196,7 @@ class transaction extends Component {
         
   
         <div className="row">
-        <div className="col-md-9 col-sm-12 box1 mb-3" id="profile">
+        <div className="col-sm-12 box1 mb-3" id="profile">
             {!this.state.loaderActive && this.state.totalLists === 0 ?  (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No transaction records!</h6>
@@ -205,10 +205,14 @@ class transaction extends Component {
               <div>
                 <div
                   id="table"
-                  className=" mt-3 justify-content-center shadow "
+                  className="mt-3 justify-content-center shadow "
                 >
-                <div className="card-header bg-medium font-weight-bold text-dark">
-                    TRANSACTION HISTORY
+                <div className="card-header bg-medium font-weight-bold text-dark d-flex justify-content-between py-1">
+                    <span className="mt-2">TRANSACTION HISTORY</span>
+                    <span>
+                      <button className="btn btn-primary rounded-0 btn-sm mr-2">Filter</button>
+                      <button className="btn btn-info rounded-0 btn-sm">Print</button>
+                    </span>
                 </div>
                   <div className="table-responsive">
                     <table
@@ -218,10 +222,11 @@ class transaction extends Component {
                       {/* <caption>Hello World!</caption> */}
                       <thead>
                         <tr>
-                          <th className="table-padding">Date</th>
-                          <th>Customer</th>
+                          <th>Date</th>
+                          <th>Client</th>
                           <th>Description</th>
-                          <th>Credit</th>
+                          <th className="text-right">Credit</th>
+                          <th className="text-right">Debit</th>
                           <th>Transaction Log</th>
                         </tr>
                       </thead>
@@ -235,11 +240,12 @@ class transaction extends Component {
                               {this.state.user.role == "admin" && (
                                 <td onClick={this.handleRoute}
                                 className="table-padding">
-                                  {transaction.clientname}
+                                  {transaction.businessname}
                                 </td>
                               )}
                               <td className="table-padding">{transaction.description}</td>
-                              <td className="table-padding">&#8358;{transaction.credit.toLocaleString()}</td>
+                              <td className="table-padding text-right">&#8358;{transaction.credit.toLocaleString()}</td>
+                              <td className="table-padding text-right">&#8358;{transaction.debit.toLocaleString()}</td>
                               <td className="table-padding">
                                 <span className={transaction.status == 'Successful' ? 'text-success' : 'text-danger'} >{transaction.tlog}</span>
                               </td>
@@ -296,7 +302,7 @@ class transaction extends Component {
             )}
           </div>
 
-          <div className="col-md-3 col-sm-12 box2 mt-3 mb-3">
+          {/* <div className="col-md-3 col-sm-12 box2 mt-3 mb-3">
             <div className="card">
                 <div className="card-header bg-medium font-weight-bold text-dark">
                 <i className="fa fa-filter"></i> FILTER BY
@@ -451,11 +457,9 @@ class transaction extends Component {
               </form>
               </div>
             </div>
-          </div>
-      
+          </div> */}
         </div>
-        
-            </div>
+      </div>
         )}
       </div>
     );

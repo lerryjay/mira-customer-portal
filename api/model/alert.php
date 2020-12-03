@@ -2,7 +2,7 @@
   /**
    * Class for sending notifications and alerts
    */
-  class Alerts
+  class Alert
   {
     /**
      * send email to client 
@@ -12,7 +12,7 @@
      **/
     public function sendMail($email,$subject,$message)
     {
-      require './phpmailer/class.phpmailer.php';
+      require BASE_PATH.'/api/model/phpmailer/class.phpmailer.php';
       $headers = 'MIME-Version: 1.0'. "\r\n";
       $headers .= 'Content-type: text/html; charset=iso-8859' . "\r\n";
       $headers .= "From: notice@habopay.com";
@@ -44,8 +44,8 @@
       $mail->Subject = $subject;
       $mail->Body = $message;
 
-      if($mail->send()) echo json_encode(['result'=>'success','message'=>'Message sent!']);
-      else echo json_encode(['result'=>'error','message'=>'Sending failed!'. $mail->ErrorInfo]);
+      if($mail->send()) return ['status'=>true,'message'=>'Message sent!'];
+      else return ['status'=>true,'message'=>'Sending failed!'.['data'=> $mail->ErrorInfo]];
     }
 
     /**

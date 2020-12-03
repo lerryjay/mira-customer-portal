@@ -2,7 +2,7 @@
   /**
    * Products model
    */
-  class Products extends Model
+  class ProductModel extends Model
   {
     public function addProduct($productName,$desription,$companyId)
     {
@@ -17,7 +17,7 @@
 
     public function getProduct($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT * FROM products '+$condition;
+      $sql = 'SELECT * FROM products '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->row;
       else return false;
@@ -25,7 +25,7 @@
 
     public function getProducts($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT * FROM products '+$condition;
+      $sql = 'SELECT * FROM products '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->rows;
       else return false;
@@ -65,7 +65,7 @@
      **/
     public function gePackages($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT * FROM productpackage '+$condition;
+      $sql = 'SELECT * FROM productpackage '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->rows;
       else return false;
@@ -82,7 +82,7 @@
      **/
     public function getPackage($condition = '',$string = '',$values = [])
     {
-      $sql = 'SELECT * FROM productpackage '+$condition;
+      $sql = 'SELECT * FROM productpackage '.$condition;
       $query = $this->query($sql,$string,$values); 
       if($query) return $this->rows;
       else return false;

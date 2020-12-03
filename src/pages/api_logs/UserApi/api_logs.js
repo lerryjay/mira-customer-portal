@@ -232,7 +232,7 @@ class api_logs extends Component {
 
      
       <div className="row">
-      <div className="col-md-9 col-sm-12 box1 mb-3" id="profile">
+      <div className="col-sm-12 box1 mb-3" id="profile">
             {this.state.totalLists.length === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No log records!</h6>
@@ -241,10 +241,15 @@ class api_logs extends Component {
               <div>
                 <div
                   id="table"
-                  className="mt-3 justify-content-center shadow"
+                  className="mt-3 shadow"
                 >      
-                <div className="card-header bg-medium font-weight-bold text-dark">
-                    API USAGE STATISTICS
+                <div className="card-header bg-medium font-weight-bold text-dark  d-flex justify-content-between py-1">
+                    <span className="mt-2">API USAGE STATISTICS</span>
+                    <span>
+                      <button className="btn btn-primary rounded-0 btn-sm mr-2">Filter</button>
+                      <button className="btn btn-info rounded-0 btn-sm mr-2">Print</button>
+                      <button className="btn btn-danger rounded-0 btn-sm">View</button>
+                    </span>
                 </div>
                   <div className="table-responsive">
                     <table
@@ -256,9 +261,11 @@ class api_logs extends Component {
                         <tr>
                           <th className="table-padding">Date</th>
                           <th>Client</th>
-                          <th>Request</th>
-                          <th>Status code</th>
+                          <th className="table-padding">Product</th>
+                          <th>Request IP</th>
                           <th>Service Code</th>
+                          <th>Request Count</th>
+                          <th>Status</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -266,22 +273,28 @@ class api_logs extends Component {
                           return (
                             <tr key={index} >
                             <td className="table-padding">
-                              {request.date}
+                              {(new Date(request.date).toDateString())}
                             </td>
-                              {this.state.user.role == "admin" && (
+                            {this.state.user.role == "admin" && (
                                 <td onClick={this.handleRoute}
                                 className="table-padding">
-                                  {request.clientname}
+                                  {request.businessname }
                                 </td>
                               )}
-                              <td className="table-padding">{request.ip}</td>
-                              <td className="table-padding">
-                                <span >{request.statuscode}</span>
-                              </td>
+                            <td className="table-padding">
+                              {request.productname}
+                            </td>
+                            <td className="table-padding">{request.ip}</td>
+                            <td className="table-padding">
+                                <span >{request.servicecode }</span>
+                            </td>
+                            <td className="table-padding">
+                                <span >{request.count}</span>
+                            </td>
                               <td className="table-padding"
                                 style={{ minWidth: "100px", maxWidth: "100px" }}
                               >
-                                <span>{request.servicecode}</span>
+                                <span>{request.statuscode == '0' ? 'success' : 'failed' }</span>
                                </td>
                               </tr>
                           );
@@ -335,7 +348,7 @@ class api_logs extends Component {
               </div>
             )}
           </div>
-
+{/* 
           <div className="col-md-3 col-sm-12 box2 mt-3 mb-3">
             
           <form onSubmit={this.handleSearch}>
@@ -494,7 +507,7 @@ class api_logs extends Component {
          
            </div>
          </form>
-          </div>
+          </div> */}
       
       </div>
            

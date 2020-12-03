@@ -258,7 +258,7 @@ class Tickets extends Component {
          { !this.state.isloading && 
          (
          <div className="row w-100 ">
-            <div className="col-md-9 col-sm-12 box1 mb-3" id="profile">
+            <div className="col-sm-12 box1 mb-3" id="profile">
             { this.state.totalLists === 0 ? (
               <div className="alert alert-warning mt-5" role="alert">
                 <h6 className="text-center">No ticket records!</h6>
@@ -276,12 +276,12 @@ class Tickets extends Component {
                       <thead>
                         <tr>
                           <th>ID</th>
+                          <th>Date</th>
                           {this.state.user.role == "admin" && (
                             <th>Client&nbsp;Name</th>
                           )}
                           <th>Type</th>
                           <th>Title</th>
-                          <th>Date</th>
                           <th>Status</th>
                           <th>Action</th>
                         </tr>
@@ -289,8 +289,13 @@ class Tickets extends Component {
                       <tbody>
                         {this.state.currentLists.map((ticket, index) => {
                           return (
-                            <tr key={index}>
+                            <tr key={index} className="py-0">
                               <td>#{ticket.id}</td>
+                              <td>
+                                {new Date(
+                                  ticket.createdat
+                                ).toLocaleDateString()}
+                              </td>
                               {this.state.user.role == "admin" && (
                                 <td onClick={this.handleRoute}>
                                   {ticket.clientname}
@@ -298,13 +303,9 @@ class Tickets extends Component {
                               )}
                               <td>{ticket.type}</td>
                               <td>{ticket.title}</td>
-                              <td>
-                                {new Date(
-                                  ticket.createdat
-                                ).toLocaleDateString()}
-                              </td>
+                              
                               <td
-                                style={{ minWidth: "100px", maxWidth: "100px" }}
+                                style={{ minWidth: "100px", maxWidth: "100px" }} className=" py-1"
                               >
                                 <select
                                   className="custom-select custom-select-sm"
@@ -335,7 +336,7 @@ class Tickets extends Component {
                                 </select>
                               </td>
                               <td
-                                className="align-middle"
+                                className="align-middle py-0"
                                 style={{ cursor: "pointer" }}
                               >
                                 <Link to={() => `/viewticket/${ticket.id}`}>
@@ -408,7 +409,7 @@ class Tickets extends Component {
           </div>
          
          
-          <div className="col-md-3 col-sm-12 box2 mt-3 mb-3">
+          {/* <div className="col-md-3 col-sm-12 box2 mt-3 mb-3">
             <div className="card p-3">
               <label
                 htmlFor="customer"
@@ -552,7 +553,7 @@ class Tickets extends Component {
             </div>
             </form>                  
             </div>
-          </div>
+          </div> */}
 
       </div> 
          )}</div>

@@ -250,8 +250,8 @@ class UpdateClientProduct extends Component {
                         <input
                           type=""
                           className="form-control form-control-sm py-3 border-left-0"
-                          name="cost"
-                          id="cost"
+                          name="deploymentcost"
+                          id="deploymentcost"
                           placeholder="Deployment Cost"
                           value={this.state.deploymentcost}
                           onChange={this.handleInputChange}
@@ -321,8 +321,8 @@ class UpdateClientProduct extends Component {
                         <input
                           type=""
                           className="form-control form-control-sm py-3 border-left-0"
-                          name="cost"
-                          id="cost"
+                          name="trainingcost"
+                          id="trainingcost"
                           placeholder="Training Cost"
                           value={this.state.trainingcost}
                           onChange={this.handleInputChange}

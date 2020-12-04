@@ -56,7 +56,7 @@ class Services extends Component {
 
     if (res["status"]) {
       this.setState({ totalLists: res['data'], 
-      isloading: true });
+      isloading: false });
     }
   }
 
@@ -216,8 +216,10 @@ class Services extends Component {
     this.state.currentLists = currentLists;
 
     return (
+      
+      <div>
+        {!this.state.c &&
       <div className="container-fluid px-5">
-        {!this.state.isloading &&
         <div className="row mt-4">
           <div className="w-100 text-center">
             <h3>SERVICES </h3>
@@ -275,7 +277,7 @@ class Services extends Component {
                               <td
                                 style={{ minWidth: "100px", maxWidth: "100px" }}
                               >
-                                {service.cost}
+                                {service.cost.toLocaleString()}
                               </td>
                               <td
                                 className="align-middle"
@@ -578,7 +580,9 @@ class Services extends Component {
               <span></span>
             }
          </div>
-      }
+      
+      </div>
+          }
       </div>
     );
   }

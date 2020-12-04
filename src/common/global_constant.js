@@ -1,8 +1,8 @@
 // export const HTTPURL_TRN =  "http://192.168.1.4:8080/training_portal/api/"; 
-// export const HTTPURL =  "http://192.168.1.4:8080/ticketapp/api/"; 
-// export const FILEURL = "http://192.168.1.4:8080/ticketapp/"; 
-export const HTTPURL =  'http://localhost/ticketapp/api/';
-export const FILEURL = 'http://localhost/ticketapp/';
+export const HTTPURL =  "http://192.168.1.4:8080/ticketapp/api/"; 
+export const FILEURL = "http://192.168.1.4:8080/ticketapp/"; 
+// export const HTTPURL =  'http://localhost/ticketapp/api/';
+// export const FILEURL = 'http://localhost/ticketapp/';
 
 // export const HTTPURL =  "https://www.miratechnologies.com.ng/customer-portal/api/"; 
 // export const FILEURL = "https://www.miratechnologies.com.ng/customer-portal/";
@@ -110,29 +110,23 @@ export const adminMenu = [
     isDivider: true
   },
   {
-    name: 'Tickets',
-    icon: 'fa fa-ticket-alt',
+    name: 'Products',
+    icon: 'fab fa-buffer',
     isActive: false,
     sub: [
       {
-        name: 'Create Ticket',
-        route: '/createticket',
+        name: 'Add Product',
+        route: '/createproduct',
         icon: '',
         isActive: false,
       },
       {
-        name: 'All Tickets',
-        route: '/tickets',
+        name: 'All Products',
+        route: '/products',
         icon: '',
         isActive: false,
       }
     ]
-  },
-  {
-    name: 'API Metrics',
-    route: '/apilogs',
-    icon: 'fa fa-chart-line',
-    isActive: false
   },
   {
     name: 'Clients',
@@ -154,28 +148,47 @@ export const adminMenu = [
     ]
   },
   {
-    name: 'Transactions',
-    route: '/transactions',
-    icon: 'fa fa-chart-pie',
-    isActive: false
-  },
-  {
-    name: 'Products',
-    icon: 'fab fa-buffer',
+    name: 'Support',
+    icon: 'fa fa-ticket-alt',
     isActive: false,
     sub: [
       {
-        name: 'Add Product',
-        route: '/createproduct',
+        name: 'Create Ticket',
+        route: '/createticket',
         icon: '',
         isActive: false,
       },
       {
-        name: 'All Products',
-        route: '/products',
+        name: 'All Tickets',
+        route: '/tickets',
         icon: '',
         isActive: false,
       }
+    ]
+  },
+  {
+    name: 'Metrics',
+    icon: 'fa fa-chart-line',
+    isActive: false,
+    sub: [
+      {
+        name: 'API Logs',
+        route: '/apilogs',
+        // icon: 'fa fa-chart-line',
+        isActive: false
+      },
+      {
+        name: 'Transactions',
+        route: '/transactions',
+        // icon: 'fa fa-chart-pie',
+        isActive: false
+      },
+      {
+        name: 'Services',
+        route: '/services',
+        // icon: 'fa fa-cog',
+        isActive: false
+      },
     ]
   },
   {
@@ -196,12 +209,6 @@ export const adminMenu = [
         isActive: false,
       }
     ]
-  },
-  {
-    name: 'Services',
-    route: '/services',
-    icon: 'fa fa-cog',
-    isActive: false
   },
   {
     name: 'Web Analytics',

@@ -20,7 +20,7 @@ import Dashboard from "./pages/dashboard/dashboard";
 import ChangePassword from "./pages/change_password/ChangePassword";
 import Profile from "./pages/profile/Profile";
 
-import Tickets from "./pages/tickets/Tickets";
+import Tickets from "./pages/tickets/ticketlist/Tickets";
 import CreateTicket from "./pages/tickets/create_ticket/create_ticket";
 import ViewTicket from "./pages/tickets/viewticket/ViewTicket";
 

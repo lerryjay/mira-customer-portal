@@ -218,7 +218,7 @@ class Services extends Component {
     return (
       
       <div>
-        {!this.state.c &&
+        {!this.state.isloading &&
       <div className="container-fluid px-5">
         <div className="row mt-4">
           <div className="w-100 text-center">
@@ -244,15 +244,12 @@ class Services extends Component {
               </div>
             ) : (
               <div>
-                <div
-                  id="table"
-                  className="card pt-2 mt-3 justify-content-center shadow px-2"
-                >
-                  <div className="table-responsive">
-                    <table
-                      className="table table-hover table-bordered table-sm text-center align-middle mb-0 text-dark home-chart"
-                      id="myTable"
-                    >
+               <div id="table" className=" mt-3 justify-content-center shadow">
+        <div className="table-responsive">
+          <table
+            className="table table-hover table-bordered table-md text-center align-middle mb-0 text-dark home-chart"
+            id="myTable"
+          >
                       {/* <caption>Hello World!</caption> */}
                       <thead>
                         <tr>

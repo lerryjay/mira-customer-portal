@@ -423,7 +423,7 @@ class App extends Component {
                       <AdminPrivateRoute path="/createclientbyid"  permission="CREATECLIENT" component={CreateClientById} />
                       <AdminPrivateRoute path="/viewclient" permission="VIEWCLIENT" component={ViewClient} />
                       <AdminPrivateRoute path="/editclient" permission="UPDATECLIENT" component={EditClient} />
-                      <AdminPrivateRoute path="/adddeployment"  permission="ADDDEPLOYMENT" component={AddDeployment} />
+                      <Route path="/adddeployment"  /*permission="ADDDEPLOYMENT"*/ component={AddDeployment} />
                       <AdminPrivateRoute path="/updatedeployment" permission="UPDATEDEPLOYMENT" component={UpdateDeployment} />
                       <AdminPrivateRoute path="/viewdeployment" permission="VIEWDEPLOYMENT" component={ViewDeployment} />
 

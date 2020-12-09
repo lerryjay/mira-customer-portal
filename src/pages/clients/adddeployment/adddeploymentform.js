@@ -206,7 +206,7 @@ const AddDeploymentForm = ({
                       </div>
                     </div>
 
-                    <div className="col-md-4 mb-1">
+                    {/* <div className="col-md-4 mb-1">
                       <div className=" form-group">
                         <label
                           htmlFor="${costtitle}status"
@@ -229,7 +229,7 @@ const AddDeploymentForm = ({
                           <option value="complete">Complete</option>
                         </select>
                       </div>
-                    </div>
+                    </div> */}
 
                     <div className="col-md-4 mb-1">
                       <div className="form-group">
@@ -237,7 +237,7 @@ const AddDeploymentForm = ({
                           htmlFor="deploymentdate"
                           className="font-weight-bold"
                         >
-                        ${costtitle} Date
+                        {/* ${costtitle} Date */}
                         </label>
                         <input
                         className="form-control form-control-sm"

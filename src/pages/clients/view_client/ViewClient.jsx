@@ -633,7 +633,7 @@ class ViewClient extends Component {
                       <td>{product.name}</td>
                       <td>{product.deploymentstatus}</td>
                       <td>{product.paymentstatus}</td>
-                      <td>&#8358;{product.cost.toLocaleString()}</td>
+                      {/* <td>&#8358;{product.cost.toLocaleString()}</td> */}
                       <td
                         style={{ minWidth: "70px" }}
                         className="d-flex justify-content-center"

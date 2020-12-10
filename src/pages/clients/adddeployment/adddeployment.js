@@ -12,19 +12,12 @@ class AddClientProduct extends Component {
       clientid: "",
       productid: "",
       modules: [],
-      trainingcost: "",
-      deploymentcost: "",
-      trainingdate: "",
-      deploymentdate: "",
-      paymentdate: "",
-      paymentstatus: "",
-      liscenseduration: "",
-      expirationdate: "",
       remarks: "",
       errormessage: "",
       loading: false,
       files: [],
       users: [],
+      costs: [],
       previews: "",
       imagePreviewUrl: "",
       successmessage: "",
@@ -62,6 +55,12 @@ class AddClientProduct extends Component {
     this.setState({ [name]: value, errormessage: "" });
   };
 
+  updateDeploymentCosts = (costs)=>
+  {
+    this.setState({ costs });
+  }
+
+
   handleSubmit = async (e) => {
     e.preventDefault();
     this.setState({ loading: true });
@@ -77,35 +76,19 @@ class AddClientProduct extends Component {
     formdata.append("modules", mod);
     formdata.append("userid", this.state.user.userid);
     formdata.append("productid", this.state.productid);
+    formdata.append("costs", JSON.stringify(this.state.costs));
 
     fetch(HTTPURL + "deployment/add", {
       method: "POST",
       headers: myHeaders,
       body: formdata,
-    })
-      .then((response) => response.json())
+    }).then((response) => response.json())
       .then((data) => {
         this.setState({ loading: false });
         if (data.status === true) {
           document.getElementById("addclientproduct").reset();
           this.state.showAlert("success", data.message);
-          this.setState({
-            type: "",
-            liscenseduration: "",
-            paymentstatus: "",
-            deploymentstatus: "",
-            trainingstatus: "",
-            selectedModules: [],
-            trainingcost: "",
-            deploymentcost: "",
-            paymentdate: "",
-            modules: [],
-            files: [],
-            deploymentdate: "",
-            trainingdate: "",
-            remarks: "",
-            expirationstatus: "",
-            expirationdate: "",
+          this.setState({type: "",selectedModules: [],modules: [],files: [],deploymentdate: "",trainingdate: "",remarks: "",costs : [],expirationstatus: "",expirationdate: "",
           });
           window.history.back();
         } else {
@@ -204,29 +187,20 @@ class AddClientProduct extends Component {
         handleSubmit={this.handleSubmit}
         type={this.state.type}
         products={this.state.products}
-        deploymentcost={this.state.deploymentcost}
         handleInputChange={this.handleInputChange}
-        deploymentstatus={this.state.deploymentstatus}
-        deploymentdate={this.state.deploymentdate}
-        trainingcost={this.state.trainingcost}
-        trainingstatus={this.state.trainingstatus}
-        trainingdate={this.state.trainingdate}
-        paymentdate={this.state.paymentdate}
-        paymentstatus={this.state.paymentstatus}
-        expirationstatus={this.state.expirationstatus}
-        expirationdate={this.state.expirationdate}
-        licenseduration={this.state.licenseduration}
+        updateDeploymentCosts={this.updateDeploymentCosts}
+
         remarks={this.state.remarks}
         modules={this.state.modules}
         loading={this.state.loading}
-        deploymentDate={this.state.deploymentDate}
-        trainingDate={this.state.trainingDate}
-        paymentDate={this.state.paymentDate}
-        expirationDate={this.state.expirationDate}
+
         handleImageChange={this.handleImageChange}
         addModule={this.addModule}
         removeModule={this.removeModule}
         updatetype={this.updatetype}
+        showAlert = {this.state.showAlert }
+
+
       />
     );
   }

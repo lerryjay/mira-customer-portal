@@ -16,16 +16,9 @@ class viewclientproduct extends Component {
       remarks: "",
       modules: [],
       productmodules: [],
-      cost: "",
+      costs: [],
       imageurl: "",
-      expirydate:"",
-      paymentdate: "",
-      trainingdate: "",
-      deploymentdate: "",
-      paymentstatus: "",
-      trainingstatus: "",
-      licenseduration: "",
-      deploymentstatus: "",
+      
       clientproductid: "",
       previewFile: "",
       product_id: '',
@@ -50,36 +43,21 @@ class viewclientproduct extends Component {
     ).then((res) => res.json());
     if (res["status"]) {
       this.state.hideLoader();
-      const {
+      let {
         name,
         description,
-        expirydate,
-        paymentstatus,
-        paymentdate,
-        licenseduration,
-        deploymentdate,
-        deploymentstatus,
-        cost,
-        trainingdate,
-        trainingstatus,
         files,
         imageurl,
         remarks,
+        costs,
         modules,
         product_id
       } = res.data;
+      costs = costs || [];
       this.setState({
         productname: name,
-        productdescription: description,
-        paymentstatus,
-        paymentdate,
-        expirydate,
-        licenseduration,
-        deploymentdate,
-        deploymentstatus,
-        cost,
-        trainingdate,
-        trainingstatus,
+        productdescription: description,      
+        costs,
         files,
         imageurl,
         remarks,
@@ -139,16 +117,8 @@ class viewclientproduct extends Component {
     var formdata = new FormData();
     formdata.append("deploymentid", this.props.location.pathname.split("/")[2]);
     formdata.append("modules", this.state.modules.map(item=>item.id).toString() );
-    formdata.append("cost", this.state.cost);
+    formdata.append("costs", this.state.costs);
     formdata.append("userid", this.state.user.userid);
-    formdata.append("licenseduration", this.state.licenseduration);
-    formdata.append("paymentstatus", this.state.paymentstatus);
-    formdata.append("deploymentstatus", this.state.deploymentstatus);
-    formdata.append("trainingstatus", this.state.trainingstatus);
-    formdata.append("paymentdate", this.state.paymentdate);
-    formdata.append("expirydate", this.state.expirydate);
-    formdata.append("trainingdate", this.state.trainingdate);
-    formdata.append("deploymentdate", this.state.deploymentdate);
     formdata.append("remarks", this.state.remarks);
     const res = await fetch(`${HTTPURL}deployment/update`,{ headers,method : 'POST',body : formdata });
     if(res['status']){
@@ -311,38 +281,19 @@ class viewclientproduct extends Component {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th className="text-left">Payment</th>
-                  <td>{this.state.paymentdate}</td>
-                  <td>{this.state.paymentstatus}</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <th className="text-left">Deployment</th>
-                  <td> {this.state.deploymentdate} </td>
-                  <td>{this.state.deploymentstatus}</td>
-                  <td>{this.state.deploymentcost}</td>
-                </tr>
-                <tr>
-                  <th className="text-left">Training</th>
-                  <td>{this.state.trainingdate}</td>
-                  <td>{this.state.trainingstatus}</td>
-                  <td>{this.state.trainingcost}</td>
-                </tr>
-                <tr>
-                  <th className="text-left">License</th>
-                  <td>{this.state.licenseduration}</td>
-                  <td>___</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <th className="text-left">Expiration</th>
-                  <td>{this.state.expirydate}</td>
-                  <td>___</td>
-                  <td></td>
-                </tr>
+                {
+                this.state.costs.map(item=>
+                  <tr >
+                    <th className="text-left">{item.title}</th>
+                    <td>{item.paymentdate}</td>
+                    <td>{item.paymentstatus}</td>
+                    <td>{item.amount}</td>
+                  </tr>
+                  )
+                }
+                
               </tbody>
-              {this.state.user.permissions.findIndex(permission => permission === "VIEWDEPLOYMENTCOST")
+              {/* {this.state.user.permissions.findIndex(permission => permission === "VIEWDEPLOYMENTCOST")
                 ? <tfoot>
                     <tr>
                       <th className="text-left bg-light py-2">Total</th>
@@ -352,7 +303,7 @@ class viewclientproduct extends Component {
                     </tr>
                   </tfoot>
                 : <span></span>
-              }
+              } */}
             </table>
           </div>
 

@@ -1,67 +1,16 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 
 import "react-trumbowyg/dist/trumbowyg.min.css";
 import Trumbowyg from "react-trumbowyg";
 
-const UpdateDeploymentForm = ({files,getModule,handleSubmit,type,modules,handleImageChange,addModule,removeModule,updatetype,products, loading,remarks, handleInputChange,updateDeploymentCosts, showAlert}) => {
 
-  const [fields, setFields] = useState([]);
-  const [inputValue, setInputValue] = useState('');
+const UpdateDeploymentForm = ({files,handleSubmit,productId,modules,handleImageChange,products, addCostFields,loading,remarks, handleInputChange,handleCostChange,costs, newCostTitle,handleCheck,removeCostField  }) => {
 
-  const handleCostChange = ({ target })=>{
-    const index = target.getAttribute('data-index');
-    const name  = target.name;
-    
-    let cost   = fields[index];
-    cost[name] = target.value;
-    let costs  = [...fields];
-    costs[index] = cost;
-    updateDeploymentCosts([...costs ]);
-    setFields([...costs ]);
-  };
-
-  const handleCheck = ({ target }) => {
-    if (target.checked) {
-      target.removeAttribute("checked");
-      addModule(target.id);
-    } else {
-      target.setAttribute("checked", true);
-      removeModule(target.id);
-    }
-  };
-
-  const onChangeHandler = event => {
-    setInputValue(event.target.value);
-  };
-
-  const removeFields = (index) => {
-    let filtered = [...fields];
-    filtered.splice(index, 1);
-    setFields(filtered);
-  }
-
-  const addFields = () => {
-    if(inputValue.length < 1){ 
-      showAlert('danger','Please enter cost title');
-      return
-    };
-    const newField = {
-      title: inputValue,
-      cost: '',
-      duration: '',
-      paymentstatus: '',
-      paymentdate: ''
-    };
-    const updatedFields = [...fields];
-    updatedFields.push(newField);
-    setFields(updatedFields);
-    setInputValue('')
-  }
 
   return (
     <div className="container mx-auto row">
       <div className="col-md-12 mb-3 mt-4" id="profile">
-        <form onSubmit={handleSubmit} id="addclientproduct">
+        <form onSubmit={handleSubmit} id="updateDeploymentForm">
           <div className="card">
             <div className="card-header bg-medium font-weight-bold text-dark">
               UPDATE CLIENT PRODUCT
@@ -69,7 +18,7 @@ const UpdateDeploymentForm = ({files,getModule,handleSubmit,type,modules,handleI
             <div className="card-body px-5">
               <div className="form-group  mb-3">
                 <div className="form-group  mb-3">
-                  <select onChange={(e) => {  getModule(e.target.value); updatetype(e.target.value); }}  value={type} name="type" id="type" className="custom-select custom-select-sm" defaultValue="">
+                  <select onChange={handleInputChange }  value={productId} name="productId" id="productId" className="custom-select custom-select-sm" defaultValue="">
                     <option value="" disabled>
                       ---Select&nbsp;product---&nbsp;
                     </option>
@@ -89,8 +38,8 @@ const UpdateDeploymentForm = ({files,getModule,handleSubmit,type,modules,handleI
                       Cost Type
                     </label>
                     <div className="input-group mb-3">
-                      <input className="form-control form-control-sm" name="title" type="text" id="title" placeholder="Enter Cost Title" onChange={onChangeHandler} value={inputValue} />
-                      <span className="btn btn-primary btn-sm py-1 alt" onClick={(e) => addFields()}>
+                      <input className="form-control form-control-sm" name="newCostTitle" type="text" id="newCostTitle" placeholder="Enter Cost Title" onChange={handleInputChange} value={newCostTitle} />
+                      <span className="btn btn-primary btn-sm py-1 alt" onClick={addCostFields}>
                         <i className="fa fa-plus"></i> Add New Cost
                       </span>
                     </div>
@@ -99,7 +48,7 @@ const UpdateDeploymentForm = ({files,getModule,handleSubmit,type,modules,handleI
               </div>
 
               <div id="inputfields">
-                {fields.map((field, index) => {
+                {costs.map((field, index) => {
 
                   return (
                     <>
@@ -117,34 +66,36 @@ const UpdateDeploymentForm = ({files,getModule,handleSubmit,type,modules,handleI
                         <div className="col-md-5 mb-1">
                           <div className="form-group">
                             <label  htmlFor="licenseduration"  className="font-weight-bold">
-                              License Coverage
+                              Coverage 
                             </label>
                             <select className="custom-select custom-select-sm" id="duration" data-index={index} name="duration" value={field.duration}  onChange={handleCostChange}>
                               <option value="" disabled> License&nbsp;Coverage</option>
-                              <option value="weekly">Weekly</option>
-                              <option value="monthly">Monthly</option>
-                              <option value="quaterly">Quarterly</option>
-                              <option value="bi-annual">Bianually</option>
-                              <option value="annual">Annually</option>
+                              <option value="onetime">One Time</option>
+                              <option value="weekly">One week</option>
+                              <option value="monthly">One Month</option>
+                              <option value="quaterly">4 months</option>
+                              <option value="semi-annual">6 months</option>
+                              <option value="annual">1 Year</option>
+                              <option value="bi-annual">2 Years</option>
                               <option value="indefinite">Indefinite</option>
                             </select>
                           </div>
                         </div>
 
                         <div className="col-md-2 mb-1 d-flex align-items-center">
-                          <a name="" id="" className="btn btn-danger btn-sm"  onClick={(e) => removeFields(index)} role="button">Remove</a>
+                          <a name="" id="" className="btn btn-danger btn-sm"  onClick={(e) => removeCostField(index)} role="button">Remove</a>
                         </div>
 
                         <div className="col-md-4 mb-1">
                           <div className="form-group">
                             <label className="font-weight-bold">
-                              {`${field.title} Cost`}
+                              {`Cost  (${field.title})`}
                             </label>
                             <div className="input-group mb-3">
                               <span className="input-group-text bg-white py-1 alt">
                                 &#8358;
                               </span>
-                              <input type="text" className="form-control form-control-sm py-3 border-left-0"  data-index={index} name="cost" placeholder="Enter amount" onChange={handleCostChange}/>
+                              <input type="text" className="form-control form-control-sm py-3 border-left-0"  data-index={index} value={ field.amount } name="amount" placeholder="Enter amount" onChange={handleCostChange}/>
                             </div>
                           </div>
                         </div>
@@ -152,7 +103,7 @@ const UpdateDeploymentForm = ({files,getModule,handleSubmit,type,modules,handleI
                         <div className="col-md-4 mb-1">
                           <div className=" form-group">
                             <label htmlFor="status"  className="font-weight-bold">
-                              {`${field.title} Status`}
+                              {`Status (${field.title})`}
                             </label>
                             <select className="custom-select custom-select-sm" data-index={index} value={field.paymentstatus} name="paymentstatus"  style={{ height: "35px" }}  onChange={handleCostChange}>
                               <option value="" disabled>&nbsp;Status&nbsp;</option>
@@ -166,9 +117,9 @@ const UpdateDeploymentForm = ({files,getModule,handleSubmit,type,modules,handleI
                         <div className="col-md-4 mb-1">
                           <div className="form-group">
                             <label className="font-weight-bold">
-                              {`${field.title} Date`}
+                              {`Payment Date  (${field.title})`}
                             </label>
-                            <input className="form-control form-control-sm" data-index={index }  onChange={handleCostChange} value={field.paymentdatepayment} name="paymentdate"  placeholder="Date" type="date"/>
+                            <input className="form-control form-control-sm" data-index={index }  onChange={handleCostChange} value={field.paymentdate } name="paymentdate"  placeholder="Date" type="date"/>
                           </div>
                         </div>
                       </div>
@@ -177,14 +128,13 @@ const UpdateDeploymentForm = ({files,getModule,handleSubmit,type,modules,handleI
                 })}
               </div>
 
-
               <div className="row">
                 <div className="col-md-12">
                   <div className="form-group">
                     <label htmlFor="remarks" className="font-weight-bold">
                       Deployment Remarks
                     </label>
-                    <Trumbowyg id="remarks" placeholder="Remarks" value={remarks} onChange={handleInputChange} data=''/>
+                    <Trumbowyg id="remarks" placeholder="Remarks" value={remarks} onChange={handleInputChange} data={ remarks }/>
                   </div>
                 </div>
               </div>

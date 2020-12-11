@@ -47,7 +47,7 @@ const AddDeploymentForm = ({files,getModule,handleSubmit,type,modules,handleImag
     };
     const newField = {
       title: inputValue,
-      cost: '',
+      amount: '',
       duration: '',
       paymentstatus: '',
       paymentdate: ''
@@ -121,6 +121,7 @@ const AddDeploymentForm = ({files,getModule,handleSubmit,type,modules,handleImag
                             </label>
                             <select className="custom-select custom-select-sm" id="duration" data-index={index} name="duration" value={field.duration}  onChange={handleCostChange}>
                               <option value="" disabled> License&nbsp;Coverage</option>
+                              <option value="onetime">One Time</option>
                               <option value="weekly">Weekly</option>
                               <option value="monthly">Monthly</option>
                               <option value="quaterly">Quarterly</option>
@@ -144,7 +145,7 @@ const AddDeploymentForm = ({files,getModule,handleSubmit,type,modules,handleImag
                               <span className="input-group-text bg-white py-1 alt">
                                 &#8358;
                               </span>
-                              <input type="text" className="form-control form-control-sm py-3 border-left-0"  data-index={index} name="cost" placeholder="Enter amount" onChange={handleCostChange}/>
+                              <input type="text" className="form-control form-control-sm py-3 border-left-0"  data-index={index} name="amount" value={ field.amount } placeholder="Enter amount" onChange={handleCostChange}/>
                             </div>
                           </div>
                         </div>
